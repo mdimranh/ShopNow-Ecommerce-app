@@ -1,0 +1,19 @@
+<div class="li-static-banner pt-20 pt-sm-30 pt-xs-30">
+                <div class="container">
+                    <div class="row">
+                        <!-- Begin Single Banner Area -->
+                        {% for banner in banner %}
+                        {% if not banner.big_banner %}
+                        <div class="col-lg-4 col-md-4">
+                            <div class="single-banner pb-xs-30">
+                                <a href="#">
+                                    <img src="{{banner.image.url}}" alt="Li's Static Banner">
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <!-- Single Banner Area End Here -->
+                    </div>
+                </div>
+            </div>
