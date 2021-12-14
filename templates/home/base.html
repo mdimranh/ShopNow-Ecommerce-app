@@ -40,8 +40,9 @@
         <!-- Main Style CSS -->
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <!-- Responsive CSS -->
-        <link rel="stylesheet" href="{% static 'zoom/xzoom.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.7/flipclock.css" integrity="sha512-UWqafCfAKZVD24WgqPnyBy7BM3hZ5UWRDZt7tE36saC7zu1wLUDNoafWVBhzUzP9wVQLhebfmJcnXVjkern/fQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- Modernizr js -->
         <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
     </head>
@@ -221,6 +222,29 @@
         <script src="{% static 'js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
         <script src="{% static 'js/main.js' %}"></script>
+        
+        <script>
+            {% for product in hot_product %}
+                b = "{{product.hot_deal|date:'Y-m-d H:i'}}";
+                a = ".li-countdown{{product.id}}";
+                $(a)
+                    .countdown(b, function(event) {
+                    $(this).html(
+                        event.strftime('<div class="count">%D <span>Days:</span></div> <div class="count">%H <span>Hours:</span></div> <div class="count">%M <span>Mins:</span></div><div class="count"> %S <span>Secs</span></div>')
+                    );
+                });
+            {% endfor %}
+            {% if product.hot_deal != None %}
+            b = "{{product.hot_deal|date:'Y-m-d H:i'}}";
+            a = ".details-countdown";
+            $(a)
+                .countdown(b, function(event) {
+                $(this).html(
+                    event.strftime('<div class="count">%D <span>Days:</span></div> <div class="count">%H <span>Hours:</span></div> <div class="count">%M <span>Mins:</span></div><div class="count"> %S <span>Secs</span></div>')
+                );
+            });
+            {% endif %}
+        </script>
     </body>
 
 <!-- index-231:38-->

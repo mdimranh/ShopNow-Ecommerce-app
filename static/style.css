@@ -1,3 +1,5 @@
+
+
 /*-----------------------------------------------------------------------------------
 		Template Name: limupa - Digital Products Store ECommerce Bootstrap 4 Template
 		Template URI: http://bootexperts.com
@@ -2315,6 +2317,12 @@ textarea:focus {
     display: block;
     position: relative;
 }
+
+.details-countdown{
+	margin-top: -25px;
+	margin-bottom: 15px;
+}
+
 .add-actions-link {
 	display: inline-block;
 	margin-top: 24px;
@@ -3174,7 +3182,7 @@ li.rx-parent a.rx-show::after {
     color: #35008b9f;
 }
 .cat-mega-menu {
-	width: 540px;
+	width: auto;
 	padding: 4px 0 10px 0;
 	overflow: hidden;
 }
@@ -3334,7 +3342,7 @@ li.right-menu .cat-mega-menu-2 > li {
 	color: #a4a4a4;
 	display: inline-block;
 	font-size: 14px;
-	margin-right: 28px;
+	/* margin-right: 28px; */
 	position: relative;
 }
 .breadcrumb-content li a {
@@ -3343,7 +3351,7 @@ li.right-menu .cat-mega-menu-2 > li {
 .breadcrumb-content li a:hover {
 	color: #242424;
 }
-.breadcrumb-content li::before {
+/* .breadcrumb-content li::before {
 	background-color: #aaaaaa;
 	content: "";
 	height: 2px;
@@ -3353,7 +3361,7 @@ li.right-menu .cat-mega-menu-2 > li {
 	transform: rotate(-67deg);
 	transition: all 0.4s ease 0s;
 	width: 12px;
-}
+} */
 .breadcrumb-content li:last-child::before {
 	display: none;
 }
@@ -5001,7 +5009,14 @@ span.required {
   display: inline-block;
 }
 .pagination-box > li.active a {
-  color: #fed700;
+  color: white;
+  background-color: #7E48D6;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  margin-top: -15px;
+  padding: 2px 2px;
+  text-align: center;
 }
 .pagination-box > li a {
   color: #333333;
@@ -5009,7 +5024,10 @@ span.required {
   padding: 0 10px;
 }
 .pagination-box > li a:hover {
-	color: #fed700;
+	color: #7E48D6;
+}
+.pagination-box > li.active a:hover {
+	color: white;
 }
 .product-layout-list .product_desc .product_desc_info .rating-box {
   border-bottom: medium none;

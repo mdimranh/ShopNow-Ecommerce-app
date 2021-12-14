@@ -3,6 +3,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.safestring import mark_safe
 from PIL import Image
 
+from ckeditor.fields import RichTextField
+
 class Category(MPTTModel):
     status = (
         ('True', 'True'),
@@ -40,8 +42,10 @@ class Product(models.Model):
     image = models.ImageField(blank = True, upload_to = 'product/')
     main_price = models.DecimalField(decimal_places=2, max_digits=15)
     discount = models.DecimalField(decimal_places=0, max_digits=3)
+    hot_deal = models.DateTimeField(blank=True, null=True)
     amount = models.IntegerField(default=3)
-    detail = models.TextField()
+    description = models.TextField()
+    detail = RichTextField()
     status = models.CharField(max_length=10, choices=status)
     slug = models.SlugField(null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)

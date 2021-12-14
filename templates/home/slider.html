@@ -14,13 +14,13 @@
                                     {% load mptt_tags %}
                                     <ul>
                                         {% recursetree category %}
-                                        <li class="right-menu"><a href="shop-left-sidebar.html">{{ node.title }}</a>
+                                        <li class="right-menu"><a href="/category/{{node.id}}/{{node.slug}}">{{ node }}</a>
                                             {% if not node.is_leaf_node %}
                                             <ul class="cat-mega-menu">
                                                 <li class="right-menu cat-mega-title">
-                                                   <a href="shop-left-sidebar.html">Prime Video</a>
+                                                   {% comment %} <a href="shop-left-sidebar.html">Prime Video</a> {% endcomment %}
                                                     <ul>
-                                                        <li><a href="#">{{ children }}</a></li>
+                                                        <li><a href="/category/{{children.id}}/{{children.slug}}">{{ children }}</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>

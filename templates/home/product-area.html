@@ -1,3 +1,4 @@
+{% load static %}
 <!-- Begin Li's Special Product Area -->
 <div class="product-area pt-55 pb-25 pt-xs-50">
     <div class="container">
@@ -22,7 +23,7 @@
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
-                                    <a href="single-product.html">
+                                    <a href="/products/{{product.id}}">
                                         <img src="{{product.image.url}}" alt="Li's Product Image">
                                     </a>
                                     <span class="sticker">New</span>
@@ -172,7 +173,7 @@
                 </div>
                 <div class="row">
                     <div class="special-product-active owl-carousel">
-                        {% for product in product %}
+                        {% for product in hot_product %}
                         <div class="col-lg-12">
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
@@ -205,7 +206,7 @@
                                             <span class="discount-percentage">-{{product.discount}}%</span>
                                         </div>
                                         <div class="countersection">
-                                            <div class="li-countdown"></div>
+                                            <div id="li-countdown" class="li-countdown li-countdown{{product.id}}"></div>
                                         </div>
                                     </div>
                                     <div class="add-actions">
@@ -1956,3 +1957,17 @@
     </div>
 </section>
 <!-- Li's Trending Product | Home V2 Area End Here -->
+
+{% comment %} <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+<script>
+    {% for product in product %}
+        b = "{{product.created_at|date:'Y-m-d H:i'}}";
+        a = ".li-countdown1{{product.id}}";
+        $(".li-countdown")
+            .countdown("2021-12-16 00:42:55.858628", function(event) {
+            $(this).html(
+                event.strftime('<div class="count">%D <span>Days:</span></div> <div class="count">%H <span>Hours:</span></div> <div class="count">%M <span>Mins:</span></div><div class="count"> %S <span>Secs</span></div>')
+            );
+        });
+    {% endfor %}
+</script> {% endcomment %}

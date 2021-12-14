@@ -23,9 +23,13 @@
                                 <div class="ht-setting-trigger"><span>Setting</span></div>
                                 <div class="setting ht-setting">
                                     <ul class="ht-setting-list">
-                                        <li><a href="login-register.html">My Account</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                        <li><a href="login-register.html">Sign In</a></li>
+                                        {% if user.is_authenticated %}
+                                            <li><a href="/auth">My Account</a></li>
+                                            <li><a href="{% url 'logout' %}">Log out</a></li>
+                                        {% else %}
+                                            <li><a href="checkout.html">Checkout</a></li>
+                                            <li><a href="/auth">Sign In</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </li>
@@ -78,21 +82,23 @@
                 <!-- Begin Header Middle Right Area -->
                 <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                     <!-- Begin Header Middle Searchbox Area -->
-                    <form action="#" class="hm-searchbox">
-                        <select class="nice-select select-search-category">
-                            <option value="0">All</option> 
+                    <form method="post" action="{% url 'search' %}" class="hm-searchbox {% if not user.is_authenticated %}w-100{% endif %}">
+                        {% csrf_token %}
+                        <select class="nice-select select-search-category" name="category">
+                            <option value="0" selected>All</option> 
                             {% recursetree category %}                        
-                                <option value="{{node.title}}">{{node.title}}</option>
-                                {% if not node.is_leaf_node %}
+                                <option value="{{node.id}}">{{node.title}}</option>
+                                {% comment %} {% if not node.is_leaf_node %}
                                     {{ children }}
-                                {% endif %}
+                                {% endif %} {% endcomment %}
                             {% endrecursetree %}                     
                         </select>
-                        <input type="text" placeholder="Enter your search key ...">
+                        <input type="text" name="query" placeholder="Enter your search key ...">
                         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                     </form>
                     <!-- Header Middle Searchbox Area End Here -->
                     <!-- Begin Header Middle Right Area -->
+                    {% if user.is_authenticated %}
                     <div class="header-middle-right">
                         <ul class="hm-menu">
                             <!-- Begin Header Middle Wishlist Area -->
@@ -153,6 +159,7 @@
                             <!-- Header Mini Cart Area End Here -->
                         </ul>
                     </div>
+                    {% endif %}
                     <!-- Header Middle Right Area End Here -->
                 </div>
                 <!-- Header Middle Right Area End Here -->
@@ -285,7 +292,7 @@
                                     </ul>
                                 </li>
                                 <li><a href="{% url 'aboutus' %}">About Us</a></li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="/contact">Contact</a></li>
                                 <!-- Begin Header Bottom Menu Information Area -->
                                 <li class="hb-info f-right p-0 d-sm-none d-lg-block text-white">
                                     <span>{{shopinfo.address}}</span>
