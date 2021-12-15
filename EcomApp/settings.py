@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'product',
     'account',
     'ckeditor',
+    'ckeditor_uploader',
+    'order',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+CKEDITOR_UPLOAD_PATH = 'product_detail/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [

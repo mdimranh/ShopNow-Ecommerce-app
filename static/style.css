@@ -1142,7 +1142,7 @@ textarea:focus {
 .cart-quantity .add-to-cart {
 	border: none;
 	font-size: 14px;
-	color: #242424;
+	color: white;
 	position: relative;
 	background: #35008b9f;
 	cursor: pointer;
@@ -1533,7 +1533,8 @@ textarea:focus {
 .item-text::before {
 		content: "";
 		position: absolute;
-		left: -10px;
+		left: -15px;
+		right: 3px;
 		height: 22px;
 		width: 1px;
 		background: rgba(255,255,255,.3);
@@ -1541,8 +1542,8 @@ textarea:focus {
 }
 .cart-item-count {
 		position: absolute;
-		top: -25px;
-		left: -60px;
+		top: -10px;
+		left: -10px;
 		display: block;
 		overflow: hidden;
 		min-width: 26px;
@@ -1796,6 +1797,7 @@ textarea:focus {
 }
 .hm-minicart-trigger .item-text::after {
 	color: #fff;
+	display: none;
 } 
 .ht-menu > li .ht-setting-trigger.is-active span::after, 
 .ht-menu > li .ht-currency-trigger.is-active span::after, 
@@ -2321,6 +2323,8 @@ textarea:focus {
 .details-countdown{
 	margin-top: -25px;
 	margin-bottom: 15px;
+	width: auto;
+	height: auto;
 }
 
 .add-actions-link {
@@ -2345,11 +2349,18 @@ textarea:focus {
 .add-actions-link li.add-cart {
 	float: left;
 	margin: 0;
+	color: #242424;
 	background: #eef0f1;
 	border: 1px solid #e1e1e1;
 	transition: all 0.3s ease-in-out;
 	width: 120px;
 }
+
+.add-actions-link li.add-cart:hover {
+	color: white;
+	cursor: pointer;
+}
+
 .add-actions-link li:hover {
 	background: #35008b9f;
 	border-color: #35008b9f;

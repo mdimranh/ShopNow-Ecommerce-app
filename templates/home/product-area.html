@@ -32,7 +32,7 @@
                                     <div class="product_desc_info">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="product-details.html">Graphic Corner</a>
+                                                <a href="product-details.html">[[name]]</a>
                                             </h5>
                                             <div class="rating-box">
                                                 <ul class="rating">
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
+                                            <li class="add-cart active" id="p{{product.id}}" onclick="AddProduct('{{product.id}}', '{{product.title}}', '{{product.image.url}}', '{{product.price}}')">Add to cart</li>
                                             <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
                                             <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
                                         </ul>
@@ -187,7 +187,7 @@
                                     <div class="product_desc_info">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="shop-left-sidebar.html">Studio Design</a>
+                                                <a href="shop-left-sidebar.html">Graph corner</a>
                                             </h5>
                                             <div class="rating-box">
                                                 <ul class="rating">

@@ -103,7 +103,7 @@
                         <ul class="hm-menu">
                             <!-- Begin Header Middle Wishlist Area -->
                             <li class="hm-wishlist">
-                                <a href="wishlist.html">
+                                <a href="/cart">
                                     <span class="cart-item-count wishlist-item-count">0</span>
                                     <i class="fa fa-heart-o"></i>
                                 </a>
@@ -111,42 +111,30 @@
                             <!-- Header Middle Wishlist Area End Here -->
                             <!-- Begin Header Mini Cart Area -->
                             <li class="hm-minicart">
-                                <div class="hm-minicart-trigger">
+                                <a href="/cart" class="hm-minicart-trigger">
                                     <span class="item-icon"></span>
-                                    <span class="item-text">£160
-                                        <span class="cart-item-count">2</span>
+                                    &#2547;<span class="item-text pl-1" id="item-cost">{{cost}}</span>
+                                        <span class="cart-item-count" id="item-text">{{item}}</span>
                                     </span>
-                                </div>
-                                <span></span>
-                                <div class="minicart">
-                                    <ul class="minicart-product-list">
+                                </a>
+                                {% comment %} <div class="minicart">
+                                    <ul class="minicart-product-list" v-for="(value, key) in card">
                                         <li>
                                             <a href="single-product.html" class="minicart-product-image">
-                                                <img src="images/product/small-size/3.jpg" alt="cart products">
+                                                <img :src="value.image" alt="cart products">
                                             </a>
                                             <div class="minicart-product-details">
-                                                <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                <span>£80 x 1</span>
+                                                <h6><a href="single-product.html">[[value.name]]</a></h6>
+                                                <span>&#2547;[[value.price]]</span>
                                             </div>
                                             <button class="close">
-                                                <i class="fa fa-close"></i>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <a href="single-product.html" class="minicart-product-image">
-                                                <img src="images/product/small-size/4.jpg" alt="cart products">
-                                            </a>
-                                            <div class="minicart-product-details">
-                                                <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                <span>£80 x 1</span>
-                                            </div>
-                                            <button class="close">
-                                                <i class="fa fa-close"></i>
+                                                <i class="fa fa-close" @click="deleteProduct(value.id)"></i>
                                             </button>
                                         </li>
                                     </ul>
-                                    <p class="minicart-total">SUBTOTAL: <span>£160</span></p>
-                                    <div class="minicart-button">
+                                    <p class="minicart-total"  v-if="card.length > 0">SUBTOTAL: <span>&#2547;[[totalCost]]</span></p>
+                                    <p class="text-center"  v-if="card.length === 0">You have not added any products</span></p>
+                                    <div class="minicart-button" v-if="card.length > 0">
                                         <a href="checkout.html" class="li-button li-button-dark li-button-fullwidth li-button-sm">
                                             <span>View Full Cart</span>
                                         </a>
@@ -154,7 +142,7 @@
                                             <span>Checkout</span>
                                         </a>
                                     </div>
-                                </div>
+                                </div> {% endcomment %}
                             </li>
                             <!-- Header Mini Cart Area End Here -->
                         </ul>

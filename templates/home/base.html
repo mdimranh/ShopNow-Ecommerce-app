@@ -45,13 +45,13 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.7/flipclock.css" integrity="sha512-UWqafCfAKZVD24WgqPnyBy7BM3hZ5UWRDZt7tE36saC7zu1wLUDNoafWVBhzUzP9wVQLhebfmJcnXVjkern/fQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- Modernizr js -->
         <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
+        <script src="https://unpkg.com/vue@next"></script>
     </head>
     <body>
     <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
         <!-- Begin Body Wrapper -->
-        <div class="body-wrapper">
             <!-- Begin Header Area -->
             {% include 'home/header.html' %}
             <!-- Header Area End Here -->
@@ -176,9 +176,8 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             <!-- Quick View | Modal Area End Here -->
-        </div>
         <!-- Body Wrapper End Here -->
         <!-- jQuery-V1.12.4 -->
         <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
@@ -222,6 +221,7 @@
         <script src="{% static 'js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
         <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'vues/app.js' %}"></script>
         
         <script>
             {% for product in hot_product %}

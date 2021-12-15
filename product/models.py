@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 from PIL import Image
 
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Category(MPTTModel):
     status = (
@@ -45,7 +46,7 @@ class Product(models.Model):
     hot_deal = models.DateTimeField(blank=True, null=True)
     amount = models.IntegerField(default=3)
     description = models.TextField()
-    detail = RichTextField()
+    detail = RichTextUploadingField()
     status = models.CharField(max_length=10, choices=status)
     slug = models.SlugField(null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)

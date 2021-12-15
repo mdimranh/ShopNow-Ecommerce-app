@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from .forms import ContactMessageForm
+from order.models import ShopCart
 
 from django.core.paginator import Paginator
 from django.db.models import Q
 from datetime import datetime
 
 from django.contrib import messages
+
+from django.core import serializers
 
 def Home(request):
     shopinfo = ShopInfo.objects.all().first()
@@ -18,6 +21,12 @@ def Home(request):
     big_banner = Banner.objects.filter(active=True, big_banner = True)
     category = Category.objects.all()
     product = Product.objects.all()
+    shopcart = ShopCart.objects.filter(user = request.user)
+    total_cost = 0
+    for item in shopcart:
+        price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+        cost = price*item.quantity
+        total_cost += cost
     new_product = Product.objects.filter(status=True).order_by('-id')
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
     context = {
@@ -29,7 +38,9 @@ def Home(request):
         'category': category,
         'product': product,
         'new_product': new_product,
-        'hot_product': hot_product
+        'hot_product': hot_product,
+        'cost': total_cost,
+        'item': shopcart.count()
     }
     return render(request, 'home/index-2.html', context)
 
