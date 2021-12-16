@@ -1,4 +1,99 @@
 
+/* toast message */
+#myAlert{
+  visibility: hidden;
+  position:fixed;
+  color: white;
+  border-radius:5px;
+  top:10px;
+  left:0;
+  transform: translate(-5px,15px);
+  background: green;
+  border-radius:10px;
+  overflow:hidden;
+  z-index: 1050;
+}
+
+#myAlert.error{
+  visibility: hidden;
+  position:fixed;
+  color: white;
+  border-radius:10px;
+  top:0;
+  right:0;
+  transform: translate(-15px,15px);
+  background: red;
+  border-radius:10px;
+  overflow:hidden
+}
+
+.myAlert-text-icon{
+  align-items: stretch;
+  box-shadow: 0 1px 1px rgb(10 10 10 / 10%);
+  display: flex;
+  max-width:320px;
+  
+}
+.myAlert-message{
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-grow: 1;
+  font-weight: 700;
+  padding: 10px 10px;
+}
+.close{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: 0 0;
+    border: none;
+    color: currentColor;
+    font-family: inherit;
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+   
+}
+#myAlert.show {
+  visibility: visible; 
+}
+
+
+#myAlert.show{
+  animation: show 0.5s forwards;
+}
+
+@keyframes show{
+  0% {
+    transform: translate(-15px,15px) scale(0);
+  }
+  50% {
+    transform: translate(-15px,15px) scale(1.2);
+  }
+  70% {
+    transform: translate(-15px,15px) scale(0.9);
+  }
+  100% {
+    transform: translate(-15px,15px) scale(1);
+  }
+}
+
+#myAlertBar { 
+  height: 2px;
+  background-color: #ddd;
+  color: white;
+}
+#myAlertProgress {
+  background-color: #efff92;
+  width:100%
+}
+
 
 /*-----------------------------------------------------------------------------------
 		Template Name: limupa - Digital Products Store ECommerce Bootstrap 4 Template
@@ -520,6 +615,11 @@ textarea:focus {
 /*  1.9 Animation
 /*----------------------------------------*/
 /* Slider Progress Bar */
+
+.owl-item:hover{
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
 .slider-active .owl-item.active .slider-progress {
 	-webkit-animation: 5000ms ease-in-out 0s normal none 1 running timebar;
 	animation: 10000ms ease-in-out 0s normal none 1 running timebar;

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView
 from .models import Product, Images
-from home.models import ShopInfo
+from setting.models import ShopInfo
 from product.models import Category
 
 from django.core.paginator import Paginator

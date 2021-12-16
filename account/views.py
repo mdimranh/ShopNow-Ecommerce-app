@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from home.models import ShopInfo
+from setting.models import ShopInfo
 from product.models import Category
 
 from django.contrib.auth.models import User

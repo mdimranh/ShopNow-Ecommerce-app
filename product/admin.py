@@ -3,11 +3,12 @@ from mptt.admin import DraggableMPTTAdmin
 
 from .models import Category, Product, Images
 
-admin.site.register(Images)
+# admin.site.register(Images)
 
 class productImageInline(admin.TabularInline):
     model = Images
-    extra = 5
+    readonly_fields = ['image_tag']
+    extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'status', 'created_at', 'updated_at', 'price_per', 'image_tag']

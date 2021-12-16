@@ -82,10 +82,61 @@ function AddProduct(id, name, image, price) {
       'price': price
     },
     success: function(resp){
-      alert(resp.cost);
+      document.getElementById("myAlert-message").innerHTML = resp.msg;
+      showAlert();
       document.getElementById("item-text").innerHTML = resp.item;
       document.getElementById("item-cost").innerHTML = resp.cost;
     }
   });
   return
+}
+
+function desc(b, c, a, d, e){
+  id = "inp"+d;
+  val = parseInt(document.getElementById(id).value);
+  if(b === 'inc'){
+    value = val+1;
+    if(value <= c){
+      document.getElementById(id).value = value;
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8000/ajax/addtocart',
+        data: {
+          'id': e
+        },
+        success: function(resp){
+          total = a*value;
+          document.getElementById('product-total'+d).innerHTML = parseFloat(total)+".00";
+          document.getElementById("myAlert-message").innerHTML = resp.msg;
+          showAlert();
+          document.getElementById("item-text").innerHTML = resp.item;
+          document.getElementById("item-cost").innerHTML = resp.cost;
+          document.getElementById('total-cost').innerHTML = resp.cost;
+        }
+      });
+    }
+  }
+  else{
+    value = val-1;
+    if(value >= 0){
+      document.getElementById(id).value = value;
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8000/ajax/addtocart',
+        data: {
+          'id': e,
+          'desc': true
+        },
+        success: function(resp){
+          total = a*value;
+          document.getElementById('product-total'+d).innerHTML = parseFloat(total)+".00";
+          document.getElementById("myAlert-message").innerHTML = resp.msg;
+          showAlert();
+          document.getElementById("item-text").innerHTML = resp.item;
+          document.getElementById("item-cost").innerHTML = resp.cost;
+          document.getElementById('total-cost').innerHTML = resp.cost;
+        }
+      });
+    }
+  }
 }

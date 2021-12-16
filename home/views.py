@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from .models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
+from setting.models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from .forms import ContactMessageForm
 from order.models import ShopCart

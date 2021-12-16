@@ -1,3 +1,36 @@
+
+function showAlert(){
+  var myAlert = document.getElementById("myAlert");
+move();
+ 
+  myAlert.className = "show";
+
+  setTimeout(function(){hideAlert(); }, 5000);
+}
+
+function hideAlert(){
+  myAlert.className = myAlert.className.replace("show", "");
+}
+
+
+var i = 0;
+function move() {
+  if (i == 0) {
+    var elem = document.getElementById("myAlertBar");
+    var width = 1;
+    var interval = setInterval(frame, 50);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        interval = 0;
+      } else {
+        width++;
+        elem.style.width = width + "%";
+      }
+    }
+  }
+}
+
 /*--------------------------------------------------
 Template Name: limupa;
 Description: limupa - Digital Products Store ECommerce Bootstrap 4 Template;
@@ -50,12 +83,12 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
  /*  02. Header Dropdown
  /*----------------------------------------*/
  	// Li's Dropdown Menu
- 	$('.ht-setting-trigger, .ht-currency-trigger, .ht-language-trigger, .hm-minicart-trigger, .cw-sub-menu').on('click', function (e) {
- 		e.preventDefault();
- 		$(this).toggleClass('is-active');
- 		$(this).siblings('.ht-setting, .ht-currency, .ht-language, .minicart, .cw-sub-menu li').slideToggle();
- 	});
- 	$('.ht-setting-trigger.is-active').siblings('.catmenu-body').slideDown();
+ 	// $('.ht-setting-trigger, .ht-currency-trigger, .ht-language-trigger, .hm-minicart-trigger, .cw-sub-menu').on('click', function (e) {
+ 	// 	e.preventDefault();
+ 	// 	$(this).toggleClass('is-active');
+ 	// 	$(this).siblings('.ht-setting, .ht-currency, .ht-language, .minicart, .cw-sub-menu li').slideToggle();
+ 	// });
+ 	// $('.ht-setting-trigger.is-active').siblings('.catmenu-body').slideDown();
 /*----------------------------------------*/
 /* 03. Li's Sticky Menu Activation
 /*----------------------------------------*/
@@ -466,22 +499,22 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
 /*----------------------------------------*/
 /* 22. Cart Plus Minus Button
 /*----------------------------------------*/
- $(".cart-plus-minus").append('<div class="dec qtybutton"><i class="fa fa-angle-down"></i></div><div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>');
- $(".qtybutton").on("click", function() {
-    var $button = $(this);
-    var oldValue = $button.parent().find("input").val();
-    if ($button.hasClass('inc')) {
-       var newVal = parseFloat(oldValue) + 1;
-    } else {
-        // Don't allow decrementing below zero
-       if (oldValue > 0) {
-         var newVal = parseFloat(oldValue) - 1;
-         } else {
-         newVal = 0;
-       }
-       }
-    $button.parent().find("input").val(newVal);
-   });
+//  $(".cart-plus-minus").append('<div class="dec qtybutton"><i class="fa fa-angle-down"></i></div><div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>');
+//  $(".qtybutton").on("click", function() {
+//     var $button = $(this);
+//     var oldValue = $button.parent().find("input").val();
+//     if ($button.hasClass('inc')) {
+//        var newVal = parseFloat(oldValue) + 1;
+//     } else {
+//         // Don't allow decrementing below zero
+//        if (oldValue > 0) {
+//          var newVal = parseFloat(oldValue) - 1;
+//          } else {
+//          newVal = 0;
+//        }
+//        }
+//     $button.parent().find("input").val(newVal);
+//    });
 /*----------------------------------------*/
 /* 23. Single Prduct Carousel Activision
 /*----------------------------------------*/
