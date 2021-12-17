@@ -2,6 +2,10 @@ from django.contrib import admin
 
 from .models import *
 
+
+shopinfo = ShopInfo.objects.all().first()
+admin.site.site_header = shopinfo.name+" "+"Administration"
+
 admin.site.register(ShopInfo)
 
 

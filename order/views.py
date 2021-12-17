@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse, JsonResponse
 
-from .models import ShopCart
+from .models import ShopCart, Coupon
 from product.models import Product
 
 from setting.models import ShopInfo
@@ -13,7 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def AddtoCart(request):
     product_id = request.POST['id']
-    product = Product.objects.get(id = product_id)
+    if Product.objects.filter(id = product_id).exists():
+        product = Product.objects.get(id = product_id)
     if 'desc' in request.POST:
         shopcart = ShopCart.objects.get(product=product, user = request.user)
         shopcart.quantity = int(shopcart.quantity) - 1
@@ -34,13 +35,37 @@ def AddtoCart(request):
         msg = "Successfully cart updated"
         return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
     if 'quantity' in request.POST:
-        if product.amount < request.POST['quantity']:
+        if product.amount < int(request.POST['quantity']):
             msg = f"We have only {product.amount} products"
-            return HttpResponse(msg)
+            return JsonResponse({'msg': msg})
         else:
             quantity = request.POST['quantity']
     else:
         quantity = 1
+    if 'coupon_code' in request.POST:
+        if Coupon.objects.filter(code = request.POST['coupon_code']).exists():
+            coupon = Coupon.objects.get(code = request.POST['coupon_code'])
+            cart = ShopCart.objects.filter(user = request.user)
+            for item in cart:
+                item.coupon = coupon
+                item.save()
+            total_cost = 0
+            for item in cart:
+                price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+                cost = price*item.quantity
+                total_cost += cost
+            for item in cart[:1]:
+                if item.coupon:
+                    if item.coupon.discount_type == 'fixed':
+                        total_cost -= item.coupon.value
+                    else:
+                        total_cost = total_cost - (total_cost * item.coupon.value / 100)
+            item = cart.count()
+            msg = "Coupon added successfully."
+            return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
+        else:
+            msg = "Not a valid code!"
+            return JsonResponse({'added': 'fail', 'msg': msg})
     if ShopCart.objects.filter(product=product, user = request.user).exists():
         shopcart = ShopCart.objects.get(product=product, user = request.user)
         shopcart.quantity = int(shopcart.quantity) + 1

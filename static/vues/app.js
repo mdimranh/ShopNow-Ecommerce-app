@@ -1,77 +1,21 @@
-// var app = Vue.createApp({
-//   delimiters: ['[[', ']]'],
-//   data() {
-//     return {
-//       name: "apppppppp",
-//       card: [],
-//     };
-//   },
 
-//   computed: {
-//     totalCost() {
-//       let tc = 0;
-//       this.card.forEach(element => {
-//         tc += parseFloat(element.price);
-//       });
-//       return tc;
-//     },
-//   },
+function quantity(type, amount){
+  var val = parseInt(document.getElementById('pro-quantity').value);
+  if(type === 'inc' && amount > val){
+    document.getElementById('pro-quantity').value++;
+  }
+  else if(type === 'dec' && val > 0){
+    document.getElementById('pro-quantity').value--;
+  }
+}
 
-//   methods: {
-//     AddProduct(id, name, image, price) {
-//       var item = document.getElementById('item-text');
-//       item.textContent = parseInt(item.textContent) + 1;
-//       var cost = document.getElementById('item-cost');
-//       cost.textContent = parseFloat(cost.textContent) + parseFloat(price);
-//       // $.ajax({
-//       //   type: 'POST',
-//       //   url: 'http://localhost:8000/ajax/addtocart',
-//       //   data: { 
-//       //     'id': id, 
-//       //     'name': name,
-//       //     'image': image,
-//       //     'price': price
-//       //   },
-//       //   success: function(resp){
-//       //     alert(resp);
-//       //   }
-//       // });
-//     },
-//     // deleteProduct(id){
-//     //   $.ajax({
-//     //     type: 'POST',
-//     //     url: 'http://localhost:8000/ajax/addtocart',
-//     //     data: { 
-//     //       'id': id
-//     //     },
-//     //     success: function(resp){
-//     //       alert(resp);
-//     //     }
-//     //   });
-//     // },
-//   },
-
-//   // watch: {
-//   //   couponCode(newValue) {
-//   //     if (newValue.length === 10) {
-//   //       let searchedCoupons = this.coupons.filter(
-//   //         (item) => item.code === newValue
-//   //       );
-//   //       if (searchedCoupons.length === 1) {
-//   //         this.appliedCoupon = searchedCoupons[0];
-//   //         this.couponCode = "";
-//   //       } else {
-//   //         alert("Coupon not valid!");
-//   //       }
-//   //     }
-//   //   },
-//   // },
-// });
-
-// app.mount('#app');
-
-
-function AddProduct(id, name, image, price) {
+function AddProduct(id, name, image, price, quantity) {
+  if(quantity === 'no'){
+    quantity = 1;
+  }
+  else{
+    quantity = document.getElementById('pro-quantity').value;
+  }
   $.ajax({
     type: 'POST',
     url: 'http://localhost:8000/ajax/addtocart',
@@ -79,7 +23,8 @@ function AddProduct(id, name, image, price) {
       'id': id, 
       'name': name,
       'image': image,
-      'price': price
+      'price': price,
+      'quantity': quantity
     },
     success: function(resp){
       document.getElementById("myAlert-message").innerHTML = resp.msg;
@@ -111,7 +56,7 @@ function desc(b, c, a, d, e){
           showAlert();
           document.getElementById("item-text").innerHTML = resp.item;
           document.getElementById("item-cost").innerHTML = resp.cost;
-          document.getElementById('total-cost').innerHTML = resp.cost;
+          document.getElementById('total-cost').innerHTML = "&#2547;"+resp.cost;
         }
       });
     }
@@ -134,7 +79,7 @@ function desc(b, c, a, d, e){
           showAlert();
           document.getElementById("item-text").innerHTML = resp.item;
           document.getElementById("item-cost").innerHTML = resp.cost;
-          document.getElementById('total-cost').innerHTML = resp.cost;
+          document.getElementById('total-cost').innerHTML = "&#2547;"+resp.cost;
         }
       });
     }
@@ -143,5 +88,31 @@ function desc(b, c, a, d, e){
 
 
 function addCoupon() {
-  alert('Yes');
+  var code = document.getElementById("coupon_code").value;
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8000/ajax/addtocart',
+    data: {
+      'coupon_code': code,
+      'id': 1
+    },
+    success: function(resp){
+      if(resp.added == 'fail'){
+        document.getElementById('coupon-fail').innerHTML = resp.msg;
+      }
+      else{
+        document.getElementById("myAlert-message").innerHTML = resp.msg;
+        showAlert();
+        document.getElementById("item-text").innerHTML = resp.item;
+        document.getElementById("item-cost").innerHTML = resp.cost;
+        document.getElementById('total-cost').innerHTML = "&#2547;"+resp.cost;
+        var div = document.getElementById('coupon-all');
+        div.remove();
+        var couponadd = document.getElementById("coupon-added");
+        couponadd.classList.toggle("d-none");
+        couponadd.classList.toggle("d-flex");
+        document.getElementById('coupon-fail').innerHTML = '';
+      }
+    }
+  });
 }

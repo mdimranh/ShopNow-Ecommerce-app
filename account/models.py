@@ -20,6 +20,9 @@ class Profile(models.Model):
         return mark_safe('<img src="{}" height="50" weight="50" />'.format(self.image.url))
     image_tag.short_description = 'Image'
 
+    class Meta:
+        verbose_name_plural = 'Profiles'
+        app_label = 'auth'
 
 # class ShippingAdderss(models.Model):
 #     user = models.ForeignKey(Profile, on_delete=models.CASCADE)

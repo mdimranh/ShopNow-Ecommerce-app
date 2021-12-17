@@ -90,6 +90,9 @@ class Sliding(models.Model):
 	image = models.ImageField(upload_to = 'slide/')
 	active = models.BooleanField(verbose_name='Status')
 
+	class Meta:
+		verbose_name = 'myapp'
+
 	def ImageUrl(self):
 		if self.image:
 			return self.image.url

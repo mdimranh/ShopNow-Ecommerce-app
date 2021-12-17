@@ -15,7 +15,7 @@ DIS_TYPE = (
 class Coupon(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=50)
-    discount_type = models.CharField(max_length=20, choices=DIS_TYPE)
+    discount_type = models.CharField(max_length=20, default="Percent", choices=DIS_TYPE)
     value = models.IntegerField()
     free_shipping = models.BooleanField(name='Allow free shipping')
     start_date = models.DateTimeField(default=now)
