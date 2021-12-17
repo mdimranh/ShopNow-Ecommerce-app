@@ -24,6 +24,12 @@ def AddtoCart(request):
             price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
             cost = price*item.quantity
             total_cost += cost
+        for item in cart[:1]:
+            if item.coupon:
+                if item.coupon.discount_type == 'fixed':
+                    total_cost -= item.coupon.value
+                else:
+                    total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = cart.count()
         msg = "Successfully cart updated"
         return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
@@ -45,6 +51,12 @@ def AddtoCart(request):
             price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
             cost = price*item.quantity
             total_cost += cost
+        for item in cart[:1]:
+            if item.coupon:
+                if item.coupon.discount_type == 'fixed':
+                    total_cost -= item.coupon.value
+                else:
+                    total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = cart.count()
         msg = "Product successfully added to cart!"
         return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
@@ -60,6 +72,12 @@ def AddtoCart(request):
         price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
         cost = price*item.quantity
         total_cost += cost
+    for item in cart[:1]:
+        if item.coupon:
+            if item.coupon.discount_type == 'fixed':
+                total_cost -= item.coupon.value
+            else:
+                total_cost = total_cost - (total_cost * item.coupon.value / 100)
     item = cart.count()
     msg = "Product successfully added to cart!"
     return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
@@ -88,6 +106,12 @@ def CartView(request):
         price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
         cost = price*item.quantity
         total_cost += cost
+    for item in shopcart[:1]:
+        if item.coupon:
+            if item.coupon.discount_type == 'Fixed':
+                total_cost -= item.coupon.value
+            else:
+                total_cost = total_cost - (total_cost * item.coupon.value / 100)
     context = {
         'shopinfo': shopinfo,
         'category': categorys,

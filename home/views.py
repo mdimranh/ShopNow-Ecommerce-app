@@ -21,12 +21,22 @@ def Home(request):
     big_banner = Banner.objects.filter(active=True, big_banner = True)
     category = Category.objects.all()
     product = Product.objects.all()
-    shopcart = ShopCart.objects.filter(user = request.user)
     total_cost = 0
-    for item in shopcart:
-        price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-        cost = price*item.quantity
-        total_cost += cost
+    item = 0
+    if request.user.is_authenticated:
+        shopcart = ShopCart.objects.filter(user = request.user)
+        total_cost = 0
+        for item in shopcart:
+            price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+            cost = price*item.quantity
+            total_cost += cost
+        for item in shopcart[:1]:
+            if item.coupon:
+                if item.coupon.discount_type == 'fixed':
+                    total_cost -= item.coupon.value
+                else:
+                    total_cost = total_cost - (total_cost * item.coupon.value / 100)
+        item = shopcart.count()
     new_product = Product.objects.filter(status=True).order_by('-id')
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
     context = {
@@ -40,7 +50,7 @@ def Home(request):
         'new_product': new_product,
         'hot_product': hot_product,
         'cost': total_cost,
-        'item': shopcart.count()
+        'item': item
     }
     return render(request, 'home/index-2.html', context)
 
