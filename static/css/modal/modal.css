@@ -1,0 +1,52 @@
+
+.iziModal button:nth-child(1){
+    width: 130px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    border: 2px solid #34195f;
+    transition: 0.5s;
+}
+.iziModal button:nth-child(1):hover{
+    border: 2px solid blueviolet;
+    transition: 0.5s;
+    color: blueviolet;
+    cursor: pointer;
+}
+
+.iziModal button:nth-child(2){
+    width: 130px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #8160B7;
+    font-weight: bold;
+    color: white;
+    border: 2px solid #34195f;
+    transition: 0.5s;
+}
+.iziModal button:nth-child(2):hover{
+    background: #34195f;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.product-image{
+    height: auto;
+    max-width: 150px;
+    padding: 0;
+    margin: 0;
+}
+
+.text-decoration-line-through{
+    text-decoration: line-through;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}

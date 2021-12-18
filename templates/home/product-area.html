@@ -1138,7 +1138,7 @@
                 <div class="li-static-home-image" style="background-image: url({{banner.image.url}});"></div>
                 <!-- Li's Static Home Image Area End Here -->
                 <!-- Begin Li's Static Home Content Area -->
-                <div class="li-static-home-content">
+                {% comment %} <div class="li-static-home-content"> {% endcomment %}
                     {% comment %} <p>Sale Offer<span>-20% Off</span>This Week</p>
                     <h2>Featured Product</h2>
                     <h2>Meito Accessories 2018</h2>
@@ -1146,10 +1146,10 @@
                         Starting at
                         <span> $1209.00</span>
                     </p> {% endcomment %}
-                    <div class="default-btn">
+                    {% comment %} <div class="default-btn">
                         <a href="shop-left-sidebar.html" class="links">Shopping Now</a>
                     </div>
-                </div>
+                </div> {% endcomment %}
                 {% endfor %}
                 <!-- Li's Static Home Content Area End Here -->
             </div>

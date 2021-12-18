@@ -34,25 +34,21 @@
         <!-- Magnific Popup CSS -->
         <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
         <!-- Bootstrap V4.1.3 Fremwork CSS -->
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap3.min.css' %}">
         <!-- Helper CSS -->
         <link rel="stylesheet" href="{% static 'css/helper.css' %}">
+        <!-- izimodal CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/css/iziModal.css" integrity="sha512-pH06JFjxM84j7iRF99/Cw7d9R9m2mVmEVr8oI0kK8gVkr461DI+8OYpQctHUrbmdOH7oaRyDRkkCVlQIQCFEiQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- Main Style CSS -->
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <!-- Responsive CSS -->
         <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-        <link rel="stylesheet" href="{% static 'zoom/drift-basic.css' %}">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.7/flipclock.css" integrity="sha512-UWqafCfAKZVD24WgqPnyBy7BM3hZ5UWRDZt7tE36saC7zu1wLUDNoafWVBhzUzP9wVQLhebfmJcnXVjkern/fQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- Modernizr js -->
         <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
-        <script src="https://unpkg.com/vue@next"></script>
     </head>
     <body>
-    <!--[if lt IE 8]>
-		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-	<![endif]-->
-        <!-- Begin Body Wrapper -->
+            {% include 'modal/modal.html' %}
+            {% include 'home/overlay.html' %}
             <!-- Begin Header Area -->
             {% include 'home/header.html' %}
             <!-- Header Area End Here -->
@@ -77,6 +73,8 @@
                     <div id="myAlertBar"></div>
                 </div>
             </div>
+            <div id="modal-alert"></div>
+            <div class="d-none" id="user">{% if user.is_authenticated %}yes{% endif %}</div>
             <!-- Begin Quick View | Modal Area -->
             <div class="modal fade modal-wrapper" id="exampleModalCenter" >
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -192,10 +190,13 @@
         <!-- Body Wrapper End Here -->
         <!-- jQuery-V1.12.4 -->
         <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+        {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> {% endcomment %}
         <!-- Popper js -->
         <script src="{% static 'js/vendor/popper.min.js' %}"></script>
         <!-- Bootstrap V4.1.3 Fremwork js -->
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap3.min.js' %}"></script>
+        {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
+
         <!-- Ajax Mail js -->
         <script src="{% static 'js/ajax-mail.js' %}"></script>
         <!-- Meanmenu js -->
@@ -231,6 +232,7 @@
         <!-- ScrollUp js -->
         <script src="{% static 'js/scrollUp.min.js' %}"></script>
         <!-- Main/Activator js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.js" integrity="sha512-fOWk6n+fmfFNHxlw7GapMIXgsNkSR2+GaKj40YUCErg2tThtROhqD6pxfLOqbo6kA2De2qPXEiv+7HltNDrDNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="{% static 'js/main.js' %}"></script>
         <script src="{% static 'vues/app.js' %}"></script>
         
@@ -255,6 +257,32 @@
                 );
             });
             {% endif %}
+        </script>
+        <script>
+            var mdl = $("#add-product-modal").iziModal({
+                radius: 0,
+                padding: 20,
+                closeButton: true,
+                title: 'Product add successfully.',
+                headerColor: '#8160B7',
+                width: 850,
+                fullscreen: true,
+                zindex: 2000,
+            });
+        </script>
+        <script>
+            $('#modal-alert').iziModal({
+                headerColor: '#d43838',
+                width: 400,
+                timeout: 10000,
+                pauseOnHover: true,
+                timeoutProgressbar: true,
+                attached: 'bottom'
+            });
+            $(document).on('click', '.open-alert', function (event) {
+                event.preventDefault();
+                $('#modal-alert').iziModal('open');
+            });
         </script>
     </body>
 

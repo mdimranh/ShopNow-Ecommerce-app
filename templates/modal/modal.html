@@ -1,0 +1,39 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/modal/modal.css' %}">
+
+
+<div id="add-product-modal" class="iziModal">
+    <table class="table table-borderless">
+    <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">quantity</th>
+            <th scope="col">price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img class="product-image" id="product-image" alt="">
+                    <div class="d-flex flex-column">
+                        <h6 class="text-nowrap" id="product-title"></h6>
+                        <p id="product-category-title"></p>
+                    </div>
+                </div>
+            </td>
+            <td class="align-middle fw-bold" id="product-amount"></td>
+            <td class="align-middle">
+                <div class="d-flex flex-column">
+                    <p class="p-0 m-0"><span class="text-decoration-line-through text-danger" id="product-main-price"></span> <span class="text-success" id="product-discount"></span></p>
+                    <p class="p-0 m-0 text-black fw-bold" id="product-price"></p>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <a href="/cart"><button class="mx-2">GO TO CART</button></a>
+        <a href="/cart/checkout"><button class="mx-2">CHECKOUT</button></a>
+    </div>
+</div>

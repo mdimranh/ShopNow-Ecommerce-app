@@ -1,6 +1,6 @@
 {% load static %}
 {% load mptt_tags %}
-<header>
+<header id='header'>
     <!-- Begin Header Top Area -->
     <div class="header-top">
         <div class="container">
@@ -24,6 +24,7 @@
                                 <div class="setting ht-setting">
                                     <ul class="ht-setting-list">
                                         {% if user.is_authenticated %}
+                                            <li><a href="/auth">Welcome {{user.first_name}}</a></li>
                                             <li><a href="/auth">My Account</a></li>
                                             <li><a href="{% url 'logout' %}">Log out</a></li>
                                         {% else %}

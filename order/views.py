@@ -7,14 +7,25 @@ from product.models import Product
 from setting.models import ShopInfo
 from product.models import Category
 
+import json
+
 from django.core import serializers
 
 from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
 def AddtoCart(request):
+    print(request.user)
     product_id = request.POST['id']
     if Product.objects.filter(id = product_id).exists():
         product = Product.objects.get(id = product_id)
+        product_serialize = {
+            "category": product.category.title,
+            "title": product.title,
+            "image": product.image.url,
+            "main_price": str(product.main_price),
+            "price": str(product.main_price - (product.main_price * product.discount / 100)),
+            "discount": str(product.discount)
+        }
+        pro = json.dumps(product_serialize)
     if 'desc' in request.POST:
         shopcart = ShopCart.objects.get(product=product, user = request.user)
         shopcart.quantity = int(shopcart.quantity) - 1
@@ -84,7 +95,7 @@ def AddtoCart(request):
                     total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = cart.count()
         msg = "Product successfully added to cart!"
-        return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
+        return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg, 'product': pro})
     shopcart = ShopCart(
         product= product,
         user = request.user,
@@ -105,7 +116,13 @@ def AddtoCart(request):
                 total_cost = total_cost - (total_cost * item.coupon.value / 100)
     item = cart.count()
     msg = "Product successfully added to cart!"
-    return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg})
+    context = {
+        'item':item,
+        'cost':total_cost,
+        'msg': msg,
+        'product': pro
+    }
+    return JsonResponse(context)
 
 # import json
 # @csrf_exempt
@@ -151,3 +168,27 @@ def CartDelete(request, id):
     shopcart = ShopCart.objects.filter(user = request.user, product__id = id)
     shopcart.delete()
     return HttpResponseRedirect(url)
+
+def Checkout(request):
+    shopinfo = ShopInfo.objects.all().first()
+    categorys = Category.objects.all()
+    shopcart = ShopCart.objects.filter(user = request.user)
+    total_cost = 0
+    for item in shopcart:
+        price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+        cost = price*item.quantity
+        total_cost += cost
+    for item in shopcart[:1]:
+        if item.coupon:
+            if item.coupon.discount_type == 'Fixed':
+                total_cost -= item.coupon.value
+            else:
+                total_cost = total_cost - (total_cost * item.coupon.value / 100)
+    context = {
+        'shopinfo': shopinfo,
+        'category': categorys,
+        'shopcart': shopcart,
+        'cost': total_cost,
+        'item': shopcart.count()
+    }
+    return render(request, 'order/checkout.html', context)
