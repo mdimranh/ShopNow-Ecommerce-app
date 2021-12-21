@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from setting.models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
-from product.models import Category, Product
+from product.models import Category, Subcategory, Group, Product
 from .forms import ContactMessageForm
 from order.models import ShopCart
 
@@ -16,9 +16,11 @@ from django.core import serializers
 def Home(request):
     shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
+    subcategorys = Subcategory.objects.all()
+    groups = Group.objects.all()
     slider = Sliding.objects.filter(active = True)
-    banner = Banner.objects.filter(active=True, big_banner = False)
-    big_banner = Banner.objects.filter(active=True, big_banner = True)
+    right2_banner = Banner.objects.get(active=True, banner_type = 'Right_2')
+    top_banner = Banner.objects.filter(active=True, banner_type = 'Top')
     category = Category.objects.all()
     product = Product.objects.all()
     total_cost = 0
@@ -42,9 +44,11 @@ def Home(request):
     context = {
         'shopinfo': shopinfo,
         'category': categorys,
+        'subcategory': subcategorys,
+        'group': groups,
         'slider': slider,
-        'banner': banner,
-        'big_banner': big_banner,
+        'right2_banner': right2_banner,
+        'top_banner': top_banner,
         'category': category,
         'product': product,
         'new_product': new_product,
@@ -52,7 +56,7 @@ def Home(request):
         'cost': total_cost,
         'item': item
     }
-    return render(request, 'home/index-2.html', context)
+    return render(request, 'home/home.html', context)
 
 def AboutUs(request):
     shopinfo = ShopInfo.objects.all().first()

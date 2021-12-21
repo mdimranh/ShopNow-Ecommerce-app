@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/skins/skin-demo-14.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/demos/demo-14.css' %}">
+{% endblock extra_css %}
+
+{% block custom %}
+
+{% include 'home/product-area.html' %}
+
+{% endblock custom %}

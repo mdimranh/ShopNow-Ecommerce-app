@@ -16,7 +16,7 @@ class SlidingAdmin(admin.ModelAdmin):
 admin.site.register(Sliding, SlidingAdmin)
 
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ['title', 'big_banner', 'active', 'image_tag']
+    list_display = ['title', 'banner_type', 'active', 'image_tag']
     list_per_page = 10
 admin.site.register(Banner, BannerAdmin)
 

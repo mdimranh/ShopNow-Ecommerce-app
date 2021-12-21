@@ -6,38 +6,75 @@ from PIL import Image
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
-class Category(MPTTModel):
-    status = (
-        ('True', 'True'),
-        ('False', 'False')
-    )
+# class Category(MPTTModel):
+#     status = (
+#         ('True', 'True'),
+#         ('False', 'False')
+#     )
 
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+#     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
-    title = models.CharField(max_length=250)
-    keywords = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='category', blank = True)
-    details = models.TextField()
-    status = models.CharField(max_length=10, choices=status)
-    slug = models.SlugField(null=True, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+#     title = models.CharField(max_length=250)
+#     keywords = models.CharField(max_length=100)
+#     image = models.ImageField(upload_to='category', blank = True)
+#     details = models.TextField()
+#     status = models.CharField(max_length=10, choices=status)
+#     slug = models.SlugField(null=True, unique=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
-    class MPTTMeta:
-        order_insertion_by = ['title']
+#     class MPTTMeta:
+#         order_insertion_by = ['title']
         
-    class Meta:
-        verbose_name_plural = 'categories'
+#     class Meta:
+#         verbose_name_plural = 'categories'
+
+#     def __str__(self):
+#         return self.title
+
+class Category(models.Model):
+    name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.title
+        return self.name
+
+    def Total_Group(self):
+        return Group.objects.filter(category__id=self.id).count()
+
+    def Total_Subcategory(self):
+        return Group.objects.filter(category__id=self.id).count()
+
+class Group(models.Model):
+    name = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='groups')
+    def __str__(self):
+        return self.name
+
+    def total_subcategory(self):
+        return Subategory.objects.filter(group__id=self.id).count()
+
+class Subcategory(models.Model):
+    name = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, related_name='subcategorys')
+
+    def __str__(self):
+        return self.name
+
+    def total_product(self):
+        return Product.objects.filter(category__id=self.id).count()
+
+
+
 
 class Product(models.Model):
     status = (
         ('True', 'True'),
         ('False', 'False')
     )
-    category = TreeForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_categorys', blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_groups')
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_subcategorys')
     title = models.CharField(max_length=200)
     keywords = models.CharField(max_length=100)
     image = models.ImageField(blank = True, upload_to = 'product/')

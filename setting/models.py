@@ -1,10 +1,20 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 
+
+BANNER_TYPE = (
+	('Left_1', 'Left 1'),
+	('Left_2', 'Left 2'),
+	('Right_1', 'Right 1'),
+	('Right_2', 'Right 2'),
+	('Top', 'Top'),
+	('Bottom', 'Bottom'),
+)
+
 class Banner(models.Model):
 	title = models.CharField(max_length=100)
 	image = models.ImageField(upload_to = 'banner/')
-	big_banner = models.BooleanField(default=False)
+	banner_type = models.CharField(max_length=30, default='Top', choices=BANNER_TYPE)
 	active = models.BooleanField(default=True)
 
 	def ImageUrl(self):
@@ -91,7 +101,7 @@ class Sliding(models.Model):
 	active = models.BooleanField(verbose_name='Status')
 
 	class Meta:
-		verbose_name = 'myapp'
+		verbose_name = 'Sliders'
 
 	def ImageUrl(self):
 		if self.image:

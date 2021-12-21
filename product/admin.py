@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Category, Product, Images
+from .models import *
 
 # admin.site.register(Images)
 
@@ -16,41 +16,62 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 10
     search_fields = ['title', 'new_price', 'detail']
     inlines = [productImageInline]
+    class Media:
+        js=("product_category.js",)
     prepopulated_fields = {'slug': ('title',)}
 admin.site.register(Product, ProductAdmin)
 
 
-class CategoryAdmin(DraggableMPTTAdmin):
-    mptt_indent_field = "title"
-    list_display = ('tree_actions', 'indented_title',
-                    'related_products_count', 'related_products_cumulative_count')
-    list_display_links = ('indented_title',)
+# class CategoryAdmin(DraggableMPTTAdmin):
+#     mptt_indent_field = "title"
+#     list_display = ('tree_actions', 'indented_title',
+#                     'related_products_count', 'related_products_cumulative_count')
+#     list_display_links = ('indented_title',)
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
+#     def get_queryset(self, request):
+#         qs = super().get_queryset(request)
 
-        # Add cumulative product count
-        qs = Category.objects.add_related_count(
-                qs,
-                Product,
-                'category',
-                'products_cumulative_count',
-                cumulative=True)
+#         # Add cumulative product count
+#         qs = Category.objects.add_related_count(
+#                 qs,
+#                 Product,
+#                 'category',
+#                 'products_cumulative_count',
+#                 cumulative=True)
 
-        # Add non cumulative product count
-        qs = Category.objects.add_related_count(qs,
-                 Product,
-                 'category',
-                 'products_count',
-                 cumulative=False)
-        return qs
+#         # Add non cumulative product count
+#         qs = Category.objects.add_related_count(qs,
+#                  Product,
+#                  'category',
+#                  'products_count',
+#                  cumulative=False)
+#         return qs
 
-    def related_products_count(self, instance):
-        return instance.products_count
-    related_products_count.short_description = 'Related products (for this specific category)'
+#     def related_products_count(self, instance):
+#         return instance.products_count
+#     related_products_count.short_description = 'Related products (for this specific category)'
 
-    def related_products_cumulative_count(self, instance):
-        return instance.products_cumulative_count
-    related_products_cumulative_count.short_description = 'Related products (in tree)'
+#     def related_products_cumulative_count(self, instance):
+#         return instance.products_cumulative_count
+#     related_products_cumulative_count.short_description = 'Related products (in tree)'
 
-admin.site.register(Category, CategoryAdmin)
+# admin.site.register(Category, CategoryAdmin)
+
+class GroupInline(admin.TabularInline):
+    model = Group
+    extra = 1
+    readonly_fields = ['total_subcategory']
+    # classes = ['collapse']
+
+class SubctegoryInline(admin.TabularInline):
+    model = Subcategory
+    extra = 1
+    readonly_fields = ['total_product']
+    # classes = ['collapse']
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'Total_Group', 'Total_Subcategory']
+    inlines = [GroupInline, SubctegoryInline]
+    class Media:
+        js=("category.js",)
+admin.site.register( Category, CategoryAdmin)
