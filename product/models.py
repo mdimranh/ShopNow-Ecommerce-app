@@ -1,39 +1,16 @@
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.safestring import mark_safe
 from PIL import Image
+
+from django.template.defaultfilters import slugify
 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
-# class Category(MPTTModel):
-#     status = (
-#         ('True', 'True'),
-#         ('False', 'False')
-#     )
-
-#     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-
-#     title = models.CharField(max_length=250)
-#     keywords = models.CharField(max_length=100)
-#     image = models.ImageField(upload_to='category', blank = True)
-#     details = models.TextField()
-#     status = models.CharField(max_length=10, choices=status)
-#     slug = models.SlugField(null=True, unique=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     class MPTTMeta:
-#         order_insertion_by = ['title']
-        
-#     class Meta:
-#         verbose_name_plural = 'categories'
-
-#     def __str__(self):
-#         return self.title
-
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    banner = models.ImageField(upload_to = 'category/banner/', blank=True, null=True)
+    slug= models.SlugField(null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -44,19 +21,38 @@ class Category(models.Model):
     def Total_Subcategory(self):
         return Group.objects.filter(category__id=self.id).count()
 
+    def image_tag(self):
+        if self.banner:        
+            return mark_safe('<img src="{}" heights="100" width="60" />'.format(self.banner.url))
+        else:
+            return 'Null'
+    image_tag.short_description = 'Banner'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+
 class Group(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='groups')
+    slug = models.SlugField(null=True, blank=True, unique=True)
+
     def __str__(self):
         return self.name
 
     def total_subcategory(self):
-        return Subategory.objects.filter(group__id=self.id).count()
+        return Subcategory.objects.filter(group__id=self.id).count()
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
 
 class Subcategory(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, related_name='subcategorys')
+    slug= models.SlugField(null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -64,7 +60,20 @@ class Subcategory(models.Model):
     def total_product(self):
         return Product.objects.filter(category__id=self.id).count()
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
 
+class Brands(models.Model):
+    name = models.CharField(max_length=50)
+    logo = models.ImageField(upload_to="product/brand")
+
+    def __str__(self):
+        return self.name
+
+    def image_tag(self):
+        return mark_safe('<img src="{}" heights="60" width="60" />'.format(self.logo.url))
+    image_tag.short_description = 'Image'
 
 
 class Product(models.Model):

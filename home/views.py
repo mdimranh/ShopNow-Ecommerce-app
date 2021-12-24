@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from setting.models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
-from product.models import Category, Subcategory, Group, Product
+from product.models import Category, Subcategory, Group, Product, Brands
 from .forms import ContactMessageForm
 from order.models import ShopCart
 
@@ -17,14 +17,20 @@ def Home(request):
     shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     subcategorys = Subcategory.objects.all()
+    brand = Brands.objects.all()
     groups = Group.objects.all()
     slider = Sliding.objects.filter(active = True)
+    banner=Banner.objects.filter(banner_type='Bottom')
     right2_banner = Banner.objects.get(active=True, banner_type = 'Right_2')
+    right1_banner = Banner.objects.get(active=True, banner_type = 'Right_1')
+    left1_banner = Banner.objects.get(active=True, banner_type = 'Left_1')
+    left2_banner = Banner.objects.get(active=True, banner_type = 'Left_2')
     top_banner = Banner.objects.filter(active=True, banner_type = 'Top')
     category = Category.objects.all()
     product = Product.objects.all()
     total_cost = 0
     item = 0
+    shopcart = False
     if request.user.is_authenticated:
         shopcart = ShopCart.objects.filter(user = request.user)
         total_cost = 0
@@ -45,9 +51,15 @@ def Home(request):
         'shopinfo': shopinfo,
         'category': categorys,
         'subcategory': subcategorys,
+        'brand': brand,
         'group': groups,
+        'shopcart': shopcart,
         'slider': slider,
         'right2_banner': right2_banner,
+        'right1_banner': right1_banner,
+        'left1_banner': left1_banner,
+        'left2_banner': left2_banner,
+        'banner': banner,
         'top_banner': top_banner,
         'category': category,
         'product': product,

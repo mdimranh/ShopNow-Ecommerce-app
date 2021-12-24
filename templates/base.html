@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery.countdown.css' %}">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
     {% block extra_css %}{% endblock extra_css %}
 </head>
 
@@ -38,7 +39,7 @@
     <div class="page-wrapper">
         <header class="header header-14">
             <div class="header-top">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="header-left">
                         <a href="tel:#"><i class="icon-phone"></i>Call: {{shopinfo.phone}}</a>
                     </div><!-- End .header-left -->
@@ -72,9 +73,24 @@
                                             </div><!-- End .header-menu -->
                                         </div><!-- End .header-dropdown -->
                                     </li>
+                                    {% if user.is_authenticated %}
+                                    <li>   
+                                        <div class="header-dropdown">
+                                            <a href="#">{{user.first_name}} {{user.last_name}}</a>
+                                            <div class="header-menu">
+                                                <ul>
+                                                    <li><a href="#">My Account</a></li>
+                                                    <li><a href="/auth/logout">Logout</a></li>
+                                                </ul>
+                                            </div><!-- End .header-menu -->
+                                        </div><!-- End .header-dropdown -->
+                                    </li>
+                                    {% endif %}
+                                    {% if not user.is_authenticated %}
                                     <li class="login">
                                         <a href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
                                     </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         </ul><!-- End .top-menu -->
@@ -166,60 +182,42 @@
                                                 <span class="cart-txt">Cart</span>
                                             </a>
 
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <div class="dropdown-cart-products">
-                                                    <div class="product">
-                                                        <div class="product-cart-details">
-                                                            <h4 class="product-title">
-                                                                <a href="product.html">Beige knitted elastic runner shoes</a>
-                                                            </h4>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-cart-products" id="dropdown-cart-products">
+                                                        {% for item in shopcart %}
+                                                        <div class="product">
+                                                            <div class="product-cart-details">
+                                                                <h4 class="product-title">
+                                                                    <a href="product.html">{{item.product.title}}</a>
+                                                                </h4>
 
-                                                            <span class="cart-product-info">
-                                                                <span class="cart-product-qty">1</span>
-                                                                x $84.00
-                                                            </span>
-                                                        </div><!-- End .product-cart-details -->
+                                                                <span class="cart-product-info">
+                                                                    <span class="cart-product-qty">{{item.quantity}}</span>
+                                                                     X &#2547;{{item.product.price}}
+                                                                </span>
+                                                            </div><!-- End .product-cart-details -->
 
-                                                        <figure class="product-image-container">
-                                                            <a href="product.html" class="product-image">
-                                                                <img src="assets/images/products/cart/product-1.jpg" alt="product">
-                                                            </a>
-                                                        </figure>
-                                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                                    </div><!-- End .product -->
+                                                            <figure class="product-image-container">
+                                                                <a href="product.html" class="product-image">
+                                                                    <img src="{{item.product.image.url}}" alt="product">
+                                                                </a>
+                                                            </figure>
+                                                            <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                                        </div><!-- End .product -->
+                                                        {% endfor %}
 
-                                                    <div class="product">
-                                                        <div class="product-cart-details">
-                                                            <h4 class="product-title">
-                                                                <a href="product.html">Blue utility pinafore denim dress</a>
-                                                            </h4>
+                                                    </div><!-- End .cart-product -->
 
-                                                            <span class="cart-product-info">
-                                                                <span class="cart-product-qty">1</span>
-                                                                x $76.00
-                                                            </span>
-                                                        </div><!-- End .product-cart-details -->
+                                                    <div class="dropdown-cart-total">
+                                                        <span>Total</span>
+                                                        <span class="cart-total-price">&#2547;{{cost}}</span>
+                                                    </div><!-- End .dropdown-cart-total -->
 
-                                                        <figure class="product-image-container">
-                                                            <a href="product.html" class="product-image">
-                                                                <img src="assets/images/products/cart/product-2.jpg" alt="product">
-                                                            </a>
-                                                        </figure>
-                                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                                    </div><!-- End .product -->
-                                                </div><!-- End .cart-product -->
-
-                                                <div class="dropdown-cart-total">
-                                                    <span>Total</span>
-
-                                                    <span class="cart-total-price">$160.00</span>
-                                                </div><!-- End .dropdown-cart-total -->
-
-                                                <div class="dropdown-cart-action">
-                                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                                                </div><!-- End .dropdown-cart-total -->
-                                            </div><!-- End .dropdown-menu -->
+                                                    <div class="dropdown-cart-action">
+                                                        <a href="/cart" class="btn btn-primary">View Cart</a>
+                                                        <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                                    </div><!-- End .dropdown-cart-total -->
+                                                </div><!-- End .dropdown-menu -->
                                         </div><!-- End .cart-dropdown -->
                                     </div>
                                 </div><!-- End .col-xxl-5col -->
@@ -244,7 +242,7 @@
                                             {% for category in category %}
                                             {% if category.groups.all|length > 0 %}
                                             <li class="megamenu-container">
-                                                <a class="sf-with-ul" href="#"><i class="icon-laptop"></i>{{category.name}}</a>
+                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}"><i class="icon-laptop"></i>{{category.name}}</a>
                                                 <div class="megamenu">
                                                     <div class="row no-gutters">
                                                         <div class="col-md-8">
@@ -253,10 +251,10 @@
                                                                     {% for group in category.groups.all %}
                                                                     <div class="col-md-6">
                                                                         {% if group.subcategorys.all|length > 0 %}
-                                                                            <div class="menu-title">{{group.name}}</div><!-- End .menu-title -->
+                                                                            <div class="menu-title"><a href="/category/{{group.id}}/{{group.slug}}">{{group.name}}</a></div><!-- End .menu-title -->
                                                                             <ul>
                                                                                 {% for subcat in group.subcategorys.all %}
-                                                                                    <li><a href="#">{{subcat.name}}</a></li>
+                                                                                    <li><a href="/category/{{subcat.id}}/{{subcat.slug}}">{{subcat.name}}</a></li>
                                                                                 {% endfor %}
                                                                             </ul>
                                                                         {% endif %}
@@ -265,13 +263,15 @@
                                                                 </div><!-- End .row -->
                                                             </div><!-- End .menu-col -->
                                                         </div><!-- End .col-md-8 -->
+                                                        {% if category.banner %}
                                                         <div class="col-md-4">
                                                             <div class="banner banner-overlay">
                                                                 <a href="category.html" class="banner banner-menu">
-                                                                    <img src="assets/images/demos/demo-13/menu/banner-1.jpg" alt="Banner">
+                                                                    <img src="{{category.banner.url}}" alt="Banner">
                                                                 </a>
                                                             </div><!-- End .banner banner-overlay -->
                                                         </div><!-- End .col-md-4 -->
+                                                        {% endif %}
                                                     </div><!-- End .row -->
                                                 </div><!-- End .megamenu -->
                                             </li>
@@ -657,7 +657,7 @@
                         </div><!-- End .col-xl-9 col-xxl-10 -->
 
                         <div class="col col-lg-3 col-xl-3 col-xxl-2 header-right">
-                            <i class="la la-lightbulb-o"></i><p>Clearance Up to 30% Off</span></p>
+                            <i class="la la-lightbulb-o"></i><p>Clearance Up to 30% Off</p>
                         </div>
                     </div><!-- End .row -->
                 </div><!-- End .container-fluid -->
@@ -1022,15 +1022,15 @@
                             </ul>
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    <form action="#">
+                                    <form method="post" onsubmit="Login(event)">
                                         <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <label for="signin-email">Email</label>
+                                            <input type="email" class="form-control" id="signin-email" name="signin-email" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <label for="signin-password">Password</label>
+                                            <input type="password" class="form-control" id="signin-password" name="signin-password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -1066,19 +1066,37 @@
                                     </div><!-- End .form-choice -->
                                 </div><!-- .End .tab-pane -->
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
+                                    <form method="post" id="registration-form" onsubmit="Registration(event)">
                                         <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                            <label for="signup-first-name">First Name</label>
+                                            <input type="text" class="form-control" id="signup-first-name" name="signup-first-name" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                            <label for="signup-last-name">Last Name</label>
+                                            <input type="text" class="form-control" id="signup-last-name" name="signup-last-name" required>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label for="signup-email">Email</label>
+                                            <input type="email" class="form-control" id="signup-email" name="signup-email" required>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label for="signup-password">Password</label>
+                                            <input type="password" class="form-control" id="signup-password" name="signup-password" required>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <div class="d-flex justify-content-between">
+                                                <label for="signup-confirm-password">Confirm password</label>
+                                                <small id="pass-alert" class="text-danger">Password don't matched</small>
+                                            </div>
+                                            <input type="password" class="form-control" id="signup-confirm-password" name="signup-confirm-password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
+                                            <button type="submit" id="registration-btn" class="btn btn-outline-primary-2" disabled>
                                                 <span>SIGN UP</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
@@ -1114,6 +1132,19 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+
+    <div id="user">{% if user.is_authenticated %}yes{% else %}no{% endif %}</div>
+
+    <div id="modal-alert"></div>
+
+    <div class="overlay" id="overlay">
+        <div class="load" style="background-image: url('{{shopinfo.favicon.url}}');">
+            <div class="spinners">
+                <div class="spin-inner"></div>
+                <div class="spin-outter"></div>
+            </div>
+        </div>
+    </div>
 
     {% comment %} <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
         <div class="row justify-content-center">
@@ -1159,6 +1190,7 @@
     <!-- Main JS File -->
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/demos/demo-14.js' %}"></script>
+    <script src="{% static 'assets/account.js' %}"></script>
     {% block extra_js %}{% endblock extra_js %}
 </body>
 

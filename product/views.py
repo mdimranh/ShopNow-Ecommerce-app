@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.views.generic import DetailView
 from .models import Product, Images
 from setting.models import ShopInfo
-from product.models import Category, Group
+from product.models import Category, Group, Subcategory
 from django.core.paginator import Paginator
+
+from django.template.defaultfilters import slugify
 
 from django.http.response import JsonResponse
 
@@ -25,13 +27,12 @@ def ProductDetails(request, id):
     return render(request, 'product/product-details.html', context)
 
 def CategoryProduct(request, id, slug):
-    categorys = Category.objects.all()
-    shopinfo = ShopInfo.objects.first()
-    category = Category.objects.get(id = id)
-    if category.parent is not None:
-        product = Product.objects.filter(category = category)
-    else:
-        product = Product.objects.filter(category__parent = category)
+    if Category.objects.filter(id = id, slug = slug).exists():
+        product = Product.objects.filter(category__id = id)
+    elif Group.objects.filter(id = id, slug = slug).exists():
+        product = Product.objects.filter(group__id = id)
+    elif Subcategory.objects.filter(id = id, slug = slug).exists():
+        product = Product.objects.filter(subcategory__id = id)
 
     pd = []
     for i in range(100):
@@ -40,7 +41,7 @@ def CategoryProduct(request, id, slug):
     paginator = Paginator(pd, 12) # Show 12 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'product/category-product.html', {'product': page_obj, 'category': categorys, 'shopinfo': shopinfo, 'cat': category})
+    return render(request, 'product/category.html', {'product': page_obj})
 
 class CategoryGroupList(APIView):
     permission_classes = [IsAuthenticated,]

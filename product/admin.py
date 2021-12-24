@@ -70,8 +70,13 @@ class SubctegoryInline(admin.TabularInline):
     # classes = ['collapse']
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'Total_Group', 'Total_Subcategory']
+    list_display = ['name', 'Total_Group', 'Total_Subcategory', 'image_tag']
     inlines = [GroupInline, SubctegoryInline]
+    prepopulated_fields = {'slug':('name',)}
     class Media:
         js=("category.js",)
 admin.site.register( Category, CategoryAdmin)
+
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ['name', 'image_tag']
+admin.site.register(Brands, BrandAdmin)

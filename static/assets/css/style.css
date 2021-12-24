@@ -540,7 +540,7 @@ blockquote.text-white cite span {
 }
 .header {
   width: 100%;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
 }
 .header .container,
 .header .container-fluid {
@@ -554,12 +554,12 @@ blockquote.text-white cite span {
   display: flex;
   align-items: center;
 }
-.header-left{
+/* .header-left{
   margin-left: -30px;
-}
-.header-right{
+} */
+/* .header-right{
   margin-right: -30px;
-}
+} */
 .header-right {
   margin-left: auto;
   align-self: stretch;
@@ -1795,8 +1795,7 @@ blockquote.text-white cite span {
 .menu .megamenu,
 .menu ul {
   background-color: #fff;
-  box-shadow: 5px 10px 16px rgba(51, 51, 51, 0.05),
-    -5px 10px 16px rgba(51, 51, 51, 0.05);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 .menu ul {
   min-width: 218px;
@@ -1988,6 +1987,7 @@ blockquote.text-white cite span {
 .side-nav {
   position: relative;
   margin: 0;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .sidenav-title {
   font-weight: 600;
@@ -2120,6 +2120,7 @@ blockquote.text-white cite span {
 .menu-vertical li.show > ul,
 .menu-vertical li.show > .megamenu {
   display: block;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 .menu-vertical a:not(.btn) {
   display: block;
@@ -4412,7 +4413,7 @@ p {
 .header-14 .header-bottom .container-fluid {
   display: block;
 }
-.header-14 .header-bottom .container::after,
+/* .header-14 .header-bottom .container::after,
 .header-14 .header-bottom .container-fluid::after {
   content: "";
   position: absolute;
@@ -4421,7 +4422,7 @@ p {
   right: 16%;
   width: 0.1rem;
   background-color: #fff;
-}
+} */
 .header-14 .header-dropdown {
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
@@ -7815,6 +7816,7 @@ p {
   height: auto;
 }
 .banner.banner-menu img {
+  max-height: 400px;
   height: 100%;
 }
 .banner-content {
@@ -8500,7 +8502,7 @@ p {
   font-weight: 300;
   color: #777;
   background-color: #fafafa;
-  border: 1px solid #ebebeb;
+  border: 1px solid #FDCE78;
   border-radius: 0;
   margin-bottom: 2rem;
   transition: all 0.3s;
@@ -13306,7 +13308,7 @@ button:focus {
 }
 .table.table-summary tbody td {
   padding: 0;
-  height: 70px;
+  /* height: 70px; */
   border-bottom: 0.1rem solid #ebebeb;
 }
 .table.table-summary thead th,
