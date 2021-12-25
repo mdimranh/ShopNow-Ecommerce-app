@@ -41,7 +41,14 @@ def CategoryProduct(request, id, slug):
     paginator = Paginator(pd, 12) # Show 12 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'product/category.html', {'product': page_obj})
+    shopinfo = ShopInfo.objects.first()
+    categorys = Category.objects.all()
+    context = {
+        'product': page_obj,
+        'shopinfo': shopinfo,
+        'category': categorys
+    }
+    return render(request, 'product/category.html', context)
 
 class CategoryGroupList(APIView):
     permission_classes = [IsAuthenticated,]

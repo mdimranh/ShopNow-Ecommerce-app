@@ -1,4 +1,34 @@
-﻿@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800");
+﻿
+.pagination-box {
+  text-align: center;
+}
+.pagination-box > li {
+  display: inline-block;
+}
+.pagination-box > li.active a {
+  color: white;
+  background-color: #7E48D6;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  margin-top: -15px;
+  padding: 2px 2px;
+  text-align: center;
+}
+.pagination-box > li a {
+  color: #333333;
+  display: block;
+  padding: 0 10px;
+}
+.pagination-box > li a:hover {
+	color: #7E48D6;
+}
+.pagination-box > li.active a:hover {
+	color: white;
+}
+
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800");
 html {
   font-size: 62.5%;
   -webkit-text-size-adjust: 100%;

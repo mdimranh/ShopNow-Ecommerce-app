@@ -10,7 +10,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Category(models.Model):
     name = models.CharField(max_length=200)
     banner = models.ImageField(upload_to = 'category/banner/', blank=True, null=True)
-    slug= models.SlugField(null=True, blank=True, unique=True)
+    slug= models.SlugField(null=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -28,41 +28,29 @@ class Category(models.Model):
             return 'Null'
     image_tag.short_description = 'Banner'
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
-
 
 class Group(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='groups')
-    slug = models.SlugField(null=True, blank=True, unique=True)
+    slug = models.SlugField(null=True)
 
     def __str__(self):
         return self.name
 
     def total_subcategory(self):
         return Subcategory.objects.filter(group__id=self.id).count()
-    
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
 
 class Subcategory(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, related_name='subcategorys')
-    slug= models.SlugField(null=True, blank=True, unique=True)
+    slug= models.SlugField(null=True)
 
     def __str__(self):
         return self.name
 
     def total_product(self):
         return Product.objects.filter(category__id=self.id).count()
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
 
 class Brands(models.Model):
     name = models.CharField(max_length=50)
@@ -133,7 +121,7 @@ class Product(models.Model):
                 img.save(self.image.path)
 
 class Images(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
     title = models.CharField(max_length=200, blank=True)
     image = models.ImageField(blank=True, upload_to='product/')
 

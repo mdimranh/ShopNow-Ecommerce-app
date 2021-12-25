@@ -24,11 +24,13 @@
     <meta name="msapplication-config" content="{% static 'assets/images/icons/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static 'assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/owl-carousel/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/magnific-popup/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery.countdown.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/css/iziModal.css" integrity="sha512-pH06JFjxM84j7iRF99/Cw7d9R9m2mVmEVr8oI0kK8gVkr461DI+8OYpQctHUrbmdOH7oaRyDRkkCVlQIQCFEiQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
@@ -1135,7 +1137,7 @@
 
     <div id="user">{% if user.is_authenticated %}yes{% else %}no{% endif %}</div>
 
-    <div id="modal-alert"></div>
+    <div id="add-product-modal"></div>
 
     <div class="overlay" id="overlay">
         <div class="load" style="background-image: url('{{shopinfo.favicon.url}}');">
@@ -1191,6 +1193,20 @@
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/demos/demo-14.js' %}"></script>
     <script src="{% static 'assets/account.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.js" integrity="sha512-fOWk6n+fmfFNHxlw7GapMIXgsNkSR2+GaKj40YUCErg2tThtROhqD6pxfLOqbo6kA2De2qPXEiv+7HltNDrDNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var mdl = $("#add-product-modal").iziModal({
+            radius: 0,
+            padding: 20,
+            closeButton: true,
+            title: 'Product add successfully.',
+            headerColor: '#8160B7',
+            width: 850,
+            fullscreen: true,
+            zindex: 2000,
+        });
+        $('#add-product-modal').iziModal('open');
+    </script>
     {% block extra_js %}{% endblock extra_js %}
 </body>
 
