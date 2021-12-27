@@ -77,9 +77,6 @@ class CategoryAdmin(admin.ModelAdmin):
         js=("category.js",)
 admin.site.register( Category, CategoryAdmin)
 
-admin.site.register( Subcategory)
-admin.site.register( Group)
-
 class BrandAdmin(admin.ModelAdmin):
     list_display = ['name', 'image_tag']
 admin.site.register(Brands, BrandAdmin)

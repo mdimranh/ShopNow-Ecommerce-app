@@ -53,6 +53,41 @@ def Account(request):
                 return HttpResponse({'msg': msg})
     return HttpResponse({"msg": 'Something is wrong'})
 
+def Profile(request):
+    shopinfo = ShopInfo.objects.all().first()
+    categorys = Category.objects.all()
+    total_cost = 0
+    item = 0
+    if request.user.is_authenticated:
+        shopcart = ShopCart.objects.filter(user = request.user)
+        total_cost = 0
+        for item in shopcart:
+            price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+            cost = price*item.quantity
+            total_cost += cost
+        for item in shopcart[:1]:
+            if item.coupon:
+                if item.coupon.discount_type == 'fixed':
+                    total_cost -= item.coupon.value
+                else:
+                    total_cost = total_cost - (total_cost * item.coupon.value / 100)
+        item = shopcart.count()
+        context = {
+            'shopinfo': shopinfo,
+            'category': categorys,
+            'shopcart': shopcart,
+            'cost': total_cost,
+            'item': item
+        }
+    else:
+        context = {
+            'shopinfo': shopinfo,
+            'category': categorys,
+            'cost': total_cost,
+            'item': item
+        }
+    return render(request, 'account/profile.html', context)
+
 def Logout(request):
     auth.logout(request)
     return redirect('/')

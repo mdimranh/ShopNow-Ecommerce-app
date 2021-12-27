@@ -5253,6 +5253,7 @@ p {
   display: flex;
   flex-direction: column;
   text-align: center;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.24);
 }
 .heading .title {
   margin-bottom: 0;
@@ -6419,17 +6420,18 @@ p {
 .product-media {
   position: relative;
   display: block;
-  background-color: #d7d7d7;
+  background-color: none;
   margin-bottom: 0;
   overflow: hidden;
 }
 .product-media > a {
-  display: block;
+  display: flex;
+  justify-content: center;
 }
 .product-image {
   display: block;
-  width: 100%;
-  height: auto;
+  width: auto !important;
+  max-height: 180px;
 }
 .product-image-hover {
   position: absolute;
@@ -9011,8 +9013,8 @@ small.form-text {
 .table td {
   padding-left: 0;
   padding-right: 0;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
+  /* padding-top: 1.4rem; */
+  /* padding-bottom: 1.4rem; */
 }
 .table td {
   vertical-align: middle;
@@ -9538,6 +9540,7 @@ button:focus {
 .brand img {
   width: auto !important;
   max-width: 100% !important;
+  max-height: 45px;
 }
 .brand:focus {
   outline: none !important;
@@ -9579,7 +9582,7 @@ button:focus {
   margin-left: -1rem;
   margin-right: -1rem;
   margin-top: -3rem;
-  padding-top: 3rem;
+  /* padding-top: 3rem; */
 }
 .carousel-with-shadow.owl-simple .owl-nav [class*="owl-"] {
   margin-top: -31px;
@@ -13439,8 +13442,8 @@ button:focus {
   }
 }
 .table td {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  /* padding-top: 3rem; */
+  /* padding-bottom: 3rem; */
 }
 .table .price-col {
   width: 180px;
@@ -13557,6 +13560,7 @@ button:focus {
   color: #fff;
   background-color: #FCB941;
 }
+
 @media screen and (max-width: 991px) {
   .table-mobile,
   .table-mobile tbody,
@@ -16392,3 +16396,14 @@ button:focus {
   content: "\f7e3";
 }
 /*# sourceMappingURL=style.css.map */
+
+
+.product{
+  border: 1px solid rgba(128, 128, 128, 0.18);
+  padding: 0;
+  margin: 0;
+}
+
+.product:hover{
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 1px 2px 0px, rgba(14, 30, 37, 0.32) 0px 1px 8px 0px;
+}

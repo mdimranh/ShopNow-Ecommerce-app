@@ -81,7 +81,7 @@
                                             <a href="#">{{user.first_name}} {{user.last_name}}</a>
                                             <div class="header-menu">
                                                 <ul>
-                                                    <li><a href="#">My Account</a></li>
+                                                    <li><a id="my-account" href="/profile">My Account</a></li>
                                                     <li><a href="/auth/logout">Logout</a></li>
                                                 </ul>
                                             </div><!-- End .header-menu -->
@@ -90,7 +90,7 @@
                                     {% endif %}
                                     {% if not user.is_authenticated %}
                                     <li class="login">
-                                        <a href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
+                                        <a id="login-modal-btn" href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
                                     </li>
                                     {% endif %}
                                 </ul>
@@ -118,12 +118,13 @@
                                 <div class="col-lg-8 col-xxl-4-5col d-none d-lg-block">
                                     <div class="header-search header-search-extended header-search-visible header-search-no-radius">
                                         <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                                        <form action="#" method="get">
+                                        <form method="post" action="{% url 'search' %}">
+                                            {% csrf_token %}
                                             <div class="header-search-wrapper search-wrapper-wide">
 
                                                 <div class="select-custom">
-                                                    <select id="cat" name="cat">
-                                                        <option value="">All Departments</option>
+                                                    <select id="cat" name="category">
+                                                        <option value="0">All Departments</option>
                                                         {% for category in category %}                       
                                                             <option class='bolden' value="{{category.id}}"><h4>{{category.name}}</h4></option>
                                                             {% for group in category.groups.all %}
@@ -136,7 +137,7 @@
                                                     </select>
                                                 </div><!-- End .select-custom -->
                                                 <label for="q" class="sr-only">Search</label>
-                                                <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                                                <input type="search" class="form-control" name="query" id="q" placeholder="Search product ..." required>
 
                                                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                                             </div><!-- End .header-search-wrapper -->
@@ -144,6 +145,7 @@
                                     </div><!-- End .header-search -->
                                 </div><!-- End .col-xxl-4-5col -->
 
+                                {% if user.is_authenticated %}
                                 <div class="col-lg-4 col-xxl-5col d-flex justify-content-end align-items-center">
                                     <div class="header-dropdown-link">
                                         <div class="dropdown compare-dropdown">
@@ -171,7 +173,7 @@
                                             </div><!-- End .dropdown-menu -->
                                         </div><!-- End .compare-dropdown -->
 
-                                        <a href="wishlist.html" class="wishlist-link">
+                                        <a href="/wishlist" class="wishlist-link">
                                             <i class="icon-heart-o"></i>
                                             <span class="wishlist-count">3</span>
                                             <span class="wishlist-txt">Wishlist</span>
@@ -180,7 +182,7 @@
                                         <div class="dropdown cart-dropdown">
                                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                                 <i class="icon-shopping-cart"></i>
-                                                <span class="cart-count">2</span>
+                                                <span class="cart-count">{{item}}</span>
                                                 <span class="cart-txt">Cart</span>
                                             </a>
 
@@ -212,7 +214,7 @@
 
                                                     <div class="dropdown-cart-total">
                                                         <span>Total</span>
-                                                        <span class="cart-total-price">&#2547;{{cost}}</span>
+                                                        <span class="cart-total-price" id="cart-total-price">&#2547;{{cost}}</span>
                                                     </div><!-- End .dropdown-cart-total -->
 
                                                     <div class="dropdown-cart-action">
@@ -223,6 +225,8 @@
                                         </div><!-- End .cart-dropdown -->
                                     </div>
                                 </div><!-- End .col-xxl-5col -->
+                                {% endif %}
+
                             </div><!-- End .row -->
                         </div><!-- End .col-xl-9 col-xxl-10 -->
                     </div><!-- End .row -->
@@ -1135,9 +1139,49 @@
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
 
-    <div id="user">{% if user.is_authenticated %}yes{% else %}no{% endif %}</div>
+    <div id="user" style="display:none;">{% if user.is_authenticated %}yes{% else %}no{% endif %}</div>
 
-    <div id="add-product-modal"></div>
+    <div id="add-product-modal">
+        <table class="table table-cart table-mobile">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if user.is_authenticated %}
+                {% for cart in shopcart %}
+                <tr>
+                    <td class="product-col">
+                        <div class="product">
+                            <figure class="product-media">
+                                <a href="#">
+                                    <img src="{{cart.product.image.url}}" alt="Product image">
+                                </a>
+                            </figure>
+                            <h3 class="product-title">
+                                <a href="#">{{cart.product.title}}</a>
+                            </h3><!-- End .product-title -->
+                        </div><!-- End .product -->
+                    </td>
+                    <td class="price-col">&#2547;{{cart.product.price}}</td>
+                    <td class="quantity-col">
+                        <div class="cart-product-quantity">
+                            <input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
+                        </div><!-- End .cart-product-quantity -->
+                    </td>
+                    <td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
+                    <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table><!-- End .table table-wishlist -->
+    </div>
 
     <div class="overlay" id="overlay">
         <div class="load" style="background-image: url('{{shopinfo.favicon.url}}');">

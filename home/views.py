@@ -115,7 +115,7 @@ def SearchView(request):
         if cat_id == '0':
             products = Product.objects.filter(title__icontains = query)
         else:
-            products = Product.objects.filter(Q(category__id = cat_id, title__icontains = query) | Q(category__parent__id = cat_id, title__icontains = query))
+            products = Product.objects.filter(Q(category__id = cat_id, title__icontains = query) | Q(group__id = cat_id, title__icontains = query) | Q(subcategory__id = cat_id, title__icontains = query))
         paginator = Paginator(products, 12) # Show 12 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -123,4 +123,4 @@ def SearchView(request):
         categorys = Category.objects.all()
         teaminfo = TeamInfo.objects.all()
         aboutus = Aboutus.objects.all().first()
-        return render(request, 'product/category-product.html', {'product': page_obj, 'category': categorys, 'shopinfo': shopinfo})
+        return render(request, 'product/category.html', {'product': page_obj, 'category': categorys, 'shopinfo': shopinfo})

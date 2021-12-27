@@ -9,7 +9,7 @@ function quantity(type, amount){
   }
 }
 
-function AddProduct(id, name, image, price, quantity) {
+function AddProduct(id, quantity) {
   document.getElementById("overlay").style.display = "block";
   if (document.getElementById('user').innerText === 'yes'){
     if(quantity === 'no'){
@@ -22,29 +22,12 @@ function AddProduct(id, name, image, price, quantity) {
       type: 'POST',
       url: 'http://localhost:8000/ajax/addtocart',
       data: { 
-        'id': id, 
-        'name': name,
-        'image': image,
-        'price': price,
+        'id': id,
         'quantity': quantity,
         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
       },
       success: function(resp){
-        // document.getElementById("myAlert-message").innerHTML = resp.msg;
-        // showAlert();
-        // document.getElementById("item-text").innerHTML = resp.item;
-        // document.getElementById("item-cost").innerHTML = resp.cost;
-        // var product = JSON.parse(resp.product);
-        // document.getElementById('product-title').innerHTML = product.title;
-        // document.getElementById('product-category-title').innerHTML = product.category;
-        // document.getElementById('product-amount').innerHTML = quantity;
-        // document.getElementById('product-image').src = product.image;
-        // document.getElementById('product-price').innerHTML = "&#2547;"+(parseFloat(product.price)*quantity);
-        // document.getElementById('product-main-price').innerHTML = "&#2547;"+product.main_price;
-        // document.getElementById('product-discount').innerHTML = "("+product.discount+"% off)";
-        // $("#add-product-modal").iziModal('open');
-        // document.getElementById("overlay").style.display = "none";
-        // varstr = JSON.stringify(resp.cart);
+        document.getElementById("cart-total-price").innerHTML = "&#2547;"+resp.cost;
         $("#dropdown-cart-products").empty();
         varjson = JSON.parse(JSON.stringify(resp.cart));
         varjson.forEach(function(data){
@@ -63,7 +46,7 @@ function AddProduct(id, name, image, price, quantity) {
                               <img src="${data.image}" alt="product">
                           </a>
                       </figure>
-                      <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                      <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
           $('#dropdown-cart-products').append(div);
           document.getElementById("overlay").style.display = "none";
@@ -77,10 +60,10 @@ function AddProduct(id, name, image, price, quantity) {
       },
     });
   }
-  // else{
-  //   window.location = 'http://127.0.0.1:8000/auth';
-  //   document.getElementById("overlay").style.display = "none";
-  // }
+  else{
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById('login-modal-btn').click();
+  }
 }
 
 function Update(id, quantity){
@@ -94,7 +77,35 @@ function Update(id, quantity){
       'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
     },
     success: function(resp){
-      console.log(resp.msg);
+      if (resp.msg_type){
+        alert(resp.msg);
+      }
+      else{
+      document.getElementById("cart-total-price").innerHTML = "&#2547;"+resp.cost;
+      document.getElementById("total-cost").innerHTML = "&#2547;"+resp.cost;
+        $("#dropdown-cart-products").empty();
+        varjson = JSON.parse(JSON.stringify(resp.cart));
+        varjson.forEach(function(data){
+          var div = `<div class="product">
+                      <div class="product-cart-details">
+                          <h4 class="product-title">
+                              <a href="product.html">${data.title}</a>
+                          </h4>
+                          <span class="cart-product-info">
+                              <span class="cart-product-qty">${data.amount}</span>
+                              X${data.price}
+                          </span>
+                      </div><!-- End .product-cart-details -->
+                      <figure class="product-image-container">
+                          <a href="product.html" class="product-image">
+                              <img src="${data.image}" alt="product">
+                          </a>
+                      </figure>
+                      <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
+                  </div>`
+          $('#dropdown-cart-products').append(div);
+        });
+      }
       document.getElementById("overlay").style.display = "none";
     },
     headers: {
@@ -102,6 +113,10 @@ function Update(id, quantity){
       },
   });
 }
+
+$("input[class='form-control amount']").on('change', function(){
+  Update($(this).attr("cart-id"), $(this).val());
+});
 
 $("#coupon-btn").click(function(){
   addCoupon();
@@ -123,7 +138,8 @@ function addCoupon() {
         $("#coupon-success").removeClass('d-none');
         document.getElementById('coupon-fail').innerHTML = '';
         document.getElementById("coupon-amount").innerHTML = resp.value;
-        document.getElementById('total-cost').innerHTML = "&#2547;"+resp.cost;
+        document.getElementById("cart-total-price").innerHTML = "&#2547;"+resp.cost;
+        document.getElementById("total-cost").innerHTML = "&#2547;"+resp.cost;
         var div = document.getElementById('coupon-section');
         div.remove();
       }
@@ -135,14 +151,79 @@ function addCoupon() {
   });
 }
 
-// $('#cart-quantity').on('change', function(){
-//   console.log($(this).val());
-//   console.log($(this).attr("product-id"));
-// });
 
-$("input[class='form-control amount']").on('change', function(){
-  Update($(this).attr("cart-id"), $(this).val());
-});
+
+function CartDelete(id){
+  document.getElementById("overlay").style.display = "block";
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8000/ajax/cartdelete',
+    data: {
+      'id': id,
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    },
+    success: function(resp){
+      $('#cart'+id).remove();
+      document.getElementById("cart-total-price").innerHTML = "&#2547;"+resp.cost;
+      document.getElementById("total-cost").innerHTML = "&#2547;"+resp.cost;
+        $("#dropdown-cart-products").empty();
+        varjson = JSON.parse(JSON.stringify(resp.cart));
+        varjson.forEach(function(data){
+          var div = `<div class="product">
+                      <div class="product-cart-details">
+                          <h4 class="product-title">
+                              <a href="product.html">${data.title}</a>
+                          </h4>
+                          <span class="cart-product-info">
+                              <span class="cart-product-qty">${data.amount}</span>
+                              X${data.price}
+                          </span>
+                      </div><!-- End .product-cart-details -->
+                      <figure class="product-image-container">
+                          <a href="product.html" class="product-image">
+                              <img src="${data.image}" alt="product">
+                          </a>
+                      </figure>
+                      <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
+                  </div>`
+          $('#dropdown-cart-products').append(div);
+          document.getElementById("overlay").style.display = "none";
+        });
+      document.getElementById("overlay").style.display = "none";
+    },
+    headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+  });
+}
+
+
+function AddWishlist(id) {
+  document.getElementById("overlay").style.display = "block";
+  if (document.getElementById('user').innerText === 'yes'){
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:8000/ajax/addtowishlist',
+      data: { 
+        'id': id,
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(resp){
+        document.getElementById("overlay").style.display = "none";
+        alert(resp.msg);
+      },
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+    });
+  }
+  else{
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById('login-modal-btn').click();
+  }
+}
+
+
 
 
 var mdl = $("#add-product-modal").iziModal({

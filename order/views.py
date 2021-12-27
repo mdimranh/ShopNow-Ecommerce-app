@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse, JsonResponse
 
-from .models import ShopCart, Coupon
+from .models import ShopCart, Coupon, Wishlist
 from product.models import Product
 
 from setting.models import ShopInfo
@@ -17,11 +17,40 @@ def AddtoCart(request):
         cart = ShopCart.objects.get(id = request.POST['id'])
         if cart.product.amount < int(request.POST["update-quantity"]):
             msg = f"We have only {cart.product.amount} product"
+            msg_type = 'fail'
+            return JsonResponse({'msg':msg, 'msg_type':msg_type})
         else:
             cart.quantity = request.POST['update-quantity']
             cart.save()
-            msg = 'Successfull'
-        return JsonResponse({'msg': msg})
+            cart = ShopCart.objects.filter(user = request.user)
+            total_cost = 0
+            cart_serialize = []
+            cs={}
+            for item in cart:
+                price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+                cost = price*item.quantity
+                total_cost += cost
+                cs = {
+                    "category": item.product.category.name,
+                    "title": item.product.title,
+                    "image": item.product.image.url,
+                    "main_price": str(item.product.main_price),
+                    "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
+                    "discount": str(item.product.discount),
+                    "amount": item.quantity
+                }
+                cart_serialize.append(cs)
+            
+            for item in cart[:1]:
+                if item.coupon:
+                    if item.coupon.discount_type == 'fixed':
+                        total_cost -= item.coupon.value
+                    else:
+                        total_cost = total_cost - (total_cost * item.coupon.value / 100)
+            item = cart.count()
+            msg = "Product successfully added to cart!"
+            return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg, 'cart': cart_serialize})
+
     product_id = request.POST['id']
     if Product.objects.filter(id = product_id).exists():
         product = Product.objects.get(id = product_id)
@@ -97,7 +126,7 @@ def AddtoCart(request):
     shopcart = ShopCart(
         product= product,
         user = request.user,
-        quantity = quantity
+        quantity = request.POST['quantity']
     )
     shopcart.save()
     cart = ShopCart.objects.filter(user = request.user)
@@ -109,6 +138,7 @@ def AddtoCart(request):
         cost = price*item.quantity
         total_cost += cost
         cs = {
+            "id": item.id,
             "category": item.product.category.name,
             "title": item.product.title,
             "image": item.product.image.url,
@@ -176,11 +206,36 @@ def CartView(request):
     }
     return render(request, 'product/cart.html', context)
 
-def CartDelete(request, id):
-    url = request.META.get('HTTP_REFERER')
-    shopcart = ShopCart.objects.filter(user = request.user, product__id = id)
+def CartDelete(request):
+    shopcart = ShopCart.objects.get(id = request.POST['id'])
     shopcart.delete()
-    return HttpResponseRedirect(url)
+    cart = ShopCart.objects.filter(user = request.user)
+    total_cost = 0
+    cart_serialize = []
+    cs={}
+    for item in cart:
+        price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+        cost = price*item.quantity
+        total_cost += cost
+        cs = {
+            "category": item.product.category.name,
+            "title": item.product.title,
+            "image": item.product.image.url,
+            "main_price": str(item.product.main_price),
+            "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
+            "discount": str(item.product.discount),
+            "amount": item.quantity
+        }
+        cart_serialize.append(cs)
+    for item in cart[:1]:
+        if item.coupon:
+            if item.coupon.discount_type == 'fixed':
+                total_cost -= item.coupon.value
+            else:
+                total_cost = total_cost - (total_cost * item.coupon.value / 100)
+    item = cart.count()
+    msg = "Product successfully deleted"
+    return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg, 'cart': cart_serialize})
 
 def Checkout(request):
     shopinfo = ShopInfo.objects.all().first()
@@ -205,3 +260,23 @@ def Checkout(request):
         'item': shopcart.count()
     }
     return render(request, 'order/checkout.html', context)
+
+def AddtoWishlist(request):
+    if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
+        context = {
+            'msg': 'Product already exist in wish list.'
+        }
+        return JsonResponse(context)
+    wishlist = Wishlist(
+        user = request.user,
+        product = Product.objects.get(id = request.POST['id'])
+    )
+    wishlist.save()
+    return JsonResponse({'msg': 'Successfully added.'})
+
+def WishList(request):
+    wishlist = Wishlist.objects.filter(user = request.user)
+    context = {
+        'wishlist' : wishlist
+    }
+    return render(request, 'product/wishlist.html', context)

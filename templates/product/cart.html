@@ -33,9 +33,9 @@
 										</tr>
 									</thead>
 
-									<tbody>
+									<tbody id="cart-product">
                                         {% for cart in shopcart %}
-										<tr>
+										<tr id="cart{{cart.id}}">
 											<td class="product-col">
 												<div class="product">
 													<figure class="product-media">
@@ -56,7 +56,7 @@
                                                 </div><!-- End .cart-product-quantity -->
                                             </td>
 											<td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
-											<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+											<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
 										</tr>
                                         {% endfor %}
 									</tbody>
@@ -65,16 +65,24 @@
 	                			<div class="cart-bottom">
 			            			<div class="cart-discount">
                                         <p class="text-danger" id="coupon-fail"></p>
-                                        <p class="text-white bg-success px-3 py-1 d-none" id="coupon-success">Coupon added successfully</p>
-			            				<div class="input-group" id="coupon-section">
+										{% for cart in shopcart %}
+										{% if forloop.first %}
+										{% if cart.coupon_active %}
+                                        <p class="text-white bg-success px-3 py-1" id="coupon-success">Coupon added successfully</p>
+			            				{% else %}
+										<p class="text-white bg-success px-3 py-1 d-none" id="coupon-success">Coupon added successfully</p>
+										<div class="input-group" id="coupon-section">
 				        					<input type="text" class="form-control" id="coupon-code" placeholder="coupon code">
 				        					<div class="input-group-append">
 												<button id="coupon-btn" class="btn btn-outline-primary-2"><i class="icon-long-arrow-right"></i></button>
 											</div><!-- .End .input-group-append -->
 			        					</div><!-- End .input-group -->
+										{% endif %}
+										{% endif %}
+										{% endfor %}
 			            			</div><!-- End .cart-discount -->
 
-			            			<a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
+			            			{% comment %} <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> {% endcomment %}
 		            			</div><!-- End .cart-bottom -->
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
