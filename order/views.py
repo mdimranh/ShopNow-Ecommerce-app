@@ -55,6 +55,7 @@ def AddtoCart(request):
     if Product.objects.filter(id = product_id).exists():
         product = Product.objects.get(id = product_id)
         product_serialize = {
+            "id": product.id,
             "category": product.category.name,
             "title": product.title,
             "image": product.image.url,
@@ -95,6 +96,8 @@ def AddtoCart(request):
         shopcart = ShopCart.objects.get(product=product, user = request.user)
         shopcart.quantity = int(shopcart.quantity) + 1
         shopcart.save()
+        if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
+            Wishlist.objects.get(product__id = request.POST['id'], user = request.user).delete()
         cart = ShopCart.objects.filter(user = request.user)
         total_cost = 0
         cart_serialize = []
@@ -129,7 +132,9 @@ def AddtoCart(request):
         quantity = request.POST['quantity']
     )
     shopcart.save()
-    cart = ShopCart.objects.filter(user = request.user)
+    if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
+        Wishlist.objects.get(product__id = request.POST['id'], user = request.user).delete()
+    cart = ShopCart.objects.filter(user = request.user).order_by('created_at')
     total_cost = 0
     cart_serialize = []
     cs={}

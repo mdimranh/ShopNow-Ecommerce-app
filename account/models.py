@@ -23,7 +23,3 @@ class Profile(models.Model):
     class Meta:
         verbose_name_plural = 'Profiles'
         app_label = 'auth'
-
-# class ShippingAdderss(models.Model):
-#     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-#     region = models.ForeignKey(to, on_delete)

@@ -1,4 +1,16 @@
 
+var mdl = $("#add-product-modal").iziModal({
+    radius: 0,
+    padding: 20,
+    closeButton: true,
+    title: 'Product add successfully.',
+    headerColor: '#8160B7',
+    width: 850,
+    fullscreen: true,
+    zindex: 2000,
+});
+
+
 function quantity(type, amount){
   var val = parseInt(document.getElementById('pro-quantity').value);
   if(type === 'inc' && amount > val){
@@ -49,11 +61,40 @@ function AddProduct(id, quantity) {
                       <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
           $('#dropdown-cart-products').append(div);
-          document.getElementById("overlay").style.display = "none";
         });
-        // for (var property in product) {
-        //     console.log(property,":",product[property]);
-        // }
+        if($("#wishitem"+id).length > 0){
+          document.getElementById("wishitem"+id).remove();
+        }
+        var product = JSON.parse(resp.product);
+        var div = `<tr>
+                    <td class="product-col">
+                        <div class="product">
+                            <figure class="product-media">
+                                <a href="/products/${product.id}">
+                                    <img src="${product.image}" alt="Product image">
+                                </a>
+                            </figure>
+                            <h3 class="product-title">
+                                <a href="/products/${product.id}">${product.title}</a>
+                            </h3><!-- End .product-title -->
+                        </div><!-- End .product -->
+                    </td>
+                    <td class="product-price">
+                      <div class="d-flex flex-column">
+                        <span class="new-price">${product.price}</span><clear>
+                        <span class="old-price"><span>${product.main_price}</span> (${product.discount}%)</span>
+                      </div>
+                    </td>
+                    <td class="quantity-col">
+                        <div class="cart-product-quantity">
+                            <span>${quantity}</span>
+                        </div><!-- End .cart-product-quantity -->
+                    </td>
+                </tr>`;
+        document.getElementById("overlay").style.display = "none";
+        $('#modal-table-body').empty();
+        $('#modal-table-body').append(div);
+        $('#add-product-modal').iziModal('open');
       },
       headers: {
         "X-CSRFToken": getCookie("csrftoken")
@@ -222,17 +263,3 @@ function AddWishlist(id) {
     document.getElementById('login-modal-btn').click();
   }
 }
-
-
-
-
-var mdl = $("#add-product-modal").iziModal({
-    radius: 0,
-    padding: 20,
-    closeButton: true,
-    title: 'Product add successfully.',
-    headerColor: '#8160B7',
-    width: 850,
-    fullscreen: true,
-    zindex: 2000,
-});

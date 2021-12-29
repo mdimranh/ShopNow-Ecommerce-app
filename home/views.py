@@ -48,7 +48,6 @@ def Home(request):
     new_product = Product.objects.filter(status=True).order_by('-id')
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
     context = {
-        'shopinfo': shopinfo,
         'category': categorys,
         'subcategory': subcategorys,
         'brand': brand,

@@ -3,6 +3,12 @@ from django.contrib import admin
 from .models import *
 
 
+from solo.admin import SingletonModelAdmin
+from .models import SiteConfiguration
+
+admin.site.register(SiteConfiguration, SingletonModelAdmin)
+
+
 shopinfo = ShopInfo.objects.all().first()
 admin.site.site_header = shopinfo.name+" "+"Administration"
 
@@ -38,3 +44,5 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ['name', 'status', 'message', 'note']
     list_filter = ['status', 'created_at', 'updated_at']
 admin.site.register(ContactMessage, ContactMessageAdmin)
+
+admin.site.register(Region)

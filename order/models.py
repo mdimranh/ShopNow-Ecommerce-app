@@ -57,6 +57,7 @@ class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     coupon = models.ForeignKey(Coupon, blank=True, null=True, on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.user.first_name+''+self.user.last_name
@@ -78,6 +79,7 @@ class ShopCart(models.Model):
 class Wishlist(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.user.first_name+''+self.user.last_name

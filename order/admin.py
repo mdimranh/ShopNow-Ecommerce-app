@@ -3,11 +3,11 @@ from django.contrib import admin
 from .models import ShopCart, Wishlist, Coupon, UserLimits, UserRestrictions
 
 class ShopCartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'quantity', 'product_image', 'coupon_active']
+    list_display = ['user', 'product', 'quantity', 'created_at', 'product_image', 'coupon_active']
 admin.site.register(ShopCart, ShopCartAdmin)
 
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'product_image']
+    list_display = ['user', 'product', 'created_at', 'product_image']
 admin.site.register(Wishlist, WishlistAdmin)
 
 class UserRestrictionInlin(admin.TabularInline):

@@ -1,6 +1,28 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 
+import json
+
+from solo.models import SingletonModel
+
+class SiteConfiguration(SingletonModel):
+	name = models.CharField(max_length=255, default='Buy Now')
+	phone = models.CharField(max_length=20, default = 1)
+	logo = models.ImageField(upload_to='settings/', default = 'settings/logo.png')
+	address=models.CharField(max_length=200, default = 'Dhaka')
+	twitter = models.URLField(default = 'twitter.com')
+	facebook = models.URLField(default = 'facebook.com')
+	youtube = models.URLField(default = 'youtube.com')
+	instagram = models.URLField(default = 'instagram.com')
+	favicon = models.ImageField(upload_to='settings/')
+	maintenance_mode = models.BooleanField(default=False)
+
+	def __str__(self):
+		return "Site Configuration"
+
+	class Meta:
+		verbose_name = "Site Configuration"
+	
 
 BANNER_TYPE = (
 	('Left_1', 'Left 1'),
@@ -112,3 +134,40 @@ class Sliding(models.Model):
 	def image_tag(self):
 		return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
 	image_tag.short_description = 'Image'
+
+
+region_choice = [
+	('1', 'Barishal'),
+	('2', 'Chattogram'),
+	('3', 'Dhaka'),
+	('4', 'Khulna'),
+	('5', 'Rajshahi'),
+	('6', 'Rangpur'),
+	('7', 'Sylhet'),
+	('8', 'Mymensingh')
+]
+
+class Region(models.Model):   #division
+	name = models.CharField(max_length=50, choices=region_choice)
+
+	def __str__(self):
+		return list(region_choice[int(self.name)-1])[1]
+
+	def title(self):
+		return list(region_choice[int(self.name)])[1]
+	
+class City(models.Model):   #district
+	name = models.CharField(max_length=50, choices=region_choice)
+	divisions = models.ForeignKey(Region, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return self.name
+
+class Area(models.Model):   #district
+	name = models.CharField(max_length=50, choices=region_choice)
+	divisions = models.ForeignKey(Region, on_delete = models.CASCADE)
+	city = models.ForeignKey(City, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return self.name
+	

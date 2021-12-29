@@ -16407,3 +16407,13 @@ button:focus {
 .product:hover{
   box-shadow: rgba(14, 30, 37, 0.12) 0px 1px 2px 0px, rgba(14, 30, 37, 0.32) 0px 1px 8px 0px;
 }
+
+tbody .product{
+  border: none;
+  box-shadow: none;
+}
+
+tbody .product:hover{
+  border: none;
+  box-shadow: none;
+}

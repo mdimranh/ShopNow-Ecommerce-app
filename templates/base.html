@@ -1,4 +1,6 @@
 {% load static %}
+{% load solo_tags %}
+{% get_solo 'setting.SiteConfiguration' as site_config %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +32,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/owl-carousel/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/magnific-popup/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery.countdown.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/css/iziModal.css" integrity="sha512-pH06JFjxM84j7iRF99/Cw7d9R9m2mVmEVr8oI0kK8gVkr461DI+8OYpQctHUrbmdOH7oaRyDRkkCVlQIQCFEiQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'assets/izimodal/css/iziModal.css' %}"/>
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
@@ -43,7 +45,7 @@
             <div class="header-top">
                 <div class="container-fluid">
                     <div class="header-left">
-                        <a href="tel:#"><i class="icon-phone"></i>Call: {{shopinfo.phone}}</a>
+                        <a href="tel:#"><i class="icon-phone"></i>Call: {{site_config.phone}}</a>
                     </div><!-- End .header-left -->
 
                     <div class="header-right">
@@ -109,7 +111,7 @@
                                 <i class="icon-bars"></i>
                             </button>
                             <a href="/" class="logo">
-                                <img src="{{shopinfo.logo.url}}" alt="Molla Logo" width="105" height="25">
+                                <img src="{{site_config.logo.url}}" alt="Molla Logo" width="105" height="25">
                             </a>
                         </div><!-- End .col-xl-3 col-xxl-2 -->
                     
@@ -705,14 +707,14 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-4">
                             <div class="widget widget-about">
-                                <img src="{{shopinfo.logo.url}}" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                                <img src="{{site_config.logo.url}}" class="footer-logo" alt="Footer Logo" width="105" height="25">
                                 <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. </p>
                                 
                                 <div class="widget-about-info">
                                     <div class="row">
                                         <div class="col-sm-6 col-md-4">
                                             <span class="widget-about-title">Got Question? Call us 24/7</span>
-                                            <a href="tel:123456789">{{shopinfo.phone}}</a>
+                                            <a href="tel:123456789">{{site_config.phone}}</a>
                                         </div><!-- End .col-sm-6 -->
                                         <div class="col-sm-6 col-md-8">
                                             <span class="widget-about-title">Payment Method</span>
@@ -790,13 +792,13 @@
 
             <div class="footer-bottom">
                 <div class="container-fluid">
-                    <p class="footer-copyright">Copyright © 2021 {{shopinfo.name}}. All Rights Reserved.</p><!-- End .footer-copyright -->
+                    <p class="footer-copyright">Copyright © 2021 {{site_config.name}}. All Rights Reserved.</p><!-- End .footer-copyright -->
                     <div class="social-icons social-icons-color">
                         <span class="social-label">Social Media</span>
-                        <a href="{{shopinfo.facebook}}" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                        <a href="{{shopinfo.twitter}}" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="{{shopinfo.instagram}}" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                        <a href="{{shopinfo.youtube}}" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
+                        <a href="{{site_config.facebook}}" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                        <a href="{{site_config.twitter}}" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                        <a href="{{site_config.instagram}}" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                        <a href="{{site_config.youtube}}" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
                         {% comment %} <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a> {% endcomment %}
                     </div><!-- End .soial-icons -->
                 </div><!-- End .container-fluid -->
@@ -1148,43 +1150,15 @@
                     <th>Product</th>
                     <th>Price</th>
                     <th>Quantity</th>
-                    <th>Total</th>
-                    <th></th>
                 </tr>
             </thead>
-            <tbody>
-                {% if user.is_authenticated %}
-                {% for cart in shopcart %}
-                <tr>
-                    <td class="product-col">
-                        <div class="product">
-                            <figure class="product-media">
-                                <a href="#">
-                                    <img src="{{cart.product.image.url}}" alt="Product image">
-                                </a>
-                            </figure>
-                            <h3 class="product-title">
-                                <a href="#">{{cart.product.title}}</a>
-                            </h3><!-- End .product-title -->
-                        </div><!-- End .product -->
-                    </td>
-                    <td class="price-col">&#2547;{{cart.product.price}}</td>
-                    <td class="quantity-col">
-                        <div class="cart-product-quantity">
-                            <input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
-                        </div><!-- End .cart-product-quantity -->
-                    </td>
-                    <td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
-                    <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                </tr>
-                {% endfor %}
-                {% endif %}
+            <tbody id="modal-table-body">
             </tbody>
-        </table><!-- End .table table-wishlist -->
+        </table>
     </div>
 
     <div class="overlay" id="overlay">
-        <div class="load" style="background-image: url('{{shopinfo.favicon.url}}');">
+        <div class="load" style="background-image: url('{{site_config.favicon.url}}');">
             <div class="spinners">
                 <div class="spin-inner"></div>
                 <div class="spin-outter"></div>
@@ -1237,8 +1211,8 @@
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/demos/demo-14.js' %}"></script>
     <script src="{% static 'assets/account.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.5.1/js/iziModal.js" integrity="sha512-fOWk6n+fmfFNHxlw7GapMIXgsNkSR2+GaKj40YUCErg2tThtROhqD6pxfLOqbo6kA2De2qPXEiv+7HltNDrDNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
+    <script src="{% static 'assets/izimodal/js/iziModal.js' %}"></script>
+    {% comment %} <script>
         var mdl = $("#add-product-modal").iziModal({
             radius: 0,
             padding: 20,
@@ -1249,8 +1223,8 @@
             fullscreen: true,
             zindex: 2000,
         });
-        $('#add-product-modal').iziModal('open');
-    </script>
+    </script> {% endcomment %}
+    <script src="{% static 'assets/add-product.js' %}"></script>
     {% block extra_js %}{% endblock extra_js %}
 </body>
 
