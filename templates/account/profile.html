@@ -1,6 +1,7 @@
-
 {% extends 'base.html' %}
-
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'assets/css/profile.css' %}">{% endblock extra_css %}
 {% block custom %}
 <main class="main">
     {% comment %} <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -23,7 +24,7 @@
 	                <div class="container">
 	                	<div class="row">
 	                		<aside class="col-md-4 col-lg-3">
-	                			<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+	                			<ul class="nav nav-dashboard mb-3 mb-md-0" role="tablist">
 								    <li class="nav-item">
 								        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
 								    </li>
@@ -45,9 +46,75 @@
 	                		<div class="col-md-8 col-lg-9">
 	                			<div class="tab-content">
 								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<p>Hello <span class="font-weight-normal text-dark">{{user.first_name}} {{user.last_name}}</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
-								    	<br>
-								    	From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                                        <h4>Dashboard</h4>
+                                        <div class="container-fluid">
+                                            <div class="row m-0 p-0">
+                                                <div class="col-lg-4 col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0">Personal Profile<a href="#tab-account" class="tab-trigger-link ml-3">edit</a></h6>
+                                                    <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
+                                                    <p class="user-email">{{user.email}}</p>
+                                                </div>
+                                                <div class="col-lg-8 col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0 d-flex flex-fill">Address Book<a href="#tab-address" class="tab-trigger-link ml-3">edit</a></h6>
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <small>Default Shipping Address</small>
+                                                                <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
+                                                                <p class="user-email">{{user.email}}</p>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <small>Default Billing Address</small>
+                                                                <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
+                                                                <p class="user-email">{{user.email}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0 d-flex flex-fill">Recent Orders<a href="#tab-orders" class="tab-trigger-link ml-3">edit</a></h6>
+                                                    <table class="table table-cart table-mobile">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody id="cart-product">
+                                                            {% for cart in mycart %}
+                                                            <tr id="cart{{cart.id}}">
+                                                                <td class="product-col">
+                                                                    <div class="product">
+                                                                        <figure class="product-media">
+                                                                            <a href="#">
+                                                                                <img src="{{cart.product.image.url}}" alt="Product image">
+                                                                            </a>
+                                                                        </figure>
+
+                                                                        <h3 class="product-title">
+                                                                            <a href="#">{{cart.product.title}}</a>
+                                                                        </h3><!-- End .product-title -->
+                                                                    </div><!-- End .product -->
+                                                                </td>
+                                                                <td class="price-col">&#2547;{{cart.product.price}}</td>
+                                                                <td class="quantity-col">
+                                                                    <div class="cart-product-quantity">
+                                                                        <input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
+                                                                    </div><!-- End .cart-product-quantity -->
+                                                                </td>
+                                                                <td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
+                                                                <td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table><!-- End .table table-wishlist -->
+                                                </div>
+                                            </div>
+                                        </div>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
@@ -61,10 +128,9 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-
-                                            <tbody>
-                                                {% for cart in shopcart %}
-                                                <tr>
+                                            <tbody id="cart-product">
+                                                {% for cart in mycart %}
+                                                <tr id="cart{{cart.id}}">
                                                     <td class="product-col">
                                                         <div class="product">
                                                             <figure class="product-media">
@@ -72,7 +138,6 @@
                                                                     <img src="{{cart.product.image.url}}" alt="Product image">
                                                                 </a>
                                                             </figure>
-
                                                             <h3 class="product-title">
                                                                 <a href="#">{{cart.product.title}}</a>
                                                             </h3><!-- End .product-title -->
@@ -85,12 +150,13 @@
                                                         </div><!-- End .cart-product-quantity -->
                                                     </td>
                                                     <td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
-                                                    <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                                    <td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
-								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+								    	<a href="category.html" class="btn btn-outline-primary-2"><span>CHECKOUT</span><i class="icon-long-arrow-right"></i></a>
+								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-up"></i></a>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
@@ -99,71 +165,159 @@
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-								    	<table class="table table-cart table-mobile">
-                                            <tbody>
-                                                {% for cart in shopcart %}
+								    	<table class="table">
+                                            <thead>
                                                 <tr>
-                                                    <td class="product-col">
-                                                        <div class="product">
-                                                            <figure class="product-media">
-                                                                <a href="#">
-                                                                    <img src="{{cart.product.image.url}}" alt="Product image">
-                                                                </a>
-                                                            </figure>
-                                                            <h3 class="product-title">
-                                                                <a href="#">{{cart.product.title}}</a>
-                                                            </h3><!-- End .product-title -->
-                                                        </div><!-- End .product -->
-                                                    </td>
-                                                    <td class="price-col">&#2547;{{cart.product.price}}</td>
-                                                    <td class="quantity-col">
-                                                        <div class="cart-product-quantity">
-                                                            <input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
-                                                        </div><!-- End .cart-product-quantity -->
-                                                    </td>
-                                                    <td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
-                                                    <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                                    <th>Full Name</th>
+                                                    <th>Address</th>
+                                                    <th>Region</th>
+                                                    <th>Phone Number</th>
+                                                    <th></th>
+                                                    <th></th>
                                                 </tr>
-                                                {% endfor %}
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Imran Hossain</td>
+                                                    <td>Kaliakoir, Gazipur</td>
+                                                    <td>Dhaka-Gazipur-Mouchak</td>
+                                                    <td>01942504420</td>
+                                                    <td>Default addess</td>
+                                                    <td>edit</td>
+                                                </tr>
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
-								    </div><!-- .End .tab-pane -->
 
-								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-								    	<form action="#">
+                                        <form action="#" class="">
 			                				<div class="row">
 			                					<div class="col-sm-6">
-			                						<label>First Name *</label>
-			                						<input type="text" class="form-control" required>
+			                						<label>Full Name *</label>
+			                						<input type="text" class="form-control" required value="{{user.first_name}}">
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
-			                						<label>Last Name *</label>
-			                						<input type="text" class="form-control" required>
+			                						<label>Phone *</label>
+			                						<input type="text" class="form-control" required value="{{user.last_name}}">
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
-		            						<label>Display Name *</label>
+		            						{% comment %} <label>Display Name *</label>
 		            						<input type="text" class="form-control" required>
-		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
+		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label>Region *</label>
+                                                    <select class="form-control" name="" id="region">
+                                                        {% for item in region %}
+                                                            <option value="{{item.name}}">{{item.title}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
 
-		                					<label>Email address *</label>
-		        							<input type="email" class="form-control" required>
+                                                <div class="col-sm-4">
+                                                    <label>City *</label>
+                                                    <select class="form-control" name="" id="city" disabled>
+                                                        <option value="">---</option>
+                                                    </select>
+                                                </div>
 
-		            						<label>Current password (leave blank to leave unchanged)</label>
-		            						<input type="password" class="form-control">
+                                                <div class="col-sm-4">
+                                                    <label>Area *</label>
+                                                    <select class="form-control" name="" id="area" disabled>
+                                                        <option value="">---</option>
+                                                    </select>
+                                                </div>
+                                            </div><!-- End .row -->
 
-		            						<label>New password (leave blank to leave unchanged)</label>
-		            						<input type="password" class="form-control">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label>Address *</label>
+                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                </div>
+                                            </div><!-- End .row -->
 
-		            						<label>Confirm new password</label>
-		            						<input type="password" class="form-control mb-2">
-
-		                					<button type="submit" class="btn btn-outline-primary-2">
+		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
 			                					<span>SAVE CHANGES</span>
 			            						<i class="icon-long-arrow-right"></i>
 			                				</button>
 			                			</form>
+
+								    </div><!-- .End .tab-pane -->
+
+								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+								    	<h4>Address Book</h4>
+                                        <form action="#" class="d-none address-edit">
+			                				<div class="row">
+			                					<div class="col-sm-6">
+			                						<label>First Name *</label>
+			                						<input type="text" class="form-control" required value="{{user.first_name}}">
+			                					</div><!-- End .col-sm-6 -->
+
+			                					<div class="col-sm-6">
+			                						<label>Last Name *</label>
+			                						<input type="text" class="form-control" required value="{{user.last_name}}">
+			                					</div><!-- End .col-sm-6 -->
+			                				</div><!-- End .row -->
+
+		            						{% comment %} <label>Display Name *</label>
+		            						<input type="text" class="form-control" required>
+		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label>Email address *</label>
+                                                    <input type="email" class="form-control" required value="{{user.email}}">
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <label>Phone *</label>
+                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                </div>
+                                            </div><!-- End .row -->
+
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label>Birth Day</label>
+		        							        <input type="date" class="form-control" required value="{{user.email}}">
+                                                </div>
+
+                                                <div class="col-sm-8">
+                                                    <div class="d-flex flex-column">
+                                                        <label>Gender</label>
+                                                        <div class="d-flex flex-fill">
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="radio" class="d-none" id="male" value="male" name="gender">
+                                                                <label for="male"><span type="btn" class="btn btn-outline-warning male-btn active">Male</span></label>
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="radio" class="d-none" id="female" value="female" name="gender">
+                                                                <label for="female"><span type="btn" class="btn btn-outline-warning female-btn">Female</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- End .row -->
+
+		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
+			                					<span>SAVE CHANGES</span>
+			            						<i class="icon-long-arrow-right"></i>
+			                				</button>
+			                			</form>
+                                        <div class="container-fluid address-view">
+                                            <div class="row m-0 p-0">
+                                                <div class="col-lg-4 col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0">Name<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
+                                                    <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
+                                                </div>
+                                                <div class="col-lg-4 col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0">Email<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
+                                                    <p class="m-0 p-0">{{user.email}}</p>
+                                                </div>
+                                                <div class="col-lg-4 col-12 m-0 p-0">
+                                                    <h6 class="m-0 p-0">Phone<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
+                                                    <p class="m-0 p-0">{{user.email}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
 								    </div><!-- .End .tab-pane -->
 								</div>
 	                		</div><!-- End .col-lg-9 -->
@@ -173,3 +327,7 @@
     </div><!-- End .page-content -->
 </main>
 {% endblock custom %}
+
+{% block extra_js %}
+    <script src="{% static 'assets/profile.js' %}"></script>
+{% endblock extra_js %}

@@ -148,13 +148,13 @@ region_choice = [
 ]
 
 class Region(models.Model):   #division
-	name = models.CharField(max_length=50, choices=region_choice)
+	name = models.CharField(max_length=50, choices=region_choice, unique=True)
 
 	def __str__(self):
 		return list(region_choice[int(self.name)-1])[1]
 
 	def title(self):
-		return list(region_choice[int(self.name)])[1]
+		return list(region_choice[int(self.name)-1])[1]
 	
 class City(models.Model):   #district
 	name = models.CharField(max_length=50, choices=region_choice)

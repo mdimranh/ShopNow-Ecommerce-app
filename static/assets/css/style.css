@@ -4810,6 +4810,17 @@ p {
 .footer a:focus {
   color: #FCB941;
 }
+
+.footer .btn{
+  background-color: rgba(128, 128, 128, 0.479);
+  color: white;
+  border: none;
+}
+
+.footer .btn:hover{
+    background-color: orange;
+}
+
 .footer .widget {
   margin-bottom: 4rem;
 }

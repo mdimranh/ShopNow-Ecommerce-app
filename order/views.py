@@ -12,6 +12,7 @@ import json
 from django.core import serializers
 
 from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def AddtoCart(request):
     if 'update-quantity' in request.POST:
         cart = ShopCart.objects.get(id = request.POST['id'])
@@ -266,6 +267,7 @@ def Checkout(request):
     }
     return render(request, 'order/checkout.html', context)
 
+csrf_exempt
 def AddtoWishlist(request):
     if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
         context = {

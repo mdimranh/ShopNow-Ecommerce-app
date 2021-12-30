@@ -77,8 +77,8 @@
                                             </div><!-- End .header-menu -->
                                         </div><!-- End .header-dropdown -->
                                     </li>
-                                    {% if user.is_authenticated %}
-                                    <li>   
+                                    <li id="user-option">
+                                        {% if user.is_authenticated %}   
                                         <div class="header-dropdown">
                                             <a href="#">{{user.first_name}} {{user.last_name}}</a>
                                             <div class="header-menu">
@@ -88,10 +88,10 @@
                                                 </ul>
                                             </div><!-- End .header-menu -->
                                         </div><!-- End .header-dropdown -->
+                                        {% endif %}
                                     </li>
-                                    {% endif %}
                                     {% if not user.is_authenticated %}
-                                    <li class="login">
+                                    <li class="login" id="login">
                                         <a id="login-modal-btn" href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
                                     </li>
                                     {% endif %}
@@ -147,8 +147,8 @@
                                     </div><!-- End .header-search -->
                                 </div><!-- End .col-xxl-4-5col -->
 
-                                {% if user.is_authenticated %}
-                                <div class="col-lg-4 col-xxl-5col d-flex justify-content-end align-items-center">
+                                <div class="col-lg-4 col-xxl-5col d-flex justify-content-end align-items-center" id="cart-section">
+                                    {% if user.is_authenticated %}
                                     <div class="header-dropdown-link">
                                         <div class="dropdown compare-dropdown">
                                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Compare Products" aria-label="Compare Products">
@@ -226,8 +226,8 @@
                                                 </div><!-- End .dropdown-menu -->
                                         </div><!-- End .cart-dropdown -->
                                     </div>
+                                    {% endif %}
                                 </div><!-- End .col-xxl-5col -->
-                                {% endif %}
 
                             </div><!-- End .row -->
                         </div><!-- End .col-xl-9 col-xxl-10 -->
@@ -1014,7 +1014,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" id="signin-modal-close-btn" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="icon-close"></i></span>
                     </button>
 

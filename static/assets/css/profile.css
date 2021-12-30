@@ -1,0 +1,60 @@
+
+.nav-dashboard{
+    justify-content: space-between;
+}
+
+#tab-dashboard .container-fluid,
+#tab-account .container-fluid{
+    margin: 0;
+    padding: 0;
+}
+
+#tab-dashboard h4,
+#tab-account h4{
+    margin-left: 0px;
+}
+
+#tab-dashboard .user-email{
+    margin-top: -10px;
+}
+
+#tab-dashboard small{
+    color: rgba(128, 128, 128, 0.678);
+}
+
+.edit-btn{
+    color: orange;
+    padding: 0 10px;
+    font-size: small;
+}
+
+.edit-btn:hover{
+    cursor: pointer;
+}
+
+#tab-account .btn:hover{
+    cursor: pointer;
+    background: transparent;
+}
+
+#tab-account .btn.active:hover{
+    background: orange;
+}
+
+.btn.active{
+    background: orange;
+}
+
+.profile-submit-btn:hover{
+    color: orange;
+}
+
+@media screen and (min-width: 768px) {
+    #tab-dashboard h4{
+        margin-left: -20px;
+    }
+    .nav-dashboard{
+        display: flex;
+        flex-direction: column;
+    }
+}

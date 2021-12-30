@@ -131,7 +131,7 @@
 					    {% if product.paginator.num_pages > 12 %}
                             <ul class="pagination-box pt-xs-20 pb-xs-15">
                                 {% if product.has_previous %}
-                                    <li><a class="text-center" href="?page={{ product.previous_page_number }}"><i class="fa fa-arrow-left fa-lg"></i></a></li>
+                                    <li><a class="text-center" href="?page={{ product.previous_page_number }}"><i class="fa fa-long-arrow-left fa-lg"></i></a></li>
                                     <li><a class="text-center" href="?page=1">1</a></li>
                                 {% endif %}
                                 {% if product.number|add:-2 > 1 %}
@@ -149,7 +149,7 @@
                                 {% endif %}
                                 {% if product.has_next %}
                                     <li><a class="text-center" href="?page={{ product.paginator.num_pages }}">{{ product.paginator.num_pages }}</a></li>
-                                    <li><a class="text-center" href="?page={{ product.next_page_number }}"><i class="fa fa-arrow-right fa-lg"></i></a></li>
+                                    <li><a class="text-center" href="?page={{ product.next_page_number }}"><i class="fa fa-long-arrow-right fa-lg"></i></a></li>
                                 {% endif %}
                             </ul>
                         {% endif %}

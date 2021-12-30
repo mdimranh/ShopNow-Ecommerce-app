@@ -26,7 +26,6 @@ def Home(request):
     left1_banner = Banner.objects.get(active=True, banner_type = 'Left_1')
     left2_banner = Banner.objects.get(active=True, banner_type = 'Left_2')
     top_banner = Banner.objects.filter(active=True, banner_type = 'Top')
-    category = Category.objects.all()
     product = Product.objects.all()
     total_cost = 0
     item = 0
@@ -60,7 +59,6 @@ def Home(request):
         'left2_banner': left2_banner,
         'banner': banner,
         'top_banner': top_banner,
-        'category': category,
         'product': product,
         'new_product': new_product,
         'hot_product': hot_product,
