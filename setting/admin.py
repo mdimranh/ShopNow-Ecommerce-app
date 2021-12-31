@@ -4,22 +4,31 @@ from .models import *
 
 
 from solo.admin import SingletonModelAdmin
-from .models import SiteConfiguration
+from .models import SiteConfiguration, SiteFront
 
 admin.site.register(SiteConfiguration, SingletonModelAdmin)
+admin.site.register(SiteFront, SingletonModelAdmin)
 
 
-shopinfo = ShopInfo.objects.all().first()
-admin.site.site_header = shopinfo.name+" "+"Administration"
+# shopinfo = ShopInfo.objects.all().first()
+admin.site.site_header = str(SiteConfiguration.name)+" "+"Administration"
 
-admin.site.register(ShopInfo)
+class SliderSettingInline(admin.TabularInline):
+    model = SliderSetting
 
+    class Media:
+        css = {'all': ('no-delete.css',)}
 
-class SlidingAdmin(admin.ModelAdmin):
-    list_display = ['line_1', 'line_2', 'line_3', 'active', 'image_tag']
+class SlideInline(admin.TabularInline):
+    model = Slide
+    readonly_fields = ['image_tag']
+    extra = 0
+
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ['name']
     list_per_page = 10
-    search_fields = ['line_1', 'line_2', 'line_3']
-admin.site.register(Sliding, SlidingAdmin)
+    inlines = [SliderSettingInline, SlideInline]
+admin.site.register(Slider, SliderAdmin)
 
 class BannerAdmin(admin.ModelAdmin):
     list_display = ['title', 'banner_type', 'active', 'image_tag']

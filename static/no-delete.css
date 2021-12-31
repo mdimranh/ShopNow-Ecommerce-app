@@ -1,0 +1,19 @@
+.inline-deletelink{
+    display: none !important;
+}
+
+th:last-child{
+    display: none !important;
+}
+
+table{
+    overflow: hidden;
+}
+
+table th{
+    white-space: nowrap;
+}
+
+table td{
+    vertical-align: middle;
+}

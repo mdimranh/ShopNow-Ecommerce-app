@@ -1,4 +1,6 @@
 {% load static %}
+{% load solo_tags %}
+{% get_solo 'setting.SiteFront' as site_front %}
 {% block custom %}
 <main class="main">
     <div class="mb-lg-2"></div>
@@ -6,8 +8,8 @@
         <div class="row">
             <div class="col-xl-9 col-xxl-8 offset-lg-3 offset-xxl-2">
                 <div class="intro-slider-container slider-container-ratio mb-2">
-                    <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl" data-owl-options='{"nav": false, "dots": true, "autoplay": true, "autoplayTimeout": 5000}'>
-                      {% for slider in slider %}
+                    <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl" data-owl-options='{"nav": true, "animateOut":"shakeX", "dots": true, "autoplay": true, "autoplayTimeout": 6000}'>
+                      {% for slider in site_front.slide.all %}
                         <div class="intro-slide">
                             <figure class="slide-image">
                                 <picture>
@@ -43,7 +45,7 @@
                     </a>
                     <div class="banner-content text-right">
                         <div class="price text-center">
-                            <sup class="text-white">from</sup>
+                            <sup class="text-white">{{site_front.name}}</sup>
                             <span class="text-white">
                                 <strong>$199</strong><sup class="text-white">,99</sup>
                             </span>
@@ -108,8 +110,10 @@
                             data-owl-options='{
                                 "nav": false, 
                                 "dots": false,
+                                "autoplay": true,
+                                "autoplayTimeout": 4000,
                                 "margin": 5,
-                                "loop": false,
+                                "loop": true,
                                 "responsive": {
                                     "0": {
                                         "items":2

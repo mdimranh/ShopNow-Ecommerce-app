@@ -13,6 +13,16 @@ $(".female-btn").on('click', function(){
     $(".male-btn").removeClass("active");
 })
 
+$(".address-edit-btn").on("click", function(){
+    $("#address-edit-form").removeClass("d-none");
+    $(".address").addClass("d-none");
+})
+
+$(".address-cancel-btn").on("click", function(){
+    $("#address-edit-form").addClass("d-none");
+    $(".address").removeClass("d-none");
+})
+
 
 
 

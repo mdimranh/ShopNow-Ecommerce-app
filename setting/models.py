@@ -99,31 +99,36 @@ class ContactMessage(models.Model):
 	def __str__(self):
 			return self.name
 
-class ShopInfo(models.Model):
-	name = models.CharField(max_length=50)
-	phone=models.CharField(max_length=17)
-	email=models.EmailField()
-	address=models.CharField(max_length=200)
-	twitter = models.URLField()
-	facebook = models.URLField()
-	youtube = models.URLField()
-	instagram = models.URLField()
-	logo = models.ImageField(upload_to='shopinfo')
-	favicon = models.ImageField(upload_to='shopinfo')
+
+class Slider(models.Model):
+	name = models.CharField(max_length=250)
 
 	def __str__(self):
 		return self.name
-
-
-class Sliding(models.Model):
-	line_1 = models.TextField(verbose_name='Line 1')
-	line_2 = models.TextField(verbose_name='Line 2')
-	line_3 = models.TextField(verbose_name='Line 3')
-	image = models.ImageField(upload_to = 'slide/')
-	active = models.BooleanField(verbose_name='Status')
-
+	
 	class Meta:
 		verbose_name = 'Sliders'
+
+
+class SliderSetting(SingletonModel):
+	slider = models.OneToOneField(Slider, on_delete= models.CASCADE)
+	autoplay = models.BooleanField(default=True)
+	autoplay_timeout = models.IntegerField(default=4000)
+	arrows = models.BooleanField(default=True)
+
+	class Meta:
+		verbose_name = 'Settings'
+
+class Slide(models.Model):
+	slider = models.ForeignKey(Slider, on_delete = models.CASCADE, related_name="slide")
+	caption_3 = models.CharField( max_length=250, verbose_name='caption 1')
+	caption_2 = models.CharField( max_length=250, verbose_name='caption 2')
+	caption_2 = models.CharField( max_length=250, verbose_name='caption 3')
+	action_text = models.CharField( max_length=200, verbose_name='Call to Action Text')
+	action_url = models.URLField(verbose_name='Call to Action URL')
+	link_type = models.BooleanField(verbose_name='Open in new window')
+	image = models.ImageField(upload_to = 'slide/')
+	active = models.BooleanField(verbose_name='Status')
 
 	def ImageUrl(self):
 		if self.image:
@@ -134,6 +139,15 @@ class Sliding(models.Model):
 	def image_tag(self):
 		return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
 	image_tag.short_description = 'Image'
+
+class SiteFront(SingletonModel):
+	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
+
+	def __str__(self):
+		return "Site Front"
+
+	class Meta:
+		verbose_name = "Site Front"
 
 
 region_choice = [

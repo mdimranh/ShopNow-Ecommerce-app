@@ -24,10 +24,12 @@ jQuery(function($){
                 type:"POST",
                 data:{category_id: id,},
                 success: function(result) {
-                    console.log(result);
                     col = $( "tr[class='form-row dynamic-subcategory_set']" );
                     colx = $( "tr[class='form-row has_original dynamic-subcategory_set']" );
-                    console.log(colx.length);
+                    rslt = [];
+                    for(var k in result){
+                        rslt.push(k);
+                    }
                     for(i = 0; i < colx.length; i++){
                         cols = $(colx[i]);
                         col1 = cols.children('td:nth-child(3)');
@@ -35,9 +37,11 @@ jQuery(function($){
                         col3 = col2.children('select:nth-child(1)');
                         col_id = col3.attr('id');
                         cols = document.getElementById(col_id);
-                        cols.options.length = 0;
-                        for(var k in result){
-                            cols.options.add(new Option(k, result[k]));
+                        for(j = 0; j < cols.options.length; j++){
+                            if (rslt.indexOf(cols.options[j].innerHTML) === -1){
+                                cols.options[j].remove();
+                                j = -1;
+                            }
                         }
                     }
                     col1 = col.children('td:nth-child(3)');
@@ -65,7 +69,6 @@ jQuery(function($){
                 type:"POST",
                 data:{category_id: id,},
                 success: function(result) {
-                    console.log(result);
                     col = $("tr[class='form-row dynamic-subcategory_set']").last();
                     col1 = col.children('td:nth-child(3)');
                     col2 = col1.children('div:nth-child(1)');

@@ -59,13 +59,13 @@ admin.site.register(Product, ProductAdmin)
 
 class GroupInline(admin.TabularInline):
     model = Group
-    extra = 1
+    extra = 0
     readonly_fields = ['total_subcategory']
     # classes = ['collapse']
 
 class SubctegoryInline(admin.TabularInline):
     model = Subcategory
-    extra = 1
+    extra = 0
     readonly_fields = ['total_product']
     # classes = ['collapse']
 

@@ -4,7 +4,6 @@ from django.http import HttpResponse, JsonResponse
 from .models import ShopCart, Coupon, Wishlist
 from product.models import Product
 
-from setting.models import ShopInfo
 from product.models import Category
 
 import json
@@ -189,7 +188,6 @@ def AddtoCart(request):
 #         return JsonResponse(shop_cart, safe=False)
 
 def CartView(request):
-    shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     shopcart = ShopCart.objects.filter(user = request.user)
     total_cost = 0
@@ -204,7 +202,6 @@ def CartView(request):
             else:
                 total_cost = total_cost - (total_cost * item.coupon.value / 100)
     context = {
-        'shopinfo': shopinfo,
         'category': categorys,
         'shopcart': shopcart,
         'cost': total_cost,
@@ -244,7 +241,6 @@ def CartDelete(request):
     return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg, 'cart': cart_serialize})
 
 def Checkout(request):
-    shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     shopcart = ShopCart.objects.filter(user = request.user)
     total_cost = 0
@@ -259,7 +255,6 @@ def Checkout(request):
             else:
                 total_cost = total_cost - (total_cost * item.coupon.value / 100)
     context = {
-        'shopinfo': shopinfo,
         'category': categorys,
         'shopcart': shopcart,
         'cost': total_cost,

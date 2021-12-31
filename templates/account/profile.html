@@ -118,7 +118,8 @@
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-								    	<table class="table table-cart table-mobile">
+								    	<h4>Orders</h4>
+                                        <table class="table table-cart table-mobile">
                                             <thead>
                                                 <tr>
                                                     <th>Product</th>
@@ -160,12 +161,14 @@
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
-								    	<p>No downloads available yet.</p>
+								    	<h4>Downloads</h4>
+                                        <p>No downloads available yet.</p>
 								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-								    	<table class="table">
+								    	<h4>Address Book</h4>
+                                        <table class="table address">
                                             <thead>
                                                 <tr>
                                                     <th>Full Name</th>
@@ -183,12 +186,12 @@
                                                     <td>Dhaka-Gazipur-Mouchak</td>
                                                     <td>01942504420</td>
                                                     <td>Default addess</td>
-                                                    <td>edit</td>
+                                                    <td class="text-warning address-edit-btn">edit</td>
                                                 </tr>
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
 
-                                        <form action="#" class="">
+                                        <form action="#" class="d-none" id="address-edit-form">
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>Full Name *</label>
@@ -238,14 +241,18 @@
 
 		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
 			                					<span>SAVE CHANGES</span>
-			            						<i class="icon-long-arrow-right"></i>
+			            						<i class="fa fa-long-arrow-right"></i>
 			                				</button>
+		                					<div class="btn btn-outline-primary-2 mt-5 profile-submit-btn address-cancel-btn">
+			            						<i class="fa fa-times"></i>
+                                                <span>Cancel</span>
+                                            </div>
 			                			</form>
 
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-								    	<h4>Address Book</h4>
+								    	<h4>Account</h4>
                                         <form action="#" class="d-none address-edit">
 			                				<div class="row">
 			                					<div class="col-sm-6">

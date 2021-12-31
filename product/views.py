@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView
 from .models import Product, Images
-from setting.models import ShopInfo
 from product.models import Category, Group, Subcategory
 from django.core.paginator import Paginator
 
@@ -16,12 +15,10 @@ from rest_framework.permissions import IsAuthenticated
 def ProductDetails(request, id):
     product = Product.objects.get(id = id)
     images = Images.objects.filter(product=product)
-    shopinfo = ShopInfo.objects.first()
     categorys = Category.objects.all()
     context = {
         'product': product,
         'images': images,
-        'shopinfo': shopinfo,
         'category': categorys
     }
     return render(request, 'product/product-details.html', context)
@@ -41,11 +38,9 @@ def CategoryProduct(request, id, slug):
     paginator = Paginator(pd, 12) # Show 12 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    shopinfo = ShopInfo.objects.first()
     categorys = Category.objects.all()
     context = {
         'product': page_obj,
-        'shopinfo': shopinfo,
         'category': categorys
     }
     return render(request, 'product/category.html', context)

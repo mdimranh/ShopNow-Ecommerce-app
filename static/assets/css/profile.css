@@ -49,6 +49,16 @@
     color: orange;
 }
 
+#address-edit-form .btn:hover{
+    background-color: orange;
+    color: black;
+    cursor: pointer;
+}
+
+.address-edit-btn:hover{
+    cursor: pointer;
+}
+
 @media screen and (min-width: 768px) {
     #tab-dashboard h4{
         margin-left: -20px;

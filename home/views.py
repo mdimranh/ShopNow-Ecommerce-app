@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from setting.models import ShopInfo, Sliding, Banner, TeamInfo, Aboutus, ContactMessage
+from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Subcategory, Group, Product, Brands
 from .forms import ContactMessageForm
 from order.models import ShopCart
@@ -14,12 +14,11 @@ from django.contrib import messages
 from django.core import serializers
 
 def Home(request):
-    shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
-    slider = Sliding.objects.filter(active = True)
+    # slider = Sliding.objects.filter(active = True)
     banner=Banner.objects.filter(banner_type='Bottom')
     right2_banner = Banner.objects.get(active=True, banner_type = 'Right_2')
     right1_banner = Banner.objects.get(active=True, banner_type = 'Right_1')
@@ -52,7 +51,7 @@ def Home(request):
         'brand': brand,
         'group': groups,
         'shopcart': shopcart,
-        'slider': slider,
+        # 'slider': slider,
         'right2_banner': right2_banner,
         'right1_banner': right1_banner,
         'left1_banner': left1_banner,
@@ -68,12 +67,10 @@ def Home(request):
     return render(request, 'home/home.html', context)
 
 def AboutUs(request):
-    shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
-        'shopinfo': shopinfo,
         'category': categorys,
         'teaminfo': teaminfo,
         'aboutus': aboutus
@@ -93,12 +90,10 @@ def ContactUs(request):
             data.save()
             messages.success(request, 'Your message has been sent.')
             return redirect(request.path_info)
-    shopinfo = ShopInfo.objects.all().first()
     categorys = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
-        'shopinfo': shopinfo,
         'category': categorys,
         'aboutus': aboutus,
         'form': ContactMessageForm
@@ -116,8 +111,7 @@ def SearchView(request):
         paginator = Paginator(products, 12) # Show 12 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        shopinfo = ShopInfo.objects.all().first()
         categorys = Category.objects.all()
         teaminfo = TeamInfo.objects.all()
         aboutus = Aboutus.objects.all().first()
-        return render(request, 'product/category.html', {'product': page_obj, 'category': categorys, 'shopinfo': shopinfo})
+        return render(request, 'product/category.html', {'product': page_obj, 'category': categorys})
