@@ -10,14 +10,8 @@ admin.site.register(SiteConfiguration, SingletonModelAdmin)
 admin.site.register(SiteFront, SingletonModelAdmin)
 
 
-# shopinfo = ShopInfo.objects.all().first()
-admin.site.site_header = str(SiteConfiguration.name)+" "+"Administration"
-
-class SliderSettingInline(admin.TabularInline):
-    model = SliderSetting
-
-    class Media:
-        css = {'all': ('no-delete.css',)}
+siteinfo = SiteConfiguration.objects.get()
+admin.site.site_header = str(siteinfo.name)+" "+"Administration"
 
 class SlideInline(admin.TabularInline):
     model = Slide
@@ -27,7 +21,18 @@ class SlideInline(admin.TabularInline):
 class SliderAdmin(admin.ModelAdmin):
     list_display = ['name']
     list_per_page = 10
-    inlines = [SliderSettingInline, SlideInline]
+    inlines = [SlideInline]
+    class Media:
+        css = {'all': ('no-delete.css',)}
+    fieldsets = (
+        (None, {
+            'fields': ('name',)
+        }),
+        ('Slide Setting', {
+            'classes': ('collapse', 'open'),
+            'fields': ('autoplay','autoplay_timeout', 'arrows'),
+        }),
+    )
 admin.site.register(Slider, SliderAdmin)
 
 class BannerAdmin(admin.ModelAdmin):

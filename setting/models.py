@@ -25,18 +25,17 @@ class SiteConfiguration(SingletonModel):
 	
 
 BANNER_TYPE = (
-	('Left_1', 'Left 1'),
-	('Left_2', 'Left 2'),
-	('Right_1', 'Right 1'),
-	('Right_2', 'Right 2'),
+	('Left', 'Left'),
 	('Top', 'Top'),
-	('Bottom', 'Bottom'),
+	('Middle Small', 'Middle Small'),
+	('Middle Big', 'Middle Big'),
+	('Bottom', 'Bottom')
 )
 
 class Banner(models.Model):
 	title = models.CharField(max_length=100)
 	image = models.ImageField(upload_to = 'banner/')
-	banner_type = models.CharField(max_length=30, default='Top', choices=BANNER_TYPE)
+	banner_type = models.CharField(max_length=50, default='Top', choices=BANNER_TYPE)
 	active = models.BooleanField(default=True)
 
 	def ImageUrl(self):
@@ -48,11 +47,16 @@ class Banner(models.Model):
 		return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
 	image_tag.short_description = 'Image'
 
-class Aboutus(models.Model):
+	def __str__(self):
+		return self.title
+	
+
+class Aboutus(SingletonModel):
 	line1 = models.CharField(max_length=250)
 	line2 = models.TextField()
 	line3 = models.TextField()
 	banner = models.ImageField(upload_to='aboutus/banner')
+
 	def ImageUrl(self):
 		if self.banner:
 			return self.banner.url
@@ -63,12 +67,20 @@ class Aboutus(models.Model):
 		return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.banner.url))
 	image_tag.short_description = 'Image'
 
+	def __str__(self):
+		return self.line1
+	
+
 class TeamInfo(models.Model):
 	name = models.CharField(max_length=250)
 	job_title = models.CharField(max_length=250)
 	email = models.EmailField()
 	image = models.ImageField(upload_to = 'aboutus/team/')
 	about_us = models.ForeignKey(Aboutus, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return self.name
+	
 
 	def ImageUrl(self):
 		if self.image:
@@ -102,33 +114,30 @@ class ContactMessage(models.Model):
 
 class Slider(models.Model):
 	name = models.CharField(max_length=250)
+	autoplay = models.BooleanField(default=True)
+	autoplay_timeout = models.IntegerField(default=4000)
+	arrows = models.BooleanField(default=True)
 
 	def __str__(self):
 		return self.name
 	
 	class Meta:
-		verbose_name = 'Sliders'
-
-
-class SliderSetting(SingletonModel):
-	slider = models.OneToOneField(Slider, on_delete= models.CASCADE)
-	autoplay = models.BooleanField(default=True)
-	autoplay_timeout = models.IntegerField(default=4000)
-	arrows = models.BooleanField(default=True)
-
-	class Meta:
-		verbose_name = 'Settings'
+		verbose_name = 'Slider'
 
 class Slide(models.Model):
 	slider = models.ForeignKey(Slider, on_delete = models.CASCADE, related_name="slide")
-	caption_3 = models.CharField( max_length=250, verbose_name='caption 1')
+	caption_1 = models.CharField( max_length=250, verbose_name='caption 1')
 	caption_2 = models.CharField( max_length=250, verbose_name='caption 2')
-	caption_2 = models.CharField( max_length=250, verbose_name='caption 3')
+	caption_3 = models.CharField( max_length=250, verbose_name='caption 3')
 	action_text = models.CharField( max_length=200, verbose_name='Call to Action Text')
 	action_url = models.URLField(verbose_name='Call to Action URL')
 	link_type = models.BooleanField(verbose_name='Open in new window')
 	image = models.ImageField(upload_to = 'slide/')
 	active = models.BooleanField(verbose_name='Status')
+
+	def __str__(self):
+		return ''
+	
 
 	def ImageUrl(self):
 		if self.image:
@@ -142,6 +151,9 @@ class Slide(models.Model):
 
 class SiteFront(SingletonModel):
 	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
+	top_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'top_banner', name='Top Banner')
+	left_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'left_banner1', name='Left Banner 1')
+	left_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'left_banner2', name='Left Banner 2')
 
 	def __str__(self):
 		return "Site Front"
