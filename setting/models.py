@@ -51,7 +51,7 @@ class Banner(models.Model):
 		return self.title
 	
 
-class Aboutus(SingletonModel):
+class Aboutus(models.Model):
 	line1 = models.CharField(max_length=250)
 	line2 = models.TextField()
 	line3 = models.TextField()
@@ -151,49 +151,18 @@ class Slide(models.Model):
 
 class SiteFront(SingletonModel):
 	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
-	top_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'top_banner', name='Top Banner')
-	left_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'left_banner1', name='Left Banner 1')
-	left_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name = 'left_banner2', name='Left Banner 2')
+	top_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='top_banner')
+	left_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='left_banner1')
+	left_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='left_banner2')
+	middle_big_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_big_banner1')
+	middle_big_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_big_banner2')
+	middle_small_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_small_banner')
+	bottom_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='bottom_banner1')
+	bottom_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='bottom_banner2')
 
 	def __str__(self):
 		return "Site Front"
 
 	class Meta:
 		verbose_name = "Site Front"
-
-
-region_choice = [
-	('1', 'Barishal'),
-	('2', 'Chattogram'),
-	('3', 'Dhaka'),
-	('4', 'Khulna'),
-	('5', 'Rajshahi'),
-	('6', 'Rangpur'),
-	('7', 'Sylhet'),
-	('8', 'Mymensingh')
-]
-
-class Region(models.Model):   #division
-	name = models.CharField(max_length=50, choices=region_choice, unique=True)
-
-	def __str__(self):
-		return list(region_choice[int(self.name)-1])[1]
-
-	def title(self):
-		return list(region_choice[int(self.name)-1])[1]
-	
-class City(models.Model):   #district
-	name = models.CharField(max_length=50, choices=region_choice)
-	divisions = models.ForeignKey(Region, on_delete = models.CASCADE)
-
-	def __str__(self):
-		return self.name
-
-class Area(models.Model):   #district
-	name = models.CharField(max_length=50, choices=region_choice)
-	divisions = models.ForeignKey(Region, on_delete = models.CASCADE)
-	city = models.ForeignKey(City, on_delete = models.CASCADE)
-
-	def __str__(self):
-		return self.name
 	

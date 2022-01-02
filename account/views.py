@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
-from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, Region
+from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from order.models import ShopCart
 from datetime import datetime
@@ -86,13 +86,11 @@ def Profile(request):
                 else:
                     total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = shopcart.count()
-        region = Region.objects.all()
         context = {
             'mycart': shopcart,
             'category': categorys,
             'cost': total_cost,
             'item': item,
-            'region': region
         }
     else:
         context = {
