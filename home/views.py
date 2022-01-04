@@ -53,11 +53,11 @@ def Home(request):
     return render(request, 'home/home.html', context)
 
 def AboutUs(request):
-    categorys = Category.objects.all()
+    category = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
-        'category': categorys,
+        'category': category,
         'teaminfo': teaminfo,
         'aboutus': aboutus
     }
