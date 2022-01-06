@@ -241,7 +241,7 @@ def CartDelete(request):
     return JsonResponse({'item':item, 'cost':total_cost, 'msg': msg, 'cart': cart_serialize})
 
 def Checkout(request):
-    categorys = Category.objects.all()
+    category = Category.objects.all()
     shopcart = ShopCart.objects.filter(user = request.user)
     total_cost = 0
     for item in shopcart:
@@ -255,7 +255,7 @@ def Checkout(request):
             else:
                 total_cost = total_cost - (total_cost * item.coupon.value / 100)
     context = {
-        'category': categorys,
+        'category': category,
         'shopcart': shopcart,
         'cost': total_cost,
         'item': shopcart.count()
