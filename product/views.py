@@ -32,7 +32,7 @@ def CategoryProduct(request, id, slug):
         product = Product.objects.filter(subcategory__id = id)
 
     pd = []
-    for i in range(100):
+    for i in range(120):
         for p in product:
             pd.append(p)
     paginator = Paginator(pd, 12) # Show 12 contacts per page.
