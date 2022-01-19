@@ -37,6 +37,7 @@ def Home(request):
                     total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = shopcart.count()
     new_product = Product.objects.filter(status=True).order_by('-id')
+    new_product_cat = Product.objects.filter(status=True).distinct("category")
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
     context = {
         'category': categorys,
@@ -46,6 +47,7 @@ def Home(request):
         'shopcart': shopcart,
         'product': product,
         'new_product': new_product,
+        'new_product_cat': new_product_cat,
         'hot_product': hot_product,
         'cost': total_cost,
         'item': item
