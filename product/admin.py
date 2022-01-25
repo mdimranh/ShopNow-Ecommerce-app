@@ -80,3 +80,7 @@ admin.site.register( Category, CategoryAdmin)
 class BrandAdmin(admin.ModelAdmin):
     list_display = ['name', 'image_tag']
 admin.site.register(Brands, BrandAdmin)
+
+class RecentlyViewAdmin(admin.ModelAdmin):
+    list_display = ['product', 'on_create']
+admin.site.register(RecentlyView, RecentlyViewAdmin)

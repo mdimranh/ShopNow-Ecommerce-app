@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
+from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands
 from .forms import ContactMessageForm
 from order.models import ShopCart
@@ -18,6 +18,7 @@ def Home(request):
     subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
+    menus = Menus.objects.all()
     product = Product.objects.all()
     total_cost = 0
     item = 0
@@ -39,16 +40,19 @@ def Home(request):
     new_product = Product.objects.filter(status=True).order_by('-id')
     new_product_cat = Product.objects.filter(status=True).distinct("category")
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
+    product_carousel = ProductCarousel.objects.filter(enable = True)
     context = {
         'category': categorys,
         'subcategory': subcategorys,
         'brand': brand,
         'group': groups,
+        'menus': menus,
         'shopcart': shopcart,
         'product': product,
         'new_product': new_product,
         'new_product_cat': new_product_cat,
         'hot_product': hot_product,
+        'procaro': product_carousel,
         'cost': total_cost,
         'item': item
     }

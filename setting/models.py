@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 
+from product.models import Category, Group, Subcategory
+
 import json
 
 from solo.models import SingletonModel
@@ -165,4 +167,30 @@ class SiteFront(SingletonModel):
 
 	class Meta:
 		verbose_name = "Site Front"
+
+menu_style = (
+	("mega", "Mega Menu"),
+	("dropdown", "Dropdown"),
+)
+
+class Menus(models.Model):
+	name = models.CharField(max_length=100)
+	style = models.CharField(max_length=200, choices=menu_style)
+	categorys = models.ManyToManyField(Category, blank=True)
+	groups = models.ManyToManyField(Group, blank=True)
+
+	def __str__(self):
+		return self.name
+	
+
+class ProductCarousel(models.Model):
+	name = models.CharField(max_length=50)
+	categories = models.ManyToManyField(Category, blank=True)
+	groups = models.ManyToManyField(Group, blank=True)
+	subcategorys = models.ManyToManyField(Subcategory, blank=True)
+	enable = models.BooleanField(default=True)
+
+	def __str__(self):
+		return self.name
+	
 	

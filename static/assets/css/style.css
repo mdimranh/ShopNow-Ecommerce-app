@@ -2286,7 +2286,7 @@ blockquote.text-white cite span {
 .menu-vertical .menu-title {
   color: #333;
   font-weight: 600;
-  font-size: 1.4rem;
+  font-size: 2.1rem;
   letter-spacing: -0.01em;
   text-transform: capitalize;
   /* padding-bottom: 1rem; */
@@ -4533,6 +4533,8 @@ p {
 .header-14 .header-bottom .menu ul,
 .header-14 .header-bottom .menu .megamenu {
   margin-top: 0;
+  max-height: 400px;
+  overflow-y: auto;
 }
 .header-14 .header-bottom .menu > li:not(:hover):not(.active):not(.show) > a {
   color: #fff;

@@ -2,18 +2,27 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView
 from .models import Product, Images
-from product.models import Category, Group, Subcategory
+from product.models import Category, Group, Subcategory, RecentlyView
 from django.core.paginator import Paginator
 
 from django.template.defaultfilters import slugify
 
 from django.http.response import JsonResponse
 
+import datetime
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 def ProductDetails(request, id):
     product = Product.objects.get(id = id)
+    if RecentlyView.objects.filter(product__id=id).exists():
+        recent_pro = RecentlyView.objects.get(product__id = id)
+        recent_pro.on_create = datetime.datetime.now()
+        recent_pro.save()
+    else:
+        recent_pro = RecentlyView.objects.create(product = product)
+        recent_pro.save()
     images = Images.objects.filter(product=product)
     categorys = Category.objects.all()
     context = {

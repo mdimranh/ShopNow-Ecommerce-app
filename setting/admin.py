@@ -57,3 +57,6 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ['name', 'status', 'message', 'note']
     list_filter = ['status', 'created_at', 'updated_at']
 admin.site.register(ContactMessage, ContactMessageAdmin)
+
+admin.site.register(ProductCarousel)
+admin.site.register(Menus)
