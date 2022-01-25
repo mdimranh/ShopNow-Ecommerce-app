@@ -4530,11 +4530,17 @@ p {
   color: #fff;
   background-color: #333;
 }
-.header-14 .header-bottom .menu ul,
+.header-14 .header-bottom .menu ul{
+  margin-top: 0;
+}
+
 .header-14 .header-bottom .menu .megamenu {
   margin-top: 0;
   max-height: 400px;
   overflow-y: auto;
+}
+.header-14 .header-bottom .menu .megamenu .menu-title {
+  font-weight: bold;
 }
 .header-14 .header-bottom .menu > li:not(:hover):not(.active):not(.show) > a {
   color: #fff;

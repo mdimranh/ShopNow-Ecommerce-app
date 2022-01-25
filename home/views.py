@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
-from product.models import Category, Subcategory, Group, Product, Brands
+from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from .forms import ContactMessageForm
 from order.models import ShopCart
 
@@ -41,6 +41,7 @@ def Home(request):
     new_product_cat = Product.objects.filter(status=True).distinct("category")
     hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
     product_carousel = ProductCarousel.objects.filter(enable = True)
+    recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {
         'category': categorys,
         'subcategory': subcategorys,
@@ -53,6 +54,7 @@ def Home(request):
         'new_product_cat': new_product_cat,
         'hot_product': hot_product,
         'procaro': product_carousel,
+        'recent_view': recently_view,
         'cost': total_cost,
         'item': item
     }
