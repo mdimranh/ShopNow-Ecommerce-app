@@ -6,6 +6,7 @@ from product.models import Category, Group, Subcategory
 import json
 
 from solo.models import SingletonModel
+from fontawesome_5.fields import IconField
 
 class SiteConfiguration(SingletonModel):
 	name = models.CharField(max_length=255, default='Buy Now')
@@ -178,6 +179,7 @@ class Menus(models.Model):
 	style = models.CharField(max_length=200, choices=menu_style)
 	categorys = models.ManyToManyField(Category, blank=True)
 	groups = models.ManyToManyField(Group, blank=True)
+	icon = IconField()
 
 	def __str__(self):
 		return self.name

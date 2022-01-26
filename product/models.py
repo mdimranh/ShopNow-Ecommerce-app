@@ -7,9 +7,12 @@ from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from fontawesome_5.fields import IconField
+
 class Category(models.Model):
     name = models.CharField(max_length=200)
     banner = models.ImageField(upload_to = 'category/banner/', blank=True, null=True)
+    icon = IconField()
     slug= models.SlugField(null=True, unique=True)
 
     def __str__(self):

@@ -1687,6 +1687,11 @@ blockquote.text-white cite span {
   padding: 0;
   list-style: none;
 }
+
+.main-nav .menu .fas{
+  margin-right: 6px;
+}
+
 .menu {
   display: flex;
   align-items: center;
@@ -6588,6 +6593,7 @@ p {
 }
 .product-title a {
   color: inherit;
+  font-size: 2rem;
 }
 .product-title a:hover,
 .product-title a:focus {

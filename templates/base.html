@@ -1,4 +1,5 @@
 {% load static %}
+{% load fontawesome_5 %}
 {% load solo_tags %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
 <!DOCTYPE html>
@@ -6,6 +7,7 @@
 
 <!-- molla/index-14.html  22 Nov 2019 09:59:31 GMT -->
 <head>
+    {% fontawesome_5_static %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -251,7 +253,7 @@
                                             {% for category in category %}
                                             {% if category.groups.all|length > 0 %}
                                             <li class="megamenu-container">
-                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}"><i class="icon-laptop"></i>{{category.name}}</a>
+                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}">{{category.icon.as_html}}{{category.name}}</a>
                                                 <div class="megamenu">
                                                     <div class="row no-gutters">
                                                         <div class="col-md-8">
@@ -300,7 +302,7 @@
                                     {% for menu in menus %}
                                     {% if menu.style == 'mega' %}
                                     <li>
-                                        <a href="category.html" class="sf-with-ul">{{menu.name}}</a>
+                                        <a href="category.html" class="sf-with-ul">{{menu.icon.as_html}}{{menu.name}}</a>
 
                                         <div class="megamenu megamenu-md">
                                         <div class="row no-gutters">
@@ -312,7 +314,7 @@
                                                             {% for group in category.groups.all %}
                                                             {% if group.subcategorys.all|length > 0 %}
                                                             <div class="col-md-6">
-                                                                <div class="menu-title">{{group.name}}</div><!-- End .menu-title -->
+                                                                <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
                                                                 <ul>
                                                                     {% for subcategory in group.subcategorys.all %}
                                                                     <li><a href="#">{{subcategory.name}}</a></li>
@@ -356,7 +358,7 @@
                                     </li>
                                     {% else %}
                                     <li>
-                                        <a href="#" class="sf-with-ul">{{menu.name}}</a>
+                                        <a href="#" class="sf-with-ul">{{menu.icon.as_html}}{{menu.name}}</a>
 
                                         <ul>
                                             {% if menu.categorys.all|length > 0 %}
