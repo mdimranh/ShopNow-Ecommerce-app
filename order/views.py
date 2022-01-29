@@ -260,7 +260,7 @@ def Checkout(request):
         'cost': total_cost,
         'item': shopcart.count()
     }
-    return render(request, 'order/checkout.html', context)
+    return render(request, 'product/checkout.html', context)
 
 csrf_exempt
 def AddtoWishlist(request):

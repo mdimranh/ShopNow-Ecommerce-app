@@ -21,6 +21,13 @@ $(".address-edit-btn").on("click", function(){
 $(".address-cancel-btn").on("click", function(){
     $("#address-edit-form").addClass("d-none");
     $(".address").removeClass("d-none");
+    $("#add-address-form").addClass("d-none");
+})
+
+$(".add-address-btn").on("click", function(){
+    $("#add-address-form").removeClass("d-none");
+    $(".address").addClass("d-none");
+    $("#address-edit-form").addClass("d-none");
 })
 
 

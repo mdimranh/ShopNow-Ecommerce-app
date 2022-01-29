@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
+from region.models import State
+
 def Account(request):
     if request.method == "POST":
         if 'first_name' in request.POST:
@@ -72,6 +74,7 @@ def Profile(request):
     categorys = Category.objects.all()
     total_cost = 0
     item = 0
+    state = State.objects.all()
     if request.user.is_authenticated:
         shopcart = ShopCart.objects.filter(user = request.user)
         total_cost = 0
@@ -91,6 +94,7 @@ def Profile(request):
             'category': categorys,
             'cost': total_cost,
             'item': item,
+            'state': state
         }
     else:
         context = {

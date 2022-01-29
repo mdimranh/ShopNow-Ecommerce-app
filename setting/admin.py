@@ -10,7 +10,7 @@ admin.site.register(SiteConfiguration, SingletonModelAdmin)
 admin.site.register(SiteFront, SingletonModelAdmin)
 
 siteinfo = SiteConfiguration.objects.get()
-admin.site.site_header = str(siteinfo.name)+" "+"Administration"
+admin.site.site_header = str(siteinfo.name)
 
 class SlideInline(admin.TabularInline):
     model = Slide

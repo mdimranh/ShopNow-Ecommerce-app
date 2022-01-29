@@ -167,11 +167,14 @@
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-								    	<h4>Address Book</h4>
+								    	<div class="d-flex flex-fill justify-content-between">
+                                            <h4>Address Book</h4>
+                                            <button class="btn btn-outline-warning add-address-btn"><i class="fa fa-plus"></i>New Address</button>
+                                        </div>
                                         <table class="table address">
                                             <thead>
                                                 <tr>
-                                                    <th>Full Name</th>
+                                                    <th>Address Name</th>
                                                     <th>Address</th>
                                                     <th>Region</th>
                                                     <th>Phone Number</th>
@@ -194,13 +197,70 @@
                                         <form action="#" class="d-none" id="address-edit-form">
 			                				<div class="row">
 			                					<div class="col-sm-6">
-			                						<label>Full Name *</label>
+			                						<label>Address Name *</label>
 			                						<input type="text" class="form-control" required value="{{user.first_name}}">
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
 			                						<label>Phone *</label>
 			                						<input type="text" class="form-control" required value="{{user.last_name}}">
+			                					</div><!-- End .col-sm-6 -->
+			                				</div><!-- End .row -->
+
+		            						{% comment %} <label>Display Name *</label>
+		            						<input type="text" class="form-control" required>
+		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label>Region *</label>
+                                                    <select class="form-control" name="" id="region">
+                                                        {% for state in state %}
+                                                            <option value="{{state.name}}">{{state.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label>City *</label>
+                                                    <select class="form-control" name="" id="city" disabled>
+                                                        <option value="">---</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label>Area *</label>
+                                                    <select class="form-control" name="" id="area" disabled>
+                                                        <option value="">---</option>
+                                                    </select>
+                                                </div>
+                                            </div><!-- End .row -->
+
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label>Address *</label>
+                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                </div>
+                                            </div><!-- End .row -->
+
+		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
+			                					<span>SAVE CHANGES</span>
+			            						<i class="fa fa-long-arrow-right"></i>
+			                				</button>
+		                					<div class="btn btn-outline-primary-2 mt-5 profile-submit-btn address-cancel-btn">
+			            						<i class="fa fa-times"></i>
+                                                <span>Cancel</span>
+                                            </div>
+			                			</form>
+                                        <form action="#" class="d-none" id="add-address-form">
+			                				<div class="row">
+			                					<div class="col-sm-6">
+			                						<label>Address Name *</label>
+			                						<input type="text" class="form-control" required>
+			                					</div><!-- End .col-sm-6 -->
+
+			                					<div class="col-sm-6">
+			                						<label>Phone *</label>
+			                						<input type="text" class="form-control" required>
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
@@ -235,12 +295,12 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label>Address *</label>
-                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                    <input type="tel" class="form-control" required>
                                                 </div>
                                             </div><!-- End .row -->
 
 		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
-			                					<span>SAVE CHANGES</span>
+			                					<span>Save</span>
 			            						<i class="fa fa-long-arrow-right"></i>
 			                				</button>
 		                					<div class="btn btn-outline-primary-2 mt-5 profile-submit-btn address-cancel-btn">

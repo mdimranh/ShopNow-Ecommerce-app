@@ -21,6 +21,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.humanize',
@@ -137,3 +138,70 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "search_model": "auth.user",
+    "topmenu_links": [
+        {
+            "name": "Home", "url": "admin:index"
+        },
+        {
+            "name": "Products", "url": "/admin/product/product/"
+        },
+        # {
+        #     "app": "order"
+        # }
+    ],
+    "usermenu_links": [
+        {
+            "model": "auth.user"
+        }
+    ],
+    "show_sidebar": True,
+    "icons": {
+        "auth": "fas fa-user-cog",
+        "auth.user": "fas fa-user",
+        "auth.Profile": "fab fa-product-hunt",
+        "order.Coupon": "fas fa-tags",
+        "order.ShopCart": "fas fa-shopping-cart",
+        "order.WishList": "fas fa-heart",
+        "product.Product": "fas fa-cubes",
+    },
+    "hide_models": ['product.RecentlyView'],
+    "order_with_respect_to": ["auth.user", "account.Profile", "product.Product", "product.Category"],
+    # "show_ui_builder": True,
+    # "language_chooser": True
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": True,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": True,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-outline-warning",
+        "danger": "btn-outline-danger",
+        "success": "btn-outline-success"
+    },
+    "actions_sticky_top": False
+}
