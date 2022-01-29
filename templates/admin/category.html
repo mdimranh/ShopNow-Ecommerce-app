@@ -1,0 +1,462 @@
+  {% extends 'base.html' %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/tree/style.min.css" />
+    <link rel="stylesheet" href="../assets/css/tree/treeview.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="../assets/icon/font-awesome/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="../assets/icon/icofont/css/icofont.css" />
+    <link
+      rel="stylesheet"
+      href="../assets/icon/material-design/css/material-design-iconic-font.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/navigation.css" />
+  </head>
+  <body>
+    <nav class="top-nav d-flex justify-content-between" id="topnav">
+      <div class="left d-flex align-items-center">
+        <span class="px-2" id="menu-btn"><i class="fa fa-bars"></i></span>
+        <div class="px-2">
+          <img class="logo" src="../assets/img/logo2.png" alt="logo" />
+        </div>
+      </div>
+      <div class="right d-flex align-items-center notification-drop">
+        <span class="px-2">
+          <i class="fa fa-bell"></i>
+        </span>
+        <span class="px-2"><i class="fa fa-comments"></i></span>
+        <span class="px-2"><i class="fa fa-user fa-lg"></i></span>
+      </div>
+    </nav>
+
+    <div>
+      <div class="sidenav" id="sidenav">
+        <ul>
+          <li>
+            <div class="menu">
+              <i class="fa fa-dashboard fa-left"></i>
+              <span>Dashboard</span>
+            </div>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-cube fa-left"></i>
+              <span>Products</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">Product</a></li>
+              <li><a href="">Category</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-dollar fa-left"></i>
+              <span>Sales</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">User</a></li>
+              <li><a href="">group</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-tags fa-left"></i>
+              <span>Coupons</span>
+            </div>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-file fa-left"></i>
+              <span>Pages</span>
+            </div>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-camera fa-left"></i>
+              <span>Media</span>
+            </div>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-bars fa-left"></i>
+              <span>Menus</span>
+            </div>
+          </li>
+          <li class="text-center py-2 header">System</li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-users fa-left"></i>
+              <span>Users</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">User</a></li>
+              <li><a href="">group</a></li>
+              <li><a href="">group</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-globe fa-left"></i>
+              <span>Localization</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">User</a></li>
+              <li><a href="">group</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-paint-brush fa-left"></i>
+              <span>Appearance</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">User</a></li>
+              <li><a href="">group</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-bar-chart-o fa-left"></i>
+              <span>Reports</span>
+            </div>
+          </li>
+          <li>
+            <div class="menu">
+              <i class="fa fa-cogs fa-left"></i>
+              <span>Settings</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="main m-3">
+        <!-- <h3 class="fw-bold">Product's</h3> -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Category Tree</h5>
+            <div class="card-header-right">
+              <i class="icofont icofont-rounded-down"></i>
+              <i class="icofont icofont-refresh"></i>
+              <i class="icofont icofont-close-circled"></i>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="card-block tree-view container-fluid">
+              <div class="row">
+                <div class="col-xxl-3 col-lg-4 col-md-6">
+                  <button
+                    class="btn btn-success py-1 px-2"
+                    id="add-root-category-btn"
+                  >
+                    Add Root Category
+                  </button>
+                  <div id="basicTree">
+                    <ul>
+                      <li
+                        data='{"type": "category", "name":"Electronics", "id": "2", "search": true, "enable": true}'
+                        data-jstree='{"opened":true, "icon":"fa fa-folder-open"}'
+                      >
+                        Electronics
+                        <ul>
+                          <li
+                            data='{"type": "group", "name":"Laptop", "id": "2", "search": true, "enable": true}'
+                            data-jstree='{"opened":true, "icon": "icofont icofont-folder-open"}'
+                          >
+                            Laptop
+                            <ul>
+                              <li
+                                data='{"type": "subcategory", "name":"Samsung", "id": "2", "search": false, "enable": true}'
+                                data-jstree='{"icon":"icofont icofont-folder"}'
+                              >
+                                Samsung
+                              </li>
+                              <li
+                                data='{"type": "subcategory", "name":"Macbook", "id": "2", "search": true, "enable": false}'
+                                data-jstree='{"icon":"icofont icofont-folder"}'
+                              >
+                                Macbook
+                              </li>
+                              <li
+                                data='{"type": "subcategory", "id": "2", "search": true, "enable": true}'
+                                data-jstree='{"icon":"icofont icofont-folder"}'
+                              >
+                                HP
+                              </li>
+                              <li
+                                data='{"type": "subcategory", "id": "2", "search": true, "enable": true}'
+                                data-jstree='{"icon":"icofont icofont-folder"}'
+                              >
+                                Lenovo
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                      <li
+                        data='{"type": "category", "name":"Fashion", "id": "2", "search": true, "enable": true}'
+                        data-jstree='{"opened":true, "icon":"fa fa-folder-open"}'
+                      >
+                        Fashion
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xxl-9 col-lg-8 col-md-6">
+                  <form class="mt-2" id="add-category-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">
+                      Add Root Category
+                    </h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3 search-field">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Serchable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="search" type="checkbox" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span
+                              >Show this category in searchbox category
+                              list</span
+                            >
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the category</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="delete-btn"
+                          type="submit"
+                          class="btn btn-danger py-1 px-3 d-none"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <form class="mt-5 d-none" id="add-subcategory-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">
+                      Add Subcategory
+                    </h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Serchable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="search" type="checkbox" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span
+                              >Show this subcategory in searchbox category
+                              list</span
+                            >
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the subcategory</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button type="submit" class="btn btn-primary py-1 px-3">
+                          Save
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <form class="mt-5 d-none" id="add-group-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">Add Group</h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the group</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button type="submit" class="btn btn-primary py-1 px-3">
+                          Save
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/sidenav.js"></script>
+    <script src="../assets/js/tree/jstree.min.js"></script>
+    <script src="../assets/js/tree/jquery.tree.js"></script>
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>

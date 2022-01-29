@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'order',
     'setting',
     'region',
-    'fontawesome_5'
+    'fontawesome_5',
 ]
 
 MIDDLEWARE = [
