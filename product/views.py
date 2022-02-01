@@ -69,10 +69,16 @@ class ProductGroupList(APIView):
     def post(self, request, format = None):
         if 'category_id' in request.POST:
             category = request.data['category_id']
-            group = {}
+            group = []
             if category:
                 groups = Category.objects.get(id = category).groups.all()
-                group = {p.name:p.id for p in groups}
+                for grp in groups:
+                    gs = {
+                        "id": grp.id,
+                        "name": grp.name,
+                    }
+                    group.append(gs)
+                # group = {p.name:p.id for p in groups}
             return JsonResponse(data = group, safe=False)
         else:
             group = request.data['group_id']

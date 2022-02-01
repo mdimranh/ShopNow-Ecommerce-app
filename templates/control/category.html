@@ -1,0 +1,319 @@
+  {% extends 'control/base.html' %}
+  {% load static %}
+  {% load solo_tags %}
+  {% get_solo 'setting.SiteConfiguration' as site_config %}
+    <!-- Bootstrap CSS -->
+    {% block title %}{{site_config.name}} | Categorys{% endblock title %}
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'control/css/tree/treeview.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/icon/material-design/css/material-design-iconic-font.min.css' %}"
+    />
+    {% endblock style %}
+
+    {% block main %}
+      <div class="main m-3">
+        <!-- <h3 class="fw-bold">Product's</h3> -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Category Tree</h5>
+          </div>
+          <div class="card-block">
+            <div class="card-block tree-view container-fluid">
+              <div class="row">
+                <div class="col-xxl-3 col-lg-4 col-md-6">
+                  <button
+                    class="btn btn-success py-1 px-2"
+                    id="add-root-category-btn"
+                  >
+                    Add Root Category
+                  </button>
+                  <div id="basicTree">
+                    <ul>
+                      {% for category in categorys %}
+                      <li
+                        data='{"type": "category", "name":"{{category.name}}", "id": "{{category.id}}", "search": true, "enable": true}'
+                        data-jstree='{{% if forloop.counter == 1 %}"opened":true,{% endif %} "icon":"fa fa-folder-open"}'
+                      >
+                        {{category.name}}
+                        <ul>
+                          {% for group in category.groups.all %}
+                          <li
+                            data='{"type": "group", "name":"{{group.name}}", "id": "{{group.id}}", "search": true, "enable": true}'
+                            data-jstree='{"opened":false, "icon": "icofont icofont-folder-open"}'
+                          >
+                            {{group.name}}
+                            <ul>
+                              {% for subcat in group.subcategorys.all %}
+                              <li
+                                data='{"type": "subcategory", "name":"{{subcat.name}}", "id": "{{subcat.id}}", "search": false, "enable": true}'
+                                data-jstree='{"icon":"icofont icofont-folder"}'
+                              >
+                                {{subcat.name}}
+                              </li>
+                              {% endfor %}
+                            </ul>
+                          </li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xxl-9 col-lg-8 col-md-6">
+                  <form class="mt-2" id="add-category-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">
+                      Add Root Category
+                    </h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3 search-field">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Serchable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="search" type="checkbox" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span
+                              >Show this category in searchbox category
+                              list</span
+                            >
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the category</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="delete-btn"
+                          type="submit"
+                          class="btn btn-danger py-1 px-3 d-none"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <form class="mt-5 d-none" id="add-subcategory-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">
+                      Add Subcategory
+                    </h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Serchable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="search" type="checkbox" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span
+                              >Show this subcategory in searchbox category
+                              list</span
+                            >
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the subcategory</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button type="submit" class="btn btn-primary py-1 px-3">
+                          Save
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <form class="mt-5 d-none" id="add-group-form">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">Add Group</h6>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" value="" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable the group</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button type="submit" class="btn btn-primary py-1 px-3">
+                          Save
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock main %}
+      
+    {% block script %}
+    <script>
+      $(".menu.products").addClass("selected");
+      $(".menu.products").addClass("active");
+      $(".submenu .category").addClass("selected");
+    </script>
+    <script src="{% static 'control/js/tree/jstree.min.js' %}"></script>
+    <script src="{% static 'control/js/tree/jquery.tree.js' %}"></script>
+    {% comment %} <script src="control/js/main.js"></script> {% endcomment %}
+    {% endblock script %}

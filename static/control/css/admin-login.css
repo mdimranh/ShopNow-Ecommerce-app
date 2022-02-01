@@ -1,0 +1,18 @@
+.login{
+    background: #425384;
+}
+
+.login-card{
+    display: flex;
+    justify-content: center;
+}
+
+.auth-box{
+    width: 400px;
+}
+
+@media screen and (max-width: 400px) {
+  .auth-box{
+    width: 100%;
+    }
+}

@@ -1,0 +1,275 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% block title %}{{site_config.name}} | Dashboard{% endblock title %}
+{% block style %}
+  <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+{% endblock style %}
+{% block main %}
+    <div class="main m-3">
+        <h3 class="fw-bold">Dashboard</h3>
+        <div class="container-fluid dashboard">
+          <div class="row">
+            <div class="col-md-6 col-xl-3">
+              <div class="card client-blocks dark-primary-border">
+                <div class="card-block">
+                  <h5>Total Sales</h5>
+                  <ul>
+                    <li>
+                      <i class="icofont icofont-bill-alt"></i>
+                    </li>
+                    <li class="text-right">133</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card client-blocks info-border">
+                <div class="card-block">
+                  <h5>Total Orders</h5>
+                  <ul>
+                    <li>
+                      <i class="icofont icofont-shopping-cart text-info"></i>
+                    </li>
+                    <li class="text-right text-info">23</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card client-blocks success-border">
+                <div class="card-block">
+                  <h5>Total Products</h5>
+                  <ul>
+                    <li>
+                      <i class="icofont icofont-cubes text-success"></i>
+                    </li>
+                    <li class="text-right text-success">{{total_product}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card client-blocks">
+                <div class="card-block">
+                  <h5>Total Customers</h5>
+                  <ul>
+                    <li>
+                      <i class="icofont icofont-ui-user-group text-primary"></i>
+                    </li>
+                    <li class="text-right text-primary">169</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="row m-0 p-0 chart">
+              <div class="col-md-12 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>
+                      <i class="icofont icofont-chart-bar-graph fs-4 me-2"></i
+                      >Sales Analystics
+                    </h5>
+                  </div>
+                  <div id="chart">
+                    <canvas class="chart" id="bar-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>
+                      <i class="icofont icofont-chart-arrows-axis fs-4 me-2"></i
+                      >Daily Visitors
+                    </h5>
+                  </div>
+                  <div id="chart">
+                    <canvas class="chart" id="line-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock main %}
+    
+    {% block script %}
+    <script src="{% static 'control/js/chart/chart.min.js' %}"></script>
+    <script src="{% static 'control/js/chart/core.js' %}"></script>
+    <script src="{% static 'control/js/chart/charts.js' %}"></script>
+    <script src="{% static 'control/js/chart/animated.js' %}"></script>
+    <script>
+      var order = {
+        labels: [
+          "Saturday",
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+        ],
+        datasets: [
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.5)",
+              below: "rgba(145, 201, 253, 0.5)",
+            },
+            label: "Order",
+            backgroundColor: [
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+              "rgba(82, 204, 180, 0.99)",
+            ],
+            hoverBackgroundColor: [
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+              "rgba(26, 188, 156, 0.88)",
+            ],
+            data: [65, 59, 80, 81, 56, 55, 50],
+          },
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.5)",
+              below: "rgba(145, 201, 253, 0.5)",
+            },
+            label: "Delivered",
+            backgroundColor: [
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+              "rgba(93, 156, 236, 0.93)",
+            ],
+            hoverBackgroundColor: [
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+              "rgba(93, 156, 236, 0.82)",
+            ],
+            data: [40, 50, 65, 71, 38, 30, 25],
+          },
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.5)",
+              below: "rgba(145, 201, 253, 0.5)",
+            },
+            label: "Pending",
+            backgroundColor: [
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+              "rgba(173, 51, 75, 0.93)",
+            ],
+            hoverBackgroundColor: [
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+              "rgba(173, 51, 75, 0.82)",
+            ],
+            data: [30, 39, 55, 61, 28, 20, 15],
+          },
+        ],
+      };
+
+      var bar = document.getElementById("bar-chart").getContext("2d");
+      var myBarChart = new Chart(bar, {
+        type: "bar",
+        data: order,
+        options: {
+          barValueSpacing: 30,
+        },
+      });
+    </script>
+    <script>
+      var visitors = {
+        labels: [
+          "Saturday",
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+        ],
+        datasets: [
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.3)",
+              below: "rgba(145, 201, 253, 0.3)",
+            },
+            label: "Order",
+            backgroundColor: ["rgba(82, 204, 180, 1)"],
+            borderColor: ["rgba(82, 204, 180, 1)"],
+            hoverBackgroundColor: ["rgba(26, 188, 156, 1)"],
+            data: [65, 59, 80, 81, 56, 55, 50],
+          },
+          // {
+          //   fill: {
+          //     target: "origin",
+          //     above: "rgba(93, 156, 236, 0.3)",
+          //     below: "rgba(145, 201, 253, 0.3)",
+          //   },
+          //   label: "Delivered",
+          //   backgroundColor: ["rgba(93, 156, 236, 1)"],
+          //   borderColor: ["rgba(93, 156, 236, 1)"],
+          //   hoverBackgroundColor: ["rgba(93, 156, 236, 1)"],
+          //   data: [40, 50, 65, 200, 38, 30, 25],
+          // },
+          // {
+          //   fill: {
+          //     target: "origin",
+          //     above: "rgba(173, 51, 75, 0.3)",
+          //     below: "rgba(145, 201, 253, 0.3)",
+          //   },
+          //   label: "Pending",
+          //   backgroundColor: ["rgba(173, 51, 75, 1)"],
+          //   borderColor: ["rgba(173, 51, 75, 1)"],
+          //   hoverBackgroundColor: ["rgba(173, 51, 75, 1)"],
+          //   data: [30, 39, 55, 61, 28, 20, 15],
+          // },
+        ],
+      };
+
+      var bar = document.getElementById("line-chart").getContext("2d");
+      var myBarChart = new Chart(bar, {
+        type: "line",
+        data: visitors,
+        options: {
+          barValueSpacing: 30,
+        },
+      });
+    </script>
+    <script>
+      $(".menu.dashboard").addClass("active")
+    </script>
+    {% endblock script %}

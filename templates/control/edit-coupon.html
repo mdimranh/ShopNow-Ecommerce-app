@@ -1,0 +1,357 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% block title %}{{coupon.name}}{% endblock title %}
+  {% block style %}
+    <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      <div class="main m-3">
+        <h3 class="fw-bold">{{coupon.name}}</h3>
+        <div class="add-coupon-sec">
+          <div class="d-flex flex-fill">
+            <div class="product-menu">
+              <div class="menu-sec">
+                <div
+                  class="menu d-flex flex-fill justify-content-between selected"
+                >
+                  <span>Coupon Menu</span
+                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                </div>
+                <ul class="submenu">
+                  <li class="selected" for="coupon-general">
+                    <p class="m-0 p-0">General</p>
+                  </li>
+                  <li for="coupon-usage-restriction">
+                    <p class="m-0 p-0">Usage Restrictions</p>
+                  </li>
+                  <li for="coupon-usage-limit">
+                    <p class="m-0 p-0 coupon-usage-limit">Usage Limits</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="products-form w-100 ms-5">
+              <form class="mt-2" id="add-category-form">
+                <div id="coupon-general" class="product-form">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Name*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Name"
+                        value="{{coupon.name}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Code*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Coupon Code"
+                        value="{{coupon.code}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount Type</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="category-select">
+                        <option value="1">Percentage</option>
+                        <option value="2">Fixed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Value*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="quantity"
+                        value="{{coupon.value}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Free Shipping</label
+                    >
+                    <div class="col-sm-10">
+                      <div class="checkbox-fade fade-in-primary">
+                        <label>
+                          <input id="enable" type="checkbox" value="" />
+                          <span class="cr">
+                            <i
+                              class="
+                                cr-icon
+                                icofont icofont-ui-check
+                                txt-primary
+                              "
+                            ></i>
+                          </span>
+                          <span>Allow free shipping</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Date Range</label
+                    >
+                    <div class="col-sm-5">
+                      <input
+                        id="coupon-start"
+                        class="form-control"
+                        type="text"
+                        placeholder="Start Date"
+                        value="{{coupon.start_date|date}}"
+                      />
+                    </div>
+                    <div class="col-sm-5">
+                      <input
+                        id="coupon-end"
+                        class="form-control"
+                        type="text"
+                        placeholder="End Date"
+                        value="{{coupon.end_date|date}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="coupon-usage-restriction" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">
+                    Usage Restrictions
+                  </h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Minimum Spend</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="name"
+                        placeholder="Minimum Spend"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Maximum Spend</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="name"
+                        placeholder="Maximum Spend"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Products</label
+                    >
+                    <div class="col-sm-10">
+                      <select
+                        multiple
+                        id="group-select"
+                        placeholder="Select Products"
+                      >
+                      {% for product in products %}
+                        <option value="{{product.title}}">{{product.title}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Exclude Products</label
+                    >
+                    <div class="col-sm-10">
+                      <select
+                        multiple
+                        id="subcategory-select"
+                        placeholder="Select Products"
+                      >
+                        {% for product in products %}
+                        <option value="{{product.title}}">{{product.title}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Categories</label
+                    >
+                    <div class="col-sm-10">
+                      <select
+                        multiple
+                        id="group-select"
+                        placeholder="Select Categories"
+                      >
+                        {% for category in categorys %}
+                        <option value="{{category.name}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Exclude Categories</label
+                    >
+                    <div class="col-sm-10">
+                      <select
+                        multiple
+                        id="subcategory-select"
+                        placeholder="Select Categories"
+                      >
+                        {% for category in categorys %}
+                        <option value="{{category.name}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="coupon-usage-limit" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Usage Limits</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Usage Limit Per Coupon</label
+                    >
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="name" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Usage Limit Per Customer</label
+                    >
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="name" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock main %}
+
+    {% block script %}
+    <script>
+      $(".menu.coupon").addClass("selected");
+      $(".menu.coupon").addClass("active");
+    </script>
+    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
+    <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
+    <script src="{% static 'control/js/custom-picker.js' %}"></script>
+    <script src="{% static 'control/js/main.js' %}"></script>
+    {% endblock script %}

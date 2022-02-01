@@ -21,7 +21,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    'control',
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.humanize',
@@ -50,11 +51,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'control.middleware.LoginRequireMidleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'EcomApp.urls'
+
+# AUTH_EXEMPT_ROUTES = ('admin-login', )
+AUTH_LOGIN_ROUTE = 'admin-login'
+ROOT_URL = 'home'
 
 TEMPLATES = [
     {
