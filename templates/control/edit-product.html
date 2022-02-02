@@ -12,6 +12,7 @@
       rel="stylesheet"
       href="{% static 'control/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css' %}"
     />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
     <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
     {% endblock style %}
 
@@ -156,7 +157,7 @@
                       >Category</label
                     >
                     <div class="col-sm-10">
-                      <select id="category-select">
+                      <select id="edit-product-category-select">
                         {% for category in categorys %}
                             <option value="{{category.id}}" {% if category.id == product.category.id %}selected{% endif %}>{{category.name}}</option>
                         {% endfor %}
@@ -170,9 +171,9 @@
                       >Group</label
                     >
                     <div class="col-sm-10">
-                      <select id="group-select">
+                      <select id="edit-product-group-select">
                         {% for group in product.category.groups.all %}
-                            <option value="{{group.id}}" {% if product.group.name == group.name %}selected{% endif %}>{{group.name}}</option>
+                            <option value="{{group.id}}" {% if product.group.id == group.id %}selected{% endif %}>{{group.name}}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -184,9 +185,9 @@
                       >Subcategory</label
                     >
                     <div class="col-sm-10">
-                      <select id="subcategory-select">
+                      <select id="edit-product-subcategory-select">
                         {% for subcategory in product.group.subcategorys.all %}
-                            <option value="{{subcategory.id}}" {% if product.subcategory.name == subcategory.name %}selected{% endif %}>{{subcategory.name}}</option>
+                            <option value="{{subcategory.id}}" {% if product.subcategory.id == subcategory.id %}selected{% endif %}>{{subcategory.name}}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -654,7 +655,7 @@
     </script>
     <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
     <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
-    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
     <script src="{% static 'control/js/form-masking/inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/jquery.inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>

@@ -8,7 +8,7 @@ def CouponView(request):
     coupons = Coupon.objects.all()
     context = {
         "products": products,
-        "categorys": categorys,
+        "categories": categorys,
         "coupons": coupons
     }
     return render(request, "control/coupon.html", context)

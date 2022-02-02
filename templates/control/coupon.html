@@ -10,7 +10,7 @@
       rel="stylesheet"
       href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
     <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
     <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
@@ -130,9 +130,9 @@
                       >Discount Type</label
                     >
                     <div class="col-sm-10">
-                      <select id="category-select">
-                        <option value="1">Percentage</option>
-                        <option value="2">Fixed</option>
+                      <select id="discount-type">
+                        <option value="Percent">Percentage</option>
+                        <option value="Fixed">Fixed</option>
                       </select>
                     </div>
                   </div>
@@ -259,13 +259,10 @@
                       >Products</label
                     >
                     <div class="col-sm-10">
-                      <select
-                        multiple
-                        id="group-select"
-                        placeholder="Select Products"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                      <select multiple id="products-select" placeholder="Select Products">
+                        {% for product in products %}
+                        <option value="{{product.id}}">{{product.title}}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -278,11 +275,12 @@
                     <div class="col-sm-10">
                       <select
                         multiple
-                        id="subcategory-select"
+                        id="exclude-products-select"
                         placeholder="Select Products"
                       >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        {% for product in products %}
+                        <option value="{{product.id}}">{{product.title}}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -295,11 +293,12 @@
                     <div class="col-sm-10">
                       <select
                         multiple
-                        id="group-select"
+                        id="categories-select"
                         placeholder="Select Categories"
                       >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        {% for category in categories %}
+                        <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -312,11 +311,12 @@
                     <div class="col-sm-10">
                       <select
                         multiple
-                        id="subcategory-select"
+                        id="exclude-categories-select"
                         placeholder="Select Categories"
                       >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        {% for category in categories %}
+                        <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>
@@ -405,7 +405,7 @@
     <script src="{% static 'control/js/table/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'control/js/table/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'control/js/table/responsive.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
     <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
     <script src="{% static 'control/js/custom-picker.js' %}"></script>
     <script src="{% static 'control/js/main.js' %}"></script>

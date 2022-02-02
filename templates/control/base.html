@@ -1,6 +1,4 @@
-{% load static %}
-{% load solo_tags %}
-{% get_solo 'setting.SiteConfiguration' as site_config %}
+{% load static %} {% load solo_tags %} {% get_solo 'setting.SiteConfiguration' as site_config %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,13 +11,23 @@
     />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'control/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/bootstrap.min.css' %}"
+    />
     <link
       rel="stylesheet"
       href="{% static 'control/icon/font-awesome/css/font-awesome.min.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'control/icon/icofont/css/icofont.css' %}" />
-    <link rel="stylesheet" href="{% static 'control/css/navigation-copy.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/fontawesome5/css/all.css' %}">
+    <link
+      rel="stylesheet"
+      href="{% static 'control/icon/icofont/css/icofont.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/navigation-copy.css' %}"
+    />
     {% block style %}{% endblock style %}
   </head>
   <body>
@@ -27,7 +35,7 @@
       <div class="left d-flex align-items-center">
         <span class="px-2" id="menu-btn"><i class="fa fa-bars"></i></span>
         <div class="px-2">
-          <img class="logo" src="{{site_config.logo.url}}" alt="logo" />
+          <a href="/control"><img class="logo" src="{{site_config.logo.url}}" alt="logo" /></a>
         </div>
       </div>
       <div class="right d-flex align-items-center notification-drop">
@@ -37,8 +45,15 @@
             This is notification section
           </div>
         </span>
-        <span class="px-2 message"><i class="fa fa-comments"></i></span>
-        <span class="px-2 profile"><i class="icofont icofont-user-alt-5 icofont-lg me-3"></i></span>
+        <span class="px-2 message"><i class="fas fa-comment-dots"></i></span>
+        <span class="px-2 profile"
+          ><i class="icofont icofont-user-alt-5 icofont-lg me-3"></i>
+          <div class="profile-sec">
+            <ul>
+              <li><a href=""><i class="fas fa-user"></i>{{user.first_name}}</a></li>
+            </ul>
+          </div>
+        </span>
       </div>
     </nav>
 
@@ -47,15 +62,15 @@
         <ul>
           <li>
             <a href="/control/">
-                <div class="menu dashboard">
-                    <i class="fa fa-dashboard fa-left"></i>
-                    <span>Dashboard</span>
-                </div>
+              <div class="menu dashboard">
+                <i class="fas fa-tachometer-alt fa-left"></i>
+                <span>Dashboard</span>
+              </div>
             </a>
           </li>
           <li>
             <div class="menu products">
-              <i class="fa fa-cube fa-left"></i>
+              <i class="fas fa-cube fa-left"></i>
               <span>Products</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
@@ -66,7 +81,7 @@
           </li>
           <li>
             <div class="menu">
-              <i class="fa fa-dollar fa-left"></i>
+              <i class="fas fa-dollar-sign fa-left"></i>
               <span>Sales</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
@@ -77,30 +92,30 @@
           </li>
           <li>
             <a href="/control/coupon">
-            <div class="menu coupon">
-              <i class="fa fa-tags fa-left"></i>
-              <span>Coupons</span>
-            </div>
-          </a>
+              <div class="menu coupon">
+                <i class="fas fa-tags fa-left"></i>
+                <span>Coupons</span>
+              </div>
+            </a>
           </li>
           <li>
             <div class="menu">
-              <i class="fa fa-file fa-left"></i>
+              <i class="fas fa-file-alt fa-left"></i>
               <span>Pages</span>
             </div>
           </li>
           <li>
             <div class="menu">
-              <i class="fa fa-camera fa-left"></i>
+              <i class="fas fa-camera fa-left"></i>
               <span>Media</span>
             </div>
           </li>
           <li>
             <a href="/control/menu">
-            <div class="menu menus">
-              <i class="fa fa-bars fa-left"></i>
-              <span>Menus</span>
-            </div>
+              <div class="menu menus">
+                <i class="fa fa-bars fa-left"></i>
+                <span>Menus</span>
+              </div>
             </a>
           </li>
           <li class="text-center py-2 header">System</li>

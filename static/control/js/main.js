@@ -69,22 +69,21 @@ $(".product-menu .submenu li").on("click", function () {
 
 // //! Select 2 customize
 
-let ins = tail.select("#category-select", {
-  search: true,
-  placeholder: "Select category",
-});
-let group = tail.select("#group-select", {
-  search: true,
-  placeholder: "Select category",
-});
-tail.select("#subcategory-select", {
-  search: true,
-  placeholder: "Select category",
-});
-tail.select("#discount-type", {
-  placeholder: "Discount type",
-});
-console.log(ins);
+// let ins = tail.select("#category-select", {
+//   search: true,
+//   placeholder: "Select category",
+// });
+// let group = tail.select("#group-select", {
+//   search: true,
+//   placeholder: "Select category",
+// });
+// tail.select("#subcategory-select", {
+//   search: true,
+//   placeholder: "Select category",
+// });
+// tail.select("#discount-type", {
+//   placeholder: "Discount type",
+// });
 // ins.options.items = {};
 // ins.options.add("New option", "Yes", false, false, false, '', true);
 
@@ -133,8 +132,8 @@ document.querySelectorAll("[id=option-name]").forEach((element) => {
 
 $(".add-new-option").on("click", function () {
   $(".new-option").append(div);
-  tail.select("#discount-type", {
-    placeholder: "Discount type",
+  VirtualSelect.init({
+    ele: "select",
   });
   document.querySelectorAll("[id=option-name]").forEach((element) => {
     $(element).on("keyup", function () {
@@ -392,16 +391,63 @@ function getCookie(name) {
     return cookieValue;
 }
 
+VirtualSelect.init({
+  ele: "select",
+  // options: dis_type,
+  // autoSelectFirstOption: true
+});
 
-$("#category-select").change(function(){
+// VirtualSelect.init({
+//   ele: "#products-select",
+// });
+
+// VirtualSelect.init({
+//   ele: "#exclude-products-select",
+//   // multiple: true
+// });
+
+// VirtualSelect.init({
+//   ele: "#categories-select",
+//   // multiple: true
+// });
+
+// VirtualSelect.init({
+//   ele: "#exclude-categories-select",
+//   // multiple: true
+// });
+
+// VirtualSelect.init({
+//   ele: "#category-select",
+//   // multiple: true
+//   autoSelectFirstOption: false
+// });
+
+// VirtualSelect.init({
+//   ele: "#group-select",
+//   // multiple: true
+// });
+
+// VirtualSelect.init({
+//   ele: "#subcategory-select",
+//   // multiple: true
+// });
+
+$("#category-select").on('change', function(){
     $.ajax({
-        url:"/productgroups/",
+        url:"/control/productgroups/",
         type:"POST",
         data:{category_id: $(this).val(),},
         success: function(result) {
+          opt = []
           result.forEach(function(data){
-            var id = (data.id).tostring()
-            group.options.add(id, data.name, false, false, false, '', true);
+            opt.push({label: data.name, value: data.id})
+          })
+          VirtualSelect.init({
+            ele: "#group-select",
+            options: opt
+          })
+          VirtualSelect.init({
+            ele: "#subcategory-select",
           })
         },
         headers: {
@@ -411,4 +457,84 @@ $("#category-select").change(function(){
             console.error(JSON.stringify(e));
         },
     });
+});
+
+$("#group-select").on('change', function(){
+    $.ajax({
+        url:"/control/productgroups/",
+        type:"POST",
+        data:{group_id: $(this).val(),},
+        success: function(result) {
+          opt = []
+          result.forEach(function(data){
+            opt.push({label: data.name, value: data.id})
+          })
+          VirtualSelect.init({
+            ele: "#subcategory-select",
+            options: opt
+          })
+        },
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        error: function(e){
+            console.error(JSON.stringify(e));
+        },
+    });
+});
+
+
+$("#edit-product-category-select").on('click', function(){
+  $("#edit-product-category-select").on('change', function(){
+      $.ajax({
+          url:"/control/productgroups/",
+          type:"POST",
+          data:{category_id: $(this).val(),},
+          success: function(result) {
+            opt = []
+            result.forEach(function(data){
+              opt.push({label: data.name, value: data.id})
+            })
+            VirtualSelect.init({
+              ele: "#edit-product-group-select",
+              options: opt
+            })
+            VirtualSelect.init({
+              ele: "#edit-product-subcategory-select",
+            })
+          },
+          headers: {
+              "X-CSRFToken": getCookie("csrftoken")
+          },
+          error: function(e){
+              console.error(JSON.stringify(e));
+          },
+      });
+  });
+});
+
+$("#edit-product-group-select").on('click', function(){
+  $("#edit-product-group-select").on('change', function(){
+      $.ajax({
+          url:"/control/productgroups/",
+          type:"POST",
+          data:{group_id: $(this).val(),},
+          success: function(result) {
+            opt = []
+            result.forEach(function(data){
+              opt.push({label: data.name, value: data.id})
+            })
+            VirtualSelect.init({
+              ele: "#edit-product-subcategory-select",
+              options: opt
+            })
+          },
+          headers: {
+              "X-CSRFToken": getCookie("csrftoken")
+          },
+          error: function(e){
+              console.error(JSON.stringify(e));
+          },
+      });
+  });
 });

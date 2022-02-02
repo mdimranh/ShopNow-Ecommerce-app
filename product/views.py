@@ -74,7 +74,7 @@ class ProductGroupList(APIView):
                 groups = Category.objects.get(id = category).groups.all()
                 for grp in groups:
                     gs = {
-                        "id": grp.id,
+                        "id": str(grp.id),
                         "name": grp.name,
                     }
                     group.append(gs)
@@ -87,3 +87,33 @@ class ProductGroupList(APIView):
                 subcategorys = Group.objects.get(id = group).subcategorys.all()
                 subcategory = {p.name:p.id for p in subcategorys}
             return JsonResponse(data = subcategory, safe=False)
+
+class ControlCayegoryList(APIView):
+    permission_classes = [IsAuthenticated,]
+    def post(self, request, format = None):
+        if 'category_id' in request.POST:
+            category = request.data['category_id']
+            group = []
+            if category:
+                groups = Category.objects.get(id = category).groups.all()
+                for grp in groups:
+                    gs = {
+                        "id": str(grp.id),
+                        "name": grp.name,
+                    }
+                    group.append(gs)
+                # group = {p.name:p.id for p in groups}
+            return JsonResponse(data = group, safe=False)
+        else:
+            group = request.data['group_id']
+            subcat = []
+            if group:
+                subcats = Group.objects.get(id = group).subcategorys.all()
+                for item in subcats:
+                    subcat_item = {
+                        "id": str(item.id),
+                        "name": item.name,
+                    }
+                    subcat.append(subcat_item)
+                # group = {p.name:p.id for p in groups}
+            return JsonResponse(data = subcat, safe=False)
