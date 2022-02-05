@@ -1,0 +1,1353 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% block title %}{{site_config.name}} | Products{% endblock title %}
+
+    {% block style %}
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/dataTables.bootstrap4.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      {% if user_info %}
+        <h5 class="fw-bold mb-2">{{user_info.first_name}} {{user_info.last_name}}</h5>
+      {% else %}
+        <h3 class="fw-bold">User's</h3>
+      {% endif %}
+      {% if not user_info %}
+      <div class="card product-list">
+          <div class="card-header">
+            <h5>All User</h5>
+            <div class="card-header-right me-3">
+              <button class="btn btn-add add-product-btn p-2">
+                <i class="fa fa-plus px-2 m-0"></i>Add User
+              </button>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+              </div>
+              <table
+              id="user-list"
+              data-toolbar="#toolbar"
+              data-toggle="table"
+              data-sticky-header="true"
+              data-sticky-header-offset-y="40"
+              data-pagination="true"
+              data-page-list="[10, 25, 50, 100, ALL]"
+              data-search="true"
+              data-search-highlight="true"
+              data-show-toggle="true"
+              data-show-export="true"
+              data-export-types="['csv','json', 'doc']"
+              data-export-options='{
+                "fileName": "userlist"
+              }'
+              data-filter-control="true"
+              data-show-multi-sort="true"
+              data-fixed-columns="true"
+              data-fixed-number="1"
+              data-show-columns="true"
+              data-show-columns-toggle-all="true"
+              data-show-toggle="true"
+              data-show-fullscreen="true"
+              data-show-pagination-switch="true"
+              {% comment %} data-detail-view="true" {% endcomment %}
+              {% comment %} data-sticky-header = "true" {% endcomment %}
+              data-checkbox = "true"
+              class="table table-striped table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-checkbox="true" ></th>
+                    <th data-sortable="true" data-valign="middle">Full Name</th>
+                    <th data-sortable="true" data-valign="middle">Email</th>
+                    <th data-sortable="true" data-valign="middle">Status</th>
+                    <th data-sortable="true" data-valign="middle">Join On</th>
+                    <th data-sortable="true" data-valign="middle">Last Login</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in users %}
+                  <tr>
+                    <td data-checkbox-enabled="false"></td>
+                    <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/user/{{item.id}}">{{item.first_name}} {{item.last_name}}</a></td>
+                    <td>{{item.email}}</td>
+                    <td>{% if item.is_superuser %}Admin{% elif not item.superuser and item.is_staff %}Staff{% else %}User{% endif %}</td>
+                    <td>{{item.date_joined|date}}</td>
+                    <td>{% if item.profile_info.online %}<i class="far fa-dot-circle text-success me-2"></i>{% endif %}{{item.last_login|timesince}}{% if item.last_login %} ago{% else %}-{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+      </div>
+      <div class="add-user-sec d-none">
+          <div class="d-flex flex-fill">
+            <div class="product-menu">
+              <div class="menu-sec">
+                <div
+                  class="menu d-flex flex-fill justify-content-between selected"
+                >
+                  <span>Basic Information</span
+                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                </div>
+                <ul class="submenu">
+                  <li class="selected" for="general">
+                    <p class="m-0 p-0">General</p>
+                  </li>
+                  <li for="category"><p class="m-0 p-0">Category</p></li>
+                  <li for="price"><p class="m-0 p-0">Price</p></li>
+                  <li for="images"><p class="m-0 p-0">Images</p></li>
+                  <li for="seo"><p class="m-0 p-0">Seo</p></li>
+                </ul>
+              </div>
+              <div class="menu-sec">
+                <div class="menu d-flex flex-fill justify-content-between">
+                  <span>Advanced Information</span
+                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                </div>
+                <ul class="submenu">
+                  <li for="attributes"><p class="m-0 p-0">Attributes</p></li>
+                  <li for="options"><p class="m-0 p-0">Options</p></li>
+                  <li for="additional"><p class="m-0 p-0">Additional</p></li>
+                </ul>
+              </div>
+            </div>
+            <div class="products-form w-100 ms-5">
+              <form class="mt-2" id="add-category-form" method="post">
+                {% csrf_token %}
+                <div id="general" class="product-form">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Name*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Short Descriptions*</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Quantity*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="quantity"
+                        min="1"
+                        value="5"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Status</label
+                    >
+                    <div class="col-sm-10">
+                      <div class="checkbox-fade fade-in-primary">
+                        <label>
+                          <input id="enable" type="checkbox" value="" name="enable" />
+                          <span class="cr">
+                            <i
+                              class="
+                                cr-icon
+                                icofont icofont-ui-check
+                                txt-primary
+                              "
+                            ></i>
+                          </span>
+                          <span>Enable this product</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="category" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Category</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="category-select">
+                        {% for category in categorys %}
+                          <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Group</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="group-select">
+                      </select>
+                      {% comment %} <select class="form-control" name="" id="groups-select">
+                        <option value="">---</option>
+                      </select> {% endcomment %}
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Subcategory</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="subcategory-select">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="price" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Price</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Main Price*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control autonumber"
+                        data-a-sign="৳"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount*</label
+                    >
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount Type*</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="discount-type">
+                        <option value="percentage">Percentage</option>
+                        <option value="fixed">Fixed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="images" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <h6>Thumbnail</h6>
+                    <label for="thumbnail-input">
+                      <img
+                        class="thumbnail"
+                        id="thumbnail"
+                        src="control/css/image.png"
+                      />
+                    </label>
+                    <input
+                      class="d-none"
+                      type="file"
+                      accept="image/*"
+                      id="thumbnail-input"
+                      onchange="loadthumbnail(event)"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <h6>Additional Images</h6>
+                    <input
+                      type="file"
+                      name="files[]"
+                      id="filer_input1"
+                      multiple="multiple"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="seo" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Seo</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Title</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Title"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Keywords</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Keywords"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="attributes" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Size</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        value=""
+                        data-role="tagsinput"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Color</label
+                    >
+                    <div class="col-sm-10 d-flex justify-content-between">
+                      <div class="d-flex flex-wrap" id="color-picker">
+                        <input class="mx-1 my-1" id="color-pick" type="color" />
+                      </div>
+                      <div class="btn btn-outline-success" id="add-color">
+                        Add New Color
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="options" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
+                  <hr />
+                  <br />
+                  <div class="d-flex flex-fill align-items-center option-sec">
+                    <div class="option w-100">
+                      <div
+                        class="
+                          option-head
+                          d-flex
+                          flex-fill
+                          justify-content-between
+                          mb-3
+                        "
+                      >
+                        <h6 class="option-name">Option Name</h6>
+                        <span class="arrow"
+                          ><i class="fa fa-angle-right"></i
+                        ></span>
+                      </div>
+                      <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Name</label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="option-name"
+                            placeholder="Option name"
+                          />
+                        </div>
+                        <div class="col-sm-4">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Type</label
+                        >
+                        <div class="col-sm-10">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div> -->
+                      <div class="options-option">
+                        <div class="row mb-3 mx-2">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Option</label
+                          >
+                          <div class="col-sm-5 d-flex">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="option-name"
+                              placeholder="Label"
+                            />
+                          </div>
+                          <div class="col-sm-4 d-flex flex-fill">
+                            <input
+                              type="number"
+                              class="form-control"
+                              placeholder="Price"
+                            />
+                            <div class="btn col-sm-1">
+                              <i class="fa fa-trash"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="btn add-options-option">Add option</div>
+                    </div>
+                    <i class="fa fa-trash fa-lg ms-3"></i>
+                  </div>
+                  <div class="new-option"></div>
+                  <div
+                    class="
+                      d-flex
+                      flex-fill
+                      justify-content-end
+                      mb-3
+                      add-new-option-sec
+                    "
+                  >
+                    <div class="btn btn-outline-success add-new-option">
+                      Add new options
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="additional" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Description</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="description"
+                        id="description"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Additional Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="additional-info"
+                        id="additional-info"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Shipping Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="shipping-info"
+                        id="shipping-info"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% else %}
+      <nav class="mt-4">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active fw-bold" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Personal Info</button>
+          <button class="nav-link fw-bold" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Permissions</button>
+          <button class="nav-link fw-bold" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+          <div class="products-form w-100 mt-5">
+              <form class="mt-2" id="add-category-form" method="post">
+                {% csrf_token %}
+                <div id="general" class="product-form">
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >First Name</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Last Name</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Email</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Status</label
+                    >
+                    <div class="col-sm-10">
+                      <div class="checkbox-fade fade-in-primary">
+                        <label>
+                          <input id="enable" type="checkbox" value="" name="enable" />
+                          <span class="cr">
+                            <i
+                              class="
+                                cr-icon
+                                icofont icofont-ui-check
+                                txt-primary
+                              "
+                            ></i>
+                          </span>
+                          <span>Enable this product</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="category" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Category</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="category-select">
+                        {% for category in categorys %}
+                          <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Group</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="group-select">
+                      </select>
+                      {% comment %} <select class="form-control" name="" id="groups-select">
+                        <option value="">---</option>
+                      </select> {% endcomment %}
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Subcategory</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="subcategory-select">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="price" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Price</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Main Price*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control autonumber"
+                        data-a-sign="৳"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount*</label
+                    >
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount Type*</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="discount-type">
+                        <option value="percentage">Percentage</option>
+                        <option value="fixed">Fixed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="images" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <h6>Thumbnail</h6>
+                    <label for="thumbnail-input">
+                      <img
+                        class="thumbnail"
+                        id="thumbnail"
+                        src="control/css/image.png"
+                      />
+                    </label>
+                    <input
+                      class="d-none"
+                      type="file"
+                      accept="image/*"
+                      id="thumbnail-input"
+                      onchange="loadthumbnail(event)"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <h6>Additional Images</h6>
+                    <input
+                      type="file"
+                      name="files[]"
+                      id="filer_input1"
+                      multiple="multiple"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="seo" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Seo</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Title</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Title"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Keywords</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Keywords"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="attributes" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Size</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        value=""
+                        data-role="tagsinput"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Color</label
+                    >
+                    <div class="col-sm-10 d-flex justify-content-between">
+                      <div class="d-flex flex-wrap" id="color-picker">
+                        <input class="mx-1 my-1" id="color-pick" type="color" />
+                      </div>
+                      <div class="btn btn-outline-success" id="add-color">
+                        Add New Color
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="options" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
+                  <hr />
+                  <br />
+                  <div class="d-flex flex-fill align-items-center option-sec">
+                    <div class="option w-100">
+                      <div
+                        class="
+                          option-head
+                          d-flex
+                          flex-fill
+                          justify-content-between
+                          mb-3
+                        "
+                      >
+                        <h6 class="option-name">Option Name</h6>
+                        <span class="arrow"
+                          ><i class="fa fa-angle-right"></i
+                        ></span>
+                      </div>
+                      <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Name</label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="option-name"
+                            placeholder="Option name"
+                          />
+                        </div>
+                        <div class="col-sm-4">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Type</label
+                        >
+                        <div class="col-sm-10">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div> -->
+                      <div class="options-option">
+                        <div class="row mb-3 mx-2">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Option</label
+                          >
+                          <div class="col-sm-5 d-flex">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="option-name"
+                              placeholder="Label"
+                            />
+                          </div>
+                          <div class="col-sm-4 d-flex flex-fill">
+                            <input
+                              type="number"
+                              class="form-control"
+                              placeholder="Price"
+                            />
+                            <div class="btn col-sm-1">
+                              <i class="fa fa-trash"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="btn add-options-option">Add option</div>
+                    </div>
+                    <i class="fa fa-trash fa-lg ms-3"></i>
+                  </div>
+                  <div class="new-option"></div>
+                  <div
+                    class="
+                      d-flex
+                      flex-fill
+                      justify-content-end
+                      mb-3
+                      add-new-option-sec
+                    "
+                  >
+                    <div class="btn btn-outline-success add-new-option">
+                      Add new options
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="additional" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Description</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="description"
+                        id="description"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Additional Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="additional-info"
+                        id="additional-info"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Shipping Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="shipping-info"
+                        id="shipping-info"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Profile</div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Contact</div>
+      </div>
+      {% endif %}
+    {% endblock main %}
+
+    {% block script %}
+    <script>
+      $(".menu.users").addClass("selected");
+      $(".menu.users").addClass("active");
+    </script>
+    <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
+    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    {% endblock script %}

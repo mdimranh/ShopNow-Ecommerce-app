@@ -538,3 +538,71 @@ $("#edit-product-group-select").on('click', function(){
       });
   });
 });
+
+
+
+//! User list table
+
+$('#user-list').on('check.bs.table', function (e, row, $element) {
+  console.log(row[2]);
+})
+
+var $usertable = $('#user-list')
+var $remove = $('#remove')
+var selections = []
+
+function getUserIdSelections() {
+    return $.map($usertable.bootstrapTable('getSelections'), function (row) {
+      return row[2]
+    })
+  }
+
+$usertable.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove.prop('disabled', !$usertable.bootstrapTable('getSelections').length)
+      selections = getUserIdSelections()
+    })
+
+$remove.click(function () {
+      var ids = getUserIdSelections()
+      console.log(ids)
+      $remove.prop('disabled', true)
+    })
+
+//! product list table
+
+var $producttable = $('#product-table')
+
+function getProductIdSelections() {
+    return $.map($producttable.bootstrapTable('getSelections'), function (row) {
+      return row[3]
+    })
+  }
+
+$producttable.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove.prop('disabled', !$producttable.bootstrapTable('getSelections').length)
+      selections = getProductIdSelections()
+      console.log(selections)
+    })
+
+$remove.click(function () {
+      var ids = getProductIdSelections()
+      console.log(ids)
+      $remove.prop('disabled', true)
+    })
+
+// $producttable.on("click-row.bs.table", function(row, $element, field){
+//   var link = $element[2];
+//   var lnk = link.slice(9, link.length-6)
+//   location.href = lnk
+// })
+$producttable.on("click-cell.bs.table", function(field, value, row, $element){
+  var link = $element[2];
+  if(value === 3){
+    var lnk = link.slice(9, link.length-6)
+    location.href = lnk
+  }
+})

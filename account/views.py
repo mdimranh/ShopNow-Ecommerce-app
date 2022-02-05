@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from .models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from order.models import ShopCart
@@ -21,6 +22,7 @@ def Account(request):
             user = User.objects.create_user(username = email, first_name = first_name, last_name = last_name, email = email)
             user.set_password(password)
             user.save()
+            Profile.objects.create(user = user)
             return JsonResponse({'msg': "Account create successfully. please login first", 'success': 'yes'})
         else:
             email = request.POST['email']
@@ -29,6 +31,9 @@ def Account(request):
 
             if user is not None:
                 auth.login(request, user)
+                pro = Profile.objects.get(user = user)
+                pro.online = True
+                pro.save()
                 cart = ShopCart.objects.filter(user = user).order_by('created_at')
                 total_cost = 0
                 cart_serialize = []
@@ -70,7 +75,7 @@ def Account(request):
                 return JsonResponse({'msg': msg})
     return HttpResponse({"msg": 'Something is wrong'})
 
-def Profile(request):
+def ProfileView(request):
     categorys = Category.objects.all()
     total_cost = 0
     item = 0
@@ -103,6 +108,10 @@ def Profile(request):
     return render(request, 'account/profile.html', context)
 
 def Logout(request):
+    user = request.user
+    pro = Profile.objects.get(user = user)
+    pro.online = False
+    pro.save()
     auth.logout(request)
     return redirect('/')
 

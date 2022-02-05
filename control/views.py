@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib import messages
 from product.models import Product
 from setting.models import Menus
+from django.contrib.auth.models import User
 
 from django.contrib.auth.models import User, auth
 
+from account.models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from order.models import ShopCart
@@ -33,8 +36,10 @@ def Login(request):
 
         if user is not None:
             if user.is_superuser:
-                print("Yes ---------")
                 auth.login(request, user)
+                pro = Profile.objects.get(user = user)
+                pro.online = True
+                pro.save()
                 total_product = Product.objects.all().count()
                 context = {
                     "total_product": total_product
@@ -42,6 +47,9 @@ def Login(request):
                 return render(request, "control/index.html", context)
             else:
                 auth.login(request, user)
+                pro = Profile.objects.get(user = user)
+                pro.online = True
+                pro.save()
                 categorys = Category.objects.all()
                 subcategorys = Subcategory.objects.all()
                 brand = Brands.objects.all()
@@ -87,4 +95,25 @@ def Login(request):
                     'item': item
                 }
                 return render(request, 'home/home.html', context)
+        else:
+            messages.error(request, "Invalid username or password!")
+            return render(request, "control/login.html")
+
     return render(request, "control/login.html")
+
+def Users(request):
+    users = User.objects.all().first()
+    us = []
+    for i in range(300):
+        us.append(users)
+    context = {
+        "users": us
+    }
+    return render(request, "control/user.html", context)
+
+def UserDetails(request, id):
+    user = User.objects.get(id = id)
+    context = {
+        "user_info": user
+    }
+    return render(request, "control/user.html", context)

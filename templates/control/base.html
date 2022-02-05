@@ -20,6 +20,7 @@
       href="{% static 'control/icon/font-awesome/css/font-awesome.min.css' %}"
     />
     <link rel="stylesheet" href="{% static 'control/fontawesome5/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'control/icon/bootstrap/bootstrap-icons.css' %}">
     <link
       rel="stylesheet"
       href="{% static 'control/icon/icofont/css/icofont.css' %}"
@@ -47,10 +48,13 @@
         </span>
         <span class="px-2 message"><i class="fas fa-comment-dots"></i></span>
         <span class="px-2 profile"
-          ><i class="icofont icofont-user-alt-5 icofont-lg me-3"></i>
-          <div class="profile-sec">
+          ><i class="far fa-user fa-lg me-3"></i>
+          <div class="profile-sec bg-white">
             <ul>
-              <li><a href=""><i class="fas fa-user"></i>{{user.first_name}}</a></li>
+              <li class="py-2"><a class="text-decoration-none d-flex flex-fill align-items-center" href="/control/user/{{user.id}}"><i class="far fa-user px-3"></i>{{user.first_name}}{% if user.is_superuser %} (Admin){% endif %}</a></li>
+              <li class="py-2"><a class="text-decoration-none d-flex flex-fill align-items-center" href=""><i class="fas fa-cogs px-3"></i>Settings</a></li>
+              <li class="py-2"><a class="text-decoration-none d-flex flex-fill align-items-center" href="/"><i class="fas fa-desktop px-3"></i>Visit Site</a></li>
+              <li class="py-2"><a class="text-decoration-none d-flex flex-fill align-items-center" href="/auth/logout"><i class="far fa-share-square px-3"></i>Logout</a></li>
             </ul>
           </div>
         </span>
@@ -119,7 +123,7 @@
             </a>
           </li>
           <li class="text-center py-2 header">System</li>
-          <li>
+          {% comment %} <li>
             <div class="menu">
               <i class="fa fa-users fa-left"></i>
               <span>Users</span>
@@ -129,6 +133,14 @@
               <li><a href="">User</a></li>
               <li><a href="">Profile</a></li>
             </ul>
+          </li> {% endcomment %}
+          <li>
+            <a href="/control/user">
+              <div class="menu users">
+                <i class="fas fa-users fa-left"></i>
+                <span>Users</span>
+              </div>
+            </a>
           </li>
           <li>
             <div class="menu">
@@ -166,7 +178,12 @@
           </li>
         </ul>
       </div>
-      {% block main %}{% endblock main %}
+      <div class="main mx-3 mt-3">
+        {% block main %}{% endblock main %}
+        <div class="copyright d-flex flex-fill justify-content-between">
+          <span>copyright <span class="fw-bold">©</span> <span class="current-year"></span> <a href="/" class="text-decoration-none">{{site_config.name}}</a></span>
+        </div>
+      </div>
     </div>
 
     <script src="{% static 'control/js/jquery.min.js' %}"></script>

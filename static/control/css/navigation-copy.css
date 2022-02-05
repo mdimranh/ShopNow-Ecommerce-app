@@ -62,6 +62,24 @@
   transition: 0.3s;
   color: var(--white);
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidenav::-webkit-scrollbar {
+  width: 4px;
+  margin-left: 5px;
+}
+
+.sidenav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.733);
+  border-left: 1px solid rgba(128, 128, 128, 0.301);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.sidenav::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.5);
+  border-radius: 20px;
 }
 
 .sidenav.expand {
@@ -210,9 +228,27 @@
   position: absolute;
   left: 230px;
   top: 44px;
-  bottom: 0;
+  /* bottom: 200px; */
+  padding-bottom: 25px;
   right: 0;
   transition: 0.3s;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+  margin-left: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.733);
+  border-left: 1px solid rgba(128, 128, 128, 0.301);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
 }
 
 .main.expand {
@@ -476,13 +512,26 @@ textarea:focus {
 
 .profile-sec {
   position: absolute;
-  right: 10px;
+  right: 5px;
   top: 43.5px;
-  padding-top: 10px;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   width: 200px;
   display: none;
   z-index: 1000;
+}
+
+.profile-sec ul li{
+  margin: 0 10px;
+  border-radius: 5px;
+}
+
+.profile-sec ul li:hover{
+  background: #3f5485;
+}
+
+.profile-sec ul li:hover a{
+  color: white;
 }
 
 .notification:hover{
@@ -537,13 +586,54 @@ textarea:focus {
 /* product page */
 
 .product-column {
-  width: 60px;
+  /* width: 60px; */
   padding: 0 15px 0 0;
-}
-.check-column {
-  width: 10px;
 }
 .product-img {
   height: 70px;
   width: auto;
+}
+
+tbody tr td:nth-child(3){
+  font-weight: bolder;
+  /* font-size: 18px; */
+}
+
+tbody tr td:nth-child(3):hover{
+  cursor: pointer;
+  color: #2e4eee;
+}
+
+tbody tr td:nth-child(5)::before{
+  content: "৳";
+}
+
+
+.nav-link.active{
+  color: #2e4eee;
+}
+
+
+
+
+
+.bs-checkbox :hover{
+  cursor: pointer;
+}
+
+
+.copyright{
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 10px 10px;
+  position: fixed;
+  background: white;
+  left: 230px;
+  right: 0;
+  bottom: 0;
+  transition: 0.3s;
+}
+
+.copyright.expand {
+  left: 58px;
+  transition: 0.3s;
 }

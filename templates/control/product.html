@@ -3,14 +3,10 @@
 {% block title %}{{site_config.name}} | Products{% endblock title %}
 
     {% block style %}
-    <link
-      rel="stylesheet"
-      href="{% static 'control/css/table/dataTables.bootstrap4.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
     <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
     <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
     <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
@@ -26,8 +22,12 @@
     {% endblock style %}
 
     {% block main %}
-    <div class="main m-3">
+      {% if product_details %}
+      <h3 class="fw-bold">{{product_details.title}}</h3>
+      {% else %}
       <h3 class="fw-bold">Product's</h3>
+      {% endif %}
+      {% if not product_details %}
       <div class="card product-list">
           <div class="card-header">
             <h5>All Products</h5>
@@ -39,59 +39,64 @@
           </div>
           <div class="card-block">
             <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+              </div>
               <table
-                id="footer-select"
+                id="product-table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-pagination="true"
+                data-page-list="[5, 25, 50, 100, ALL]"
+                data-search="true"
+                data-search-highlight="true"
+                data-show-export="true"
+                data-export-types="['csv','json', 'doc']"
+                data-export-options='{
+                  "fileName": "userlist"
+                }'
+                data-filter-control="true"
+                data-show-multi-sort="true"
+                data-fixed-columns="true"
+                data-fixed-number="1"
+                {% comment %} data-show-columns="true"
+                data-show-columns-toggle-all="true" {% endcomment %}
+                data-show-toggle="true"
+                data-show-fullscreen="true"
+                data-show-pagination-switch="true"
+                {% comment %} data-show-footer="true" {% endcomment %}
+                {% comment %} data-detail-view="true" {% endcomment %}
+                data-sticky-header = "true"
+                data-checkbox = "true"
                 class="table table-striped table-bordered no-border nowrap"
               >
                 <thead>
                   <tr>
-                    <th class="check-column check-column-header"><div class="checkbox-fade fade-in-primary">
-                        <label>
-                          <input class="main-check-box" id="enable" type="checkbox" value="" />
-                          <span class="cr">
-                            <i
-                              class="
-                                cr-icon
-                                icofont icofont-ui-check
-                                txt-primary
-                              "
-                            ></i>
-                          </span>
-                        </label>
-                      </div></th>
-                    <th>Thumbnail</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Active</th>
-                    <th>Quantity</th>
-                    <th>Created</th>
+                    <th data-checkbox="true" ></th>
+                    <th data-searchable="false">Thumbnail</th>
+                    <th data-visible="false"></th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="input">Name</th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="select">Category</th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="select">Price</th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="select">Active</th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="select">Quantity</th>
+                    <th data-sortable="true" data-valign="middle" data-filter-control="select">Created</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for product in products %}
                   <tr>
-                    <td class="check-column"><div class="checkbox-fade fade-in-primary">
-                        <label>
-                          <input class="check" id="enable" type="checkbox" value="" />
-                          <span class="cr">
-                            <i
-                              class="
-                                cr-icon
-                                icofont icofont-ui-check
-                                txt-primary
-                              "
-                            ></i>
-                          </span>
-                        </label>
-                      </div></td>
-                    <td class="d-flex flex-fill justify-content-center product-column"><img class="product-img" src="{{product.image.url}}"></td>
-                    <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/product/edit-product/{{product.id}}">{{product.title}}</a></td>
-                    <td>{{product.category}}</td>
-                    <td>৳{{product.price}} <span class="text-decoration-line-through text-danger">(৳{{product.main_price}})</span></td>
+                    <td data-checkbox-enabled="false"></td>
+                    <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image.url}}"></td>
+                    <td><a href="/control/product/edit-product/{{product.id}}"></a></td>
+                    <td >{{product.title}}</td>
+                    <td >{{product.category}}</td>
+                    <td>{{product.price}}</span></td>
                     <td class="ps-4">{% if product.status == 'True' %}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
                     <td>{{product.amount}}</td>
-                    <td>{{product.created_at|date}}</td>
+                    <td>{{product.created_at|date:"d M Y"}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -731,7 +736,634 @@
             </div>
           </div>
       </div>
-    </div>
+      {% endif %}
+      {% if product_details %}
+      <div class="edit-product-sec">
+          <div class="d-flex flex-fill">
+            <div class="product-menu">
+              <div class="menu-sec">
+                <div
+                  class="menu d-flex flex-fill justify-content-between selected"
+                >
+                  <span>Basic Information</span
+                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                </div>
+                <ul class="submenu">
+                  <li class="selected" for="general">
+                    <p class="m-0 p-0">General</p>
+                  </li>
+                  <li for="category"><p class="m-0 p-0">Category</p></li>
+                  <li for="price"><p class="m-0 p-0">Price</p></li>
+                  <li for="images"><p class="m-0 p-0">Images</p></li>
+                  <li for="seo"><p class="m-0 p-0">Seo</p></li>
+                </ul>
+              </div>
+              <div class="menu-sec">
+                <div class="menu d-flex flex-fill justify-content-between">
+                  <span>Advanced Information</span
+                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                </div>
+                <ul class="submenu">
+                  <li for="attributes"><p class="m-0 p-0">Attributes</p></li>
+                  <li for="options"><p class="m-0 p-0">Options</p></li>
+                  <li for="additional"><p class="m-0 p-0">Additional</p></li>
+                </ul>
+              </div>
+            </div>
+            <div class="products-form w-100 ms-5">
+              <form class="mt-2" id="add-category-form">
+                <div id="general" class="product-form">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Name*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Name"
+                        value="{{product_details.title}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Short Descriptions*</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                      >{{product_details.short_info}}</textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Quantity*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="quantity"
+                        min="1"
+                        value="{{product_details.amount}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-1">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Status</label
+                    >
+                    <div class="col-sm-10">
+                      <div class="checkbox-fade fade-in-primary">
+                        <label>
+                          <input id="enable" type="checkbox" {% if product_details.status == 'True' %}checked{% endif %} />
+                          <span class="cr">
+                            <i
+                              class="
+                                cr-icon
+                                icofont icofont-ui-check
+                                txt-primary
+                              "
+                            ></i>
+                          </span>
+                          <span>Enable this product</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="category" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Category</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="edit-product-category-select">
+                        {% for category in categorys %}
+                            <option value="{{category.id}}" {% if category.id == product_details.category.id %}selected{% endif %}>{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Group</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="edit-product-group-select">
+                        {% for group in product_details.category.groups.all %}
+                            <option value="{{group.id}}" {% if product_details.group.id == group.id %}selected{% endif %}>{{group.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Subcategory</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="edit-product-subcategory-select">
+                        {% for subcategory in product_details.group.subcategorys.all %}
+                            <option value="{{subcategory.id}}" {% if product_details.subcategory.id == subcategory.id %}selected{% endif %}>{{subcategory.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="price" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Price</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Main Price*</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control autonumber"
+                        data-a-sign="৳"
+                        value="{{product_details.main_price}}"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount*</label
+                    >
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" value="{{product_details.discount}}" />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Discount Type*</label
+                    >
+                    <div class="col-sm-10">
+                      <select id="discount-type">
+                        <option value="percentage" selected>Percentage</option>
+                        <option value="fixed">Fixed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="images" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <h6>Thumbnail</h6>
+                    <label for="thumbnail-input">
+                      <img
+                        class="thumbnail"
+                        id="thumbnail"
+                        src="{{product_details.image.url}}"
+                      />
+                    </label>
+                    <input
+                      class="d-none"
+                      type="file"
+                      accept="image/*"
+                      id="thumbnail-input"
+                      onchange="loadthumbnail(event)"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <h6>Additional Images</h6>
+                    <input
+                      type="file"
+                      name="files[]"
+                      id="filer_input1"
+                      multiple="multiple"
+                    />
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="seo" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Seo</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Title</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Title"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Keywords</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Meta Keywords"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="attributes" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Size</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control w-100"
+                        value=""
+                        data-role="tagsinput"
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Color</label
+                    >
+                    <div class="col-sm-10 d-flex justify-content-between">
+                      <div class="d-flex flex-wrap" id="color-picker">
+                        <input class="mx-1 my-1" id="color-pick" type="color" />
+                      </div>
+                      <div class="btn btn-outline-success" id="add-color">
+                        Add New Color
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Meta Descriptions</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="short-desc"
+                        id="short-desc"
+                        placeholder="Meta Descriptions"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="options" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
+                  <hr />
+                  <br />
+                  <div class="d-flex flex-fill align-items-center option-sec">
+                    <div class="option w-100">
+                      <div
+                        class="
+                          option-head
+                          d-flex
+                          flex-fill
+                          justify-content-between
+                          mb-3
+                        "
+                      >
+                        <h6 class="option-name">Option Name</h6>
+                        <span class="arrow"
+                          ><i class="fa fa-angle-right"></i
+                        ></span>
+                      </div>
+                      <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Name</label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="option-name"
+                            placeholder="Option name"
+                          />
+                        </div>
+                        <div class="col-sm-4">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- <div class="row mb-3 mx-2">
+                        <label
+                          for="inputEmail3"
+                          class="col-sm-2 col-form-label d-none d-xl-block"
+                          >Type</label
+                        >
+                        <div class="col-sm-10">
+                          <select id="discount-type">
+                            <option value="2">Dropdown</option>
+                            <option value="1">Radio</option>
+                          </select>
+                        </div>
+                      </div> -->
+                      <div class="options-option">
+                        <div class="row mb-3 mx-2">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Option</label
+                          >
+                          <div class="col-sm-5 d-flex">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="option-name"
+                              placeholder="Label"
+                            />
+                          </div>
+                          <div class="col-sm-4 d-flex flex-fill">
+                            <input
+                              type="number"
+                              class="form-control"
+                              placeholder="Price"
+                            />
+                            <div class="btn col-sm-1">
+                              <i class="fa fa-trash"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="btn add-options-option">Add option</div>
+                    </div>
+                    <i class="fa fa-trash fa-lg ms-3"></i>
+                  </div>
+                  <div class="new-option"></div>
+                  <div
+                    class="
+                      d-flex
+                      flex-fill
+                      justify-content-end
+                      mb-3
+                      add-new-option-sec
+                    "
+                  >
+                    <div class="btn btn-outline-success add-new-option">
+                      Add new options
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div id="additional" class="product-form d-none">
+                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                  <hr />
+                  <br />
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Description</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="description"
+                        id="description"
+                      >{{product_details.description}}</textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Additional Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="additional-info"
+                        id="additional-info"
+                      >{{product_details.additional_info}}</textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label
+                      for="inputEmail3"
+                      class="col-sm-2 col-form-label d-none d-xl-block"
+                      >Shipping Info</label
+                    >
+                    <div class="col-sm-10">
+                      <textarea
+                        class="form-control"
+                        name="shipping-info"
+                        id="shipping-info"
+                      >{{product_details.shipping_info}}</textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      {% endif %}
     {% endblock main %}
 
     {% block script %}
@@ -740,17 +1372,17 @@
       $(".menu.products").addClass("active");
       $(".submenu .product").addClass("selected");
     </script>
-    <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
+    {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
     {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
-    <script src="{% static 'control/js/table/jszip.min.js' %}"></script>
-    <script src="{% static 'control/js/table/pdfmake.min.js' %}"></script>
-    <script src="{% static 'control/js/table/vfs_fonts.js' %}"></script>
-    <script src="{% static 'control/js/table/buttons.print.min.js' %}"></script>
-    <script src="{% static 'control/js/table/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'control/js/table/data-table-custom.js' %}"></script>
-    <script src="{% static 'control/js/table/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'control/js/table/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'control/js/table/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/utils.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
     <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
     <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
     <script src="{% static 'control/js/tail.select-full.js' %}"></script>

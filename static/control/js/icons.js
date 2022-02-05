@@ -5,7 +5,7 @@ $(document).ready(function () {
   // console.log(typeof(jsonObject));
   opt = [];
   for (const icon in jsonObjects.icons) {
-    var st = `<i class="${jsonObjects.icons[icon]} mx-3"></i> ${jsonObjects.icons[icon]}`;
+    var st = `<i class="${jsonObjects.icons[icon]} mx-3 fa-lg"></i> ${jsonObjects.icons[icon]}`;
     opt.push({ label: st, value: jsonObjects.icons[icon] });
   }
   VirtualSelect.init({

@@ -1,6 +1,7 @@
 $("#menu-btn").on("click", function () {
   $("#sidenav").toggleClass("expand");
   $(".main").toggleClass("expand");
+  $(".copyright").toggleClass("expand");
 });
 
 // var topnav = $("#topnav");
@@ -19,6 +20,7 @@ $(window).resize(function () {
   if ($(window).width() < 641) {
       $("#sidenav").addClass("expand");
       $(".main").addClass("expand");
+      $(".copyright").toggleClass("expand");
   }
 });
 
@@ -27,3 +29,7 @@ el.forEach((element) => {
   let height = element.scrollHeight;
   element.style.setProperty("--height", height + "px");
 });
+
+const date = new Date();
+const current_year = date.getFullYear();
+$(".current-year").text(current_year);

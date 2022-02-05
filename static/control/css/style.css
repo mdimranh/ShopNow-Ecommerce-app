@@ -21649,9 +21649,9 @@ body.menu-sidebar .navbar-wrapper {
 }
 .btn {
   border-radius: 2px;
-  text-transform: capitalize;
+  /* text-transform: capitalize;
   font-size: 15px;
-  padding: 10px 19px;
+  padding: 10px 19px; */
   font-family: open sans;
 }
 .button-page .card-block {

@@ -14,10 +14,10 @@ def EditProduct(request, id):
     product = Product.objects.get(id = id)
     categorys = Category.objects.all()
     context = {
-        "product": product,
+        "product_details": product,
         "categorys": categorys
     }
-    return render(request, "control/edit-product.html", context)
+    return render(request, "control/product.html", context)
 
 def CategoryView(request):
     categorys = Category.objects.all()
