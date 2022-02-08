@@ -14,6 +14,8 @@ class Category(models.Model):
     banner = models.ImageField(upload_to = 'category/banner/', blank=True, null=True)
     icon = IconField()
     slug= models.SlugField(null=True, unique=True)
+    searchable = models.BooleanField(default=True)
+    enable = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -36,6 +38,8 @@ class Group(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='groups')
     slug = models.SlugField(null=True)
+    searchable = models.BooleanField(default=True)
+    enable = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -48,6 +52,8 @@ class Subcategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, related_name='subcategorys')
     slug= models.SlugField(null=True)
+    searchable = models.BooleanField(default=True)
+    enable = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -68,9 +74,9 @@ class Brands(models.Model):
 
 
 class Product(models.Model):
-    status = (
-        ('True', 'True'),
-        ('False', 'False')
+    dis_type = (
+        ('Fixed', 'Fixed'),
+        ('Percentage', 'Percentage')
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_categorys', blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_groups')
@@ -80,14 +86,20 @@ class Product(models.Model):
     image = models.ImageField(blank = True, upload_to = 'product/')
     main_price = models.DecimalField(decimal_places=2, max_digits=15)
     discount = models.DecimalField(decimal_places=0, max_digits=3)
+    discount_type = models.CharField(max_length=10, choices=dis_type, default="Percentage")
     hot_deal = models.DateTimeField(blank=True, null=True)
     amount = models.IntegerField(default=3)
     short_info = models.TextField()
     description = RichTextUploadingField()
     additional_info = RichTextUploadingField()
     shipping_info = RichTextUploadingField()
-    status = models.CharField(max_length=10, choices=status)
+    size = models.CharField(max_length=200, null=True, blank=True)
+    color = models.CharField(max_length=500, null=True, blank=True)
+    enable = models.BooleanField(default=True)
     slug = models.SlugField(null=True, unique=True)
+    meta_title = models.CharField(max_length=200, null=True, blank=True)
+    meta_keywords = models.CharField(max_length=200, null=True, blank=True)
+    meta_descriptions = models.CharField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

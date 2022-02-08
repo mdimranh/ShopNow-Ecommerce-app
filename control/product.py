@@ -2,6 +2,14 @@ from django.shortcuts import render
 from product.models import Product, Category
 
 def Products(request):
+    if request.method == "POST":
+        # name = request.POST["name"]
+        # description = request.POST["name"]
+        # short_info = request.POST["short_desc"]
+        # amount = request.POST["quantity"]
+        # amount = request.POST["quantity"]
+        # create_product = Product(title = name, )
+        print("enable---------------->>", request.POST["enable"])
     products = Product.objects.all()
     categorys = Category.objects.all()
     context = {

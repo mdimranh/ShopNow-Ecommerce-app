@@ -15,6 +15,19 @@ $(document).ready(function () {
   });
 });
 
-$("#icon-select").on("change", function(){
-  console.log($(this).val());
+// $(".get-data").on("click", function(){
+//   var val = $("#icon-select").val();
+//   if(val === ""){
+//     alert("Null");
+//   }
+//   else{
+//     alert(val);
+//   }
+// })
+
+$(".get-data").on("click", function(){
+  console.log("yes");
+  var position = "inside";
+  var parent = $("#basicTree").jstree("get_selected");
+  console.log(parent);
 })

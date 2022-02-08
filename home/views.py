@@ -37,9 +37,9 @@ def Home(request):
                 else:
                     total_cost = total_cost - (total_cost * item.coupon.value / 100)
         item = shopcart.count()
-    new_product = Product.objects.filter(status=True).order_by('-id')
-    new_product_cat = Product.objects.filter(status=True).distinct("category")
-    hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
+    new_product = Product.objects.filter(enable=True).order_by('-id')
+    new_product_cat = Product.objects.filter(enable=True).distinct("category")
+    hot_product = Product.objects.filter(enable=True, hot_deal__gt = datetime.now())
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {

@@ -476,7 +476,7 @@ textarea:focus {
   white-space: nowrap;
 }
 
-#options .option {
+#add-options .option {
   border: 1px solid rgba(128, 128, 128, 0.185);
   border-radius: 5px;
   margin-bottom: 10px;
@@ -484,7 +484,7 @@ textarea:focus {
   overflow: hidden;
 }
 
-#options .option .option-head {
+#add-options .option .option-head {
   padding: 12px 15px;
   border-bottom: 1px solid rgba(128, 128, 128, 0.185);
   background-color: rgb(26, 188, 156);
@@ -558,16 +558,16 @@ textarea:focus {
   display: block;
 }
 
-#options .option.selected {
+#add-options .option.selected {
   height: auto;
   overflow: hidden;
 }
 
-#options .option .option-head:hover {
+#add-options .option .option-head:hover {
   cursor: pointer;
 }
 
-#options .option.selected .option-head .fa {
+#add-options .option.selected .option-head .fa {
   transform: rotate(90deg);
 }
 
@@ -615,6 +615,24 @@ tbody tr td:nth-child(5)::before{
 
 
 
+/* category page */
+.expand-all,
+.collapse-all{
+  position: relative;
+  font-weight: bolder;
+  border: none;
+  color: #2e4eee;
+  background: none;
+}
+
+.expand-all::after{
+  content: "";
+  height: 20px;
+  position: absolute;
+  right: -4px;
+  border-left: 2px solid gray;
+}
+
 
 
 .bs-checkbox :hover{
@@ -636,4 +654,65 @@ tbody tr td:nth-child(5)::before{
 .copyright.expand {
   left: 58px;
   transition: 0.3s;
+}
+
+
+/*! media */
+@media screen and (max-width: 641px){
+
+  .sidenav {
+    width: 58px;
+    transition: 0.3s;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .sidenav:hover {
+    width: 230px;
+  }
+
+  .sidenav ul li .menu span {
+    visibility: hidden;
+  }
+
+  .sidenav:hover ul li .menu span {
+    visibility: visible;
+  }
+
+  .sidenav li .menu.selected ~ ul {
+    height: 0;
+  }
+
+  .sidenav:hover li .menu.selected ~ ul {
+    height: var(--height);
+    transition: 0.3s ease-in-out;
+    overflow: hidden;
+  }
+
+  .sidenav li.header {
+    display: none;
+  }
+
+  .sidenav:hover li.header {
+    display: block;
+  }
+
+  .sidenav .menu .arrow {
+    right: -100px;
+  }
+
+  .sidenav:hover .menu .arrow {
+    right: 15px;
+  }
+
+  .main{
+    left: 58px;
+    transition: 0.3s;
+  }
+
+  .copyright {
+    left: 58px;
+    transition: 0.3s;
+  }
+
 }

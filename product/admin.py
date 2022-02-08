@@ -11,7 +11,7 @@ class productImageInline(admin.TabularInline):
     extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'status', 'created_at', 'updated_at', 'price_per', 'image_tag']
+    list_display = ['title', 'enable', 'created_at', 'updated_at', 'price_per', 'image_tag']
     list_filter = ['title', 'created_at']
     list_per_page = 10
     search_fields = ['title', 'new_price', 'detail']

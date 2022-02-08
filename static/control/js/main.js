@@ -37,6 +37,9 @@ $("#basicTree").on("changed.jstree", function (e, data) {
 });
 
 $("#add-root-category-btn").on("click", function () {
+  var selected_node = $("#basicTree").jstree("get_selected");
+  var getdata = JSON.parse($("#basicTree").jstree("get_node", selected_node).li_attr.data);
+  console.log(getdata.name);
   $("#add-category-form h6").text("Add Root Category");
   $("#add-category-form #name").val("");
   $("#add-category-form #search").attr("checked", false);
@@ -47,6 +50,14 @@ $("#add-root-category-btn").on("click", function () {
   $("#add-group-form").addClass("d-none");
   $("#add-subcategory-form").addClass("d-none");
 });
+
+$(".collapse-all").on("click", function(){
+  $("#basicTree").jstree("close_all");
+})
+
+$(".expand-all").on("click", function(){
+  $("#basicTree").jstree("open_all");
+})
 
 //! product menu section
 $(".product-menu .menu").on("click", function () {
@@ -318,7 +329,7 @@ $(".options-option .fa-trash").on("click", function () {
   $(this).parent().parent().parent().remove();
 });
 
-$("#options")
+$("#add-options")
   .children(".option-sec")
   .children()
   .last()
@@ -432,7 +443,7 @@ VirtualSelect.init({
 //   // multiple: true
 // });
 
-$("#category-select").on('change', function(){
+$("#add-category-select").on('change', function(){
     $.ajax({
         url:"/control/productgroups/",
         type:"POST",
@@ -443,7 +454,7 @@ $("#category-select").on('change', function(){
             opt.push({label: data.name, value: data.id})
           })
           VirtualSelect.init({
-            ele: "#group-select",
+            ele: "#add-group-select",
             options: opt
           })
           VirtualSelect.init({
@@ -459,7 +470,7 @@ $("#category-select").on('change', function(){
     });
 });
 
-$("#group-select").on('change', function(){
+$("#add-group-select").on('change', function(){
     $.ajax({
         url:"/control/productgroups/",
         type:"POST",
@@ -470,7 +481,7 @@ $("#group-select").on('change', function(){
             opt.push({label: data.name, value: data.id})
           })
           VirtualSelect.init({
-            ele: "#subcategory-select",
+            ele: "#add-subcategory-select",
             options: opt
           })
         },
@@ -606,3 +617,100 @@ $producttable.on("click-cell.bs.table", function(field, value, row, $element){
     location.href = lnk
   }
 })
+
+
+
+//! add product section
+
+// $("#save-btn").on("click", function(){
+//   alert("click");
+// })
+
+var savebtn = document.querySelectorAll("div[id=save-btn]");
+for(i = 0; i < savebtn.length; i++){
+  savebtn[i].addEventListener('click', function(){
+    if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0){
+      $("[for=add-general]").click();
+    }
+    else if($("#add-category-select").val().length === 0){
+      $("[for=add-category]").click();
+    }
+    else if($("#add-main-price").val().length === 0){
+      $("[for=add-price]").click();
+    }
+    else if($("#add-thumbnail-input").val().length === 0){
+      $("[for=add-images]").click();
+    }
+    else if($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0){
+      $("[for=add-seo]").click();
+    }
+    else if($("#add-description").val().length === 0){
+      $("[for=add-additional]").click();
+    }
+    else{
+      $("[id=product-submit-button]").click();
+    }
+  })
+}
+
+// product-name
+// short-desc
+// quantity
+// category-select
+// main-proce
+// discount
+// discount-type
+// thumbnail-input
+// meta-title
+// meta-keywords
+// meta-descriptions
+// description
+// additional-info
+// shipping-info
+
+
+var forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms)
+  .forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+
+      // select invalid input section
+      if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0){
+        $("[for=add-general]").click();
+        $(".basic").click();
+      }
+      else if($("#add-category-select").val().length === 0){
+        $("[for=add-category]").click();
+        $(".basic").click();
+      }
+      else if($("#add-main-price").val().length === 0){
+        $("[for=add-price]").click();
+        $(".basic").click();
+      }
+      else if($("#add-thumbnail-input").val().length === 0){
+        $("[for=add-images]").click();
+        $(".basic").click();
+      }
+      else if($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0){
+        $("[for=add-seo]").click();
+        $(".basic").click();
+      }
+      else if($("#add-description").val().length === 0){
+        $("[for=add-additional]").click();
+        $(".advance").click();
+      }
+    }, false)
+  })
+
+
+  $(".enable-cr").on("click", function(){
+    $("#enable").click();
+  })

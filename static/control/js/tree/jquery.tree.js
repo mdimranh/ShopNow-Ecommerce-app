@@ -9,7 +9,8 @@ $( document ).ready(function() {
     $('#basicTree').jstree({
 		'core' : {
 			'themes' : {
-				'responsive': false
+				'responsive': false,
+                'animation': 300
 			}
 		},
         'types' : {

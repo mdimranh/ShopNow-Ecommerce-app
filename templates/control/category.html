@@ -1,11 +1,14 @@
   {% extends 'control/base.html' %}
   {% load static %}
+  {% load fontawesome_5 %}
   {% load solo_tags %}
   {% get_solo 'setting.SiteConfiguration' as site_config %}
     <!-- Bootstrap CSS -->
     {% block title %}{{site_config.name}} | Categorys{% endblock title %}
     {% block style %}
+    {% fontawesome_5_static %}
     <link rel="stylesheet" href="{% static 'control/css/tree/treeview.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
     <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
     <link
       rel="stylesheet"
@@ -23,18 +26,27 @@
             <div class="card-block tree-view container-fluid">
               <div class="row">
                 <div class="col-xxl-3 col-lg-4 col-md-6">
-                  <button
-                    class="btn btn-success py-1 px-2"
-                    id="add-root-category-btn"
-                  >
-                    Add Root Category
-                  </button>
+                  <div class="d-flex flex-column">
+                    <div>
+                      <button class="p-1 m-0 expand-all">Expand All</button>
+                      <button class="p-1 m-0 collapse-all">Collapse All</button>
+                    </div>
+                    <div>
+                      <button
+                      class="btn btn-success py-1 px-2 w-auto"
+                      id="add-root-category-btn"
+                      >
+                        Add Root Category
+                      </button>
+                    </div>
+                  </div>
+                  <div class="btn get-data">get data</div>
                   <div id="basicTree">
                     <ul>
                       {% for category in categorys %}
                       <li
                         data='{"type": "category", "name":"{{category.name}}", "id": "{{category.id}}", "search": true, "enable": true}'
-                        data-jstree='{{% if forloop.counter == 1 %}"opened":true,{% endif %} "icon":"fa fa-folder-open"}'
+                        data-jstree='{"opened":false, "icon":"fa fa-folder-open"}'
                       >
                         {{category.name}}
                         <ul>
@@ -77,9 +89,20 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
+                          id="root-cat-name"
                           placeholder="Name"
                         />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Icon</label
+                      >
+                      <div class="col-sm-10">
+                        <select id="icon-select">
+                        </select>
                       </div>
                     </div>
                     <div class="row mb-3 search-field">
@@ -313,5 +336,9 @@
     </script>
     <script src="{% static 'control/js/tree/jstree.min.js' %}"></script>
     <script src="{% static 'control/js/tree/jquery.tree.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script src="{% static 'control/fontawesome.json' %}"></script>
+    <script src="{% static 'control/font5.json' %}"></script>
+    <script src="{% static 'control/js/icons.js' %}"></script>
     {% comment %} <script src="control/js/main.js"></script> {% endcomment %}
     {% endblock script %}

@@ -16,13 +16,13 @@ $(".sidenav .menu").on("click", function () {
     }
 });
 
-$(window).resize(function () {
-  if ($(window).width() < 641) {
-      $("#sidenav").addClass("expand");
-      $(".main").addClass("expand");
-      $(".copyright").toggleClass("expand");
-  }
-});
+// $(window).resize(function () {
+//   if ($(window).width() < 641) {
+//       $("#sidenav").addClass("expand");
+//       $(".main").addClass("expand");
+//       $(".copyright").addClass("expand");
+//   }
+// });
 
 var el = document.querySelectorAll(".submenu");
 el.forEach((element) => {
