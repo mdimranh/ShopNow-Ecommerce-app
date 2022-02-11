@@ -83,7 +83,7 @@ class Product(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_subcategorys')
     title = models.CharField(max_length=200)
     keywords = models.CharField(max_length=100)
-    image = models.ImageField(blank = True, upload_to = 'product/')
+    image = models.CharField(max_length=500, blank = True, null=True)
     main_price = models.DecimalField(decimal_places=2, max_digits=15)
     discount = models.DecimalField(decimal_places=0, max_digits=3)
     discount_type = models.CharField(max_length=10, choices=dis_type, default="Percentage")
@@ -118,24 +118,24 @@ class Product(models.Model):
         else:
             return 0
 
-    def ImageUrl(self):
-        if self.image:
-            return self.image.url
-        else:
-            return ""
+    # def ImageUrl(self):
+    #     if self.image:
+    #         return self.image.url
+    #     else:
+    #         return ""
 
     def image_tag(self):
-        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
+        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image))
     image_tag.short_description = 'Image'
 
-    def save(self, *args, **kwargs):
-        if self.image:
-            super(Product, self).save(*args, **kwargs)
-            img = Image.open(self.image.path)
-            if img.height != 600 and img.width != 600:
-                output_size = (600,600)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
+    # def save(self, *args, **kwargs):
+    #     if self.image:
+    #         super(Product, self).save(*args, **kwargs)
+    #         img = Image.open(self.image.path)
+    #         if img.height != 600 and img.width != 600:
+    #             output_size = (600,600)
+    #             img.thumbnail(output_size)
+    #             img.save(self.image.path)
 
 class Images(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")

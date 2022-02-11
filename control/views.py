@@ -16,15 +16,19 @@ from datetime import datetime
 
 def Dashboard(request):
     total_product = Product.objects.all().count()
+    total_customer = User.objects.filter(is_staff=False, is_superuser=False).count()
     context = {
-        "total_product": total_product
+        "total_product": total_product,
+        "total_customer": total_customer,
+        "dashboard_sec": True
     }
     return render(request, "control/index.html", context)
 
 def Menu(request):
     allmenus = Menus.objects.all()
     context = {
-        "menus": allmenus
+        "menus": allmenus,
+        'menu_sec': True
     }
     return render(request, "control/menu.html", context)
 
@@ -101,19 +105,24 @@ def Login(request):
 
     return render(request, "control/login.html")
 
+
 def Users(request):
-    users = User.objects.all().first()
-    us = []
-    for i in range(300):
-        us.append(users)
+    users = User.objects.all()
+    perm = ContentType.objects.all()
     context = {
-        "users": us
+        "users": users,
+        "user_sec": True,
+        "permis": perm
     }
     return render(request, "control/user.html", context)
 
+from django.contrib.contenttypes.models import ContentType
 def UserDetails(request, id):
     user = User.objects.get(id = id)
+    perm = ContentType.objects.all()
     context = {
-        "user_info": user
+        "user_info": user,
+        "user_sec": True,
+        "permis": perm
     }
     return render(request, "control/user.html", context)

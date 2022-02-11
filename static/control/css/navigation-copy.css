@@ -8,6 +8,10 @@
   --white: #ffffff;
 }
 
+body{
+  background: #F1F3F7;
+}
+
 .top-nav p,
 .sidenav p {
   padding: 0;
@@ -307,26 +311,26 @@ table.no-border th {
 /*! Add product section */
 
 .product-menu {
-  min-width: 220px;
-  max-width: 220px;
   border-radius: 6px;
   padding: 5px 0;
 }
 
 .product-menu .menu-sec {
-  border-left: 1px solid rgba(128, 128, 128, 0.308);
-  border-top: 1px solid rgba(128, 128, 128, 0.308);
-  /* border-right: 1px solid rgba(128, 128, 128, 0.308); */
+  border-left: 1px solid rgba(128, 128, 128, 0.1);
+  border-top: 1px solid rgba(128, 128, 128, 0.1);
+  box-sizing: border-box;
+  background: rgba(128, 128, 128, 0.2);
   border-bottom: none;
 }
 
 .product-menu .menu-sec:last-child {
-  border-bottom: 1px solid rgba(128, 128, 128, 0.308);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 }
 
 .product-menu .menu-sec .menu {
   padding: 10px 25px;
-  border-right: 1px solid rgba(128, 128, 128, 0.308);
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
+  background-color: white;
 }
 
 .product-menu .menu-sec ul li {
@@ -335,34 +339,14 @@ table.no-border th {
   height: 40px;
   border-left: 4px solid transparent;
   border-top: 1px solid none;
-  border-right: 1px solid rgba(128, 128, 128, 0.308);
+  /* border-right: 1px solid rgba(128, 128, 128, 0.308); */
   border-bottom: 1px solid none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .product-menu .menu-sec ul li:first-child {
   margin-top: 10px;
-}
-
-.product-menu .menu-sec ul li:first-child::after {
-  content: "";
-  position: absolute;
-  width: 1px;
-  height: 2px;
-  border-left: 1px solid rgba(128, 128, 128, 0.308);
-  position: relative;
-  right: -189px;
-  top: -47.6px;
-  /* background-color: red; */
-}
-
-.product-menu .menu-sec ul li:last-child::after {
-  content: "";
-  position: absolute;
-  border-left: 1px solid rgba(128, 128, 128, 0.308);
-  position: relative;
-  right: -189px;
-  bottom: -7.1px;
-  /* background-color: red; */
 }
 
 .product-menu .menu-sec ul li:last-child {
@@ -393,6 +377,7 @@ table.no-border th {
 
 .product-menu .menu-sec .menu.selected {
   border-bottom: 1px solid rgba(128, 128, 128, 0.308);
+  background: rgb(241, 237, 237);
   transition-delay: 0s;
 }
 
@@ -412,20 +397,9 @@ table.no-border th {
   border-left: 4px solid rgba(63, 84, 133, 1);
   border-top: 1px solid rgba(128, 128, 128, 0.308);
   border-bottom: 1px solid rgba(128, 128, 128, 0.308);
+  background: white;
   border-right: none;
   position: relative;
-}
-
-.product-menu .menu-sec .submenu li.selecred:before {
-  content: "";
-  position: absolute;
-  display: block;
-  right: -189px;
-  bottom: -44px;
-  width: 12px;
-  height: 12px;
-  border-right: 1px solid rgba(128, 128, 128, 0.308);
-  background-color: red;
 }
 
 /*! Ckeditor */
@@ -654,6 +628,34 @@ tbody tr td:nth-child(5)::before{
 .copyright.expand {
   left: 58px;
   transition: 0.3s;
+}
+
+
+/* user page */
+.permission-btn{
+  border: 1px solid rgba(128, 128, 128, 0.486);
+  background: rgba(197, 197, 197, 0.11);
+  padding: 5px;
+  width: 50px !important;
+}
+
+.permission-btn:hover{
+  background: rgba(197, 197, 197, 0.35);
+  cursor: pointer;
+}
+
+.permission-btn:nth-child(2){
+  margin-left: -4px;
+  border-left: none;
+}
+
+.permission-btn:nth-child(3){
+  margin-left: -3px;
+  border-left: none;
+}
+
+.radio-btn:hover{
+  cursor: pointer;
 }
 
 

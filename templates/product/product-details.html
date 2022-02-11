@@ -39,15 +39,15 @@
                         <div class="product-gallery product-gallery-vertical">
                             <div class="row">
                                 <figure class="product-main-image">
-                                    <img id="product-zoom" src="{{product.image.url}}" data-zoom-image="{{product.image.url}}" alt="product image">
+                                    <img id="product-zoom" src="{{product.image}}" data-zoom-image="{{product.image}}" alt="product image">
                                     <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                         <i class="icon-arrows"></i>
                                     </a>
                                 </figure><!-- End .product-main-image -->
                                 <div id="product-zoom-gallery" class="product-image-gallery">
                                     {% for image in images %}
-                                    <a class="product-gallery-item active" href="#" data-image="{{image.image.url}}" data-zoom-image="{{image.image.url}}">
-                                        <img src="{{image.image.url}}" alt="product side">
+                                    <a class="product-gallery-item active" href="#" data-image="{{image.image}}" data-zoom-image="{{image.image.url}}">
+                                        <img src="{{image.image}}" alt="product side">
                                     </a>
                                     {% endfor %}
                                 </div><!-- End .product-image-gallery -->
@@ -214,7 +214,7 @@
                     <figure class="product-media">
                         <span class="product-label label-new">New</span>
                         <a href="product.html">
-                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
+                            <img src="{{product.image}}" alt="Product image" class="product-image">
                         </a>
                         <div class="product-action-vertical">
                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
@@ -242,7 +242,7 @@
                         <div class="product-nav product-nav-thumbs">
                             {% for image in images %}
                             <a href="#" class="active">
-                                <img src="{{image.image.url}}" alt="product desc">
+                                <img src="{{image.image}}" alt="product desc">
                             </a>
                             {% endfor %}
                         </div><!-- End .product-nav -->
@@ -260,7 +260,7 @@
                 <div class="col-6">
                     <figure class="product-media">
                         <a href="product.html">
-                            <img src="{{product.image.url}}" alt="Product image">
+                            <img src="{{product.image}}" alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
                     <h4 class="product-title"><a href="product.html">{{product.title}}</a></h4><!-- End .product-title -->

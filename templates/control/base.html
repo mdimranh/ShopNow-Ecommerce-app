@@ -66,21 +66,21 @@
         <ul>
           <li>
             <a href="/control/">
-              <div class="menu dashboard">
+              <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
                 <i class="fas fa-tachometer-alt fa-left"></i>
                 <span>Dashboard</span>
               </div>
             </a>
           </li>
           <li>
-            <div class="menu products">
+            <div class="menu {% if product_sec %}selected active{% endif %}">
               <i class="fas fa-cube fa-left"></i>
               <span>Products</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li class="product"><a href="/control/product">Product</a></li>
-              <li class="category"><a href="/control/category">Category</a></li>
+              <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product">Product</a></li>
+              <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category">Category</a></li>
             </ul>
           </li>
           <li>
@@ -96,7 +96,7 @@
           </li>
           <li>
             <a href="/control/coupon">
-              <div class="menu coupon">
+              <div class="menu coupon {% if coupon_sec %}selected active{% endif %}">
                 <i class="fas fa-tags fa-left"></i>
                 <span>Coupons</span>
               </div>
@@ -116,7 +116,7 @@
           </li>
           <li>
             <a href="/control/menu">
-              <div class="menu menus">
+              <div class="menu menus {% if menu_sec %}selected active{% endif %}">
                 <i class="fa fa-bars fa-left"></i>
                 <span>Menus</span>
               </div>
@@ -136,7 +136,7 @@
           </li> {% endcomment %}
           <li>
             <a href="/control/user">
-              <div class="menu users">
+              <div class="menu users {% if user_sec %}selected active{% endif %}">
                 <i class="fas fa-users fa-left"></i>
                 <span>Users</span>
               </div>

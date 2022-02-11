@@ -60,7 +60,7 @@ $(".expand-all").on("click", function(){
 })
 
 //! product menu section
-$(".product-menu .menu").on("click", function () {
+$(".product-menu .menu").not(".disable").on("click", function () {
   if ($(this).hasClass("selected")) {
     $(this).removeClass("selected");
   } else {
@@ -356,6 +356,15 @@ $(".add-coupon-btn").on("click", function(){
     element.style.setProperty("--height", height + "px");
   });
 })
+$(".add-user-btn").on("click", function(){
+  $(".user-list").addClass("d-none");
+  $(".add-user-sec").removeClass("d-none");
+  var el = document.querySelectorAll(".submenu");
+  el.forEach((element) => {
+    let height = element.scrollHeight;
+    element.style.setProperty("--height", height + "px");
+  });
+})
 
 
 // product page
@@ -551,6 +560,7 @@ $("#edit-product-group-select").on('click', function(){
 });
 
 
+// user section
 
 //! User list table
 
@@ -577,9 +587,73 @@ $usertable.on('check.bs.table uncheck.bs.table ' +
 
 $remove.click(function () {
       var ids = getUserIdSelections()
-      console.log(ids)
       $remove.prop('disabled', true)
     })
+
+
+var allowall = document.querySelectorAll("span[ids=allow-all]")
+for (i = 0; i < allowall.length; i++) {
+  allowall[i].addEventListener("click", function(){
+    // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
+    var allow = document.querySelectorAll("input[ids=allow-btn]")
+    for (index = 0; index < allow.length; index++) {
+      allow[index].click();
+    }
+  });
+}
+
+var denyall = document.querySelectorAll("span[ids=deny-all]")
+for (i = 0; i < allowall.length; i++) {
+  denyall[i].addEventListener("click", function(){
+    // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
+    var deny = document.querySelectorAll("input[ids=deny-btn]")
+    for (index = 0; index < deny.length; index++) {
+      deny[index].click();
+    }
+  });
+}
+
+var inheritall = document.querySelectorAll("span[ids=inherit-all]")
+for (i = 0; i < allowall.length; i++) {
+  inheritall[i].addEventListener("click", function(){
+    // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
+    var inherit = document.querySelectorAll("input[ids=inherit-btn]")
+    for (index = 0; index < inherit.length; index++) {
+      inherit[index].click();
+    }
+  });
+}
+
+var allowallsec = document.querySelectorAll("span[ids=allow]")
+for (i = 0; i < allowallsec.length; i++) {
+  allowallsec[i].addEventListener("click", function(){
+    var allow = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=allow-btn]");
+    for (index = 0; index < allow.length; index++) {
+      allow[index].click();
+    }
+  });
+}
+
+var denyallsec = document.querySelectorAll("span[ids=deny]")
+for (i = 0; i < denyallsec.length; i++) {
+  denyallsec[i].addEventListener("click", function(){
+    var deny = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=deny-btn]");
+    for (index = 0; index < deny.length; index++) {
+      deny[index].click();
+    }
+  });
+}
+
+var inheritallsec = document.querySelectorAll("span[ids=inherit]")
+for (i = 0; i < inheritallsec.length; i++) {
+  inheritallsec[i].addEventListener("click", function(){
+    var inherit = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=inherit-btn]");
+    for (index = 0; index < inherit.length; index++) {
+      inherit[index].click();
+    }
+  });
+}
+
 
 //! product list table
 
@@ -587,7 +661,7 @@ var $producttable = $('#product-table')
 
 function getProductIdSelections() {
     return $.map($producttable.bootstrapTable('getSelections'), function (row) {
-      return row[3]
+      return row[2]
     })
   }
 
@@ -596,12 +670,13 @@ $producttable.on('check.bs.table uncheck.bs.table ' +
     function () {
       $remove.prop('disabled', !$producttable.bootstrapTable('getSelections').length)
       selections = getProductIdSelections()
-      console.log(selections)
     })
 
 $remove.click(function () {
       var ids = getProductIdSelections()
-      console.log(ids)
+      for(i = 0; i <= ids.length-1; i++){
+        console.log(ids[i].slice(39, ids[i].length-6));
+      }
       $remove.prop('disabled', true)
     })
 
@@ -708,9 +783,4 @@ Array.prototype.slice.call(forms)
         $(".advance").click();
       }
     }, false)
-  })
-
-
-  $(".enable-cr").on("click", function(){
-    $("#enable").click();
   })

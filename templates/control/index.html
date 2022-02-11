@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
 {% endblock style %}
 {% block main %}
-        <h3 class="fw-bold">Dashboard</h3>
+        <h3 class="fw-bold ms-2 ps-1">Dashboard</h3>
         <div class="container-fluid dashboard">
           <div class="row">
             <div class="col-md-6 col-xl-3">
@@ -58,7 +58,7 @@
                     <li>
                       <i class="icofont icofont-ui-user-group text-primary"></i>
                     </li>
-                    <li class="text-right text-primary">169</li>
+                    <li class="text-right text-primary">{{total_customer}}</li>
                   </ul>
                 </div>
               </div>

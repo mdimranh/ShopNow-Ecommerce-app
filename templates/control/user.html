@@ -1,6 +1,7 @@
 {% extends 'control/base.html' %}
 {% load static %}
-{% block title %}{{site_config.name}} | Products{% endblock title %}
+
+{% block title %}{{site_config.name}} | Users{% endblock title %}
 
     {% block style %}
     <link
@@ -26,11 +27,11 @@
         <h3 class="fw-bold">User's</h3>
       {% endif %}
       {% if not user_info %}
-      <div class="card product-list">
+      <div class="card user-list">
           <div class="card-header">
             <h5>All User</h5>
             <div class="card-header-right me-3">
-              <button class="btn btn-add add-product-btn p-2">
+              <button class="btn btn-add add-user-btn p-2">
                 <i class="fa fa-plus px-2 m-0"></i>Add User
               </button>
             </div>
@@ -108,1228 +109,497 @@
             </div>
           </div>
       </div>
-      <div class="add-user-sec d-none">
-          <div class="d-flex flex-fill">
-            <div class="product-menu">
-              <div class="menu-sec">
-                <div
-                  class="menu d-flex flex-fill justify-content-between selected"
-                >
-                  <span>Basic Information</span
-                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
-                </div>
-                <ul class="submenu">
-                  <li class="selected" for="general">
-                    <p class="m-0 p-0">General</p>
-                  </li>
-                  <li for="category"><p class="m-0 p-0">Category</p></li>
-                  <li for="price"><p class="m-0 p-0">Price</p></li>
-                  <li for="images"><p class="m-0 p-0">Images</p></li>
-                  <li for="seo"><p class="m-0 p-0">Seo</p></li>
-                </ul>
-              </div>
-              <div class="menu-sec">
-                <div class="menu d-flex flex-fill justify-content-between">
-                  <span>Advanced Information</span
-                  ><span class="arrow"><i class="fa fa-angle-right"></i></span>
-                </div>
-                <ul class="submenu">
-                  <li for="attributes"><p class="m-0 p-0">Attributes</p></li>
-                  <li for="options"><p class="m-0 p-0">Options</p></li>
-                  <li for="additional"><p class="m-0 p-0">Additional</p></li>
-                </ul>
-              </div>
-            </div>
-            <div class="products-form w-100 ms-5">
-              <form class="mt-2" id="add-category-form" method="post">
-                {% csrf_token %}
-                <div id="general" class="product-form">
-                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Name*</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        name="name"
-                        placeholder="Name"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Short Descriptions*</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="short-desc"
-                        id="short-desc"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Quantity*</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="number"
-                        class="form-control"
-                        name="quantity"
-                        min="1"
-                        value="5"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-1">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Status</label
-                    >
-                    <div class="col-sm-10">
-                      <div class="checkbox-fade fade-in-primary">
-                        <label>
-                          <input id="enable" type="checkbox" value="" name="enable" />
-                          <span class="cr">
-                            <i
-                              class="
-                                cr-icon
-                                icofont icofont-ui-check
-                                txt-primary
-                              "
-                            ></i>
-                          </span>
-                          <span>Enable this product</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="category" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Category</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="category-select">
-                        {% for category in categorys %}
-                          <option value="{{category.id}}">{{category.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Group</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="group-select">
-                      </select>
-                      {% comment %} <select class="form-control" name="" id="groups-select">
-                        <option value="">---</option>
-                      </select> {% endcomment %}
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Subcategory</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="subcategory-select">
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="price" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Price</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Main Price*</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control autonumber"
-                        data-a-sign="৳"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Discount*</label
-                    >
-                    <div class="col-sm-10">
-                      <input type="number" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Discount Type*</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="discount-type">
-                        <option value="percentage">Percentage</option>
-                        <option value="fixed">Fixed</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="images" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <h6>Thumbnail</h6>
-                    <label for="thumbnail-input">
-                      <img
-                        class="thumbnail"
-                        id="thumbnail"
-                        src="control/css/image.png"
-                      />
-                    </label>
-                    <input
-                      class="d-none"
-                      type="file"
-                      accept="image/*"
-                      id="thumbnail-input"
-                      onchange="loadthumbnail(event)"
-                    />
-                  </div>
-                  <div class="row mb-3">
-                    <h6>Additional Images</h6>
-                    <input
-                      type="file"
-                      name="files[]"
-                      id="filer_input1"
-                      multiple="multiple"
-                    />
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="seo" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Seo</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Title</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        placeholder="Meta Title"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Keywords</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        placeholder="Meta Keywords"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Descriptions</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="short-desc"
-                        id="short-desc"
-                        placeholder="Meta Descriptions"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="attributes" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Size</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control w-100"
-                        value=""
-                        data-role="tagsinput"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Color</label
-                    >
-                    <div class="col-sm-10 d-flex justify-content-between">
-                      <div class="d-flex flex-wrap" id="color-picker">
-                        <input class="mx-1 my-1" id="color-pick" type="color" />
-                      </div>
-                      <div class="btn btn-outline-success" id="add-color">
-                        Add New Color
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Descriptions</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="short-desc"
-                        id="short-desc"
-                        placeholder="Meta Descriptions"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="options" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
-                  <hr />
-                  <br />
-                  <div class="d-flex flex-fill align-items-center option-sec">
-                    <div class="option w-100">
-                      <div
-                        class="
-                          option-head
-                          d-flex
-                          flex-fill
-                          justify-content-between
-                          mb-3
-                        "
-                      >
-                        <h6 class="option-name">Option Name</h6>
-                        <span class="arrow"
-                          ><i class="fa fa-angle-right"></i
-                        ></span>
-                      </div>
-                      <div class="row mb-3 mx-2">
-                        <label
-                          for="inputEmail3"
-                          class="col-sm-2 col-form-label d-none d-xl-block"
-                          >Name</label
-                        >
-                        <div class="col-sm-6">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="option-name"
-                            placeholder="Option name"
-                          />
-                        </div>
-                        <div class="col-sm-4">
-                          <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
-                          </select>
-                        </div>
-                      </div>
-                      <!-- <div class="row mb-3 mx-2">
-                        <label
-                          for="inputEmail3"
-                          class="col-sm-2 col-form-label d-none d-xl-block"
-                          >Type</label
-                        >
-                        <div class="col-sm-10">
-                          <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
-                          </select>
-                        </div>
-                      </div> -->
-                      <div class="options-option">
-                        <div class="row mb-3 mx-2">
-                          <label
-                            for="inputEmail3"
-                            class="col-sm-2 col-form-label d-none d-xl-block"
-                            >Option</label
-                          >
-                          <div class="col-sm-5 d-flex">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="option-name"
-                              placeholder="Label"
-                            />
-                          </div>
-                          <div class="col-sm-4 d-flex flex-fill">
-                            <input
-                              type="number"
-                              class="form-control"
-                              placeholder="Price"
-                            />
-                            <div class="btn col-sm-1">
-                              <i class="fa fa-trash"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="btn add-options-option">Add option</div>
-                    </div>
-                    <i class="fa fa-trash fa-lg ms-3"></i>
-                  </div>
-                  <div class="new-option"></div>
+      <div class="add-user-sec d-none card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
                   <div
-                    class="
-                      d-flex
-                      flex-fill
-                      justify-content-end
-                      mb-3
-                      add-new-option-sec
-                    "
+                    class="menu disable d-flex flex-fill justify-content-between selected"
                   >
-                    <div class="btn btn-outline-success add-new-option">
-                      Add new options
-                    </div>
+                    <span>User Information</span>
+                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
                   </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="coupon-general">
+                      <p class="m-0 p-0">Account</p>
+                    </li>
+                    <li for="coupon-usage-restriction">
+                      <p class="m-0 p-0">Permission</p>
+                    </li>
+                  </ul>
                 </div>
-                <div id="additional" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Description</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="description"
-                        id="description"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Additional Info</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="additional-info"
-                        id="additional-info"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Shipping Info</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="shipping-info"
-                        id="shipping-info"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2" id="add-category-form">
+                  <div id="coupon-general" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Accounnt</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >First Name</label
                       >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="First Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Last Name</label
                       >
-                        Cancel
-                      </button>
+                      <div class="col-sm-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Email</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="quantity"
+                          placeholder="Email"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="add-discount-type"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Roles</label
+                      >
+                      <div class="col-xl-10">
+                        <select id="add-discount-type" name="roles">
+                          <option value="admin">Admin</option>
+                          <option value="staff">Staff</option>
+                          <option value="customer">Customer</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Password</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="quantity"
+                          placeholder="Password"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Confirm Password</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          type="password"
+                          class="form-control"
+                          name="quantity"
+                          placeholder="Confirm Password"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </form>
+                  <div id="coupon-usage-restriction" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">
+                      Permission
+                    </h6>
+                    <hr />
+                    <div class="row mb-3">
+                      <div class="ps-3 d-flex flex-fill justify-content-end">
+                          <span>
+                            <span class="permission-btn f-18 allow-all" ids="allow-all">Allow All</span>
+                            <span class="permission-btn f-18 deny-all" ids="deny-all">Deny All</span>
+                            <span class="permission-btn f-18 inherit-all" ids="inherit-all">Inherit All</span>
+                          </span>
+                        </div>
+                      <ul>
+                      {% for p in permis %}
+                        <li><div class="mt-3 fw-bold f-24">{% ifchanged p.app_label %}{{p.app_label}}{% endifchanged %}</div></li>
+                        {% ifchanged p.app_label %}<hr class="mt-0 p-0 mb-3">{% endifchanged %}
+                        <div>
+                        <div class="ps-3 d-flex flex-fill justify-content-between">
+                          <span class="fw-bold f-20">{{p.name}}</span>
+                          <span>
+                            <span class="permission-btn" ids="allow">Allow All</span>
+                            <span class="permission-btn" ids="deny">Deny All</span>
+                            <span class="permission-btn" ids="inherit">Inherit All</span>
+                          </span>
+                        </div>
+                        {% for all in p.contents.all %}
+                          <li class="ps-4 ms-2 my-3">
+                            <div class="d-flex flex-fill justify-content-between">
+                              <span>{{all.name}}</span>
+                              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input class="radio-btn" ids="allow-btn" type="radio" name="{{p.app_label}}{{p.name}}{{forloop.counter}}" autocomplete="off" checked>
+                                <label class="me-3">Allow</label>
+
+                                <input class="radio-btn" ids="deny-btn" type="radio" name="{{p.app_label}}{{p.name}}{{forloop.counter}}" autocomplete="off">
+                                <label class="me-3">Deny</label>
+
+                                <input class="radio-btn" ids="inherit-btn" type="radio" name="{{p.app_label}}{{p.name}}{{forloop.counter}}" autocomplete="off">
+                                <label>Inherit</label>
+                              </div>
+                            </div>
+                          </li>
+                        {% endfor %}
+                        </div>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       {% else %}
-      <nav class="mt-4">
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <button class="nav-link active fw-bold" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Personal Info</button>
-          <button class="nav-link fw-bold" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Permissions</button>
-          <button class="nav-link fw-bold" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Statistics</button>
-        </div>
-      </nav>
-      <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          <div class="products-form w-100 mt-5">
-              <form class="mt-2" id="add-category-form" method="post">
-                {% csrf_token %}
-                <div id="general" class="product-form">
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >First Name</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        name="name"
-                        placeholder="Name"
-                      />
-                    </div>
+      <div class="edit-user-sec d-none card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>User Information</span>
+                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
                   </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Last Name</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        name="name"
-                        placeholder="Name"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Email</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="name"
-                        name="name"
-                        placeholder="Name"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-1">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Status</label
-                    >
-                    <div class="col-sm-10">
-                      <div class="checkbox-fade fade-in-primary">
-                        <label>
-                          <input id="enable" type="checkbox" value="" name="enable" />
-                          <span class="cr">
-                            <i
-                              class="
-                                cr-icon
-                                icofont icofont-ui-check
-                                txt-primary
-                              "
-                            ></i>
-                          </span>
-                          <span>Enable this product</span>
-                        </label>
+                  <ul class="submenu">
+                    <li class="selected" for="coupon-general">
+                      <p class="m-0 p-0">Personal Info</p>
+                    </li>
+                    <li for="coupon-usage-restriction">
+                      <p class="m-0 p-0">Permissions</p>
+                    </li>
+                    <li for="coupon-usage-limit">
+                      <p class="m-0 p-0 coupon-usage-limit">Statistics</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2" id="add-category-form">
+                  <div id="coupon-general" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Personal Info</h6>
+                    <hr />
+                    <nav class="profile-sec-nav">
+                      <div class="nav nav-pills" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Basic</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Security</button>
                       </div>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="category" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Category</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="category-select">
-                        {% for category in categorys %}
-                          <option value="{{category.id}}">{{category.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Group</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="group-select">
-                      </select>
-                      {% comment %} <select class="form-control" name="" id="groups-select">
-                        <option value="">---</option>
-                      </select> {% endcomment %}
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Subcategory</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="subcategory-select">
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="price" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Price</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Main Price*</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control autonumber"
-                        data-a-sign="৳"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Discount*</label
-                    >
-                    <div class="col-sm-10">
-                      <input type="number" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Discount Type*</label
-                    >
-                    <div class="col-sm-10">
-                      <select id="discount-type">
-                        <option value="percentage">Percentage</option>
-                        <option value="fixed">Fixed</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="images" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <h6>Thumbnail</h6>
-                    <label for="thumbnail-input">
-                      <img
-                        class="thumbnail"
-                        id="thumbnail"
-                        src="control/css/image.png"
-                      />
-                    </label>
-                    <input
-                      class="d-none"
-                      type="file"
-                      accept="image/*"
-                      id="thumbnail-input"
-                      onchange="loadthumbnail(event)"
-                    />
-                  </div>
-                  <div class="row mb-3">
-                    <h6>Additional Images</h6>
-                    <input
-                      type="file"
-                      name="files[]"
-                      id="filer_input1"
-                      multiple="multiple"
-                    />
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="seo" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Seo</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Title</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        placeholder="Meta Title"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Keywords</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        placeholder="Meta Keywords"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Descriptions</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="short-desc"
-                        id="short-desc"
-                        placeholder="Meta Descriptions"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="attributes" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Size</label
-                    >
-                    <div class="col-sm-10">
-                      <input
-                        type="text"
-                        class="form-control w-100"
-                        value=""
-                        data-role="tagsinput"
-                      />
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Color</label
-                    >
-                    <div class="col-sm-10 d-flex justify-content-between">
-                      <div class="d-flex flex-wrap" id="color-picker">
-                        <input class="mx-1 my-1" id="color-pick" type="color" />
-                      </div>
-                      <div class="btn btn-outline-success" id="add-color">
-                        Add New Color
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Meta Descriptions</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="short-desc"
-                        id="short-desc"
-                        placeholder="Meta Descriptions"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
-                      >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="options" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
-                  <hr />
-                  <br />
-                  <div class="d-flex flex-fill align-items-center option-sec">
-                    <div class="option w-100">
-                      <div
-                        class="
-                          option-head
-                          d-flex
-                          flex-fill
-                          justify-content-between
-                          mb-3
-                        "
-                      >
-                        <h6 class="option-name">Option Name</h6>
-                        <span class="arrow"
-                          ><i class="fa fa-angle-right"></i
-                        ></span>
-                      </div>
-                      <div class="row mb-3 mx-2">
-                        <label
-                          for="inputEmail3"
-                          class="col-sm-2 col-form-label d-none d-xl-block"
-                          >Name</label
-                        >
-                        <div class="col-sm-6">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="option-name"
-                            placeholder="Option name"
-                          />
-                        </div>
-                        <div class="col-sm-4">
-                          <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
-                          </select>
-                        </div>
-                      </div>
-                      <!-- <div class="row mb-3 mx-2">
-                        <label
-                          for="inputEmail3"
-                          class="col-sm-2 col-form-label d-none d-xl-block"
-                          >Type</label
-                        >
-                        <div class="col-sm-10">
-                          <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
-                          </select>
-                        </div>
-                      </div> -->
-                      <div class="options-option">
-                        <div class="row mb-3 mx-2">
+                    </nav>
+                    <div class="tab-content mt-4" id="nav-tabContent">
+                      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="row mb-3">
                           <label
                             for="inputEmail3"
                             class="col-sm-2 col-form-label d-none d-xl-block"
-                            >Option</label
+                            >First Name</label
                           >
-                          <div class="col-sm-5 d-flex">
+                          <div class="col-sm-10">
                             <input
                               type="text"
                               class="form-control"
-                              id="option-name"
-                              placeholder="Label"
+                              id="name"
+                              placeholder="First Name"
                             />
                           </div>
-                          <div class="col-sm-4 d-flex flex-fill">
+                        </div>
+                        <div class="row mb-3">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Last Name</label
+                          >
+                          <div class="col-sm-10">
                             <input
-                              type="number"
+                              type="text"
                               class="form-control"
-                              placeholder="Price"
+                              id="name"
+                              placeholder="Last Name"
                             />
-                            <div class="btn col-sm-1">
-                              <i class="fa fa-trash"></i>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Email</label
+                          >
+                          <div class="col-sm-10">
+                            <input
+                              type="email"
+                              class="form-control"
+                              id="name"
+                              placeholder="Email"
+                            />
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputEmail3"
+                            class="col-sm-2 col-form-label d-none d-xl-block"
+                            >Status</label
+                          >
+                          <div class="col-sm-10">
+                            <div class="checkbox-fade fade-in-primary">
+                              <label>
+                                <input id="enable" type="checkbox" value="" />
+                                <span class="cr">
+                                  <i
+                                    class="
+                                      cr-icon
+                                      icofont icofont-ui-check
+                                      txt-primary
+                                    "
+                                  ></i>
+                                </span>
+                                <span>Allow free shipping</span>
+                              </label>
                             </div>
                           </div>
                         </div>
+                        <div class="row mb-3">
+                          <div class="col-sm-10 offset-lg-2">
+                            <button
+                              id="save-btn"
+                              type="submit"
+                              class="btn btn-primary py-1 px-3"
+                            >
+                              Save
+                            </button>
+                            <button
+                              id="cancel-btn"
+                              type="submit"
+                              class="btn btn-secondary py-1 px-3"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div class="btn add-options-option">Add option</div>
-                    </div>
-                    <i class="fa fa-trash fa-lg ms-3"></i>
-                  </div>
-                  <div class="new-option"></div>
-                  <div
-                    class="
-                      d-flex
-                      flex-fill
-                      justify-content-end
-                      mb-3
-                      add-new-option-sec
-                    "
-                  >
-                    <div class="btn btn-outline-success add-new-option">
-                      Add new options
+                      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Profile</div>
                     </div>
                   </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
+                  <div id="coupon-usage-restriction" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">
+                      Usage Restrictions
+                    </h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Minimum Spend</label
                       >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
+                      <div class="col-sm-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="name"
+                          placeholder="Minimum Spend"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Maximum Spend</label
                       >
-                        Cancel
-                      </button>
+                      <div class="col-sm-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="name"
+                          placeholder="Maximum Spend"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div id="additional" class="product-form d-none">
-                  <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
-                  <hr />
-                  <br />
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Description</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="description"
-                        id="description"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Additional Info</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="additional-info"
-                        id="additional-info"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <label
-                      for="inputEmail3"
-                      class="col-sm-2 col-form-label d-none d-xl-block"
-                      >Shipping Info</label
-                    >
-                    <div class="col-sm-10">
-                      <textarea
-                        class="form-control"
-                        name="shipping-info"
-                        id="shipping-info"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-sm-10 offset-lg-2">
-                      <button
-                        id="save-btn"
-                        type="submit"
-                        class="btn btn-primary py-1 px-3"
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Products</label
                       >
-                        Save
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        type="submit"
-                        class="btn btn-secondary py-1 px-3"
+                      <div class="col-sm-10">
+                        <select multiple id="products-select" placeholder="Select Products">
+                          {% for product in products %}
+                          <option value="{{product.id}}">{{product.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Exclude Products</label
                       >
-                        Cancel
-                      </button>
+                      <div class="col-sm-10">
+                        <select
+                          multiple
+                          id="exclude-products-select"
+                          placeholder="Select Products"
+                        >
+                          {% for product in products %}
+                          <option value="{{product.id}}">{{product.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Categories</label
+                      >
+                      <div class="col-sm-10">
+                        <select
+                          multiple
+                          id="categories-select"
+                          placeholder="Select Categories"
+                        >
+                          {% for category in categories %}
+                          <option value="{{category.id}}">{{category.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Exclude Categories</label
+                      >
+                      <div class="col-sm-10">
+                        <select
+                          multiple
+                          id="exclude-categories-select"
+                          placeholder="Select Categories"
+                        >
+                          {% for category in categories %}
+                          <option value="{{category.id}}">{{category.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </form>
+                  <div id="coupon-usage-limit" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Usage Limits</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Usage Limit Per Coupon</label
+                      >
+                      <div class="col-sm-10">
+                        <input type="number" class="form-control" id="name" />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Usage Limit Per Customer</label
+                      >
+                      <div class="col-sm-10">
+                        <input type="number" class="form-control" id="name" />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Profile</div>
-        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Contact</div>
+      </div>
+      <div class="bg-white card">
+        
       </div>
       {% endif %}
     {% endblock main %}

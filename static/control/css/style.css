@@ -21787,6 +21787,9 @@ body.menu-sidebar .navbar-wrapper {
 .popover-title {
   text-align: center;
 }
+.nav-pills .nav-link{
+  border-bottom: 3px solid transparent;
+}
 .nav-pills .nav-link.active.active,
 .nav-pills .nav-link.active.active:focus,
 .nav-pills .nav-link.active.active:hover,
@@ -21797,9 +21800,13 @@ body.menu-sidebar .navbar-wrapper {
 .nav-pills .nav-link.active:focus,
 .nav-pills .nav-link.active:hover {
   background: 0 0;
-  color: #0275d8;
+  color: #1ABC9C;
   text-align: center;
-  border-bottom: 1px solid #0275d8;
+  border-radius: 0;
+  border-bottom: 3px solid #1ABC9C;
+}
+.profile-sec-nav .nav{
+  border-bottom: 1px solid #1ABC9C;
 }
 .btn-primary,
 .sweet-alert button.confirm,

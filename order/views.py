@@ -33,7 +33,7 @@ def AddtoCart(request):
                 cs = {
                     "category": item.product.category.name,
                     "title": item.product.title,
-                    "image": item.product.image.url,
+                    "image": item.product.image,
                     "main_price": str(item.product.main_price),
                     "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
                     "discount": str(item.product.discount),
@@ -58,7 +58,7 @@ def AddtoCart(request):
             "id": product.id,
             "category": product.category.name,
             "title": product.title,
-            "image": product.image.url,
+            "image": product.image,
             "main_price": str(product.main_price),
             "price": str(product.main_price - (product.main_price * product.discount / 100)),
             "discount": str(product.discount)
@@ -109,7 +109,7 @@ def AddtoCart(request):
             cs = {
                 "category": item.product.category.name,
                 "title": item.product.title,
-                "image": item.product.image.url,
+                "image": item.product.image,
                 "main_price": str(item.product.main_price),
                 "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
                 "discount": str(item.product.discount),
@@ -146,7 +146,7 @@ def AddtoCart(request):
             "id": item.id,
             "category": item.product.category.name,
             "title": item.product.title,
-            "image": item.product.image.url,
+            "image": item.product.image,
             "main_price": str(item.product.main_price),
             "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
             "discount": str(item.product.discount),
@@ -223,7 +223,7 @@ def CartDelete(request):
         cs = {
             "category": item.product.category.name,
             "title": item.product.title,
-            "image": item.product.image.url,
+            "image": item.product.image,
             "main_price": str(item.product.main_price),
             "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
             "discount": str(item.product.discount),
