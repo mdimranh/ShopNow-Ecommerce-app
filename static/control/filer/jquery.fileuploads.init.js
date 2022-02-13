@@ -25,7 +25,7 @@ $(document).ready(function(){
         extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
         changeInput: true,
         showThumbs: true,
-        addMore: true
+        addMore: true,
     });
 
 	//Example 1
@@ -50,7 +50,7 @@ $(document).ready(function(){
                                     {{fi-image}}\
                                 </div>\
                                 <div class="jFiler-item-assets jFiler-row">\
-                                    <ul class="list-inline pull-left">\
+                                    <ul class="list-inline pull-left d-none">\
                                         <li>{{fi-progressBar}}</li>\
                                     </ul>\
                                     <ul class="list-inline pull-right">\
@@ -82,9 +82,9 @@ $(document).ready(function(){
                                 </div>\
                             </div>\
                         </li>',
-            progressBar: '<div class="bar"></div>',
+            // progressBar: '<div class="bar"></div>',
             itemAppendToEnd: false,
-            removeConfirmation: true,
+            removeConfirmation: false,
             _selectors: {
                 list: '.jFiler-items-list',
                 item: '.jFiler-item',
@@ -98,40 +98,45 @@ $(document).ready(function(){
             drop: null,
         },
         uploadFile: {
-            url: "../plugins/jquery.filer/php/upload.php",
-            data: null,
-            type: 'POST',
-            enctype: 'multipart/form-data',
-            beforeSend: function(){},
-            success: function(data, el){
-                var parent = el.find(".jFiler-jProgressBar").parent();
-                el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-                    $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
-                });
-            },
-            error: function(el){
-                var parent = el.find(".jFiler-jProgressBar").parent();
-                el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-                    $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
-                });
-            },
+            // url: "/",
+            // data: null,
+            // type: 'POST',
+            // enctype: 'multipart/form-data',
+            // beforeSend: function(data, el){
+            //     var parent = el.find(".jFiler-jProgressBar").parent();
+            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
+            //         $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+            //     });
+            // },
+            // success: function(data, el){
+            //     var parent = el.find(".jFiler-jProgressBar").parent();
+            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
+            //         $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+            //     });
+            // },
+            // error: function(el){
+            //     var parent = el.find(".jFiler-jProgressBar").parent();
+            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
+            //         $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
+            //     });
+            // },
             statusCode: null,
             onProgress: null,
             onComplete: null
         },
 		files: [
-			{
-				name: "Desert.jpg",
-				size: 145,
-				type: "image/jpg",
-				file: "assets/images/file-upload/Desert.jpg"
-			},
-			{
-				name: "overflow.jpg",
-				size: 145,
-				type: "image/jpg",
-				file: "assets/images/file-upload/Desert.jpg"
-			}
+			// {
+			// 	name: "Desert.jpg",
+			// 	size: 145,
+			// 	type: "image/jpg",
+			// 	file: "assets/images/file-upload/Desert.jpg"
+			// },
+			// {
+			// 	name: "overflow.jpg",
+			// 	size: 145,
+			// 	type: "image/jpg",
+			// 	file: "assets/images/file-upload/Desert.jpg"
+			// }
 		],
         addMore: false,
         clipBoardPaste: true,
@@ -144,7 +149,7 @@ $(document).ready(function(){
         afterShow: null,
         onRemove: function(itemEl, file, id, listEl, boxEl, newInputEl, inputEl){
             var file = file.name;
-            $.post('../plugins/jquery.filer/php/remove_file.php', {file: file});
+            // $.post('../plugins/jquery.filer/php/remove_file.php', {file: file});
         },
         onEmpty: null,
         options: null,

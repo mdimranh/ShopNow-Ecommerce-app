@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from product.models import Product
 from setting.models import Menus
+from home.models import SearchKeyword
 from django.contrib.auth.models import User
 
 from django.contrib.auth.models import User, auth
@@ -17,9 +18,11 @@ from datetime import datetime
 def Dashboard(request):
     total_product = Product.objects.all().count()
     total_customer = User.objects.filter(is_staff=False, is_superuser=False).count()
+    search = SearchKeyword.objects.all().order_by("-updated_at")
     context = {
         "total_product": total_product,
         "total_customer": total_customer,
+        "search": search,
         "dashboard_sec": True
     }
     return render(request, "control/index.html", context)

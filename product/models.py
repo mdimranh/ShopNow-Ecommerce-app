@@ -2,12 +2,15 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from PIL import Image
 
+from django.contrib.auth.models import User
+
 from django.template.defaultfilters import slugify
 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from fontawesome_5.fields import IconField
+from django.db.models import Q, Sum, Avg
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -85,7 +88,7 @@ class Product(models.Model):
     keywords = models.CharField(max_length=100)
     image = models.CharField(max_length=500, blank = True, null=True)
     main_price = models.DecimalField(decimal_places=2, max_digits=15)
-    discount = models.DecimalField(decimal_places=0, max_digits=3)
+    discount = models.DecimalField(decimal_places=0, max_digits=3, blank=True, null=True)
     discount_type = models.CharField(max_length=10, choices=dis_type, default="Percentage")
     hot_deal = models.DateTimeField(blank=True, null=True)
     amount = models.IntegerField(default=3)
@@ -117,6 +120,13 @@ class Product(models.Model):
             return f"{self.main_price - (self.main_price * self.discount / 100)} (-{self.discount}%)"
         else:
             return 0
+
+    def rating(self):
+        rating = Review.objects.filter(product=self).aggregate(Avg('rating'))['rating__avg']
+        return rating if type(rating) == float else 0
+
+    def total_review(self):
+        return Review.objects.filter(product=self).count()
 
     # def ImageUrl(self):
     #     if self.image:
@@ -155,6 +165,17 @@ class RecentlyView(models.Model):
 
     def __str__(self):
         return self.product.title
+    
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete = models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank=True, null=True)
+    user_name = models.CharField(max_length=200)
+    rating = models.IntegerField()
+    comment = models.TextField()
+    add_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user_name
     
     
     

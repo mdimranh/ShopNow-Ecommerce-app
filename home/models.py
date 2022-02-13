@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 
 class Sliding(models.Model):
 	line_1 = models.TextField(verbose_name='Line 1')
@@ -83,3 +84,10 @@ class ContactMessage(models.Model):
 
 	def __str__(self):
     		return self.name
+
+
+class SearchKeyword(models.Model):
+	keyword = models.CharField(max_length=500)
+	hit = models.IntegerField(default=0)
+	result = models.IntegerField(default=0)
+	updated_at = models.DateTimeField(auto_now=now)

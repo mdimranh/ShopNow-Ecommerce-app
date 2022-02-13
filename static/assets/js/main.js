@@ -783,3 +783,18 @@ $(document).ready(function () {
 
 
 document.getElementById("current-year").innerHTML = new Date().getFullYear();
+
+//! rating
+
+$(".ratring-btn i").on("click", function(){
+    var ind = $(this).attr("index");
+    for (index = 1; index <= 5; index++) {
+        if (index <= ind){
+            $("[index = "+index+"]").addClass("active");
+        }
+        else{
+            $("[index = "+index+"]").removeClass("active");
+        }
+    }
+    $("#star").val(ind);
+})

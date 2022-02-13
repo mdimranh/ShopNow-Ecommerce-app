@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}{{site_config.name}} | Dashboard{% endblock title %}
 {% block style %}
+  <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+  <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+  <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
   <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
 {% endblock style %}
 {% block main %}
@@ -79,7 +83,7 @@
                 </div>
               </div>
 
-              <div class="col-md-12 col-lg-6">
+              {% comment %} <div class="col-md-12 col-lg-6">
                 <div class="card">
                   <div class="card-header">
                     <h5>
@@ -91,13 +95,55 @@
                     <canvas class="chart" id="line-chart"></canvas>
                   </div>
                 </div>
+              </div> {% endcomment %}
+
+              <div class="col-md-12 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>
+                      <i class="icofont icofont-chart-arrows-axis fs-4 me-2"></i
+                      >Latest Search Keyword
+                    </h5>
+                  </div>
+                  <table
+                    id="product-table"
+                    data-toggle="table"
+                    data-pagination="false"
+                    class="table table-bordered no-border nowrap search-result-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col" data-sortable="true">Keyword</th>
+                        <th scope="col" data-sortable="true">Results</th>
+                        <th scope="col" data-sortable="true">Hits</th>
+                        <th scope="col" data-sortable="true">Date Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if search|length == 0 %}
+                        <tr>No Result Found</tr>
+                      {% else %}
+                      {% for search in search %}
+                      <tr>
+                        <td>{{search.keyword}}</td>
+                        <td>{{search.result}}</td>
+                        <td>{{search.hit}}</td>
+                        <td>{{search.updated_at}}</td>
+                      </tr>
+                      {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
     {% endblock main %}
     
     {% block script %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
     <script src="{% static 'control/js/chart/chart.min.js' %}"></script>
     <script src="{% static 'control/js/chart/core.js' %}"></script>
     <script src="{% static 'control/js/chart/charts.js' %}"></script>

@@ -59,12 +59,12 @@
                             <h1 class="product-title">{{product.title}}</h1><!-- End .product-title -->
                             <div class="ratings-container">
                                 <div class="ratings">
-                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                    <div class="ratings-val" style="width: {{rating}}%;"></div><!-- End .ratings-val -->
                                 </div><!-- End .ratings -->
-                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                <a class="ratings-text" href="#product-review-link" id="review-link">( {{total_review}} Reviews )</a>
                             </div><!-- End .rating-container -->
                             <div class="product-price">
-                                {{product.price}}
+                                ৳{{product.price}}
                             </div><!-- End .product-price -->
                             <div class="product-content">
                                 <p>{{product.short_info}}</p>
@@ -72,12 +72,9 @@
                             <div class="details-filter-row details-row-size">
                                 <label>Color:</label>
                                 <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
-                                    </a>
+                                    <i class="fas fa-circle fa-2x px-2"></i>
+                                    <i class="fas fa-circle fa-2x px-2"></i>
+                                    <i class="fas fa-circle fa-2x px-2"></i>
                                 </div><!-- End .product-nav -->
                             </div><!-- End .details-filter-row -->
                             <div class="details-filter-row details-row-size">
@@ -135,7 +132,7 @@
                         <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews ({{product.total_review}})</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -156,28 +153,52 @@
                     </div><!-- .End .tab-pane -->
                     <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
                         <div class="reviews">
-                            <div class="review">
-                                <div class="row no-gutters">
-                                    <div class="col-auto">
-                                        <h4><a href="#">John Doe</a></h4>
-                                        <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                            </div><!-- End .ratings -->
-                                        </div><!-- End .rating-container -->
-                                        <span class="review-date">5 days ago</span>
-                                    </div><!-- End .col -->
-                                    <div class="col">
-                                        <h4>Very good</h4>
-                                        <div class="review-content">
-                                            <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
-                                        </div><!-- End .review-content -->
-                                        <div class="review-action">
-                                            <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                            <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                        </div><!-- End .review-action -->
-                                    </div><!-- End .col-auto -->
-                                </div><!-- End .row -->
+                            <div class="review row">
+                                <form class="col-md-6 mb-md-0 mb-4" method="post">
+                                    {% csrf_token %}
+                                    <h3 class="mb-2">Add a review</h3>
+                                    <h4 class="p-0 m-0">Rating</h4>
+                                    <div class="d-flex ratring-btn mb-2 pt-1">
+                                        <i class="fas fa-star fa-lg" index="1"></i>
+                                        <i class="fas fa-star fa-lg" index="2"></i>
+                                        <i class="fas fa-star fa-lg" index="3"></i>
+                                        <i class="fas fa-star fa-lg" index="4"></i>
+                                        <i class="fas fa-star fa-lg" index="5"></i>
+                                        <select class="d-none" name="rating" id="star">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" value="{{product.id}}" name="id">
+                                    <input type="text" name="user_name" class="form-control review-username mt-2 {% if user.is_authenticated %}d-none{% endif %}" placeholder="Your Name">
+                                    <textarea name="comment" class="form-control" id="" cols="5" rows="5" placeholder="Comment"></textarea>
+                                    <button class="btn btn-warning" type="submit">Submit</button>
+                                </form>
+                                <div class="col-md-6 mb-md-0 mb-4">
+                                    {% for review in product.reviews.all %}
+                                    <div class="row no-gutters mb-2">
+                                        <div class="">
+                                            <h4 class="p-0 m-0"><a href="#">{% if user.is_authenticated %}{% if review.user.id == user.id %}<i class="fas fa-check-circle"></i>{% endif %}{% endif %} {{review.user_name}}</a></h4>
+                                            <div class="ratings-container p-0 mt-1">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: {{review.rating}}%;"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                            <span class="review-date">{{review.add_on|timesince}} ago</span>
+                                            <div class="review-content m-0 p-0">
+                                                <p>{{review.comment}}</p>
+                                            </div><!-- End .review-content -->
+                                            {% comment %} <div class="review-action p-0 m-0">
+                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                            </div><!-- End .review-action --> {% endcomment %}
+                                        </div><!-- End .col -->
+                                    </div><!-- End .row -->
+                                    {% endfor %}
+                                </div>
                             </div><!-- End .review -->
                         </div><!-- End .reviews -->
                     </div><!-- .End .tab-pane -->

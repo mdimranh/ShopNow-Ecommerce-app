@@ -10305,6 +10305,7 @@ button:focus {
   align-items: stretch;
 }
 .carousel-equal-height .product {
+  margin-top: 10px;
   width: 100%;
 }
 .owl-carousel .entry {
@@ -13866,7 +13867,7 @@ button:focus {
   line-height: 1.5;
   padding: 1.4rem 0;
   color: #333;
-  border-bottom: 0.1rem solid #ebebeb;
+  /* border-bottom: 0.1rem solid #ebebeb; */
 }
 .nav-dashboard .nav-link:before {
   font-family: "molla";
@@ -16441,4 +16442,21 @@ tbody .product{
 tbody .product:hover{
   border: none;
   box-shadow: none;
+}
+
+
+
+
+/*! rating */
+
+.ratring-btn i{
+    color: gray;
+}
+
+.ratring-btn i:hover{
+    cursor: pointer;
+}
+
+.ratring-btn i.active{
+    color: orange;
 }

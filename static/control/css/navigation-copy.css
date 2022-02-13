@@ -402,6 +402,10 @@ table.no-border th {
   position: relative;
 }
 
+.menu-sec .submenu li:hover{
+  background: #17213115;
+}
+
 /*! Ckeditor */
 
 textarea {
@@ -557,6 +561,16 @@ textarea:focus {
 
 /*! main section */
 
+/* dashboard */
+
+.search-result-table.table-bordered > :not(caption) > * {
+  border-top: none;
+}
+
+.search-result-table.table-bordered tbody tr:last-child {
+  border-bottom: none;
+}
+
 /* product page */
 
 .product-column {
@@ -578,7 +592,7 @@ tbody tr td:nth-child(3):hover{
   color: #2e4eee;
 }
 
-tbody tr td:nth-child(5)::before{
+#product-table tbody tr td:nth-child(5)::before{
   content: "৳";
 }
 

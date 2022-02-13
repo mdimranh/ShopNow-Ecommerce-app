@@ -20,6 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
         js=("product_category.js",)
     prepopulated_fields = {'slug': ('title',)}
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Review)
 
 
 # class CategoryAdmin(DraggableMPTTAdmin):

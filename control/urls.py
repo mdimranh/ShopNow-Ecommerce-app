@@ -2,6 +2,7 @@ from django.urls import path
 from .views import Dashboard, Menu, Login, Users, UserDetails
 from .product import Products, EditProduct, CategoryView
 from .coupon import CouponView, CouponDetails
+from .settings import SettingView
 
 urlpatterns = [
     path("", Dashboard, name="admin-dashboard"),
@@ -14,4 +15,5 @@ urlpatterns = [
     path("login", Login, name = "admin-login"),
     path("user", Users, name = "admin-users"),
     path("user/<int:id>", UserDetails, name = "admin-users-details"),
+    path("settings/", SettingView, name="admin-settings"),
 ]

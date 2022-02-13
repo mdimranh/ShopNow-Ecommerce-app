@@ -79,8 +79,8 @@
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product">Product</a></li>
-              <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category">Category</a></li>
+              <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product" class="d-flex flex-fill">Product</a></li>
+              <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category" class="d-flex flex-fill">Category</a></li>
             </ul>
           </li>
           <li>
@@ -90,8 +90,8 @@
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="">User</a></li>
-              <li><a href="">group</a></li>
+              <li><a href="" class="d-flex flex-fill">Orders</a></li>
+              <li><a href="" class="d-flex flex-fill">Transections</a></li>
             </ul>
           </li>
           <li>
@@ -149,8 +149,8 @@
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="">User</a></li>
-              <li><a href="">group</a></li>
+              <li><a href="" class="d-flex flex-fill">User</a></li>
+              <li><a href="" class="d-flex flex-fill">group</a></li>
             </ul>
           </li>
           <li>
@@ -160,8 +160,8 @@
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="">User</a></li>
-              <li><a href="">group</a></li>
+              <li><a href="" class="d-flex flex-fill">User</a></li>
+              <li><a href="" class="d-flex flex-fill">group</a></li>
             </ul>
           </li>
           <li>
@@ -171,17 +171,19 @@
             </div>
           </li>
           <li>
-            <div class="menu">
-              <i class="fa fa-cogs fa-left"></i>
-              <span>Settings</span>
-            </div>
+            <a href="/control/settings/">
+              <div class="menu setting {% if setting_sec %}selected active{% endif %}">
+                <i class="fa fa-cogs fa-left"></i>
+                <span>Settings</span>
+              </div>
+            </a>
           </li>
         </ul>
       </div>
       <div class="main mx-3 mt-3">
         {% block main %}{% endblock main %}
         <div class="copyright d-flex flex-fill justify-content-between">
-          <span>copyright <span class="fw-bold">©</span> <span class="current-year"></span> <a href="/" class="text-decoration-none">{{site_config.name}}</a></span>
+          <span>Copyright <span class="fw-bold">©</span> <span class="current-year"></span> <a href="/" class="text-decoration-none">{{site_config.name}}</a></span>
         </div>
       </div>
     </div>

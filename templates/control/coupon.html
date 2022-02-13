@@ -17,7 +17,13 @@
     {% endblock style %}
 
     {% block main %}
-        <h3 class="fw-bold">Coupon's</h3>
+        <div class="d-flex flex-fill justify-content-between align-items-center">
+          <h3 class="fw-bold">Coupon</h3>
+          <div class="d-flex">
+            <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+            <span class="breadcrumb-item text-secondary">Coupon</span>
+          </div>
+        </div>
         <div class="card coupon-list">
           <div class="card-header">
             <h5>All Coupons</h5>

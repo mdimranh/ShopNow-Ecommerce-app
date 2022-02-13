@@ -728,6 +728,10 @@ for(i = 0; i < savebtn.length; i++){
   })
 }
 
+$("#color-pick").on("change", function(){
+  confirm.log($(this).val());
+})
+
 // product-name
 // short-desc
 // quantity
@@ -784,3 +788,38 @@ Array.prototype.slice.call(forms)
       }
     }, false)
   })
+
+
+  $("#filer_input1").on("change", function(){
+    var len = $(this)[0].jFiler.files_list.length;
+    // console.log($(this)[0].jFiler);
+    // console.log($(this)[0].jFiler.files_list[0]);
+    for (i = 0; i <= len+1; i++) {
+      console.log($(this)[0].jFiler.files_list[i]);
+    }
+  })
+
+
+
+  //! setting file
+
+  // social login
+
+  $("#facebook-enable").on("click", function(){
+    if ($(this).is(":checked")){
+      $(".facebook-login-field").removeClass("d-none")
+    }
+    else{
+      $(".facebook-login-field").addClass("d-none")
+    }
+  })
+
+  $("#google-enable").on("click", function(){
+    if ($(this).is(":checked")){
+      $(".google-login-field").removeClass("d-none")
+    }
+    else{
+      $(".google-login-field").addClass("d-none")
+    }
+  })
+

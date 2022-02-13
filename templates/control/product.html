@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
     <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
     <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dropzone.css' %}" />
     <link
       rel="stylesheet"
       href="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
@@ -23,9 +24,22 @@
 
     {% block main %}
       {% if product_details %}
-      <h3 class="fw-bold">{{product_details.title}}</h3>
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">{{product_details.title}}</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/product/" class="text-decoration-none breadcrumb-item text-secondary">Products</a>
+          <span class="breadcrumb-item text-secondary">Edit Products</span>
+        </div>
+      </div>
       {% else %}
-      <h3 class="fw-bold">Product's</h3>
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">Product's</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/product/" class="text-decoration-none breadcrumb-item text-secondary">Products</a>
+        </div>
+      </div>
       {% endif %}
       {% if not product_details %}
       <div class="card product-list">
@@ -141,6 +155,7 @@
                     ><span class="arrow"><i class="fa fa-angle-right"></i></span>
                   </div>
                   <ul class="submenu">
+                    <li for="add-related-product"><p class="m-0 p-0">Related Product</p></li>
                     <li for="add-attributes"><p class="m-0 p-0">Attributes</p></li>
                     <li for="add-options"><p class="m-0 p-0">Options</p></li>
                     <li for="add-additional"><p class="m-0 p-0">Additional</p></li>
@@ -381,7 +396,7 @@
                     <h6 class="mt-2 text-primary fw-bolder h4">Images</h6>
                     <hr />
                     <br />
-                    <div class="row mb-3">
+                    <div id="images" class="row mb-3">
                       <h6>Thumbnail</h6>
                       <label for="add-thumbnail-input">
                         <img
@@ -486,6 +501,89 @@
                         <div class="invalid-feedback">Please Enter Meta Descriptions</div>
                       </div>
                     </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="add-related-product" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
+                    <hr />
+                    <br />
+                    <div id="toolbar1">
+                      <button id="remove" class="btn btn-danger" disabled>
+                        <i class="fa fa-trash"></i> Delete
+                      </button>
+                    </div>
+                    <table
+                      id="product-table"
+                      data-toggle="table"
+                      data-toolbar="#toolbar1"
+                      data-pagination="true"
+                      data-page-list="[5, 25, 50, 100, ALL]"
+                      data-search="true"
+                      data-search-highlight="true"
+                      data-filter-control="true"
+                      data-show-multi-sort="true"
+                      data-fixed-columns="true"
+                      data-fixed-number="1"
+                      data-sticky-header = "true"
+                      data-checkbox = "true"
+                      class="table table-bordered no-border nowrap"
+                    >
+                      <thead>
+                        <tr>
+                          <th data-checkbox="true" ></th>
+                          <th data-searchable="false">Thumbnail</th>
+                          <th data-visible="false"></th>
+                          <th data-sortable="true" data-valign="middle">Name</th>
+                          <th data-sortable="true" data-valign="middle" data-filter-control="select">Category</th>
+                          <th data-sortable="true" data-valign="middle">Price</th>
+                          <th data-sortable="true" data-valign="middle">Active</th>
+                          <th data-sortable="true" data-valign="middle">Quantity</th>
+                          <th data-sortable="true" data-valign="middle" data-filter-control="select">Created</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for product in products %}
+                        <tr>
+                          <td data-checkbox-enabled="false"></td>
+                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
+                          <td ><a href="/control/product/edit-product/{{product.id}}"></a></td>
+                          <td >{{product.title}}</td>
+                          <td >{{product.category}}</td>
+                          <td>{{product.price}}</span></td>
+                          <td class="ps-4">{% if product.enable%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
+                          <td>{{product.amount}}</td>
+                          <td>{{product.created_at|date:"d M Y"}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                      {% comment %} <tfoot>
+                        <tr>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Price</th>
+                          <th>{{product.status}}</th>
+                          <th>Amount</th>
+                          <th>Created</th>
+                        </tr>
+                      </tfoot> {% endcomment %}
+                    </table>
                     <div class="row mb-3">
                       <div class="col-xl-10 offset-lg-2">
                         <button
@@ -1409,6 +1507,7 @@
     {% block script %}
     {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
     {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>

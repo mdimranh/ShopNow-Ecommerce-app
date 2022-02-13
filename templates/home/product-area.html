@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 {% load solo_tags %}
 {% get_solo 'setting.SiteFront' as site_front %}
 <main class="main">
@@ -211,19 +212,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
-                                            <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -236,7 +237,7 @@
                             </div><!-- End .owl-carousel -->
                         </div><!-- .End .tab-pane -->
                         <div class="tab-pane p-0 fade" id="trending-elec-tab" role="tabpanel" aria-labelledby="trending-elec-link">
-                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow ps-3" data-toggle="owl" 
                                 data-owl-options='{
                                     "nav": true, 
                                     "dots": false,
@@ -1156,19 +1157,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
-                                            <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1232,19 +1233,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
-                                            <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1330,19 +1331,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
-                                            <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1406,19 +1407,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
                                             <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%%)</span>
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1514,14 +1515,14 @@
                                                 </div><!-- End .product-cat -->
                                                 <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                                 <div class="product-price">
-                                                    <span class="new-price">৳{{product.price}}</span>
-                                                    <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
+                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( 4 Reviews )</span>
+                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                                 </div><!-- End .rating-container -->
                                                 <div class="product-nav product-nav-dots">
                                                     <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1560,14 +1561,14 @@
                                                 </div><!-- End .product-cat -->
                                                 <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                                 <div class="product-price">
-                                                    <span class="new-price">৳{{product.price}}</span>
-                                                    <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
+                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( 4 Reviews )</span>
+                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                                 </div><!-- End .rating-container -->
                                                 <div class="product-nav product-nav-dots">
                                                     <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1606,14 +1607,14 @@
                                                 </div><!-- End .product-cat -->
                                                 <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                                 <div class="product-price">
-                                                    <span class="new-price">৳{{product.price}}</span>
-                                                    <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>
+                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
+                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( 4 Reviews )</span>
+                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                                 </div><!-- End .rating-container -->
                                                 <div class="product-nav product-nav-dots">
                                                     <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1679,19 +1680,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{product.price}}</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
                                             <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%%)</span>
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1779,19 +1780,19 @@
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
-                                        <div class="product-cat">
+                                        {% comment %} <div class="product-cat">
                                             <a href="#">{{item.product.category.name}}</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{item.product.title}}</a></h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">৳{{item.product.price}}</span>
-                                            <span class="old-price"><span>{{item.product.main_price}}</span> ({{item.product.discount}}%)</span>
+                                        <div class="product-price mt-1 d-flex flex-column">
+                                            <span class="new-price h6">৳{{item.product.price|intcomma}}</span>
+                                            {% if item.product.discount > 0 %}<span class="old-price"><span>{{item.product.main_price}}</span> ({{item.product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{item.product.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( 4 Reviews )</span>
+                                            <span class="ratings-text">( {{item.product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1898,13 +1899,13 @@
                                             </div><!-- End .product-cat -->
                                             <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                             <div class="product-price">
-                                                ৳{{product.price}}
+                                                ৳{{product.price|intcomma}}
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
-                                                    <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                    <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                                 </div><!-- End .ratings -->
-                                                <span class="ratings-text">( 4 Reviews )</span>
+                                                <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                             </div><!-- End .rating-container -->
                                         </div><!-- End .product-body -->
                                     </div><!-- End .product -->
@@ -2779,7 +2780,7 @@
                                         <div class="product-body">
                                             <h5 class="product-title"><a href="product.html">{{product.title}}</a></h5><!-- End .product-title -->
                                             <div class="product-price">
-                                                ৳{{product.price}}
+                                                ৳{{product.price|intcomma}}
                                             </div><!-- End .product-price -->
                                         </div><!-- End .product-body -->
                                     </div><!-- End .product product-sm -->
@@ -2821,9 +2822,9 @@
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( 4 Reviews )</span>
+                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                                 </div><!-- End .rating-container -->
                                                 <div class="product-nav product-nav-dots">
                                                     <a href="#" class="active" style="background: #f3815f;"><span class="sr-only">Color name</span></a>

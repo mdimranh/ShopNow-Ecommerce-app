@@ -4,6 +4,7 @@ from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, Pr
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from .forms import ContactMessageForm
 from order.models import ShopCart
+from .models import SearchKeyword
 
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -108,4 +109,16 @@ def SearchView(request):
         categorys = Category.objects.all()
         teaminfo = TeamInfo.objects.all()
         aboutus = Aboutus.objects.all().first()
+        if SearchKeyword.objects.filter(keyword=query).exists():
+            searchKey = SearchKeyword.objects.get(keyword=query)
+            searchKey.hit += 1
+            searchKey.result = products.count()
+            searchKey.save()
+        else:
+            searchKey = SearchKeyword(
+                keyword = query,
+                hit = 1,
+                result = Product.objects.filter(title__icontains = query).count()
+            )
+            searchKey.save()
         return render(request, 'product/category.html', {'product': page_obj, 'category': categorys})
