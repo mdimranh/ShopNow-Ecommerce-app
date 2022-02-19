@@ -8,7 +8,7 @@ from .models import SearchKeyword
 
 from django.core.paginator import Paginator
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib import messages
 
@@ -40,7 +40,7 @@ def Home(request):
         item = shopcart.count()
     new_product = Product.objects.filter(enable=True).order_by('-id')
     new_product_cat = Product.objects.filter(enable=True).distinct("category")
-    hot_product = Product.objects.filter(enable=True, hot_deal__gt = datetime.now())
+    hot_product = Product.objects.filter(enable=True, hot_deal_end__gt = date.today())
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {

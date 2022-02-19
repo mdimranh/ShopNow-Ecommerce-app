@@ -19,7 +19,7 @@ $(document).ready(function(){
     });
 
     //Example 2
-    $('#filer_input').filer({
+    $('#filer_input11').filer({
         limit: 3,
         maxSize: 3,
         extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
@@ -27,6 +27,13 @@ $(document).ready(function(){
         showThumbs: true,
         addMore: true,
     });
+
+    $('#filer_input12').filer({
+		showThumbs: true,
+		addMore: true,
+		allowDuplicates: false,
+        
+	});
 
 	//Example 1
     $("#filer_input1").filer({
@@ -138,7 +145,7 @@ $(document).ready(function(){
 			// 	file: "assets/images/file-upload/Desert.jpg"
 			// }
 		],
-        addMore: false,
+        addMore: true,
         clipBoardPaste: true,
         excludeName: null,
         beforeRender: null,

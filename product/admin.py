@@ -22,6 +22,10 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Review)
 
+class ImagesAdmin(admin.ModelAdmin):
+    list_display = ['pro', 'image_tag']
+admin.site.register(Images, ImagesAdmin)
+
 
 # class CategoryAdmin(DraggableMPTTAdmin):
 #     mptt_indent_field = "title"

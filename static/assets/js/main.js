@@ -798,3 +798,13 @@ $(".ratring-btn i").on("click", function(){
     }
     $("#star").val(ind);
 })
+
+
+// product details page
+
+$("i.product-color").on("click", function(){
+	if (!$(this).hasClass("select")){
+		$(this).addClass("select");
+		$("i.product-color").not($(this)).removeClass("select");
+	}
+})

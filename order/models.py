@@ -7,6 +7,9 @@ from django.utils.timezone import now
 
 from product.models import Product, Category
 
+class Order(models.Model):
+    user_id = models.CharField(max_length=200, blank=True, null=True)
+
 DIS_TYPE = (
     ('Fixed', 'Fixed'),
     ('Percent', 'Percent')

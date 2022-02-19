@@ -175,7 +175,52 @@
 										        </div><!-- End .card-header -->
 										        <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
 										            <div class="card-body">
-										                Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
+										                <div id="smart-button-container">
+															<div style="text-align: center;">
+																<div id="paypal-button-container"></div>
+															</div>
+															</div>
+														<script src="https://www.paypal.com/sdk/js?client-id=AUGlRSikgHWm5LgI6mQetKFBJVJ2ztieTFWPej1HOVxcqCxURrgvnmFl9t9SmhJi9d_WSGyzlsF3zDjF&disable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+														<script>
+															function initPayPalButton() {
+															paypal.Buttons({
+																style: {
+																shape: 'rect',
+																color: 'gold',
+																layout: 'vertical',
+																label: 'paypal',
+																
+																},
+
+																createOrder: function(data, actions) {
+																return actions.order.create({
+																	purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+																});
+																},
+
+																onApprove: function(data, actions) {
+																return actions.order.capture().then(function(orderData) {
+																	
+																	// Full available details
+																	console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+																	// Show a success message within this page, e.g.
+																	const element = document.getElementById('paypal-button-container');
+																	element.innerHTML = '';
+																	element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+																	// Or go to another URL:  actions.redirect('thank_you.html');
+																	
+																});
+																},
+
+																onError: function(err) {
+																console.log(err);
+																}
+															}).render('#paypal-button-container');
+															}
+															initPayPalButton();
+														</script>
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->

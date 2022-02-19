@@ -371,13 +371,14 @@ table.no-border th {
 
 .product-menu .menu-sec .menu {
   border-bottom: 0px solid rgba(128, 128, 128, 0.308);
-  /* border-right: 1px solid rgba(128, 128, 128, 0.308); */
+  border-right: 1px solid rgba(128, 128, 128, 0.25);
   transition-delay: 0.3s;
 }
 
 .product-menu .menu-sec .menu.selected {
   border-bottom: 1px solid rgba(128, 128, 128, 0.308);
   background: rgb(241, 237, 237);
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
   transition-delay: 0s;
 }
 

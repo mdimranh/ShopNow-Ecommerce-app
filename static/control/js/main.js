@@ -122,7 +122,7 @@ var loadthumbnail = function (event) {
 // add color btn
 
 $("#add-color").on("click", function () {
-  var inp = `<input class="mx-1 my-1" id="color-pick" type="color" />`;
+  var inp = `<input class="mx-1 my-1" id="color-pick" name="color" type="color" />`;
   $("#color-picker").append(inp);
   document.querySelectorAll("[id=color-pick]").forEach((element) => {
     console.log(element.value);
@@ -143,9 +143,6 @@ document.querySelectorAll("[id=option-name]").forEach((element) => {
 
 $(".add-new-option").on("click", function () {
   $(".new-option").append(div);
-  VirtualSelect.init({
-    ele: "select",
-  });
   document.querySelectorAll("[id=option-name]").forEach((element) => {
     $(element).on("keyup", function () {
       $(this)
@@ -161,7 +158,11 @@ $(".add-new-option").on("click", function () {
     .last()
     .on("click", function () {
       $(this).parent().children(".options-option").append(div1);
+      var option_increase = parseInt($(this).parent().children(".options-option").children().first().val())+1;
+      $(this).parent().children(".options-option").children().first().val(option_increase);
       $(".new-option .fa-trash").on("click", function () {
+        var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val())-1;
+        $(this).parent().parent().parent().parent().children().first().val(option_decrease);
         $(this).parent().parent().parent().remove();
       });
     });
@@ -182,6 +183,9 @@ $(".add-new-option").on("click", function () {
     .on("click", function () {
       $(this).parent().remove();
     });
+  VirtualSelect.init({
+    ele: "select",
+  });
 });
 
 var div = `<div class="d-flex flex-fill align-items-center option-sec">
@@ -210,14 +214,15 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
                           <input
                             type="text"
                             class="form-control"
+                            name="option-name"
                             id="option-name"
                             placeholder="Option name"
                           />
                         </div>
                         <div class="col-sm-4">
-                          <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
+                          <select id="discount-type" name="option-style">
+                            <option value="dropdown">Dropdown</option>
+                            <option value="radion">Radio</option>
                           </select>
                         </div>
                       </div>
@@ -229,12 +234,13 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
                         >
                         <div class="col-sm-10">
                           <select id="discount-type">
-                            <option value="2">Dropdown</option>
-                            <option value="1">Radio</option>
+                            <option value="dropdown">Dropdown</option>
+                            <option value="radio">Radio</option>
                           </select>
                         </div>
                       </div> -->
                       <div class="options-option">
+                        <input type="hidden" id="option-count" name="option-count" value="1">
                         <div class="row mb-3 mx-2">
                           <label
                             for="inputEmail3"
@@ -245,7 +251,7 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
                             <input
                               type="text"
                               class="form-control"
-                              id="option-name"
+                              name="options-option-name"
                               placeholder="Label"
                             />
                           </div>
@@ -253,6 +259,7 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
                             <input
                               type="number"
                               class="form-control"
+                              name="option-price"
                               placeholder="Price"
                             />
                             <div class="btn col-sm-1">
@@ -268,6 +275,8 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
 
 $(".add-options-option").on("click", function () {
   $(this).parent().children(".options-option").append(div1);
+  var option_increase = parseInt($(this).parent().children(".options-option").children().first().val())+1;
+  $(this).parent().children(".options-option").children().first().val(option_increase);
   $(this)
     .parent()
     .children(".options-option")
@@ -278,6 +287,8 @@ $(".add-options-option").on("click", function () {
     .children()
     .last()
     .on("click", function () {
+      var option_decrease = parseInt($(this).parent().parent().parent().children().first().val())-1;
+      $(this).parent().parent().parent().children().first().val(option_decrease);
       $(this).parent().parent().remove();
     });
 });
@@ -292,7 +303,7 @@ var div1 = `<div class="row mb-3 mx-2">
                 <input
                   type="text"
                   class="form-control"
-                  id="option-name"
+                  name="options-option-name"
                   placeholder="Label"
                 />
               </div>
@@ -300,6 +311,7 @@ var div1 = `<div class="row mb-3 mx-2">
                 <input
                   type="number"
                   class="form-control"
+                  name="option-price"
                   placeholder="Price"
                 />
                 <div class="btn col-sm-1">
@@ -326,6 +338,8 @@ $(".option-head").on("click", function () {
 });
 
 $(".options-option .fa-trash").on("click", function () {
+  var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val())-1;
+  $(this).parent().parent().parent().parent().children().first().val(option_decrease);
   $(this).parent().parent().parent().remove();
 });
 
@@ -368,26 +382,7 @@ $(".add-user-btn").on("click", function(){
 
 
 // product page
-$(".check-column-header").on("click", function(){
-  const check = $(this).parent().parent().parent().children("tbody").children().children(".check-column").children().children().children(".check");
-  // check.forEach((element) => { 
-  //   console.log(element);
-  // })
-  const elem = $(this).children().children().children();
 
-  if (elem.checked == true){
-    for (const ch of check){
-      ch.checked = false;
-    }
-    elem.checked = false;
-  }
-  else{
-    for (const ch of check){
-      ch.checked = true;
-    }
-    elem.checked = true;
-  }
-})
 
 
 // category page
@@ -674,17 +669,15 @@ $producttable.on('check.bs.table uncheck.bs.table ' +
 
 $remove.click(function () {
       var ids = getProductIdSelections()
+      var products = new Array();
       for(i = 0; i <= ids.length-1; i++){
-        console.log(ids[i].slice(39, ids[i].length-6));
+        products.push(ids[i].slice(39, ids[i].length-6));
       }
-      $remove.prop('disabled', true)
+      $("#selected-product").val(products);
+      deleteProduct();
     })
 
-// $producttable.on("click-row.bs.table", function(row, $element, field){
-//   var link = $element[2];
-//   var lnk = link.slice(9, link.length-6)
-//   location.href = lnk
-// })
+
 $producttable.on("click-cell.bs.table", function(field, value, row, $element){
   var link = $element[2];
   if(value === 3){
@@ -693,6 +686,43 @@ $producttable.on("click-cell.bs.table", function(field, value, row, $element){
   }
 })
 
+
+// delete product
+
+function deleteProduct(products){
+    $.ajax({
+        url:"/control/product/delete-product/",
+        type:"POST",
+        data:{product: $("#selected-product").val()},
+        success: function(result) {
+          $remove.prop('disabled', true);
+          $('#product-table tr.selected').remove();
+          if (parseInt(result.total) === 1){
+            total = '1 product';
+          }
+          else{
+            total = `${result.total} products`;
+          }
+          PNotify.desktop.permission();
+          new PNotify({
+              title: 'Successfully deleted',
+              type: 'success',
+              text: `${total} deleted successfully. You can now add product.`,
+              addclass: 'stack-bottom-right',
+              desktop: {
+                  desktop: true,
+                  icon: 'assets/images/pnotify/success.png'
+              }
+          });
+        },
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        error: function(e){
+            console.error(JSON.stringify(e));
+        },
+    });
+};
 
 
 //! add product section
@@ -703,7 +733,7 @@ $producttable.on("click-cell.bs.table", function(field, value, row, $element){
 
 var savebtn = document.querySelectorAll("div[id=save-btn]");
 for(i = 0; i < savebtn.length; i++){
-  savebtn[i].addEventListener('click', function(){
+  savebtn[i].addEventListener('click', function(e){
     if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0){
       $("[for=add-general]").click();
     }
@@ -722,14 +752,11 @@ for(i = 0; i < savebtn.length; i++){
     else if($("#add-description").val().length === 0){
       $("[for=add-additional]").click();
     }
-    else{
-      $("[id=product-submit-button]").click();
-    }
   })
 }
 
 $("#color-pick").on("change", function(){
-  confirm.log($(this).val());
+  console.log($(this).val());
 })
 
 // product-name
@@ -762,41 +789,84 @@ Array.prototype.slice.call(forms)
       form.classList.add('was-validated')
 
       // select invalid input section
-      if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0){
+      if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0){
         $("[for=add-general]").click();
-        $(".basic").click();
+        if(!($(".basic").hasClass("selected"))){
+          $(".basic").addClass("selected");
+          $(".advance").removeClass("selected");
+        }
       }
       else if($("#add-category-select").val().length === 0){
         $("[for=add-category]").click();
-        $(".basic").click();
+        if(!($(".basic").hasClass("selected"))){
+          $(".basic").addClass("selected");
+          $(".advance").removeClass("selected");
+        }
       }
       else if($("#add-main-price").val().length === 0){
         $("[for=add-price]").click();
-        $(".basic").click();
+        if(!($(".basic").hasClass("selected"))){
+          $(".basic").addClass("selected");
+          $(".advance").removeClass("selected");
+        }
       }
       else if($("#add-thumbnail-input").val().length === 0){
         $("[for=add-images]").click();
-        $(".basic").click();
+        if(!($(".basic").hasClass("selected"))){
+          $(".basic").addClass("selected");
+          $(".advance").removeClass("selected");
+        }
       }
       else if($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0){
         $("[for=add-seo]").click();
-        $(".basic").click();
+        if(!($(".basic").hasClass("selected"))){
+          $(".basic").addClass("selected");
+          $(".advance").removeClass("selected");
+        }
       }
       else if($("#add-description").val().length === 0){
         $("[for=add-additional]").click();
-        $(".advance").click();
+        if(!($(".advance").hasClass("selected"))){
+          $(".basic").removeClass("selected");
+          $(".advance").addClass("selected");
+        }
       }
     }, false)
   })
 
 
+  // $("#filer_input1").on("change", function(){
+  //   var len = $(this)[0].jFiler.files_list.length;
+  //   // console.log($(this)[0].jFiler);
+  //   // console.log($(this)[0].jFiler.files_list[0]);
+  //   for (i = 0; i <= len+1; i++) {
+  //     console.log($(this)[0].jFiler.files_list[i]);
+  //   }
+  // })
+
   $("#filer_input1").on("change", function(){
-    var len = $(this)[0].jFiler.files_list.length;
-    // console.log($(this)[0].jFiler);
-    // console.log($(this)[0].jFiler.files_list[0]);
-    for (i = 0; i <= len+1; i++) {
-      console.log($(this)[0].jFiler.files_list[i]);
+    console.log($(this)[0].jFiler.current_file)
+  })
+
+
+  //! related product table
+  var rel_pro = new Array()
+  var related_product_input = $("input[name=related-products]");
+
+  $('#related-product-table').on('change', function () {
+    if ($('#related-product-table').bootstrapTable('getSelections').length === 0){
+      rel_pro = new Array();
+      related_product_input.val(rel_pro);
     }
+    else{
+      rel_pro = new Array();
+      $('#related-product-table').bootstrapTable('getSelections').forEach((element) => {
+        // console.log(element[2]);
+        rel_pro.push(element[2]);
+        related_product_input.val(rel_pro);
+      });
+    }
+
   })
 
 
@@ -808,18 +878,28 @@ Array.prototype.slice.call(forms)
   $("#facebook-enable").on("click", function(){
     if ($(this).is(":checked")){
       $(".facebook-login-field").removeClass("d-none")
+      $("#facebook-app-id").attr("required", true)
+      $("#facebook-app-secret").attr("required", true)
     }
     else{
       $(".facebook-login-field").addClass("d-none")
+      $("#facebook-app-id").removeAttr("required")
+      $("#facebook-app-secret").removeAttr("required")
     }
   })
 
   $("#google-enable").on("click", function(){
     if ($(this).is(":checked")){
       $(".google-login-field").removeClass("d-none")
+      $("#google-app-id").attr("required", true)
+      $("#google-app-secret").attr("required", true)
     }
     else{
       $(".google-login-field").addClass("d-none")
+      $("#google-app-id").removeAttr("required")
+      $("#google-app-secret").removeAttr("required")
     }
   })
+
+  $('.input-images').imageUploader();
 

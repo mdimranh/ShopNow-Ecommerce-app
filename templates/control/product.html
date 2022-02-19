@@ -10,7 +10,19 @@
     <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
     <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
     <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'control/dropzone/dropzone.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/basic.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.brighttheme.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.history.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
+
+    {% comment %} <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'control/image-uploader/image-uploader.min.css' %}" />
     <link
       rel="stylesheet"
       href="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
@@ -57,6 +69,7 @@
                 <button id="remove" class="btn btn-danger" disabled>
                   <i class="fa fa-trash"></i> Delete
                 </button>
+                <input type="hidden" id="selected-product">
               </div>
               <table
                 id="product-table"
@@ -104,7 +117,7 @@
                   <tr>
                     <td data-checkbox-enabled="false"></td>
                     <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
-                    <td ><a href="/control/product/edit-product/{{product.id}}"></a></td>
+                    <td data-field="ids"><a href="/control/product/edit-product/{{product.id}}"></a></td>
                     <td >{{product.title}}</td>
                     <td >{{product.category}}</td>
                     <td>{{product.price}}</span></td>
@@ -158,13 +171,15 @@
                     <li for="add-related-product"><p class="m-0 p-0">Related Product</p></li>
                     <li for="add-attributes"><p class="m-0 p-0">Attributes</p></li>
                     <li for="add-options"><p class="m-0 p-0">Options</p></li>
+                    <li for="add-hot-deal"><p class="m-0 p-0">Hot Deals</p></li>
                     <li for="add-additional"><p class="m-0 p-0">Additional</p></li>
                   </ul>
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2 needs-validation" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                <form class="mt-2 needs-validation add-pro-form" action="/control/product/" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
                   {% csrf_token %}
+                  <input type="hidden" name="unique" id="unique" value="{{user.id}}{% now "hidmy" %}unique{{csrf_token}}">
                   <div id="add-general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
@@ -418,12 +433,21 @@
                     </div>
                     <div class="row mb-3">
                       <h6>Additional Images</h6>
-                      <input
+                      {% comment %} <input
                         type="file"
                         name="add-additional-image"
                         id="filer_input1"
                         multiple
-                      />
+                      /> {% endcomment %}
+                      {% comment %} <div class="input-images"></div> {% endcomment %}
+                      <div class="dropzone mx-2" id="DidDropzone">
+                        <div class="dz-message d-flex flex-column align-items-center">
+                          <i class="fas fa-cloud-upload-alt fa-3x text-secondary"></i>
+                          <span class="my-2 text-secondary f-20">Drag & Drop files here</span>
+                          <small class="py-1 text-secondary">or</small>
+                          <div class="btn btn-success mt-2" style="width: 120px;">Browse File</div>
+                        </div>
+                      </div>
                     </div>
                     <div class="row mb-3">
                       <div class="col-xl-10">
@@ -521,18 +545,13 @@
                     </div>
                   </div>
                   <div id="add-related-product" class="product-form d-none">
-                    <h6 class="mt-2 text-primary fw-bolder h4">Attributes</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Related Products</h6>
                     <hr />
                     <br />
-                    <div id="toolbar1">
-                      <button id="remove" class="btn btn-danger" disabled>
-                        <i class="fa fa-trash"></i> Delete
-                      </button>
-                    </div>
+                    <input type="hidden" name="related-products" value="">
                     <table
-                      id="product-table"
+                      id="related-product-table"
                       data-toggle="table"
-                      data-toolbar="#toolbar1"
                       data-pagination="true"
                       data-page-list="[5, 25, 50, 100, ALL]"
                       data-search="true"
@@ -551,11 +570,11 @@
                           <th data-searchable="false">Thumbnail</th>
                           <th data-visible="false"></th>
                           <th data-sortable="true" data-valign="middle">Name</th>
-                          <th data-sortable="true" data-valign="middle" data-filter-control="select">Category</th>
+                          <th data-sortable="true" data-valign="middle">Category</th>
                           <th data-sortable="true" data-valign="middle">Price</th>
                           <th data-sortable="true" data-valign="middle">Active</th>
                           <th data-sortable="true" data-valign="middle">Quantity</th>
-                          <th data-sortable="true" data-valign="middle" data-filter-control="select">Created</th>
+                          <th data-sortable="true" data-valign="middle">Created</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -563,7 +582,7 @@
                         <tr>
                           <td data-checkbox-enabled="false"></td>
                           <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
-                          <td ><a href="/control/product/edit-product/{{product.id}}"></a></td>
+                          <td >{{product.id}}</td>
                           <td >{{product.title}}</td>
                           <td >{{product.category}}</td>
                           <td>{{product.price}}</span></td>
@@ -631,7 +650,7 @@
                       >
                       <div class="col-xl-10 d-flex justify-content-between color-picker-section">
                         <div class="d-flex flex-wrap" id="color-picker">
-                          <input class="mx-1 my-1" id="color-pick" type="color" />
+                          <input class="mx-1 my-1" id="color-pick" name="color" type="color" />
                         </div>
                         <div class="btn btn-outline-success" id="add-color">
                           Add New Color
@@ -703,13 +722,14 @@
                               type="text"
                               class="form-control"
                               id="option-name"
+                              name="option-name"
                               placeholder="Option name"
                             />
                           </div>
                           <div class="col-sm-4">
-                            <select id="discount-type">
-                              <option value="2">Dropdown</option>
-                              <option value="1">Radio</option>
+                            <select id="discount-type" name="option-style">
+                              <option value="dropdown">Dropdown</option>
+                              <option value="radio">Radio</option>
                             </select>
                           </div>
                         </div>
@@ -727,6 +747,7 @@
                           </div>
                         </div> -->
                         <div class="options-option">
+                          <input type="hidden" id="option-count" name="option-count" value="1">
                           <div class="row mb-3 mx-2">
                             <label
                               for="inputEmail3"
@@ -737,7 +758,7 @@
                               <input
                                 type="text"
                                 class="form-control"
-                                id="option-name"
+                                name="options-option-name"
                                 placeholder="Label"
                               />
                             </div>
@@ -745,6 +766,7 @@
                               <input
                                 type="number"
                                 class="form-control"
+                                name="option-price"
                                 placeholder="Price"
                               />
                               <div class="btn col-sm-1">
@@ -773,6 +795,101 @@
                     </div>
                     <div class="row mb-3">
                       <div class="col-xl-10">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="add-hot-deal" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Hot Deals</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Date Range</label
+                      >
+                      <div class="col-sm-5">
+                        <input
+                          id="coupon-start"
+                          class="form-control"
+                          name="hot-deal-start"
+                          type="text"
+                          placeholder="Start Date"
+                        />
+                      </div>
+                      <div class="col-sm-5">
+                        <input
+                          id="coupon-end"
+                          class="form-control"
+                          name="hot-deal-end"
+                          type="text"
+                          placeholder="End Date"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Discount*</label
+                      >
+                      <div class="col-xl-10">
+                        <input type="number" class="form-control" name="hot-deal-discount" />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Discount Type*</label
+                      >
+                      <div class="col-xl-10">
+                        <select id="discount-type" name="hot-deal-discount-type">
+                          <option value="percentage" selected>Percentage</option>
+                          <option value="fixed">Fixed</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Free Shipping</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="hot-deal-free-shipping" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Allow free shipping</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
                         <button
                           id="save-btn"
                           type="submit"
@@ -1507,7 +1624,6 @@
     {% block script %}
     {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
     {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
-    <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
@@ -1525,8 +1641,25 @@
     <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>
     <script src="{% static 'control/js/form-masking/form-mask.js' %}"></script>
     <script src="{% static 'control/jquery.filer/js/jquery.filer.min.js' %}"></script>
-    <script src="{% static 'control/filer/custom-filer.js' %}"></script>
+    {% comment %} <script src="{% static 'control/filer/custom-filer.js' %}"></script> {% endcomment %}
     <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
+    <script src="{% static 'control/js/custom-picker.js' %}"></script>
     <script src="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
     <script src="{% static 'control/filer/jquery.fileuploads.init.js' %}"></script>
+    <script src="{% static 'control/image-uploader/image-uploader.min.js' %}"></script>
+    <script src="{% static 'control/dropzone/dist/dropzone.js' %}"></script>
+    <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.desktop.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.confirm.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.callbacks.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.animate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.history.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.mobile.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.nonblock.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/notify.js' %}"></script>
+
     {% endblock script %}

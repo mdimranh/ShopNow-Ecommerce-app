@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 from PIL import Image
-
+import json
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 from django.template.defaultfilters import slugify
 
@@ -85,12 +86,15 @@ class Product(models.Model):
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_groups')
     subcategory = models.ForeignKey(Subcategory, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_subcategorys')
     title = models.CharField(max_length=200)
-    keywords = models.CharField(max_length=100)
     image = models.CharField(max_length=500, blank = True, null=True)
     main_price = models.DecimalField(decimal_places=2, max_digits=15)
     discount = models.DecimalField(decimal_places=0, max_digits=3, blank=True, null=True)
     discount_type = models.CharField(max_length=10, choices=dis_type, default="Percentage")
-    hot_deal = models.DateTimeField(blank=True, null=True)
+    hot_deal_start = models.DateField(blank=True, null=True)
+    hot_deal_end = models.DateField(blank=True, null=True)
+    hot_deal_discount = models.IntegerField(blank=True, null=True)
+    hot_deal_discount_type = models.CharField(max_length=50, blank=True, null=True)
+    hot_deal_free_shipping = models.BooleanField(default=False)
     amount = models.IntegerField(default=3)
     short_info = models.TextField()
     description = RichTextUploadingField()
@@ -98,13 +102,21 @@ class Product(models.Model):
     shipping_info = RichTextUploadingField()
     size = models.CharField(max_length=200, null=True, blank=True)
     color = models.CharField(max_length=500, null=True, blank=True)
+    # option = models.TextField(blank=True, null=True)
+    option = ArrayField(
+        ArrayField(
+            models.TextField(blank=True, null=True)
+        ), blank=True, null=True
+    )
     enable = models.BooleanField(default=True)
     slug = models.SlugField(null=True, unique=True)
     meta_title = models.CharField(max_length=200, null=True, blank=True)
     meta_keywords = models.CharField(max_length=200, null=True, blank=True)
     meta_descriptions = models.CharField(max_length=500, null=True, blank=True)
+    related_product = models.CharField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    unique = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -114,7 +126,44 @@ class Product(models.Model):
             return self.main_price - (self.main_price * self.discount / 100)
         else:
             return 0
+
+    def pro_color(self):
+        return self.color[2:-2].split("', '")
+
+    def pro_size(self):
+        return self.size.split(',')
     
+    def related_pro(self):
+        related_p = []
+        if self.related_product != None and len(self.related_product) > 0:
+            for id in self.related_product.split(','):
+                pro = Product.objects.get(id = id)
+                related_p.append(pro)
+        return related_p
+
+    def pro_option(self):
+        no_option = False
+        c = 0
+        for i in self.option:
+            print("Faka -------------->",len(i[2]))
+            lst = []
+            arrange = str(i[2]).replace('), (', ',').replace('[(', '').replace(')]', '').replace(' ', '').replace("'", "").split(',')
+            for j in range(0, len(arrange), 2):
+                if arrange[j] == '':
+                    no_option = True
+                lst.append((arrange[j], arrange[j+1]))
+            self.option[c][2] = lst
+            lst = []
+            c += 1
+        if no_option:
+            True
+        else:
+            return self.option
+        
+
+    def addtional_images(self):
+        return Images.objects.filter(unique = self.unique)
+
     def price_per(self):
         if self.main_price > 0:
             return f"{self.main_price - (self.main_price * self.discount / 100)} (-{self.discount}%)"
@@ -127,12 +176,6 @@ class Product(models.Model):
 
     def total_review(self):
         return Review.objects.filter(product=self).count()
-
-    # def ImageUrl(self):
-    #     if self.image:
-    #         return self.image.url
-    #     else:
-    #         return ""
 
     def image_tag(self):
         return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image))
@@ -148,15 +191,19 @@ class Product(models.Model):
     #             img.save(self.image.path)
 
 class Images(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name="images", null=True, blank=True)
     title = models.CharField(max_length=200, blank=True)
-    image = models.ImageField(blank=True, upload_to='product/')
+    image = models.TextField(blank=True)
+    unique = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.product.title
+        return self.unique
+
+    def pro(self):
+        return Product.objects.get(unique=self.unique).title
 
     def image_tag(self):
-        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
+        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image))
     image_tag.short_description = 'Image'
 
 class RecentlyView(models.Model):

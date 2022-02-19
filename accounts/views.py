@@ -46,7 +46,7 @@ def Account(request):
                         "id": item.id,
                         "category": item.product.category.name,
                         "title": item.product.title,
-                        "image": item.product.image.url,
+                        "image": item.product.image,
                         "main_price": str(item.product.main_price),
                         "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
                         "discount": str(item.product.discount),

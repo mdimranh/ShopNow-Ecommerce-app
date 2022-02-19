@@ -16445,6 +16445,19 @@ tbody .product:hover{
 }
 
 
+/* product details */
+
+i.product-color{
+  border-radius: 50%;
+}
+
+i.product-color:hover{
+  cursor: pointer;
+}
+
+i.product-color.select{
+  border: 1px solid gray;
+}
 
 
 /*! rating */

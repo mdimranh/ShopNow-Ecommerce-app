@@ -180,6 +180,7 @@
                     </div>
                   </form>
                   <form id="facebook" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Facebook</h6>
                     <hr />
                     <br />
@@ -192,8 +193,8 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="facebook-enable" type="checkbox" name="enable" />
-                            <span class="cr">
+                            <input id="facebook-enable" type="checkbox" name="facebook-enable" {% if facebook_login.status == True %}checked{% endif %} />
+                            <span class="cr mt-1">
                               <i
                                 class="
                                   cr-icon
@@ -207,7 +208,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3 facebook-login-field d-none">
+                    <div class="row mb-3 facebook-login-field {% if facebook_login.status != True %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -217,15 +218,16 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="app-id"
-                          name="name"
+                          id="facebook-app-id"
+                          name="facebook-app-id"
                           placeholder="App ID"
+                          value="{{facebook_login.client_id}}"
                           required
                         />
                         <div class="invalid-feedback">Please enter App ID</div>
                       </div>
                     </div>
-                    <div class="row mb-3 facebook-login-field d-none">
+                    <div class="row mb-3 facebook-login-field {% if facebook_login.status != True %}d-none{% endif %}">
                       <label
                         for="app-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -235,10 +237,11 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="app-secret"
-                          name="name"
+                          id="facebook-app-secret"
+                          name="facebook-app-secret"
                           placeholder="App ID"
                           required
+                          value="{{facebook_login.secret}}"
                         />
                         <div class="invalid-feedback">Please enter App Secret</div>
                       </div>
@@ -262,20 +265,21 @@
                     </div>
                   </form>
                   <form id="google" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Google</h6>
                     <hr />
                     <br />
                     <div class="row mb-1">
                       <label
-                        for="facebook-enable"
+                        for="google-enable"
                         class="col-xl-2 col-form-label d-none d-xl-block"
                         >Status</label
                       >
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="google-enable" type="checkbox" name="enable" />
-                            <span class="cr">
+                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login.status == True %}checked{% endif %} />
+                            <span class="cr mt-1">
                               <i
                                 class="
                                   cr-icon
@@ -289,7 +293,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3 google-login-field d-none">
+                    <div class="row mb-3 google-login-field {% if google_login.status != True %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -299,15 +303,16 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="app-id"
-                          name="name"
+                          id="google-app-id"
+                          name="google-app-id"
                           placeholder="App ID"
                           required
+                          value="{{google_login.client_id}}"
                         />
                         <div class="invalid-feedback">Please enter App ID</div>
                       </div>
                     </div>
-                    <div class="row mb-3 google-login-field d-none">
+                    <div class="row mb-3 google-login-field  {% if google_login.status != True %}d-none{% endif %}">
                       <label
                         for="app-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -317,10 +322,11 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="app-secret"
-                          name="name"
+                          id="google-app-secret"
+                          name="google-app-secret"
                           placeholder="App ID"
                           required
+                          value="{{google_login.secret}}"
                         />
                         <div class="invalid-feedback">Please enter App Secret</div>
                       </div>

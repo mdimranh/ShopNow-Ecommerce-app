@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/owl-carousel/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/magnific-popup/magnific-popup.css' %}">
     <!-- Main CSS File -->
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"s>
     <link rel="stylesheet" href="{% static 'assets/css/plugins/nouislider/nouislider.css' %}">
 {% endblock extra_css %}
 
@@ -45,8 +45,11 @@
                                     </a>
                                 </figure><!-- End .product-main-image -->
                                 <div id="product-zoom-gallery" class="product-image-gallery">
-                                    {% for image in images %}
-                                    <a class="product-gallery-item active" href="#" data-image="{{image.image}}" data-zoom-image="{{image.image.url}}">
+                                    <a class="product-gallery-item active" href="#" data-image="{{product.image}}" data-zoom-image="{{product.image}}">
+                                        <img src="{{product.image}}" alt="product side">
+                                    </a>
+                                    {% for image in product.addtional_images %}
+                                    <a class="product-gallery-item active" href="#" data-image="{{image.image}}" data-zoom-image="{{image.image}}">
                                         <img src="{{image.image}}" alt="product side">
                                     </a>
                                     {% endfor %}
@@ -72,24 +75,39 @@
                             <div class="details-filter-row details-row-size">
                                 <label>Color:</label>
                                 <div class="product-nav product-nav-thumbs">
-                                    <i class="fas fa-circle fa-2x px-2"></i>
-                                    <i class="fas fa-circle fa-2x px-2"></i>
-                                    <i class="fas fa-circle fa-2x px-2"></i>
+                                    {% for color in product.pro_color %}
+                                        <i class="fas fa-circle fa-2x px-1 py-1 mx-2 product-color" style="color: {{color}};"></i>
+                                    {% endfor %}
                                 </div><!-- End .product-nav -->
                             </div><!-- End .details-filter-row -->
+                            {% if product.size|length > 0 %}
                             <div class="details-filter-row details-row-size">
                                 <label for="size">Size:</label>
                                 <div class="select-custom">
                                     <select name="size" id="size" class="form-control">
-                                        <option value="#" selected="selected">Select a size</option>
-                                        <option value="s">Small</option>
-                                        <option value="m">Medium</option>
-                                        <option value="l">Large</option>
-                                        <option value="xl">Extra Large</option>
+                                        {% for size in product.pro_size %}
+                                            <option value="#" {% if forloop.counter == 1 %}selected{% endif %}>{{size}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div><!-- End .select-custom -->
-                                <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
+                                {% comment %} <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a> {% endcomment %}
                             </div><!-- End .details-filter-row -->
+                            {% endif %}
+                            {% if product.pro_option %}
+                            {% for op in product.pro_option %}
+                            <div class="details-filter-row details-row-size">
+                                <label for="size">{{op.0}}</label>
+                                <div class="select-custom">
+                                    <select name="size" id="size" class="form-control">
+                                        {% for a, b in op.2 %}
+                                            <option value="#" {% if forloop.counter == 1 %}selected{% endif %}>{{a}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div><!-- End .select-custom -->
+                                {% comment %} <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a> {% endcomment %}
+                            </div><!-- End .details-filter-row -->
+                            {% endfor %}
+                            {% endif %}
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
@@ -231,11 +249,12 @@
                         }
                     }
                 }'>
+                {% for pro in product.related_pro %}
                 <div class="product product-7 text-center">
                     <figure class="product-media">
                         <span class="product-label label-new">New</span>
                         <a href="product.html">
-                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                            <img src="{{pro.image}}" alt="Product image" class="product-image">
                         </a>
                         <div class="product-action-vertical">
                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
@@ -248,11 +267,11 @@
                     </figure><!-- End .product-media -->
                     <div class="product-body">
                         <div class="product-cat">
-                            <a href="#">{{product.category.name}}</a>
+                            <a href="#">{{pro.category.name}}</a>
                         </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
+                        <h3 class="product-title"><a href="product.html">{{pro.title}}</a></h3><!-- End .product-title -->
                         <div class="product-price">
-                            {{product.price}}
+                            {{pro.price}}
                         </div><!-- End .product-price -->
                         <div class="ratings-container">
                             <div class="ratings">
@@ -261,7 +280,7 @@
                             <span class="ratings-text">( 2 Reviews )</span>
                         </div><!-- End .rating-container -->
                         <div class="product-nav product-nav-thumbs">
-                            {% for image in images %}
+                            {% for image in pro.additional_images %}
                             <a href="#" class="active">
                                 <img src="{{image.image}}" alt="product desc">
                             </a>
@@ -269,6 +288,7 @@
                         </div><!-- End .product-nav -->
                     </div><!-- End .product-body -->
                 </div><!-- End .product -->
+                {% endfor %}
             </div><!-- End .owl-carousel -->
         </div><!-- End .container -->
     </div><!-- End .page-content -->

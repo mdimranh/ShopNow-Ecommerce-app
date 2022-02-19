@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.models import User, auth
 
-from account.models import Profile
+from accounts.models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from order.models import ShopCart
