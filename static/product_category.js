@@ -63,3 +63,35 @@ jQuery(function($){
         });
     }); 
 });
+
+// $("#menu_category").on("click", function(){
+//     $("#menu_category").on("change",function(){
+//         if($("#menu_category").val().length === 0){
+//             data = 'null'
+//         }
+//         else{
+//             data = $("#menu_category").val()
+//         }
+//        $.ajax({
+//            url:"/control/productgroups/",
+//            type:"POST",
+//            data:{category_id: data,},
+//            success: function(result) {
+//                 opt = []
+//                 result.forEach(function(data){
+//                     opt.push({label: data.name, value: data.id})
+//                 })
+//                 VirtualSelect.init({
+//                     ele: "#menu_group",
+//                     options: opt
+//                 })
+//            },
+//            headers: {
+//                "X-CSRFToken": getCookie("csrftoken")
+//            },
+//            error: function(e){
+//                console.error(JSON.stringify(e));
+//            },
+//        });
+//     });
+// })

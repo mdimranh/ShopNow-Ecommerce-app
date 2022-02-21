@@ -118,7 +118,7 @@ class ProductGroupList(APIView):
     permission_classes = [IsAuthenticated,]
     def post(self, request, format = None):
         if 'category_id' in request.POST:
-            category = request.data['category_id']
+            category = request.POST['category_id']
             group = []
             if category:
                 groups = Category.objects.get(id = category).groups.all()

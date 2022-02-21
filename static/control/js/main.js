@@ -407,45 +407,21 @@ function getCookie(name) {
 }
 
 VirtualSelect.init({
+  ele:".hideClear.hideSearch",
+  search: false,
+  hideClearButton: true
+})
+
+VirtualSelect.init({
+  ele:".hideClear",
+  search: true,
+  hideClearButton: true
+})
+
+VirtualSelect.init({
   ele: "select",
-  // options: dis_type,
-  // autoSelectFirstOption: true
+  search: true
 });
-
-// VirtualSelect.init({
-//   ele: "#products-select",
-// });
-
-// VirtualSelect.init({
-//   ele: "#exclude-products-select",
-//   // multiple: true
-// });
-
-// VirtualSelect.init({
-//   ele: "#categories-select",
-//   // multiple: true
-// });
-
-// VirtualSelect.init({
-//   ele: "#exclude-categories-select",
-//   // multiple: true
-// });
-
-// VirtualSelect.init({
-//   ele: "#category-select",
-//   // multiple: true
-//   autoSelectFirstOption: false
-// });
-
-// VirtualSelect.init({
-//   ele: "#group-select",
-//   // multiple: true
-// });
-
-// VirtualSelect.init({
-//   ele: "#subcategory-select",
-//   // multiple: true
-// });
 
 $("#add-category-select").on('change', function(){
     $.ajax({
@@ -901,5 +877,48 @@ Array.prototype.slice.call(forms)
     }
   })
 
-  $('.input-images').imageUploader();
+  //* ----------------payment method-------------
+  // paypal field
+
+  $("#paypal-enable").on("click", function(){
+    alert("Yes");
+    if ($(this).is(":checked")){
+      $(".paypal-field").removeClass("d-none")
+      $("#paypal-client-id").attr("required", true)
+      $("#paypal-secret").attr("required", true)
+    }
+    else{
+      $(".paypal-field").addClass("d-none")
+      $("#paypal-client-id").removeAttr("required")
+      $("#paypal-secret").removeAttr("required")
+    }
+  })
+
+
+// all countries
+
+// countrys = [];
+// for (const country in countries) {
+//   countrys.push({ label: countries[country].name, value: countries[country].name });
+// }
+// VirtualSelect.init({
+//   ele: "#country-select",
+//   options: countrys,
+//   search: true,
+// });
+
+$("#country-select").on("click", function(){
+  $("#country-select").on("change", function(){
+    select = []
+    selected = $("#country-select").val();
+    for (var name in selected){
+      select.push({ label: selected[name], value: selected[name] });
+    }
+    VirtualSelect.init({
+      ele: "#default-country-select",
+      options: select,
+      search: true,
+    });
+  })
+})
 

@@ -7,6 +7,7 @@ import json
 
 from solo.models import SingletonModel
 from fontawesome_5.fields import IconField
+from django.contrib.postgres.fields import ArrayField
 
 class SiteConfiguration(SingletonModel):
 	name = models.CharField(max_length=255, default='Buy Now')
@@ -177,12 +178,28 @@ menu_style = (
 class Menus(models.Model):
 	name = models.CharField(max_length=100)
 	style = models.CharField(max_length=200, choices=menu_style)
-	categorys = models.ManyToManyField(Category, blank=True)
-	groups = models.ManyToManyField(Group, blank=True)
-	icon = IconField()
+	categorys = models.ManyToManyField(Category)
+	groups = models.ManyToManyField(Group)
+	subcategorys = models.ManyToManyField(Subcategory)
+	icon = models.CharField(max_length=200)
+	active = models.BooleanField(default=True)
 
 	def __str__(self):
 		return self.name
+
+	def cat_group(self):
+		group = []
+		for cat in self.categorys.all():
+			for grp in cat.groups.all():
+				group.append(grp)
+		return group
+
+	def group_subcat(self):
+		subcat = []
+		for grp in self.groups.all():
+			for sub_cat in grp.subcategorys.all():
+				subcat.append(sub_cat)
+		return subcat
 	
 
 class ProductCarousel(models.Model):

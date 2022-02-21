@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from product.models import Product
@@ -28,9 +28,33 @@ def Dashboard(request):
     return render(request, "control/index.html", context)
 
 def Menu(request):
+    if request.method == 'POST':
+        enable = True if request.POST['menu-enable'] == 'on' else False
+        menu = Menus(
+            name = request.POST['menu-name'],
+            style = request.POST['menu-style'],
+            icon = request.POST['menu-icon'],
+            active = enable
+        )
+        menu.save()
+        for i in request.POST.getlist('menu-category')[0].split(','):
+            menu.categorys.add(Category.objects.get(id = i))
+        for i in request.POST.getlist('menu-group')[0].split(','):
+            menu.groups.add(Group.objects.get(id = i))
+        for i in request.POST.getlist('menu-subcategory')[0].split(','):
+            menu.subcategorys.add(Subcategory.objects.get(id = i))
+        menu.save()
+        return redirect(request.path_info)
+
     allmenus = Menus.objects.all()
+    categorys = Category.objects.all()
+    groups = Group.objects.all()
+    subcategories = Subcategory.objects.all()
     context = {
         "menus": allmenus,
+        'categorys': categorys,
+        'groups': groups,
+        'subcategories': subcategories,
         'menu_sec': True
     }
     return render(request, "control/menu.html", context)

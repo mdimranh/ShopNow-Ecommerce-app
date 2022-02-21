@@ -1,5 +1,6 @@
 {% extends 'control/base.html' %}
 {% load static %}
+{% load countries %}
 {% block title %}{{site_config.name}} | Settings{% endblock title %}
 
     {% block style %}
@@ -79,65 +80,143 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                  <form id="general" class="product-form needs-validation" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                  <form id="general" class="product-form needs-validation" enctype='multipart/form-data' id="general-form" method="post" novalidate>
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
                     <br />
                     <div class="row mb-3">
                       <label
-                        for="add-product-name"
+                        for="country-select"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Name*</label
+                        >Supported Countries</label
                       >
                       <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-product-name"
-                          name="name"
-                          placeholder="Name"
-                          required
-                        />
-                        <div class="invalid-feedback">Please enter name</div>
+                        <select class="form-select" id="country-select" name="country-select" required multiple>
+                          {% get_countries as countries %}
+                          {% for country in countries %}
+                            <option value="{{country.name}}">{{country.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select Country</div>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
-                        for="add-short-desc"
+                        for="default-country-select"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Short Descriptions*</label
+                        >Default Countries</label
                       >
                       <div class="col-xl-10">
-                        <textarea
-                          class="form-control"
-                          name="short-desc"
-                          id="add-short-desc"
-                          placeholder="Description"
-                          required
-                        ></textarea>
-                        <div class="invalid-feedback">Please enter description</div>
+                        <select class="form-select" id="default-country-select" name="default-country" required>
+                          {% for country in countries %}
+                            <option value="{{country.name}}">{{country.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select Country</div>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
-                        for="add-quantity"
+                        for="country-select"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Quantity*</label
+                        >Default Timezone</label
                       >
                       <div class="col-xl-10">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="add-quantity"
-                          name="quantity"
-                          min="1"
-                          value="5"
-                          required
-                        />
-                        <div class="invalid-feedback">Please enter Quantity</div>
+                        <select class="form-select" id="country-select" name="support-country" required>
+                          {% for timezone in timezones %}
+                            <option value="{{timezone}}">{{timezone}}</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select a Timezone</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="country-select"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Customer Roles</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="form-select" id="country-select" name="support-country" required multiple>
+                          <option value="Bangladesh">Bangladesh</option>
+                          <option value="Pakistan">Pakistan</option>
+                        </select>
+                        <div class="invalid-feedback">Please Select Country</div>
                       </div>
                     </div>
                     <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Welcome Email</label
+                      >
+                      <div class="col-xl-10 mt-2">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="enable" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Send welcome email after registration</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Order Status Email</label
+                      >
+                      <div class="col-xl-10 mt-2">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="enable" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Send email after order status is changed</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Invoice Email</label
+                      >
+                      <div class="col-xl-10 mt-2">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="enable" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Send invoice email to the customer after checkout</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    {% comment %} <div class="row mb-1">
                       <label
                         for="inputEmail3"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -160,7 +239,7 @@
                           </label>
                         </div>
                       </div>
-                    </div>
+                    </div> {% endcomment %}
                     <div class="row mb-3">
                       <div class="col-xl-10 offset-lg-2">
                         <button
@@ -239,7 +318,7 @@
                           class="form-control"
                           id="facebook-app-secret"
                           name="facebook-app-secret"
-                          placeholder="App ID"
+                          placeholder="Secret"
                           required
                           value="{{facebook_login.secret}}"
                         />
@@ -349,6 +428,91 @@
                       </div>
                     </div>
                   </form>
+                  <form id="paypal" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Paypal</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="paypal-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Status</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="paypal-enable" type="checkbox" name="paypal-enable" {% if paypal.status == True %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Paypal</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 paypal-field {% if paypal.status != True %}d-none{% endif %}">
+                      <label
+                        for="paypal-client-id"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Client ID</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="paypal-client-id"
+                          name="paypal-client-id"
+                          placeholder="App ID"
+                          required
+                          value="{{paypal.client_id}}"
+                        />
+                        <div class="invalid-feedback">Please enter Client ID</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 paypal-field  {% if paypal.status != True %}d-none{% endif %}">
+                      <label
+                        for="paypal-secret"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Secret</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="paypal-secret"
+                          name="paypal-secret"
+                          placeholder="Secret"
+                          required
+                          value="{{paypal.secret}}"
+                        />
+                        <div class="invalid-feedback">Please enter Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
               </div>
             </div>
           </div>
@@ -380,4 +544,5 @@
     <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
     <script src="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
     <script src="{% static 'control/filer/jquery.fileuploads.init.js' %}"></script>
+    <script src="{% static 'control/countries.json' %}"></script>
     {% endblock script %}

@@ -3,6 +3,7 @@ from product.models import Product, Category
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from allauth.socialaccount.models import SocialApp
+import pytz
 
 def SettingView(request):
     if request.method == 'POST':
@@ -48,6 +49,7 @@ def SettingView(request):
     context = {
         "facebook_login": facebook_login,
         "google_login": google_login,
+        'timezones': pytz.all_timezones,
         "setting_sec": True,
     }
     return render(request, "control/settings.html", context)

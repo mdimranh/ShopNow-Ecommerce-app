@@ -30,6 +30,7 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static 'assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/fontawesome5/css/all.css' %}">
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
@@ -331,42 +332,64 @@
                                     {% for menu in menus %}
                                     {% if menu.style == 'mega' %}
                                     <li>
-                                        <a href="category.html" class="sf-with-ul">{{menu.icon.as_html}}{{menu.name}}</a>
+                                        <a href="category.html" class="sf-with-ul"><i class="{{menu.icon}}"></i>{{menu.name}}</a>
 
                                         <div class="megamenu megamenu-md">
                                         <div class="row no-gutters">
                                             <div class="col-md-12">
                                                 <div class="menu-col">
                                                     <div class="row">
-                                                        {% if menu.categorys.all|length > 0 %}
                                                         {% for category in menu.categorys.all %}
-                                                            {% for group in category.groups.all %}
-                                                            {% if group.subcategorys.all|length > 0 %}
-                                                            <div class="col-md-6">
-                                                                <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
-                                                                <ul>
-                                                                    {% for subcategory in group.subcategorys.all %}
-                                                                    <li><a href="#">{{subcategory.name}}</a></li>
-                                                                    {% endfor %}
-                                                                </ul>
-                                                            </div><!-- End .col-md-6 -->
+                                                            {% if category.groups.all|length > 0 %}
+                                                                <div class="col-md-6">
+                                                                    <a href=""><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
+                                                                    {% comment %} {% if category.groups.all|length > 0 %} {% endcomment %}
+                                                                    <ul>
+                                                                        {% for group in category.groups.all %}
+                                                                        <li><a href="#">{{group.name}}</a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                    {% comment %} {% endif %} {% endcomment %}
+                                                                </div><!-- End .col-md-6 -->
                                                             {% endif %}
-                                                            {% endfor %}
                                                         {% endfor %}
-                                                        {% elif menu.groups.all|length > 0 %}
-                                                            {% for group in menu.groups.all %}
-                                                            {% if group.subcategorys.all|length > 0 %}
+                                                        {% for group in menu.groups.all %}
+                                                            {% if group not in manu.cat_group %}
+                                                                {% if group.subcategorys.all|length > 0 %}
+                                                                    <div class="col-md-6">
+                                                                        <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
+                                                                        <ul>
+                                                                            {% for subcat in group.subcategorys.all %}
+                                                                            <li><a href="#">{{subcat.name}}</a></li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div><!-- End .col-md-6 -->
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% for category in menu.categorys.all %}
+                                                            {% if category.groups.all|length == 0 %}
+                                                                <div class="col-md-6">
+                                                                    <a href=""><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
+                                                                </div><!-- End .col-md-6 -->
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% for group in menu.groups.all %}
+                                                            {% if group not in manu.cat_group %}
+                                                                {% if group.subcategorys.all|length == 0 %}
+                                                                    <div class="col-md-6">
+                                                                        <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
+                                                                    </div><!-- End .col-md-6 -->
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% for subcat in menu.subcategorys.all %}
+                                                            {% if subcat not in menu.group_subcat %}
                                                             <div class="col-md-6">
-                                                                <div class="menu-title">{{group.name}}</div><!-- End .menu-title -->
-                                                                <ul>
-                                                                    {% for subcategory in group.subcategorys.all %}
-                                                                    <li><a href="#">{{subcategory.name}}</a></li>
-                                                                    {% endfor %}
-                                                                </ul>
+                                                                <a href=""><div class="menu-title">{{subcat.name}}</div></a><!-- End .menu-title -->
                                                             </div><!-- End .col-md-6 -->
                                                             {% endif %}
-                                                            {% endfor %}
-                                                        {% endif %}
+                                                        {% endfor %}
                                                     </div><!-- End .row -->
                                                 </div><!-- End .menu-col -->
                                             </div><!-- End .col-md-8 -->
@@ -387,11 +410,11 @@
                                     </li>
                                     {% else %}
                                     <li>
-                                        <a href="#" class="sf-with-ul">{{menu.icon.as_html}}{{menu.name}}</a>
+                                        <a href="#" class="sf-with-ul"><i class="{{menu.icon}}"></i>{{menu.name}}</a>
 
                                         <ul>
-                                            {% if menu.categorys.all|length > 0 %}
-                                                {% for category in menu.categorys.all %}
+                                            {% comment %} {% if menu.categorys|length > 0 %} {% endcomment %}
+                                                {% for category in menu.category %}
                                                     {% for group in category.groups.all %}
                                                     {% if group.subcategorys.all|length > 0 %}
                                                     <li>
@@ -406,8 +429,8 @@
                                                     {% endif %}
                                                     {% endfor %}
                                                 {% endfor %}
-                                            {% elif menu.groups.all|length > 0 %}
-                                                {% for group in menu.groups.all %}
+                                            {% comment %} {% elif menu.groups|length > 0 %} {% endcomment %}
+                                                {% for group in menu.group %}
                                                 {% if group.subcategorys.all|length > 0 %}
                                                 <li>
                                                     <a href="about.html" class="sf-with-ul">{{group.name}}</a>
@@ -419,7 +442,7 @@
                                                 </li>
                                                 {% endif %}
                                                 {% endfor %}
-                                            {% endif %}
+                                            {% comment %} {% endif %} {% endcomment %}
                                         </ul>
                                     </li>
                                     {% endif %}

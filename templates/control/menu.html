@@ -47,7 +47,7 @@
                   <tr>
                     <td class="fw-bold"><a class="text-decoration-none" href="/control/menu/{{menu.id}}">{{menu.name}}</a></td>
                     <td>{{menu.style}}</td>
-                    <td>{{menu.icon.as_html}}</td>
+                    <td><i class="{{menu.icon}}"></i></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -62,16 +62,15 @@
             </div>
           </div>
         </div>
-        <div class="add-coupon-sec d-none">
+        <div class="add-coupon-sec d-none card">
           <div class="container-fluid">
             <div class="row m-2 p-3 bg-white">
-              <div class="product-menu col-xl-3 col-lg-4">
+              {% comment %} <div class="product-menu col-xl-3 col-lg-4">
                 <div class="menu-sec">
                   <div
                     class="menu d-flex flex-fill justify-content-between selected"
                   >
-                    <span>Coupon Menu</span>
-                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
+                    <span>Menus Menu</span>
                   </div>
                   <ul class="submenu">
                     <li class="selected" for="coupon-general">
@@ -85,16 +84,17 @@
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> {% endcomment %}
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2" id="add-category-form">
+                <form class="mt-2" id="add-category-form" method="post">
+                  {% csrf_token %}
                   <div id="coupon-general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
                     <br />
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="menu-name"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Name*</label
                       >
@@ -102,61 +102,88 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
+                          name="menu-name"
+                          id="menu-name"
                           placeholder="Name"
                         />
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="menu-style"
                         class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Code*</label
+                        >Style</label
                       >
                       <div class="col-sm-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="name"
-                          placeholder="Coupon Code"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Font Icon</label
-                      >
-                      <div class="col-sm-10">
-                        <select id="icon-select">
+                        <select name="menu-style" class="hideClear hideSearch" name="menu-style" id="menu-style">
+                          <option value="dropdown">Dropdown</option>
+                          <option value="mega">Mega Menu</option>
                         </select>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="icon-select"
                         class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Value*</label
+                        >Icon</label
                       >
                       <div class="col-sm-10">
-                        <input
-                          type="number"
-                          class="form-control"
-                          name="quantity"
-                        />
+                        <select id="icon-select" name="menu-icon">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="menu-category"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Categories</label
+                      >
+                      <div class="col-sm-10">
+                        <select name="menu-category" id="menu-category" multiple>
+                          {% for category in categorys %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="menu-group"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Groups</label
+                      >
+                      <div class="col-sm-10">
+                        <select name="menu-group" id="menu-group" multiple>
+                          {% for group in groups %}
+                            <option value="{{group.id}}">{{group.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="menu-subcategory"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Subcategories</label
+                      >
+                      <div class="col-sm-10">
+                        <select name="menu-subcategory" id="menu-subcategory" multiple>
+                          {% for subcategory in subcategories %}
+                            <option value="{{subcategory.id}}">{{subcategory.name}}</option>
+                          {% endfor %}
+                        </select>
                       </div>
                     </div>
                     <div class="row mb-1">
                       <label
                         for="inputEmail3"
                         class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Free Shipping</label
+                        >Status</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" value="" />
+                            <input id="enable" type="checkbox" value="" name="menu-enable"/>
                             <span class="cr">
                               <i
                                 class="
@@ -166,198 +193,9 @@
                                 "
                               ></i>
                             </span>
-                            <span>Allow free shipping</span>
+                            <span>Enable this Menu</span>
                           </label>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Date Range</label
-                      >
-                      <div class="col-sm-5">
-                        <input
-                          id="coupon-start"
-                          class="form-control"
-                          type="text"
-                          placeholder="Start Date"
-                        />
-                      </div>
-                      <div class="col-sm-5">
-                        <input
-                          id="coupon-end"
-                          class="form-control"
-                          type="text"
-                          placeholder="End Date"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col-sm-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <button
-                          id="cancel-btn"
-                          type="submit"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="coupon-usage-restriction" class="product-form d-none">
-                    <h6 class="mt-2 text-primary fw-bolder h4">
-                      Usage Restrictions
-                    </h6>
-                    <hr />
-                    <br />
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Minimum Spend</label
-                      >
-                      <div class="col-sm-10">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="name"
-                          placeholder="Minimum Spend"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Maximum Spend</label
-                      >
-                      <div class="col-sm-10">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="name"
-                          placeholder="Maximum Spend"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Products</label
-                      >
-                      <div class="col-sm-10">
-                        <select
-                          multiple
-                          id="discount-type"
-                          placeholder="Select Products"
-                        >
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Exclude Products</label
-                      >
-                      <div class="col-sm-10">
-                        <select
-                          multiple
-                          id="discount-type"
-                          placeholder="Select Products"
-                        >
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Categories</label
-                      >
-                      <div class="col-sm-10">
-                        <select
-                          multiple
-                          id="discount-type"
-                          placeholder="Select Categories"
-                        >
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Exclude Categories</label
-                      >
-                      <div class="col-sm-10">
-                        <select
-                          multiple
-                          id="discount-type"
-                          placeholder="Select Categories"
-                        >
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col-sm-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <button
-                          id="cancel-btn"
-                          type="submit"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="coupon-usage-limit" class="product-form d-none">
-                    <h6 class="mt-2 text-primary fw-bolder h4">Usage Limits</h6>
-                    <hr />
-                    <br />
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Usage Limit Per Coupon</label
-                      >
-                      <div class="col-sm-10">
-                        <input type="number" class="form-control" id="name" />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Usage Limit Per Customer</label
-                      >
-                      <div class="col-sm-10">
-                        <input type="number" class="form-control" id="name" />
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -387,10 +225,6 @@
     {% endblock main %}
 
     {% block script %}
-    <script>
-      $(".menu.menus").addClass("selected");
-      $(".menu.menus").addClass("active");
-    </script>
     <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script>
     <script src="{% static 'control/js/table/jszip.min.js' %}"></script>
@@ -409,4 +243,5 @@
     <script src="{% static 'control/font5.json' %}"></script>
     <script src="{% static 'control/js/icons.js' %}"></script>
     <script src="{% static 'control/js/main.js' %}"></script>
+    <script src="{% static 'product_category.js' %}"></script>
     {% endblock script %}
