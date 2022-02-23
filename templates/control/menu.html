@@ -4,14 +4,10 @@
 {% block title %}Menus{% endblock title %}
   {% block style %}
     {% fontawesome_5_static %}
-    <link
-      rel="stylesheet"
-      href="{% static 'control/css/table/dataTables.bootstrap4.min.css' %}"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
     <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
     <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
     <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
@@ -31,33 +27,70 @@
           </div>
           <div class="card-block">
             <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+                <input type="hidden" id="selected-product">
+              </div>
               <table
-                id="footer-select"
-                class="table table-striped table-bordered no-border nowrap"
+                id="product-table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-pagination="true"
+                data-page-list="[5, 25, 50, 100, ALL]"
+                data-search="true"
+                data-search-highlight="true"
+                data-show-export="true"
+                data-export-types="['csv','json', 'doc']"
+                data-export-options='{
+                  "fileName": "userlist"
+                }'
+                data-filter-control="true"
+                data-show-multi-sort="true"
+                data-fixed-columns="true"
+                data-fixed-number="1"
+                {% comment %} data-show-columns="true"
+                data-show-columns-toggle-all="true" {% endcomment %}
+                data-show-toggle="true"
+                data-show-fullscreen="true"
+                data-show-pagination-switch="true"
+                {% comment %} data-show-footer="true" {% endcomment %}
+                {% comment %} data-detail-view="true" {% endcomment %}
+                data-sticky-header = "true"
+                data-checkbox = "true"
+                class="table table-bordered no-border nowrap"
               >
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Style</th>
-                    <th>Icon</th>
+                    <th data-checkbox="true" ></th>
+                    <th data-sortable="true" data-valign="middle">Name</th>
+                    <th data-sortable="true" data-valign="middle">Style</th>
+                    <th data-sortable="true" data-valign="middle">Icon</th>
+                    <th data-sortable="true" data-valign="middle">Active</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for menu in menus %}
                   <tr>
-                    <td class="fw-bold"><a class="text-decoration-none" href="/control/menu/{{menu.id}}">{{menu.name}}</a></td>
-                    <td>{{menu.style}}</td>
+                    <td data-checkbox-enabled="false"></td>
+                    <td ><a href="/" class="title">{{menu.name}}</a></td>
+                    <td >{{menu.style}}</td>
                     <td><i class="{{menu.icon}}"></i></td>
+                    <td class="ps-4">{% if menu.active%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
-                <tfoot>
+                {% comment %} <tfoot>
                   <tr>
                     <th>Name</th>
-                    <th>Style</th>
-                    <th>Icon</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
                   </tr>
-                </tfoot>
+                </tfoot> {% endcomment %}
               </table>
             </div>
           </div>
@@ -176,14 +209,14 @@
                     </div>
                     <div class="row mb-1">
                       <label
-                        for="inputEmail3"
+                        for="menu-enable"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Status</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" value="" name="menu-enable"/>
+                            <input id="menu-enable" type="checkbox" name="menu-enable"/>
                             <span class="cr">
                               <i
                                 class="
@@ -225,17 +258,14 @@
     {% endblock main %}
 
     {% block script %}
-    <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'control/js/table/jszip.min.js' %}"></script>
-    <script src="{% static 'control/js/table/pdfmake.min.js' %}"></script>
-    <script src="{% static 'control/js/table/vfs_fonts.js' %}"></script>
-    <script src="{% static 'control/js/table/buttons.print.min.js' %}"></script>
-    <script src="{% static 'control/js/table/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'control/js/table/data-table-custom.js' %}"></script>
-    <script src="{% static 'control/js/table/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'control/js/table/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'control/js/table/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/utils.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
     <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
     <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
     <script src="{% static 'control/js/custom-picker.js' %}"></script>

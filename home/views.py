@@ -19,7 +19,7 @@ def Home(request):
     subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
-    menus = Menus.objects.all()
+    menus = Menus.objects.all().exclude(active=False)
     product = Product.objects.all()
     total_cost = 0
     item = 0

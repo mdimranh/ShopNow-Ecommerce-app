@@ -150,6 +150,55 @@ def deleteProduct(request):
     return JsonResponse(context)
 
 def CategoryView(request):
+    if request.method == 'POST':
+        if request.POST['type'] == 'new-cat':
+            cat = Category(
+                name = request.POST['category-name'],
+                icon = request.POST['icon'],
+                searchable = True if request.POST.get('search', False) == 'on' else False,
+                enable = True if request.POST.get('enable', False) == 'on' else False
+            )
+            cat.save()
+        if request.POST['type'] == 'category':
+            if 'category-name' in request.POST:
+                cat = Category.objects.get(id = request.POST['id'])
+                cat.name = request.POST['category-name']
+                cat.icon = request.POST['icon']
+                cat.searchable = True if request.POST.get('search', False) == 'on' else False
+                cat.enable = True if request.POST.get('enable', False) == 'on' else False
+                cat.save()
+            elif 'group-name' in request.POST:
+                grp = Group(
+                    name = request.POST['group-name'],
+                    category = Category.objects.get(id = request.POST['id']),
+                    searchable = True if request.POST.get('search', False) == 'on' else False,
+                    enable = True if request.POST.get('enable', False) == 'on' else False
+                )
+                grp.save()
+        elif request.POST['type'] == 'group':
+            if 'group-name' in request.POST:
+                grp = Group.objects.get(id = request.POST['id'])
+                grp.name = request.POST['group-name']
+                grp.searchable = True if request.POST.get('search', False) == 'on' else False
+                grp.enable = True if request.POST.get('enable', False) == 'on' else False
+                grp.save()
+            elif 'subcategory-name' in request.POST:
+                subcat = Subcategory(
+                    name = request.POST['subcategory-name'],
+                    group = Group.objects.get(id = request.POST['id']),
+                    category = Category.objects.get(id = Group.objects.get(id = request.POST['id']).category.id),
+                    searchable = True if request.POST.get('search', False) == 'on' else False,
+                    enable = True if request.POST.get('enable', False) == 'on' else False
+                )
+                subcat.save()
+        elif request.POST['type'] == 'subcategory':
+            subcat = Subcategory.objects.get(id = request.POST['id'])
+            subcat.name = request.POST['subcategory-name']
+            subcat.searchable = True if request.POST.get('search', False) == 'on' else False
+            subcat.enable = True if request.POST.get('enable', False) == 'on' else False
+            subcat.save()    
+        return redirect(request.path_info)
+
     categorys = Category.objects.all()
     context = {
         "categorys": categorys,
@@ -157,6 +206,21 @@ def CategoryView(request):
         "category_sec": True
     }
     return render(request, "control/category.html", context)
+
+def CategoryDelete(request, id):
+    cat = Category.objects.filter(id = id).first()
+    cat.delete()
+    return redirect("/control/category")
+
+def GroupDelete(request, id):
+    grp = Group.objects.filter(id = id).first()
+    grp.delete()
+    return redirect("/control/category")
+
+def SubcategoryDelete(request, id):
+    subcat = Subcategory.objects.filter(id = id).first()
+    subcat.delete()
+    return redirect("/control/category")
 
 def Coupon(request):
     context = {

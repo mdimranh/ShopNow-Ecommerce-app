@@ -583,18 +583,18 @@ textarea:focus {
   width: auto;
 }
 
-tbody tr td:nth-child(3){
-  font-weight: bolder;
-  /* font-size: 18px; */
-}
-
-tbody tr td:nth-child(3):hover{
-  cursor: pointer;
-  color: #2e4eee;
-}
-
-#product-table tbody tr td:nth-child(5)::before{
+#product-table tbody tr td .money::before{
   content: "৳";
+}
+
+#product-table tbody tr td .title{
+  color: black;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+#product-table tbody tr td .title:hover{
+  color: rgb(42, 99, 253);
 }
 
 
@@ -614,11 +614,11 @@ tbody tr td:nth-child(3):hover{
   background: none;
 }
 
-.expand-all::after{
+.collapse-all::after{
   content: "";
   height: 20px;
   position: absolute;
-  right: -4px;
+  right: -3px;
   border-left: 2px solid gray;
 }
 

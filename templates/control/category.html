@@ -36,8 +36,8 @@
                 <div class="col-xxl-3 col-lg-4 col-md-6">
                   <div class="d-flex flex-column">
                     <div>
-                      <button class="p-1 m-0 expand-all">Expand All</button>
                       <button class="p-1 m-0 collapse-all">Collapse All</button>
+                      <button class="p-1 m-0 expand-all">Expand All</button>
                     </div>
                     <div>
                       <button
@@ -48,26 +48,25 @@
                       </button>
                     </div>
                   </div>
-                  <div class="btn get-data">get data</div>
                   <div id="basicTree">
                     <ul>
                       {% for category in categorys %}
                       <li
-                        data='{"type": "category", "name":"{{category.name}}", "id": "{{category.id}}", "search": true, "enable": true}'
-                        data-jstree='{"opened":false, "icon":"fa fa-folder-open"}'
+                        data='{"type": "category", "name":"{{category.name}}", "icon":"{{category.icon}}", "id": "{{category.id}}", "search": "{{category.searchable}}", "enable": "{{category.enable}}"}'
+                        data-jstree='{"opened":true, "icon":"fa fa-folder-open"}'
                       >
                         {{category.name}}
                         <ul>
                           {% for group in category.groups.all %}
                           <li
-                            data='{"type": "group", "name":"{{group.name}}", "id": "{{group.id}}", "search": true, "enable": true}'
-                            data-jstree='{"opened":false, "icon": "icofont icofont-folder-open"}'
+                            data='{"type": "group", "name":"{{group.name}}", "id": "{{group.id}}", "search": "{{group.searchable}}", "enable": "{{group.enable}}"}'
+                            data-jstree='{"opened":true, "icon": "icofont icofont-folder-open"}'
                           >
                             {{group.name}}
                             <ul>
                               {% for subcat in group.subcategorys.all %}
                               <li
-                                data='{"type": "subcategory", "name":"{{subcat.name}}", "id": "{{subcat.id}}", "search": false, "enable": true}'
+                                data='{"type": "subcategory", "name":"{{subcat.name}}", "id": "{{subcat.id}}", "search": "{{subcat.searchable}}", "enable": "{{subcat.enable}}"}'
                                 data-jstree='{"icon":"icofont icofont-folder"}'
                               >
                                 {{subcat.name}}
@@ -82,14 +81,17 @@
                     </ul>
                   </div>
                 </div>
-                <div class="col-xxl-9 col-lg-8 col-md-6">
-                  <form class="mt-2" id="add-category-form">
+                <div class="col-xxl-9 col-lg-8 col-md-6 mt-4 px-4 card">
+                  <form class="mt-2 mb-3" id="category-form" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" id="type" value="new-cat">
+                    <input type="hidden" name="id" id="id" value="id">
                     <h6 class="mt-2 mb-4 text-primary fw-bolder">
                       Add Root Category
                     </h6>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="category-name"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Name*</label
                       >
@@ -97,32 +99,33 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="root-cat-name"
+                          id="category-name"
+                          name="category-name"
                           placeholder="Name"
                         />
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="icon-select"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Icon</label
                       >
                       <div class="col-sm-10">
-                        <select id="icon-select">
+                        <select id="icon-select" name="icon">
                         </select>
                       </div>
                     </div>
                     <div class="row mb-3 search-field">
                       <label
-                        for="inputEmail3"
+                        for="search"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Serchable</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="search" type="checkbox" />
+                            <input id="search" type="checkbox" name="search" />
                             <span class="cr">
                               <i
                                 class="
@@ -142,14 +145,14 @@
                     </div>
                     <div class="row mb-1">
                       <label
-                        for="inputEmail3"
+                        for="enable"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Enable</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" value="" />
+                            <input id="enable" type="checkbox" name="enable" />
                             <span class="cr">
                               <i
                                 class="
@@ -173,30 +176,26 @@
                         >
                           Save
                         </button>
-                        <button
+                        <a
+                          href=""
                           id="delete-btn"
-                          type="submit"
                           class="btn btn-danger py-1 px-3 d-none"
                         >
                           Delete
-                        </button>
-                        <button
-                          id="cancel-btn"
-                          type="submit"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </form>
-                  <form class="mt-5 d-none" id="add-subcategory-form">
+                  <form class="mt-2 mb-3 d-none" id="group-form" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" id="type">
+                    <input type="hidden" name="id" id="id">
                     <h6 class="mt-2 mb-4 text-primary fw-bolder">
-                      Add Subcategory
+                      Group
                     </h6>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="group-name"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Name*</label
                       >
@@ -204,21 +203,33 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
+                          id="group-name"
+                          name="group-name"
                           placeholder="Name"
                         />
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    {% comment %} <div class="row mb-3">
                       <label
                         for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Icon</label
+                      >
+                      <div class="col-sm-10">
+                        <select id="icon-select">
+                        </select>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="row mb-3 search-field">
+                      <label
+                        for="search"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Serchable</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="search" type="checkbox" />
+                            <input id="search" type="checkbox" name="search"/>
                             <span class="cr">
                               <i
                                 class="
@@ -229,7 +240,7 @@
                               ></i>
                             </span>
                             <span
-                              >Show this subcategory in searchbox category
+                              >Show this group in searchbox group
                               list</span
                             >
                           </label>
@@ -238,14 +249,14 @@
                     </div>
                     <div class="row mb-1">
                       <label
-                        for="inputEmail3"
+                        for="enable"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Enable</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" value="" />
+                            <input id="enable" type="checkbox" name="enable" />
                             <span class="cr">
                               <i
                                 class="
@@ -255,30 +266,40 @@
                                 "
                               ></i>
                             </span>
-                            <span>Enable the subcategory</span>
+                            <span>Enable the category</span>
                           </label>
                         </div>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <div class="col-sm-10 offset-lg-2">
-                        <button type="submit" class="btn btn-primary py-1 px-3">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
                           Save
                         </button>
-                        <button
-                          type="submit"
-                          class="btn btn-secondary py-1 px-3"
+                        <a
+                          href=""
+                          id="delete-btn"
+                          class="btn btn-danger py-1 px-3 d-none"
                         >
-                          Cancel
-                        </button>
+                          Delete
+                        </a>
                       </div>
                     </div>
                   </form>
-                  <form class="mt-5 d-none" id="add-group-form">
-                    <h6 class="mt-2 mb-4 text-primary fw-bolder">Add Group</h6>
+                  <form class="mt-2 mb-3 d-none" id="subcategory-form" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" id="type">
+                    <input type="hidden" name="id" id="id">
+                    <h6 class="mt-2 mb-4 text-primary fw-bolder">
+                      Subcategory
+                    </h6>
                     <div class="row mb-3">
                       <label
-                        for="inputEmail3"
+                        for="subcategory-name"
                         class="col-sm-2 col-form-label d-none d-xl-block"
                         >Name*</label
                       >
@@ -286,21 +307,33 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
+                          id="subcategory-name"
+                          name="subcategory-name"
                           placeholder="Name"
                         />
                       </div>
                     </div>
-                    <div class="row mb-1">
+                    {% comment %} <div class="row mb-3">
                       <label
                         for="inputEmail3"
                         class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Enable</label
+                        >Icon</label
+                      >
+                      <div class="col-sm-10">
+                        <select id="icon-select">
+                        </select>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="row mb-3 search-field">
+                      <label
+                        for="search"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Serchable</label
                       >
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" value="" />
+                            <input id="search" type="checkbox" name="search"/>
                             <span class="cr">
                               <i
                                 class="
@@ -310,22 +343,54 @@
                                 "
                               ></i>
                             </span>
-                            <span>Enable the group</span>
+                            <span
+                              >Show this subcategory in searchbox subcategory
+                              list</span
+                            >
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="enable"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="enable" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable this subcategory</span>
                           </label>
                         </div>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <div class="col-sm-10 offset-lg-2">
-                        <button type="submit" class="btn btn-primary py-1 px-3">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
                           Save
                         </button>
-                        <button
-                          type="submit"
-                          class="btn btn-secondary py-1 px-3"
+                        <a
+                          href=""
+                          id="delete-btn"
+                          class="btn btn-danger py-1 px-3 d-none"
                         >
-                          Cancel
-                        </button>
+                          Delete
+                        </a>
                       </div>
                     </div>
                   </form>

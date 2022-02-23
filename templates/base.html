@@ -160,14 +160,16 @@
                                                 <div class="select-custom">
                                                     <select id="cat" name="category">
                                                         <option value="0">All Departments</option>
-                                                        {% for category in category %}                       
-                                                            <option class='bolden' value="{{category.id}}"><h4>{{category.name}}</h4></option>
-                                                            {% for group in category.groups.all %}
-                                                                {% if group.category.id == category.id %}<option value="{{group.id}}">&nbsp;&nbsp;&#8594;&nbsp;{{group.name}}</option>{% endif %}
-                                                                {% comment %} {% for subcat in subcategory %}
-                                                                    {% if subcat.group.id == group.id %}<option value="{{subcat.id}}">--{{subcat.name}}</option>{% endif %}
-                                                                {% endfor %} {% endcomment %}
-                                                            {% endfor %}
+                                                        {% for category in category %}
+                                                            {% if category.searchable %}                       
+                                                                <option class='bolden' value="{{category.id}}"><h4>{{category.name}}</h4></option>
+                                                                {% for group in category.groups.all %}
+                                                                    {% if group.category.id == category.id and group.searchable %}<option value="{{group.id}}">&nbsp;&nbsp;&#8594;&nbsp;{{group.name}}</option>{% endif %}
+                                                                    {% comment %} {% for subcat in subcategory %}
+                                                                        {% if subcat.group.id == group.id %}<option value="{{subcat.id}}">--{{subcat.name}}</option>{% endif %}
+                                                                    {% endfor %} {% endcomment %}
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                 </div><!-- End .select-custom -->

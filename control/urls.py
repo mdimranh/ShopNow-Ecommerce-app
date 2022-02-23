@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import Dashboard, Menu, Login, Users, UserDetails
-from .product import Products, EditProduct, CategoryView, ImagesSave, deleteProduct
+from .product import Products, EditProduct, CategoryView, ImagesSave, deleteProduct, CategoryDelete, GroupDelete, SubcategoryDelete
 from .coupon import CouponView, CouponDetails
 from .settings import SettingView
 
@@ -17,5 +17,10 @@ urlpatterns = [
     path("login", Login, name = "admin-login"),
     path("user", Users, name = "admin-users"),
     path("user/<int:id>", UserDetails, name = "admin-users-details"),
+    path("settings/", SettingView, name="admin-settings"),
+    path("category/delete/<int:id>", CategoryDelete, name="admin-category-delete"),
+    path("group/delete/<int:id>", GroupDelete, name="admin-group-delete"),
+    path("subcategory/delete/<int:id>", SubcategoryDelete, name="admin-subcategory-delete"),
+    path("settings/", SettingView, name="admin-settings"),
     path("settings/", SettingView, name="admin-settings"),
 ]

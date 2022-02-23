@@ -2,53 +2,88 @@
 $("#basicTree").on("changed.jstree", function (e, data) {
   var getdata = JSON.parse(data.instance.get_node(data.selected).li_attr.data);
   if (getdata.type === "category") {
-    $("#add-category-form h6").text("Category");
-    $("#add-category-form .search-field").removeClass("d-none");
-    $("#add-category-form #cancel-btn").addClass("d-none");
-    $("#add-category-form #delete-btn").removeClass("d-none");
-    $("#add-subcategory-form").addClass("d-none");
-    $("#add-group-form").removeClass("d-none");
+    $("#category-form h6").text("Category");
+    $("#category-form").removeClass("d-none");
+    $("#category-form #delete-btn").removeClass("d-none");
+    $("#category-form #delete-btn").attr("href", "/control/category/delete/"+getdata.id+"")
+    $("#group-form").removeClass("d-none");
+    $("#group-form h6").text("Add Group");
+    $("#group-form #save-btn").text("Add");
+    $("#group-form #delete-btn").addClass("d-none");
+    $("#subcategory-form").addClass("d-none");
+    $("#category-form #type").val(getdata.type)
+    $("#category-form #id").val(getdata.id)
+    $("#group-form #type").val(getdata.type)
+    $("#group-form #id").val(getdata.id)
+    document.getElementById("icon-select").setValue((getdata.icon).replace(",", ' '));
+    $("#category-form #category-name").val(getdata.name)
+    if(getdata.search === 'True'){
+      $("#category-form #search").attr("checked", "checked")
+    }
+    if(getdata.enable === 'True'){
+      $("#category-form #enable").attr("checked", "checked")
+    }
   } else if (getdata.type === "group") {
-    $("#add-category-form h6").text("Group");
-    $("#add-category-form .search-field").addClass("d-none");
-    $("#add-category-form #cancel-btn").addClass("d-none");
-    $("#add-category-form #delete-btn").removeClass("d-none");
-    $("#add-subcategory-form").removeClass("d-none");
-    $("#add-group-form").addClass("d-none");
-  } else {
-    $("#add-category-form h6").text("Subcategory");
-    $("#add-category-form .search-field").removeClass("d-none");
-    $("#add-category-form #cancel-btn").addClass("d-none");
-    $("#add-category-form #delete-btn").removeClass("d-none");
-    $("#add-group-form").addClass("d-none");
-    $("#add-subcategory-form").addClass("d-none");
+    $("#category-form").addClass("d-none");
+    $("#group-form h6").text("Group");
+    $("#group-form #save-btn").text("Save");
+    $("#group-form #delete-btn").removeClass("d-none");
+    $("#group-form #delete-btn").attr("href", "/control/group/delete/"+getdata.id+"")
+    $("#group-form").removeClass("d-none");
+    $("#subcategory-form").removeClass("d-none");
+    $("#subcategory-form h6").text("Add Subcategory");
+    $("#subcategory-form #save-btn").text("Add");
+    $("#subcategory-form #delete-btn").addClass("d-none");
+    $("#group-form #type").val(getdata.type)
+    $("#group-form #id").val(getdata.id)
+    $("#subcategory-form #type").val(getdata.type)
+    $("#subcategory-form #id").val(getdata.id)
+    $("#group-form #group-name").val(getdata.name)
+    if(getdata.search === 'True'){
+      $("#group-form #search").attr("checked", "checked")
+    }
+    if(getdata.enable === 'True'){
+      $("#group-form #enable").attr("checked", "checked")
+    }
+  } else if (getdata.type === "subcategory") {
+    $("#category-form").addClass("d-none");
+    $("#group-form").addClass("d-none");
+    $("#subcategory-form").removeClass("d-none");
+    $("#subcategory-form h6").text("Subcategory");
+    $("#subcategory-form #save-btn").text("Save");
+    $("#subcategory-form #delete-btn").attr("href", "/control/subcategory/delete/"+getdata.id+"")
+    $("#subcategory-form #delete-btn").removeClass("d-none");
+    $("#subcategory-form #type").val(getdata.type)
+    $("#subcategory-form #id").val(getdata.id)
+    $("#subcategory-form #subcategory-name").val(getdata.name)
+    if(getdata.search === 'True'){
+      $("#subcategory-form #search").attr("checked", "checked")
+    }
+    if(getdata.enable === 'True'){
+      $("#subcategory-form #enable").attr("checked", "checked")
+    }
   }
   $("#add-category-form #name").val(getdata.name);
-  if (getdata.search) {
-    $("#add-category-form #search").attr("checked", true);
-  } else {
-    $("#add-category-form #search").attr("checked", false);
-  }
-  if (getdata.enable) {
-    $("#add-category-form #enable").attr("checked", true);
-  } else {
-    $("#add-category-form #enable").attr("checked", false);
-  }
 });
+
 
 $("#add-root-category-btn").on("click", function () {
   var selected_node = $("#basicTree").jstree("get_selected");
   var getdata = JSON.parse($("#basicTree").jstree("get_node", selected_node).li_attr.data);
-  console.log(getdata.name);
-  $("#add-category-form h6").text("Add Root Category");
-  $("#add-category-form #name").val("");
-  $("#add-category-form #search").attr("checked", false);
-  $("#add-category-form #enable").attr("checked", false);
-  $("#add-category-form .search-field").removeClass("d-none");
-  $("#add-category-form #cancel-btn").removeClass("d-none");
-  $("#add-category-form #delete-btn").addClass("d-none");
-  $("#add-group-form").addClass("d-none");
-  $("#add-subcategory-form").addClass("d-none");
+  $("#category-form").removeClass("d-none")
+  $("#category-form h6").text("Add Root Category");
+  $("#category-form #delete-btn").removeClass("d-none");
+  $("#category-form #type").val("new-cat")
+  $("#category-form #id").val('id')
+  $("#category-form #category-name").val("");
+  document.getElementById("icon-select").setValue('');
+  $("#category-form #search").attr("checked", false);
+  $("#category-form #enable").attr("checked", false);
+  $("#category-form .search-field").removeClass("d-none");
+  $("#category-form #cancel-btn").removeClass("d-none");
+  $("#category-form #delete-btn").addClass("d-none");
+  $("#group-form").addClass("d-none");
+  $("#subcategory-form").addClass("d-none");
 });
 
 $(".collapse-all").on("click", function(){
@@ -654,13 +689,13 @@ $remove.click(function () {
     })
 
 
-$producttable.on("click-cell.bs.table", function(field, value, row, $element){
-  var link = $element[2];
-  if(value === 3){
-    var lnk = link.slice(9, link.length-6)
-    location.href = lnk
-  }
-})
+// $producttable.on("click-cell.bs.table", function(field, value, row, $element){
+//   var link = $element[2];
+//   if(value === 3){
+//     var lnk = link.slice(9, link.length-6)
+//     location.href = lnk
+//   }
+// })
 
 
 // delete product

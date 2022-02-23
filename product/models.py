@@ -16,7 +16,7 @@ from django.db.models import Q, Sum, Avg
 class Category(models.Model):
     name = models.CharField(max_length=200)
     banner = models.ImageField(upload_to = 'category/banner/', blank=True, null=True)
-    icon = IconField()
+    icon = models.CharField(max_length=100)
     slug= models.SlugField(null=True, unique=True)
     searchable = models.BooleanField(default=True)
     enable = models.BooleanField(default=True)
@@ -28,7 +28,7 @@ class Category(models.Model):
         return Group.objects.filter(category__id=self.id).count()
 
     def Total_Subcategory(self):
-        return Group.objects.filter(category__id=self.id).count()
+        return Subcategory.objects.filter(category__id=self.id).count()
 
     def image_tag(self):
         if self.banner:        

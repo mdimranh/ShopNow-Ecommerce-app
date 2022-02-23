@@ -14,7 +14,6 @@ $(document).ready(function () {
     search: true,
   });
 });
-
 // $(".get-data").on("click", function(){
 //   var val = $("#icon-select").val();
 //   if(val === ""){
@@ -25,9 +24,22 @@ $(document).ready(function () {
 //   }
 // })
 
-$(".get-data").on("click", function(){
-  console.log("yes");
-  var position = "inside";
-  var parent = $("#basicTree").jstree("get_selected");
-  console.log(parent);
-})
+// $(".get-data").on("click", function(){
+//   console.log("yes");
+//   var position = "inside";
+//   var parent = $("#basicTree").jstree("get_selected");
+//   console.log(parent);
+// })
+
+// $(".get-data").on("click", function(){
+//   var selected_node = $("#basicTree").jstree("get_selected");
+//   var getdata = JSON.parse($("#basicTree").jstree("get_node", selected_node).li_attr.data);
+//   console.log(getdata.id);
+// })
+
+// $("#basicTree").on("changed.jstree", function (e, data) {
+//   var selected_node = $("#basicTree").jstree("get_selected");
+//   var getdata = JSON.parse($("#basicTree").jstree("get_node", selected_node).li_attr.data);
+//   $("#id").val(getdata.id)
+//   $("#type").val(getdata.type)
+// })

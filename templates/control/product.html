@@ -118,9 +118,9 @@
                     <td data-checkbox-enabled="false"></td>
                     <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
                     <td data-field="ids"><a href="/control/product/edit-product/{{product.id}}"></a></td>
-                    <td >{{product.title}}</td>
+                    <td ><a href="/control/product/edit-product/{{product.id}}" class="title">{{product.title}}</a></td>
                     <td >{{product.category}}</td>
-                    <td>{{product.price}}</span></td>
+                    <td ><span class="money">{{product.price}}</span></td>
                     <td class="ps-4">{% if product.enable%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
                     <td>{{product.amount}}</td>
                     <td>{{product.created_at|date:"d M Y"}}</td>

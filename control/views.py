@@ -29,7 +29,7 @@ def Dashboard(request):
 
 def Menu(request):
     if request.method == 'POST':
-        enable = True if request.POST['menu-enable'] == 'on' else False
+        enable = True if request.POST.get("menu-enable", False) == 'on' else False
         menu = Menus(
             name = request.POST['menu-name'],
             style = request.POST['menu-style'],
@@ -39,10 +39,12 @@ def Menu(request):
         menu.save()
         for i in request.POST.getlist('menu-category')[0].split(','):
             menu.categorys.add(Category.objects.get(id = i))
-        for i in request.POST.getlist('menu-group')[0].split(','):
-            menu.groups.add(Group.objects.get(id = i))
-        for i in request.POST.getlist('menu-subcategory')[0].split(','):
-            menu.subcategorys.add(Subcategory.objects.get(id = i))
+        if request.POST.getlist('menu-group')[0].split(',')[0] != '':
+            for i in request.POST.getlist('menu-group')[0].split(','):
+                menu.groups.add(Group.objects.get(id = i))
+        if request.POST.getlist('menu-subcategory')[0].split(',')[0] != '':
+            for i in request.POST.getlist('menu-subcategory')[0].split(','):
+                menu.subcategorys.add(Subcategory.objects.get(id = i))
         menu.save()
         return redirect(request.path_info)
 
