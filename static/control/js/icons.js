@@ -14,6 +14,7 @@ $(document).ready(function () {
     search: true,
   });
 });
+
 // $(".get-data").on("click", function(){
 //   var val = $("#icon-select").val();
 //   if(val === ""){

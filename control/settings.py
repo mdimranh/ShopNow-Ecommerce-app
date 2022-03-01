@@ -53,3 +53,7 @@ def SettingView(request):
         "setting_sec": True,
     }
     return render(request, "control/settings.html", context)
+
+
+def Slider(request):
+    return render(request, "control/slider.html")

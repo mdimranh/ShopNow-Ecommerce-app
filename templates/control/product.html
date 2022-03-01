@@ -426,7 +426,7 @@
                         accept="image/*"
                         id="add-thumbnail-input"
                         name="thumbnail"
-                        onchange="loadthumbnail(event)"
+                        {% comment %} onchange="loadthumbnail(event)" {% endcomment %}
                         required
                       />
                       <div class="invalid-feedback">Please Select Image</div>

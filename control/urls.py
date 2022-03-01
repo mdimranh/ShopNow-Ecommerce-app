@@ -2,7 +2,7 @@ from django.urls import path
 from .views import Dashboard, Menu, Login, Users, UserDetails
 from .product import Products, EditProduct, CategoryView, ImagesSave, deleteProduct, CategoryDelete, GroupDelete, SubcategoryDelete
 from .coupon import CouponView, CouponDetails
-from .settings import SettingView
+from .settings import SettingView, Slider
 
 urlpatterns = [
     path("", Dashboard, name="admin-dashboard"),
@@ -22,5 +22,5 @@ urlpatterns = [
     path("group/delete/<int:id>", GroupDelete, name="admin-group-delete"),
     path("subcategory/delete/<int:id>", SubcategoryDelete, name="admin-subcategory-delete"),
     path("settings/", SettingView, name="admin-settings"),
-    path("settings/", SettingView, name="admin-settings"),
+    path("slider/", Slider, name="admin-sliders"),
 ]

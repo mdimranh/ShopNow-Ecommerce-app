@@ -146,13 +146,20 @@ $(".product-menu .menu-sec .submenu li").on("click", function () {
 
 // Load thumbnail
 
-var loadthumbnail = function (event) {
-  var output = document.getElementById("thumbnail");
+// var loadthumbnail = function (event) {
+//   var output = event.path[1].firstElementChild.firstElementChild
+//   // var output = document.getElementById("thumbnail");
+//   // console.log(output)
+//   output.src = URL.createObjectURL(event.target.files[0]);
+//   output.onload = function () {
+//     URL.revokeObjectURL(output.src); // free memory
+//   };
+// };
+
+$("#add-thumbnail-input").change(function(event){
+  var output = $(this).parent().children("label").children("img")[0]
   output.src = URL.createObjectURL(event.target.files[0]);
-  output.onload = function () {
-    URL.revokeObjectURL(output.src); // free memory
-  };
-};
+})
 
 // add color btn
 
@@ -414,6 +421,24 @@ $(".add-user-btn").on("click", function(){
     element.style.setProperty("--height", height + "px");
   });
 })
+$(".add-slide-btn").on("click", function(){
+  $(".slide-list").addClass("d-none");
+  $(".add-slide-sec").removeClass("d-none");
+  var el = document.querySelectorAll(".submenu");
+  el.forEach((element) => {
+    let height = element.scrollHeight;
+    element.style.setProperty("--height", height + "px");
+  });
+})
+
+//! sitefront section
+// slide page
+
+// const dragArea = document.querySelector(".wrapper");
+// new Sortable(dragArea, {
+//   animation: 350,
+//   handle: '.handle'
+// })
 
 
 // product page

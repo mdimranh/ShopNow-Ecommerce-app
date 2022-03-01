@@ -2120,6 +2120,7 @@ img.comment-img {
 }
 .thumbnail {
   margin-bottom: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.274);
 }
 .thumbnail .thumb {
   position: relative;
@@ -21787,8 +21788,11 @@ body.menu-sidebar .navbar-wrapper {
 .popover-title {
   text-align: center;
 }
+.nav-pills{
+  border-bottom: 1px solid rgba(66, 83, 132, 0.2);
+}
 .nav-pills .nav-link{
-  border-bottom: 3px solid transparent;
+  border-bottom: 1px solid transparent;
 }
 .nav-pills .nav-link.active.active,
 .nav-pills .nav-link.active.active:focus,
@@ -21803,7 +21807,7 @@ body.menu-sidebar .navbar-wrapper {
   color: #1ABC9C;
   text-align: center;
   border-radius: 0;
-  border-bottom: 3px solid #1ABC9C;
+  border-bottom: 1px solid #1ABC9C;
 }
 .profile-sec-nav .nav{
   border-bottom: 1px solid #1ABC9C;
@@ -45038,4 +45042,8 @@ body .pcoded[vertical-nav-type="compact"] .main-menu {
 }
 body.menu-bottom .navbar-wrapper {
   z-index: 1050;
+}
+
+.drag-icon:hover{
+  cursor: move;
 }

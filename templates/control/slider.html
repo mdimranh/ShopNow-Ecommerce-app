@@ -1,0 +1,427 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% load fontawesome_5 %}
+{% block title %}Menus{% endblock title %}
+  {% block style %}
+    {% fontawesome_5_static %}
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+        <h3 class="fw-bold">Slider's</h3>
+        <div class="card slide-list">
+          <div class="card-header">
+            <h5>All Slides</h5>
+            <div class="card-header-right me-3">
+              <button class="btn btn-add add-slide-btn p-2">
+                <i class="fa fa-plus px-2 m-0"></i>Add Slide
+              </button>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+                <input type="hidden" id="selected-product">
+              </div>
+              <table
+                id="product-table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-pagination="true"
+                data-page-list="[5, 25, 50, 100, ALL]"
+                data-search="true"
+                data-search-highlight="true"
+                data-show-export="true"
+                data-export-types="['csv','json', 'doc']"
+                data-export-options='{
+                  "fileName": "userlist"
+                }'
+                data-filter-control="true"
+                data-show-multi-sort="true"
+                data-fixed-columns="true"
+                data-fixed-number="1"
+                {% comment %} data-show-columns="true"
+                data-show-columns-toggle-all="true" {% endcomment %}
+                data-show-toggle="true"
+                data-show-fullscreen="true"
+                data-show-pagination-switch="true"
+                {% comment %} data-show-footer="true" {% endcomment %}
+                {% comment %} data-detail-view="true" {% endcomment %}
+                data-sticky-header = "true"
+                data-checkbox = "true"
+                class="table table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-checkbox="true" ></th>
+                    <th data-sortable="true" data-valign="middle">Name</th>
+                    <th data-sortable="true" data-valign="middle">Style</th>
+                    <th data-sortable="true" data-valign="middle">Icon</th>
+                    <th data-sortable="true" data-valign="middle">Active</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for menu in menus %}
+                  <tr>
+                    <td data-checkbox-enabled="false"></td>
+                    <td ><a href="/" class="title">{{menu.name}}</a></td>
+                    <td >{{menu.style}}</td>
+                    <td><i class="{{menu.icon}}"></i></td>
+                    <td class="ps-4">{% if menu.active%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="add-slide-sec d-none card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Slider Information</span>
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="add-slides">
+                      <p class="m-0 p-0">Slides</p>
+                    </li>
+                    <li for="add-settings"><p class="m-0 p-0">Settings</p></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2 needs-validation add-pro-form" enctype='multipart/form-data' id="add-slide-form" method="post" novalidate>
+                  {% csrf_token %}
+                  <div id="add-slides" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Slides</h6>
+                    <hr />
+                    {% comment %} <br /> {% endcomment %}
+                    {% comment %} <div class="row mb-3">
+                      <label
+                        for="add-product-name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-product-name"
+                          name="name"
+                          placeholder="Name"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter name</div>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="wrapper">
+                      <div class="d-flex flex-column">
+                            <div class="d-flex flex-fill mt-2 mb-4 justify-content-between"><h6><i class="fas fa-th-list me-3 drag-icon handle"></i>Image Slide</h6><i class="fas fa-times fa-lg"></i></div>
+                            <div class="d-flex flex-column flex-xl-row align-items-center align-items-xl-start">
+                                <div class="me-3">
+                                    <label for="add-thumbnail-input">
+                                        <img
+                                        class="thumbnail border-1"
+                                        id="thumbnail"
+                                        src="{% static 'control/css/image.png' %}"
+                                        />
+                                    </label>
+                                    <input
+                                        class="d-none"
+                                        type="file"
+                                        accept="image/*"
+                                        id="add-thumbnail-input"
+                                        name="thumbnail"
+                                        {% comment %} onchange="loadthumbnail(event)" {% endcomment %}
+                                        required
+                                    />
+                                </div>
+                                <div class="w-100">
+                                    <nav>
+                                        <div class="nav nav-pills" id="nav-tab" role="tablist">
+                                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">General</button>
+                                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Options</button>
+                                            {% comment %} <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button> {% endcomment %}
+                                        </div>
+                                    </nav>
+                                    <div class="tab-content mt-3" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                          <div class="container-fluid">
+                                            <div class="row">
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 1</label>
+                                                <input class="form-control" type="text" id="caption1">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 2</label>
+                                                <input class="form-control" type="text" id="caption2">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 3</label>
+                                                <input class="form-control" type="text" id="caption3">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caltotext">Call To Action Text</label>
+                                                <input class="form-control" type="text" id="caltotext">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caltourl">Call To Action URL</label>
+                                                <input class="form-control" type="text" id="caltourl">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                          <div class="container-fluid">
+                                            <div class="row">
+                                              {% comment %} <div class="col-4 mb-2">
+                                                <label class="my-1" for="caption1">Caption 1</label>
+                                                <input class="form-control" type="text" id="caption1">
+                                              </div> {% endcomment %}
+                                              <div class="col-12 mb-2 mt-3">
+                                                <div class="checkbox-fade fade-in-primary">
+                                                  <label>
+                                                    <input id="enable" type="checkbox" name="enable"/>
+                                                    <span class="cr">
+                                                      <i
+                                                        class="
+                                                          cr-icon
+                                                          icofont icofont-ui-check
+                                                          txt-primary
+                                                        "
+                                                      ></i>
+                                                    </span>
+                                                    <span>Open in New Window</span>
+                                                  </label>
+                                                </div>
+                                              </div>
+                                              <div class="col-12 mb-2">
+                                                <div class="checkbox-fade fade-in-primary">
+                                                  <label>
+                                                    <input id="enable" type="checkbox" name="enable" checked  />
+                                                    <span class="cr">
+                                                      <i
+                                                        class="
+                                                          cr-icon
+                                                          icofont icofont-ui-check
+                                                          txt-primary
+                                                        "
+                                                      ></i>
+                                                    </span>
+                                                    <span>Enable this slide</span>
+                                                  </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        {% comment %} <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Contact</div> {% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                    </div>
+                    <div class="btn my-3 add-new-slide-btn">Add Slide</div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="add-settings" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Settings</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="add-product-name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-product-name"
+                          name="name"
+                          placeholder="Name"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter name</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="speed"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Speed</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="speed"
+                          name="speed"
+                          placeholder="300ms"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="enable-autoplay"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Autoplay</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable-autoplay" type="checkbox" name="enable" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Autoplay</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="autoplay-speed"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Autoplay Speed</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="autoplay-speed"
+                          name="autoplay-speed"
+                          placeholder="300"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="dots"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Dots</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="dots" type="checkbox" name="dots" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Show Slider Dots</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="arrows"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Arrows</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="arrows" type="checkbox" name="arrows" />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Show Prev/Next arrows</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    {% endblock main %}
+
+    {% block script %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/utils.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
+    <script src="{% static 'control/js/custom-picker.js' %}"></script>
+    <script src="{% static 'control/fontawesome.json' %}"></script>
+    <script src="{% static 'control/font5.json' %}"></script>
+    <script src="{% static 'control/js/icons.js' %}"></script>
+    <script src="{% static 'control/js/Sortable.js' %}"></script>
+    <script src="{% static 'control/js/main.js' %}"></script>
+    <script src="{% static 'control/js/slider-file.js' %}"></script>
+    <script src="{% static 'product_category.js' %}"></script>
+    <script>
+      const dragArea = document.querySelector(".wrapper");
+      new Sortable(dragArea, {
+        animation: 350,
+        handle: '.handle'
+      })
+    </script>
+    {% endblock script %}

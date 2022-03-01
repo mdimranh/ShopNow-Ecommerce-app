@@ -433,7 +433,7 @@ textarea:focus {
 }
 
 /* product image section */
-
+.wrapper .thumbnail,
 #images .thumbnail {
   height: 150px;
   width: auto;
@@ -441,6 +441,7 @@ textarea:focus {
   margin: 5px 0;
 }
 
+.wrapper .thumbnail:hover,
 #images .thumbnail:hover {
   cursor: pointer;
 }
@@ -732,4 +733,8 @@ textarea:focus {
     transition: 0.3s;
   }
 
+}
+
+.fa-times:hover{
+  cursor: pointer;
 }
