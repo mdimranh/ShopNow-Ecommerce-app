@@ -12,10 +12,10 @@
             	<div class="checkout">
 	                <div class="container">
             			<div class="checkout-discount">
-            				<form action="#">
+            				{% comment %} <form action="#">
         						<input type="text" class="form-control" required id="checkout-discount-input">
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-            				</form>
+            				</form> {% endcomment %}
             			</div><!-- End .checkout-discount -->
             			<form action="#">
 		                	<div class="row">
@@ -24,20 +24,20 @@
 		                				<div class="row">
 		                					<div class="col-sm-6">
 		                						<label>First Name *</label>
-		                						<input type="text" class="form-control" required>
+		                						<input type="text" class="form-control" id="first_name" {% if user.is_authenticated %}value="{{user.first_name}}"{% endif %} required>
 		                					</div><!-- End .col-sm-6 -->
 
 		                					<div class="col-sm-6">
 		                						<label>Last Name *</label>
-		                						<input type="text" class="form-control" required>
+		                						<input type="text" class="form-control" id="last_name" {% if user.is_authenticated %}value="{{user.last_name}}"{% endif %} required>
 		                					</div><!-- End .col-sm-6 -->
 		                				</div><!-- End .row -->
 
 	            						<label>Company Name (Optional)</label>
-	            						<input type="text" class="form-control">
+	            						<input type="text" id="company_name" class="form-control">
 
 	            						<label>Country *</label>
-	            						<input type="text" class="form-control" required>
+	            						<input type="text" id="country" class="form-control" required>
 
 	            						<label>Street address *</label>
 	            						<input type="text" class="form-control" placeholder="House number and Street name" required>
@@ -90,38 +90,33 @@
 		                				<table class="table table-summary">
 		                					<thead>
 		                						<tr>
-		                							<th>Product</th>
-		                							<th>Total</th>
+		                							<th><span class="fw-bolder h5">Product</span></th>
+		                							<th><span class="fw-bolder h5">Total</span></th>
 		                						</tr>
 		                					</thead>
 
 		                					<tbody>
 		                						<tr>
-		                							<td><a href="#">Beige knitted elastic runner shoes</a></td>
+		                							<td class="py-1 text-secondary">Beige knitted elastic runner shoes</td>
 		                							<td>$84.00</td>
 		                						</tr>
-
 		                						<tr>
-		                							<td><a href="#">Blue utility pinafore denimdress</a></td>
-		                							<td>$76,00</td>
-		                						</tr>
-		                						<tr class="summary-subtotal">
-		                							<td>Subtotal:</td>
+		                							<td class="py-3 h6">Subtotal:</td>
 		                							<td>$160.00</td>
 		                						</tr><!-- End .summary-subtotal -->
 		                						<tr>
-		                							<td>Shipping:</td>
+		                							<td class="py-3 h6">Shipping:</td>
 		                							<td>Free shipping</td>
 		                						</tr>
-		                						<tr class="summary-total">
-		                							<td>Total:</td>
+		                						<tr>
+		                							<td class="py-3 h5">Total:</td>
 		                							<td>$160.00</td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
 
 		                				<div class="accordion-summary" id="accordion-payment">
-										    <div class="card">
+										    {% comment %} <div class="card">
 										        <div class="card-header" id="heading-1">
 										            <h2 class="card-title">
 										                <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
@@ -134,9 +129,9 @@
 										                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
-										    </div><!-- End .card -->
+										    </div><!-- End .card --> {% endcomment %}
 
-										    <div class="card">
+										    {% comment %} <div class="card">
 										        <div class="card-header" id="heading-2">
 										            <h2 class="card-title">
 										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
@@ -149,7 +144,7 @@
 										                Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. 
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
-										    </div><!-- End .card -->
+										    </div><!-- End .card --> {% endcomment %}
 
 										    <div class="card">
 										        <div class="card-header" id="heading-3">

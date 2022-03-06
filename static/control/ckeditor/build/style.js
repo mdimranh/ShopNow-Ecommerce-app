@@ -6,3 +6,5 @@ ClassicEditor.create(document.querySelector("#shipping-info"));
 ClassicEditor.create(document.querySelector("#add-description"));
 ClassicEditor.create(document.querySelector("#add-additional-info"));
 ClassicEditor.create(document.querySelector("#add-shipping-info"));
+
+ClassicEditor.create(document.querySelector("#body"));

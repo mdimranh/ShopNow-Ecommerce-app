@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
-from .models import Profile
+from .models import Profile, AddressBook
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from order.models import ShopCart
@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
-from region.models import State
+from region.models import Country, Region, City, Area
+from accounts.models import AddressBook
 
 def Account(request):
     if request.method == "POST":
@@ -76,10 +77,40 @@ def Account(request):
     return HttpResponse({"msg": 'Something is wrong'})
 
 def ProfileView(request):
+    if request.method == 'POST':
+        if 'ab-name' in request.POST:
+            if request.POST.get('default') == 'on':
+                default = True
+                for ab in AddressBook.objects.filter(default = 'True'):
+                    ab.default = False
+                    ab.save()
+            else: default = False
+            user = request.user
+            name = request.POST['ab-name']
+            phone = request.POST['ab-phone']
+            if request.POST['ab-country'] != 'null':
+                country = Country.objects.get(id = request.POST['ab-country'])
+            else: country = None
+            if request.POST['ab-region'] != 'null':
+                region = Region.objects.get(id = request.POST['ab-region'])
+            else: region = None
+            if request.POST['ab-city'] != 'null':
+                city = City.objects.get(id = request.POST['ab-city'])
+            else: city = None
+            if request.POST['ab-area'] != 'null':
+                area = Area.objects.get(id = request.POST['ab-area'])
+            else: area = None
+            address = request.POST['ab-address']
+            address_book = AddressBook(
+                user=user, name=name, phone=phone, country=country, region=region, city=city, area=area, address=address, default=default
+            )
+            address_book.save()
+            return redirect(request.path_info)
     categorys = Category.objects.all()
     total_cost = 0
     item = 0
-    state = State.objects.all()
+    countrys = Country.objects.all()
+    address_book = AddressBook.objects.filter(user = request.user)
     if request.user.is_authenticated:
         shopcart = ShopCart.objects.filter(user = request.user)
         total_cost = 0
@@ -99,7 +130,8 @@ def ProfileView(request):
             'category': categorys,
             'cost': total_cost,
             'item': item,
-            'state': state
+            'address_book': address_book,
+            'countrys': countrys
         }
     else:
         context = {
@@ -116,24 +148,32 @@ def Logout(request):
     return redirect('/')
 
 import json
+# def GetCity(request):
+#     id = request.POST['id']
+#     city = []
+#     f = open('bd-districts.json', 'r', encoding='utf-8')
+#     data = json.load(f)
+#     for i in data['districts']:
+#         if i['division_id'] == id:
+#             city.append((i['name'], i["id"]))
+#     f.close()
+#     return JsonResponse(data = city, safe=False)
+
+
+def GetRegion(request):
+    region_list = []
+    for region in Country.objects.get(id = request.POST['id']).region.all():
+        region_list.append((region.name, region.id))
+    return JsonResponse(data = region_list, safe=False)
+
 def GetCity(request):
-    id = request.POST['id']
-    city = []
-    f = open('bd-districts.json', 'r', encoding='utf-8')
-    data = json.load(f)
-    for i in data['districts']:
-        if i['division_id'] == id:
-            city.append((i['name'], i["id"]))
-    f.close()
-    return JsonResponse(data = city, safe=False)
+    city_list = []
+    for city in Region.objects.get(id = request.POST['id']).city.all():
+        city_list.append((city.name, city.id))
+    return JsonResponse(data = city_list, safe=False)
 
 def GetArea(request):
-    id = request.POST['id']
-    area = []
-    f = open('bd-upazilas.json', 'r', encoding='utf-8')
-    data = json.load(f)
-    for i in data['upazilas']:
-        if i['district_id'] == id:
-            area.append((i['name'], i["id"]))
-    f.close()
-    return JsonResponse(data = area, safe=False)
+    area_list = []
+    for area in City.objects.get(id = request.POST['id']).area.all():
+        area_list.append((area.name, area.id))
+    return JsonResponse(data = area_list, safe=False)

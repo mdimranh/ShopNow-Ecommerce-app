@@ -1,0 +1,767 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% load countries %}
+{% load static %} {% load solo_tags %}
+{% get_solo 'setting.SiteFront' as sitefront %}
+{% block title %}{{site_config.name}} | {{sitefront.slider.id}}{% endblock title %}
+
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dropzone.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">Setting's</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/settings/" class="text-decoration-none breadcrumb-item text-secondary">Settings</a>
+        </div>
+      </div>
+      <div class="card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu basic d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>General Settings</span
+                    ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="general"><p class="m-0 p-0">General</p></li>
+                    <li for="logo"><p class="m-0 p-0">Logo</p></li>
+                    <li for="banner"><p class="m-0 p-0">Banner</p></li>
+                    <li for="footer"><p class="m-0 p-0">Footer</p></li>
+                    <li for="mail"><p class="m-0 p-0">Mail</p></li>
+                    <li for="social-link"><p class="m-0 p-0">Social Link</p></li>
+                  </ul>
+                </div>
+                <div class="menu-sec">
+                  <div class="menu advance d-flex flex-fill justify-content-between">
+                    <span>Social Logins</span
+                    ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                  </div>
+                  <ul class="submenu">
+                    <li for="facebook"><p class="m-0 p-0">Facebook</p></li>
+                    <li for="google"><p class="m-0 p-0">Google</p></li>
+                    {% comment %} <li for="add-additional"><p class="m-0 p-0">Additional</p></li> {% endcomment %}
+                  </ul>
+                </div>
+                <div class="menu-sec">
+                  <div class="menu advance d-flex flex-fill justify-content-between">
+                    <span>Payment Methods</span
+                    ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                  </div>
+                  <ul class="submenu">
+                    <li for="paypal"><p class="m-0 p-0">Paypal</p></li>
+                    <li for="bkash"><p class="m-0 p-0">Bkash</p></li>
+                    <li for="bkash"><p class="m-0 p-0">Nagod</p></li>
+                    <li for="bkash"><p class="m-0 p-0">Rocket</p></li>
+                    <li for="sslcommerze"><p class="m-0 p-0">SSLCommerze</p></li>
+                    <li for="stripe"><p class="m-0 p-0">Stripe</p></li>
+                    <li for="cashon"><p class="m-0 p-0">Cash On Delivery</p></li>
+                    <li for="bank"><p class="m-0 p-0">Bank Transfer</p></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                  <form id="general" class="product-form needs-validation" enctype='multipart/form-data' id="general-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3 facebook-login-field">
+                      <label
+                        for="name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Name"
+                          required
+                          value="{{siteinfo.name}}"
+                        />
+                        <div class="invalid-feedback">Please enter site name</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Slider</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="slider" name="slider">
+                          {% for slider in sliders %}
+                          <option value="{{slider.id}}" {% if slider.id == sitefront.slider.id %}selected{% endif %} >{{slider.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="term"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Terms & Condition Page</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="term" name="term">
+                          {% for page in pages %}
+                          <option value="{{page.id}}">{{page.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="privacy"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Privacy Policy Page</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="privacy" name="privacy">
+                          {% for page in pages %}
+                          <option value="{{page.id}}">{{page.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3 facebook-login-field">
+                      <label
+                        for="address"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Address</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address"
+                          name="address"
+                          placeholder="Address"
+                          required
+                          value="{{siteinfo.address}}"
+                        />
+                        <div class="invalid-feedback">Please enter Address</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="logo" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Logo</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label class="h5 mb-3" for="add-thumbnail-2">Logo</label>
+                      <label for="add-thumbnail-input" class="slide-thumbnail">
+                          <img
+                          class="thumbnail border-1 pointer"
+                          id="add-thumbnail"
+                          src = "{{site_config.logo.url}}"
+                          />
+                      </label>
+                      <input
+                          class="d-none"
+                          type="file"
+                          accept="image/*"
+                          id="add-thumbnail-input"
+                          name="logo"
+                          for="add-thumbnail"
+                          required
+                      />
+                    </div>
+                    <div class="row mb-3">
+                      <label class="h5 mb-3" for="add-thumbnail-input-1">Favicon</label>
+                      <label for="add-thumbnail-input-1" class="slide-thumbnail">
+                          <img
+                          class="thumbnail border-1 pointer"
+                          id="add-thumbnail-1"
+                          src="{{site_config.favicon.url}}"
+                          />
+                      </label>
+                      <input
+                          class="d-none"
+                          type="file"
+                          accept="image/*"
+                          id="add-thumbnail-input-1"
+                          name="favicon"
+                          for="add-thumbnail-1"
+                          required
+                      />
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="banner" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post">
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Banner</h6>
+                    <hr />
+                    <br />
+                    <a class="btn btn-outline-success mb-3" href="{% static 'control/img/banner.png' %}" target="_blank">Banner Guide</a>
+                    <div class="row mb-3">
+                      <label
+                        for="banner1"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 1</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner1" name="banner1">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner1.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="banner2"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 2</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner2" name="banner2">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner2.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 3</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner3" name="banner3">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner3.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 4</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner4" name="banner4">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner4.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 5</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner5" name="banner5">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner5.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 6</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner6" name="banner6">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner6.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 7</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner7" name="banner7">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner7.id %}selected{% endif %} >{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div><div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Banner 8</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="banner8" name="banner8">
+                          {% for banner in banners %}
+                          <option value="{{banner.id}}">{{banner.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="footer" class="product-form needs-validation d-none" enctype='multipart/form-data' id="general-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Footer</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3 facebook-login-field">
+                      <label
+                        for="name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Name"
+                          required
+                          value="{{siteinfo.name}}"
+                        />
+                        <div class="invalid-feedback">Please enter site name</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Slider</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="slider" name="slider">
+                          {% for slider in sliders %}
+                          <option value="{{slider.id}}" {% if slider.id == sitefront.slider.id %}selected{% endif %} >{{slider.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="term"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Terms & Condition Page</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="term" name="term">
+                          {% for page in pages %}
+                          <option value="{{page.id}}">{{page.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="privacy"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Privacy Policy Page</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="disable" id="privacy" name="privacy">
+                          {% for page in pages %}
+                          <option value="{{page.id}}">{{page.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3 facebook-login-field">
+                      <label
+                        for="address"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Address</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address"
+                          name="address"
+                          placeholder="Address"
+                          required
+                          value="{{siteinfo.address}}"
+                        />
+                        <div class="invalid-feedback">Please enter Address</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="social-link" class="product-form needs-validation d-none" enctype='multipart/form-data' id="social-link-form" method="post">
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Social Link</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3 facebook-login-field">
+                      <label
+                        for="facebook"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Facebook</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="facebook"
+                          name="facebook"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="twitter"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Twitter</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="twitter"
+                          name="twitter"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="instagram"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Instagram</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="instagram"
+                          name="instagram"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="youtube"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Youtube</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="youtube"
+                          name="youtube"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="google" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Google</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="google-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Status</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login.status == True %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Google Login</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 google-login-field {% if google_login.status != True %}d-none{% endif %}">
+                      <label
+                        for="app-id"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App ID</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="google-app-id"
+                          name="google-app-id"
+                          placeholder="App ID"
+                          required
+                          value="{{google_login.client_id}}"
+                        />
+                        <div class="invalid-feedback">Please enter App ID</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 google-login-field  {% if google_login.status != True %}d-none{% endif %}">
+                      <label
+                        for="app-secret"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App Secret</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="google-app-secret"
+                          name="google-app-secret"
+                          placeholder="App ID"
+                          required
+                          value="{{google_login.secret}}"
+                        />
+                        <div class="invalid-feedback">Please enter App Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="paypal" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Paypal</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="paypal-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Status</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="paypal-enable" type="checkbox" name="paypal-enable" {% if paypal.status == True %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Paypal</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 paypal-field {% if paypal.status != True %}d-none{% endif %}">
+                      <label
+                        for="paypal-client-id"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Client ID</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="paypal-client-id"
+                          name="paypal-client-id"
+                          placeholder="App ID"
+                          required
+                          value="{{paypal.client_id}}"
+                        />
+                        <div class="invalid-feedback">Please enter Client ID</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 paypal-field  {% if paypal.status != True %}d-none{% endif %}">
+                      <label
+                        for="paypal-secret"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Secret</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="paypal-secret"
+                          name="paypal-secret"
+                          placeholder="Secret"
+                          required
+                          value="{{paypal.secret}}"
+                        />
+                        <div class="invalid-feedback">Please enter Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    {% endblock main %}
+
+    {% block script %}
+    {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/utils.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
+    <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
+    <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
+    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/inputmask.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/form-mask.js' %}"></script>
+    <script src="{% static 'control/jquery.filer/js/jquery.filer.min.js' %}"></script>
+    <script src="{% static 'control/filer/custom-filer.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
+    <script src="{% static 'control/filer/jquery.fileuploads.init.js' %}"></script>
+    <script src="{% static 'control/countries.json' %}"></script>
+    {% endblock script %}

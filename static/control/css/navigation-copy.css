@@ -310,6 +310,10 @@ table.no-border th {
 
 /*! Add product section */
 
+.menu-sec .menu.disable{
+  cursor:none;
+}
+
 .product-menu {
   border-radius: 6px;
   padding: 5px 0;
@@ -331,6 +335,7 @@ table.no-border th {
   padding: 10px 25px;
   border-right: 1px solid rgba(128, 128, 128, 0.1);
   background-color: white;
+  cursor: pointer;
 }
 
 .product-menu .menu-sec ul li {
@@ -343,6 +348,7 @@ table.no-border th {
   border-bottom: 1px solid none;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  cursor: pointer;
 }
 
 .product-menu .menu-sec ul li:first-child {
@@ -351,11 +357,6 @@ table.no-border th {
 
 .product-menu .menu-sec ul li:last-child {
   margin-bottom: 10px;
-}
-
-.product-menu .menu-sec .menu:hover,
-.product-menu .menu-sec ul li:hover {
-  cursor: pointer;
 }
 
 .product-menu .menu-sec .menu .arrow {
@@ -735,6 +736,54 @@ textarea:focus {
 
 }
 
-.fa-times:hover{
+
+.menu-item{
+  border: 1px solid rgba(128, 128, 128, 0.312);
+  border-radius: 5px;
+  padding-left: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-item.selected{
+  border: 1px solid rgba(63, 83, 132, 0.4);
+  background: #2e4eee23;
+}
+
+.menus{
+  position: relative;
+}
+
+.menus .fa-trash{
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+.menus .enable{
+  position: absolute;
+  left: 10px;
+}
+
+.fa-times{
+  cursor: pointer;
+}
+
+.slide-thumbnail{
+  width: 150px;
+  height: 150px;
+}
+
+.slide-thumbnail img{
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.add-new-slide-btn:hover{
+  background: #2a394f27;
+}
+
+.pointer{
   cursor: pointer;
 }

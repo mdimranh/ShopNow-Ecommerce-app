@@ -29,7 +29,7 @@ class SliderAdmin(admin.ModelAdmin):
         }),
         ('Slide Setting', {
             'classes': ('collapse', 'open'),
-            'fields': ('autoplay','autoplay_timeout', 'arrows'),
+            'fields': ('speed', 'autoplay','autoplay_timeout', 'arrows'),
         }),
     )
 admin.site.register(Slider, SliderAdmin)
@@ -60,3 +60,4 @@ admin.site.register(ContactMessage, ContactMessageAdmin)
 
 admin.site.register(ProductCarousel)
 admin.site.register(Menus)
+admin.site.register(Pages)

@@ -1,0 +1,358 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% block title %}{{site_config.name}} | Messages{% endblock title %}
+
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/basic.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.brighttheme.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.history.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
+
+    {% comment %} <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'control/image-uploader/image-uploader.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      {% if message %}
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">{{message.name}}</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/message/" class="text-decoration-none breadcrumb-item text-secondary">Messages</a>
+          <span class="breadcrumb-item text-secondary">Edit Messages</span>
+        </div>
+      </div>
+      {% else %}
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">Messages</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/message/" class="text-decoration-none breadcrumb-item text-secondary">Messages</a>
+        </div>
+      </div>
+      {% endif %}
+      {% if messages %}
+      <div class="card product-list">
+          <div class="card-header">
+            <h5>All Messages</h5>
+            <div class="card-header-right me-3">
+              <button class="btn btn-add add-product-btn p-2">
+                <i class="fa fa-plus px-2 m-0"></i>Add Message
+              </button>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+                <input type="hidden" id="selected-product">
+              </div>
+              <table
+                id="product-table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-pagination="true"
+                data-page-list="[5, 25, 50, 100, ALL]"
+                data-search="true"
+                data-search-highlight="true"
+                {% comment %} data-show-export="true"
+                data-export-types="['csv','json', 'doc']"
+                data-export-options='{
+                  "fileName": "userlist"
+                }' {% endcomment %}
+                data-filter-control="true"
+                {% comment %} data-show-multi-sort="true" {% endcomment %}
+                data-fixed-columns="true"
+                data-fixed-number="1"
+                {% comment %} data-show-columns="true"
+                data-show-columns-toggle-all="true" {% endcomment %}
+                {% comment %} data-show-toggle="true"
+                data-show-fullscreen="true"
+                data-show-pagination-switch="true" {% endcomment %}
+                {% comment %} data-show-footer="true" {% endcomment %}
+                {% comment %} data-detail-view="true" {% endcomment %}
+                data-sticky-header = "true"
+                data-checkbox = "true"
+                class="table table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-checkbox="true" ></th>
+                    <th data-sortable="true" data-valign="middle">Name</th>
+                    <th data-sortable="true" data-valign="middle">Status</th>
+                    <th data-sortable="true" data-valign="middle">Message</th>
+                    <th data-sortable="true" data-valign="middle">Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for message in messages %}
+                  <tr>
+                    <td data-checkbox-enabled="false"></td>
+                    <td ><a href="/control/message/{{message.id}}" class="title">{{message.name}}</a></td>
+                    <td >{{message.status}}</td>
+                    <td >{{message.message}}</td>
+                    <td>{{message.note}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+      </div>
+      {% else %}
+      <div class="edit-sec card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable basic d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Message Information</span
+                    >
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="message">
+                      <p class="m-0 p-0">Message</p>
+                    </li>
+                    <li for="action"><p class="m-0 p-0">Action</p></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2 needs-validation" id="add-category-form" method="post" novalidate>
+                  {% csrf_token %}
+                  <input type="hidden" name="id" value="{{message.id}}">
+                  <div id="message" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="add-product-name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-product-name"
+                          name="name"
+                          value="{{message.name}}"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="add-email"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Email</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="add-email"
+                          name="email"
+                          value="{{message.email}}"
+                          placeholder="Email"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="add-phone"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Phone</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-phone"
+                          name="phone"
+                          value="{{message.phone}}"
+                          placeholder="Phone"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="add-subject"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Subject</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-subject"
+                          name="subject"
+                          value="{{message.subject}}"
+                          placeholder="Subject"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="add-message"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Message*</label
+                      >
+                      <div class="col-xl-10">
+                        <textarea
+                          class="form-control"
+                          name="message"
+                          id="add-message"
+                          placeholder="Write your message..."
+                        >{{message.message}}</textarea>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="action" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
+                    <hr />
+                    <br />
+                    {% comment %} <div class="row mb-3">
+                      <label
+                        for="add-category-select"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Status</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="form-select" id="add-category-select" name="category" required>
+                          {% for category in categorys %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select Category</div>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="row mb-3">
+                      <label
+                        for="add-note"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Note*</label
+                      >
+                      <div class="col-xl-10">
+                        <textarea
+                          class="form-control"
+                          name="note"
+                          id="add-note"
+                          placeholder="Write your note..."
+                          required
+                        >{{message.note}}</textarea>
+                        <div class="invalid-feedback">Please write your note</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      {% endif %}
+    {% endblock main %}
+
+    {% block script %}
+    {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/utils.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
+    <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
+    <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
+    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/inputmask.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/jquery.inputmask.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>
+    <script src="{% static 'control/js/form-masking/form-mask.js' %}"></script>
+    <script src="{% static 'control/jquery.filer/js/jquery.filer.min.js' %}"></script>
+    {% comment %} <script src="{% static 'control/filer/custom-filer.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
+    <script src="{% static 'control/js/custom-picker.js' %}"></script>
+    <script src="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
+    <script src="{% static 'control/filer/jquery.fileuploads.init.js' %}"></script>
+    <script src="{% static 'control/image-uploader/image-uploader.min.js' %}"></script>
+    <script src="{% static 'control/dropzone/dist/dropzone.js' %}"></script>
+    <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
+
+    {% endblock script %}

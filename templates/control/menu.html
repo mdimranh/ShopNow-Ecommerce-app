@@ -17,121 +17,51 @@
     {% block main %}
         <h3 class="fw-bold">Menu's</h3>
         <div class="card coupon-list">
-          <div class="card-header">
-            <h5>All Menus</h5>
-            <div class="card-header-right me-3">
-              <button class="btn btn-add add-coupon-btn p-2">
-                <i class="fa fa-plus px-2 m-0"></i>Add Menu
-              </button>
-            </div>
-          </div>
-          <div class="card-block">
-            <div class="dt-responsive table-responsive">
-              <div id="toolbar">
-                <button id="remove" class="btn btn-danger" disabled>
-                  <i class="fa fa-trash"></i> Delete
-                </button>
-                <input type="hidden" id="selected-product">
-              </div>
-              <table
-                id="product-table"
-                data-toggle="table"
-                data-toolbar="#toolbar"
-                data-pagination="true"
-                data-page-list="[5, 25, 50, 100, ALL]"
-                data-search="true"
-                data-search-highlight="true"
-                data-show-export="true"
-                data-export-types="['csv','json', 'doc']"
-                data-export-options='{
-                  "fileName": "userlist"
-                }'
-                data-filter-control="true"
-                data-show-multi-sort="true"
-                data-fixed-columns="true"
-                data-fixed-number="1"
-                {% comment %} data-show-columns="true"
-                data-show-columns-toggle-all="true" {% endcomment %}
-                data-show-toggle="true"
-                data-show-fullscreen="true"
-                data-show-pagination-switch="true"
-                {% comment %} data-show-footer="true" {% endcomment %}
-                {% comment %} data-detail-view="true" {% endcomment %}
-                data-sticky-header = "true"
-                data-checkbox = "true"
-                class="table table-bordered no-border nowrap"
-              >
-                <thead>
-                  <tr>
-                    <th data-checkbox="true" ></th>
-                    <th data-sortable="true" data-valign="middle">Name</th>
-                    <th data-sortable="true" data-valign="middle">Style</th>
-                    <th data-sortable="true" data-valign="middle">Icon</th>
-                    <th data-sortable="true" data-valign="middle">Active</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for menu in menus %}
-                  <tr>
-                    <td data-checkbox-enabled="false"></td>
-                    <td ><a href="/" class="title">{{menu.name}}</a></td>
-                    <td >{{menu.style}}</td>
-                    <td><i class="{{menu.icon}}"></i></td>
-                    <td class="ps-4">{% if menu.active%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-                {% comment %} <tfoot>
-                  <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>{{product.status}}</th>
-                    <th>Amount</th>
-                    <th>Created</th>
-                  </tr>
-                </tfoot> {% endcomment %}
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="add-coupon-sec d-none card">
-          <div class="container-fluid">
-            <div class="row m-2 p-3 bg-white">
-              {% comment %} <div class="product-menu col-xl-3 col-lg-4">
-                <div class="menu-sec">
-                  <div
-                    class="menu d-flex flex-fill justify-content-between selected"
-                  >
-                    <span>Menus Menu</span>
+          <div class="container-fluid mt-4">
+            <div class="row">
+              <div class="col-lg-4 col-sm-12">
+                <div class="card-block">
+                  <button class="btn btn-add add-menu-btn">
+                    <i class="fa fa-plus px-2 m-0"></i>Add Menu
+                  </button>
+                  <div class="wrapper mt-2">
+                    {% for menu in menus %}
+                    <div class="d-flex flex-column justify-content-center menus">
+                      <div class="my-2 py-2 menu-item" id="{{menu.id}}" name="{{menu.name}}" style="{{menu.style}}" icon="{{menu.icon}}" category="{{menu.categories_id}}" group="{{menu.groups_id}}" subcat="{{menu.subcats_id}}" status="{{menu.active}}">
+                        <div class="d-flex align-items-center ms-4">
+                          <h6 class="my-0 p-0 me-5">
+                            <i class="{{menu.icon}} me-3 drag-icon handle"></i>{{menu.name}}
+                          </h6>
+                        </div>
+                      </div>
+                      <i class="fas fa-trash delete-menus text-danger"></i>
+                      {% if menu.active %}
+                        <i class="fas fa-check-circle enable text-success"></i>
+                      {% else %}
+                        <i class="fas fa-times-circle enable text-danger"></i>
+                      {% endif %}
+                    </div>
+                    {% endfor %}
                   </div>
-                  <ul class="submenu">
-                    <li class="selected" for="coupon-general">
-                      <p class="m-0 p-0">General</p>
-                    </li>
-                    <li for="coupon-usage-restriction">
-                      <p class="m-0 p-0">Usage Restrictions</p>
-                    </li>
-                    <li for="coupon-usage-limit">
-                      <p class="m-0 p-0 coupon-usage-limit">Usage Limits</p>
-                    </li>
-                  </ul>
                 </div>
-              </div> {% endcomment %}
-              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2" id="add-category-form" method="post">
+              </div>
+              <div class="col-lg-8 col-sm-12">
+                <form class="mt-2 card" id="edit-menu-form" method="post">
+                  <h5 class="form-title text-primary">Add New Menu</h5>
+                  <hr>
                   {% csrf_token %}
+                  <input type="hidden" name="id" id="id">
                   <div id="coupon-general" class="product-form">
-                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
-                    <hr />
-                    <br />
+                    {% comment %} <h6 class="mt-2 text-primary fw-bolder h4">General</h6> {% endcomment %}
+                    {% comment %} <hr /> {% endcomment %}
+                    {% comment %} <br /> {% endcomment %}
                     <div class="row mb-3">
                       <label
                         for="menu-name"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Name*</label
                       >
-                      <div class="col-sm-10">
+                      <div class="col-lg-10">
                         <input
                           type="text"
                           class="form-control"
@@ -144,10 +74,10 @@
                     <div class="row mb-3">
                       <label
                         for="menu-style"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Style</label
                       >
-                      <div class="col-sm-10">
+                      <div class="col-lg-10">
                         <select name="menu-style" class="hideClear hideSearch" name="menu-style" id="menu-style">
                           <option value="dropdown">Dropdown</option>
                           <option value="mega">Mega Menu</option>
@@ -157,22 +87,23 @@
                     <div class="row mb-3">
                       <label
                         for="icon-select"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Icon</label
                       >
-                      <div class="col-sm-10">
-                        <select id="icon-select" name="menu-icon">
+                      <input type="hidden" id="first-menu-icon">
+                      <div class="col-lg-10">
+                        <select id="menu-icon-select" name="menu-icon">
                         </select>
                       </div>
                     </div>
                     <div class="row mb-3">
                       <label
                         for="menu-category"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Categories</label
                       >
-                      <div class="col-sm-10">
-                        <select name="menu-category" id="menu-category" multiple>
+                      <div class="col-lg-10">
+                        <select name="menu-category" id="menu-category" multiple required>
                           {% for category in categorys %}
                             <option value="{{category.id}}">{{category.name}}</option>
                           {% endfor %}
@@ -182,10 +113,10 @@
                     <div class="row mb-3">
                       <label
                         for="menu-group"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Groups</label
                       >
-                      <div class="col-sm-10">
+                      <div class="col-lg-10">
                         <select name="menu-group" id="menu-group" multiple>
                           {% for group in groups %}
                             <option value="{{group.id}}">{{group.name}}</option>
@@ -196,10 +127,10 @@
                     <div class="row mb-3">
                       <label
                         for="menu-subcategory"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
                         >Subcategories</label
                       >
-                      <div class="col-sm-10">
+                      <div class="col-lg-10">
                         <select name="menu-subcategory" id="menu-subcategory" multiple>
                           {% for subcategory in subcategories %}
                             <option value="{{subcategory.id}}">{{subcategory.name}}</option>
@@ -210,10 +141,10 @@
                     <div class="row mb-1">
                       <label
                         for="menu-enable"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        class="col-2 col-form-label"
                         >Status</label
                       >
-                      <div class="col-sm-10">
+                      <div class="col-lg-10 mt-2">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
                             <input id="menu-enable" type="checkbox" name="menu-enable"/>
@@ -231,22 +162,22 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 mt-4">
                       <div class="col-sm-10 offset-lg-2">
                         <button
                           id="save-btn"
                           type="submit"
                           class="btn btn-primary py-1 px-3"
                         >
-                          Save
+                          Add Menu
                         </button>
-                        <button
+                        {% comment %} <button
                           id="cancel-btn"
                           type="submit"
                           class="btn btn-secondary py-1 px-3"
                         >
                           Cancel
-                        </button>
+                        </button> {% endcomment %}
                       </div>
                     </div>
                   </div>
@@ -272,6 +203,36 @@
     <script src="{% static 'control/fontawesome.json' %}"></script>
     <script src="{% static 'control/font5.json' %}"></script>
     <script src="{% static 'control/js/icons.js' %}"></script>
-    <script src="{% static 'control/js/main.js' %}"></script>
+    <script src="{% static 'control/js/Sortable.js' %}"></script>
     <script src="{% static 'product_category.js' %}"></script>
+    <script>
+      const dragArea = document.querySelector(".wrapper");
+      var sortable = new Sortable(dragArea, {
+        animation: 350,
+        {% comment %} handle: '.handle', {% endcomment %}
+        onSort: function(){
+          elm = $(".menu-item")
+          var ids = []
+          for(i=0; i < elm.length; i++){
+            ids.push(elm[i].getAttribute("id"))
+          }
+          ids = String(ids)
+          $.ajax({
+            url:"/control/menu/update",
+            type:"POST",
+            data:{menu_id: ids, action: "update"},
+            success: function(result) {
+              console.log(result.msg)
+              console.log(result.id)
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            error: function(e){
+                console.error(JSON.stringify(e));
+            },
+          });
+        }
+      })
+    </script>
     {% endblock script %}

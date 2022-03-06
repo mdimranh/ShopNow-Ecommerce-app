@@ -6,6 +6,8 @@ from product.models import Category, Group, Subcategory, RecentlyView
 from django.core.paginator import Paginator
 from django.db.models import Q, Sum
 
+from setting.models import Menus
+
 from django.template.defaultfilters import slugify
 
 from django.http.response import JsonResponse
@@ -71,6 +73,7 @@ def ProductDetails(request, id):
         else:
             recent_pro = RecentlyView.objects.create(product = product)
             recent_pro.save()
+        menus = Menus.objects.all().exclude(active=False).order_by('position')
         images = Images.objects.filter(product=product)
         categorys = Category.objects.all()
         context = {
@@ -78,7 +81,8 @@ def ProductDetails(request, id):
             'images': images,
             'category': categorys,
             'total_review': total_review,
-            'rating': rating
+            'rating': rating,
+            'menus': menus
         }
         return render(request, 'product/product-details.html', context)
 

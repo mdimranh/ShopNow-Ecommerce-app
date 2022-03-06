@@ -1,32 +1,32 @@
 $("#pass-alert").css("display", "none");
-$('#signup-password').keyup(function() {
- if($("#singnup-password").val() === $("#signup-confirm-password").val() && $("#signup-password").val().length > 0){
-    $("#registration-btn").removeAttr("disabled");
-    $("#pass-alert").css('display', 'none');
- }
- else{
-    $("#registration-btn").attr("disabled", "true");
-    $("#pass-alert").css('display', 'block');
- }
+$('#signup-password').keyup(function () {
+    if ($("#singnup-password").val() === $("#signup-confirm-password").val() && $("#signup-password").val().length > 0) {
+        $("#registration-btn").removeAttr("disabled");
+        $("#pass-alert").css('display', 'none');
+    }
+    else {
+        $("#registration-btn").attr("disabled", "true");
+        $("#pass-alert").css('display', 'block');
+    }
 });
-$('#signup-confirm-password').keyup(function() {
- if($("#signup-password").val() === $("#signup-confirm-password").val() && $("#signup-password").val().length > 0){
-    $("#registration-btn").removeAttr("disabled");
-    $("#pass-alert").css('display', 'none');
- }
- else{
-    $("#registration-btn").attr("disabled", "true");
-    $("#pass-alert").css('display', 'block');
- }
+$('#signup-confirm-password').keyup(function () {
+    if ($("#signup-password").val() === $("#signup-confirm-password").val() && $("#signup-password").val().length > 0) {
+        $("#registration-btn").removeAttr("disabled");
+        $("#pass-alert").css('display', 'none');
+    }
+    else {
+        $("#registration-btn").attr("disabled", "true");
+        $("#pass-alert").css('display', 'block');
+    }
 });
 
 
-function AddPro(resp){
-document.getElementById("cart-total-price").innerHTML = "&#2547;"+resp.cost;
-$("#dropdown-cart-products").empty();
-varjson = JSON.parse(JSON.stringify(resp.cart));
-varjson.forEach(function(data){
-  var div = `<div class="product">
+function AddPro(resp) {
+    document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.cost;
+    $("#dropdown-cart-products").empty();
+    varjson = JSON.parse(JSON.stringify(resp.cart));
+    varjson.forEach(function (data) {
+        var div = `<div class="product">
               <div class="product-cart-details">
                   <h4 class="product-title">
                       <a href="product.html">${data.title}</a>
@@ -43,11 +43,11 @@ varjson.forEach(function(data){
               </figure>
               <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
           </div>`
-  $('#dropdown-cart-products').append(div);
-});
+        $('#dropdown-cart-products').append(div);
+    });
 }
 
-function setcart(resp){
+function setcart(resp) {
     var cart = `<div class="header-dropdown-link">
                                         <div class="dropdown compare-dropdown">
                                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Compare Products" aria-label="Compare Products">
@@ -125,7 +125,7 @@ function setcart(resp){
                                                 </div><!-- End .dropdown-menu -->
                                         </div><!-- End .cart-dropdown -->
                                     </div>`
-    var user_option =  `<div class="header-dropdown">
+    var user_option = `<div class="header-dropdown">
         <a href="#">${resp.name}</a>
         <div class="header-menu">
             <ul>
@@ -160,21 +160,21 @@ function getCookie(name) {
 }
 
 
-function Registration(event){
+function Registration(event) {
     event.preventDefault();
 
     $.ajax({
-        url:"/auth/",
-        type:"POST",
-        data:{
+        url: "/auth/",
+        type: "POST",
+        data: {
             first_name: $("#signup-first-name").val(),
             last_name: $("#signup-last-name").val(),
             email: $("#signup-email").val(),
             password: $("#signup-password").val(),
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
         },
-        success: function(result) {
-            if (result.success === 'yes'){
+        success: function (result) {
+            if (result.success === 'yes') {
                 document.getElementById('signin-tab').click();
                 $("#registration-form")[0].reset();
             }
@@ -183,32 +183,32 @@ function Registration(event){
         headers: {
             "X-CSRFToken": getCookie("csrftoken")
         },
-        error: function(e){
+        error: function (e) {
             console.error(JSON.stringify(e));
         },
     });
-  }
+}
 
-function Login(event){
+function Login(event) {
     event.preventDefault();
 
     $.ajax({
-        url:"/auth/",
-        type:"POST",
-        data:{
+        url: "/auth/",
+        type: "POST",
+        data: {
             email: $("#signin-email").val(),
             password: $("#signin-password").val(),
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
         },
-        success: function(result) {
+        success: function (result) {
             document.getElementById('user').innerText = 'yes';
             setcart(result);
         },
         headers: {
             "X-CSRFToken": getCookie("csrftoken")
         },
-        error: function(e){
+        error: function (e) {
             console.error(JSON.stringify(e));
         },
     });
-  }
+}

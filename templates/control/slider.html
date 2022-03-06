@@ -1,5 +1,8 @@
 {% extends 'control/base.html' %}
 {% load static %}
+{% load humanize %}
+{% load solo_tags %}
+{% get_solo 'setting.SiteFront' as site_front %}
 {% load fontawesome_5 %}
 {% block title %}Menus{% endblock title %}
   {% block style %}
@@ -15,6 +18,7 @@
     {% endblock style %}
 
     {% block main %}
+      {% if slider %}
         <h3 class="fw-bold">Slider's</h3>
         <div class="card slide-list">
           <div class="card-header">
@@ -41,22 +45,8 @@
                 data-page-list="[5, 25, 50, 100, ALL]"
                 data-search="true"
                 data-search-highlight="true"
-                data-show-export="true"
-                data-export-types="['csv','json', 'doc']"
-                data-export-options='{
-                  "fileName": "userlist"
-                }'
-                data-filter-control="true"
-                data-show-multi-sort="true"
                 data-fixed-columns="true"
                 data-fixed-number="1"
-                {% comment %} data-show-columns="true"
-                data-show-columns-toggle-all="true" {% endcomment %}
-                data-show-toggle="true"
-                data-show-fullscreen="true"
-                data-show-pagination-switch="true"
-                {% comment %} data-show-footer="true" {% endcomment %}
-                {% comment %} data-detail-view="true" {% endcomment %}
                 data-sticky-header = "true"
                 data-checkbox = "true"
                 class="table table-bordered no-border nowrap"
@@ -65,19 +55,15 @@
                   <tr>
                     <th data-checkbox="true" ></th>
                     <th data-sortable="true" data-valign="middle">Name</th>
-                    <th data-sortable="true" data-valign="middle">Style</th>
-                    <th data-sortable="true" data-valign="middle">Icon</th>
-                    <th data-sortable="true" data-valign="middle">Active</th>
+                    <th data-sortable="true" data-valign="middle">On Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for menu in menus %}
+                  {% for slide in slider %}
                   <tr>
                     <td data-checkbox-enabled="false"></td>
-                    <td ><a href="/" class="title">{{menu.name}}</a></td>
-                    <td >{{menu.style}}</td>
-                    <td><i class="{{menu.icon}}"></i></td>
-                    <td class="ps-4">{% if menu.active%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
+                    <td ><a href="/control/slider/{{slide.id}}" class="title">{{slide.name}}</a></td>
+                    <td class="ps-4">{% if slide.id == onaction.slider.id %}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -118,6 +104,7 @@
                   {% csrf_token %}
                   <div id="add-slides" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">Slides</h6>
+                    <input type="hidden" value="" id="wrapper_len">
                     <hr />
                     {% comment %} <br /> {% endcomment %}
                     {% comment %} <div class="row mb-3">
@@ -139,11 +126,11 @@
                       </div>
                     </div> {% endcomment %}
                     <div class="wrapper">
-                      <div class="d-flex flex-column">
+                      <div class="d-flex flex-column mb-4">
                             <div class="d-flex flex-fill mt-2 mb-4 justify-content-between"><h6><i class="fas fa-th-list me-3 drag-icon handle"></i>Image Slide</h6><i class="fas fa-times fa-lg"></i></div>
                             <div class="d-flex flex-column flex-xl-row align-items-center align-items-xl-start">
-                                <div class="me-3">
-                                    <label for="add-thumbnail-input">
+                                <div class="me-4">
+                                    <label for="add-thumbnail-input" class="slide-thumbnail d-flex flex-fill justify-content-center">
                                         <img
                                         class="thumbnail border-1"
                                         id="thumbnail"
@@ -170,33 +157,33 @@
                                     </nav>
                                     <div class="tab-content mt-3" id="nav-tabContent">
                                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                          <div class="container-fluid">
+                                          <div class="container-fluid px-0">
                                             <div class="row">
                                               <div class="col-xxl-4 col-xl-6 col-12 mb-2">
                                                 <label class="my-1" for="caption1">Caption 1</label>
-                                                <input class="form-control" type="text" id="caption1">
+                                                <input class="form-control" type="text" id="caption1" name="caption1">
                                               </div>
                                               <div class="col-xxl-4 col-xl-6 col-12 mb-2">
                                                 <label class="my-1" for="caption1">Caption 2</label>
-                                                <input class="form-control" type="text" id="caption2">
+                                                <input class="form-control" type="text" id="caption2" name="caption2">
                                               </div>
                                               <div class="col-xxl-4 col-xl-6 col-12 mb-2">
                                                 <label class="my-1" for="caption1">Caption 3</label>
-                                                <input class="form-control" type="text" id="caption3">
+                                                <input class="form-control" type="text" id="caption3" name="caption3">
                                               </div>
                                               <div class="col-xxl-4 col-xl-6 col-12 mb-2">
                                                 <label class="my-1" for="caltotext">Call To Action Text</label>
-                                                <input class="form-control" type="text" id="caltotext">
+                                                <input class="form-control" type="text" id="caltotext" name="calltotext">
                                               </div>
                                               <div class="col-xxl-4 col-xl-6 col-12 mb-2">
                                                 <label class="my-1" for="caltourl">Call To Action URL</label>
-                                                <input class="form-control" type="text" id="caltourl">
+                                                <input class="form-control" type="text" id="caltourl" name="calltourl">
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                                         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                          <div class="container-fluid">
+                                          <div class="container-fluid px-0">
                                             <div class="row">
                                               {% comment %} <div class="col-4 mb-2">
                                                 <label class="my-1" for="caption1">Caption 1</label>
@@ -205,7 +192,7 @@
                                               <div class="col-12 mb-2 mt-3">
                                                 <div class="checkbox-fade fade-in-primary">
                                                   <label>
-                                                    <input id="enable" type="checkbox" name="enable"/>
+                                                    <input id="open" type="checkbox" name="open"/>
                                                     <span class="cr">
                                                       <i
                                                         class="
@@ -246,23 +233,6 @@
                       </div>
                     </div>
                     <div class="btn my-3 add-new-slide-btn">Add Slide</div>
-                    <div class="row mb-3">
-                      <div class="col-xl-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <div
-                          id="cancel-btn"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </div>
-                      </div>
-                    </div>
                   </div>
                   <div id="add-settings" class="product-form d-none">
                     <h6 class="mt-2 text-primary fw-bolder h4">Settings</h6>
@@ -311,7 +281,7 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable-autoplay" type="checkbox" name="enable" />
+                            <input id="enable-autoplay" type="checkbox" name="autoplay" />
                             <span class="cr">
                               <i
                                 class="
@@ -391,11 +361,339 @@
                       </div>
                     </div>
                   </div>
+                  <div class="row my-4">
+                    <div class="col-xl-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <div
+                        id="cancel-btn"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                    </div>
+                  </div>
                 </form>
               </div>
             </div>
           </div>
-      </div>
+        </div>
+      {% else %}
+        <h3 class="fw-bold">{{slide.name}}</h3>
+        <div class="add-slide-sec card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Slider Information</span>
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="add-slides">
+                      <p class="m-0 p-0">Slides</p>
+                    </li>
+                    <li for="add-settings"><p class="m-0 p-0">Settings</p></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2 needs-validation add-pro-form" enctype='multipart/form-data' id="edit-slide-form" method="post" novalidate>
+                  {% csrf_token %}
+                  <div id="add-slides" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Slides</h6>
+                    <input type="hidden" value="{{slide.slide.all|length}}" id="wrapper_len">
+                    <hr />
+                    {% comment %} <br /> {% endcomment %}
+                    {% comment %} <div class="row mb-3">
+                      <label
+                        for="add-product-name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-product-name"
+                          name="name"
+                          placeholder="Name"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter name</div>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="wrapper">
+                      <input type="hidden" id="change_image" name="change_image">
+                      {% for sld in slide.slides %}
+                      <div class="d-flex flex-column mb-4" slide-id="sld.id">
+                            <div class="d-flex flex-fill mt-2 mb-4 justify-content-between"><h6><i class="fas fa-th-list me-3 drag-icon handle"></i>Image Slide</h6><i class="fas fa-times fa-lg"></i></div>
+                            <div class="d-flex flex-column flex-xl-row align-items-center align-items-xl-start">
+                                <div class="me-4">
+                                    <label for="add-thumbnail-input-{{forloop.counter}}" class="slide-thumbnail d-flex flex-fill justify-content-center">
+                                        <img
+                                        class="thumbnail border-1"
+                                        id="add-thumbnail-{{forloop.counter}}"
+                                        src="{{sld.image.url}}"
+                                        />
+                                    </label>
+                                    <input
+                                        class="d-none"
+                                        type="file"
+                                        accept="image/*"
+                                        id="add-thumbnail-input-{{forloop.counter}}"
+                                        name="thumbnail"
+                                        src = "{{sld.image.url}}"
+                                        for="add-thumbnail-{{forloop.counter}}"
+                                    />
+                                </div>
+                                <input type="hidden" name="id" value="{{sld.id}}">
+                                <input type="hidden" name="pos" id="pos">
+                                <div class="w-100">
+                                    <nav>
+                                        <div class="nav nav-pills" id="nav-tab" role="tablist">
+                                            <button class="nav-link active" id="nav-{{forloop.counter}}-home-tab" data-bs-toggle="tab" data-bs-target="#nav-{{forloop.counter}}-home" type="button" role="tab" aria-controls="nav-{{forloop.counter}}-home" aria-selected="true">General</button>
+                                            <button class="nav-link" id="nav-{{forloop.counter}}-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-{{forloop.counter}}-profile" type="button" role="tab" aria-controls="nav-{{forloop.counter}}-profile" aria-selected="false">Options</button>
+                                            {% comment %} <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button> {% endcomment %}
+                                        </div>
+                                    </nav>
+                                    <div class="tab-content mt-3" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-{{forloop.counter}}-home" role="tabpanel" aria-labelledby="nav-{{forloop.counter}}-home-tab">
+                                          <div class="container-fluid px-0">
+                                            <div class="row">
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 1</label>
+                                                <input class="form-control" type="text" id="caption1" name="caption1" value="{{sld.caption_1}}">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 2</label>
+                                                <input class="form-control" type="text" id="caption2" name="caption2" value="{{sld.caption_2}}">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caption1">Caption 3</label>
+                                                <input class="form-control" type="text" id="caption3" name="caption3" value="{{sld.caption_3}}">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caltotext">Call To Action Text</label>
+                                                <input class="form-control" type="text" id="caltotext" name="calltotext" value="{{sld.action_text}}">
+                                              </div>
+                                              <div class="col-xxl-4 col-xl-6 col-12 mb-2">
+                                                <label class="my-1" for="caltourl">Call To Action URL</label>
+                                                <input class="form-control" type="text" id="caltourl" name="calltourl" value="{{sld.action_url}}">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="nav-{{forloop.counter}}-profile" role="tabpanel" aria-labelledby="nav-{{forloop.counter}}-profile-tab">
+                                          <div class="container-fluid px-0">
+                                            <div class="row">
+                                              {% comment %} <div class="col-4 mb-2">
+                                                <label class="my-1" for="caption1">Caption 1</label>
+                                                <input class="form-control" type="text" id="caption1">
+                                              </div> {% endcomment %}
+                                              <div class="col-12 mb-2 mt-3">
+                                                <div class="checkbox-fade fade-in-primary">
+                                                  <label>
+                                                    <input id="open" type="checkbox" name="open" {% if sld.link_type %}checked{% endif %} />
+                                                    <span class="cr">
+                                                      <i
+                                                        class="
+                                                          cr-icon
+                                                          icofont icofont-ui-check
+                                                          txt-primary
+                                                        "
+                                                      ></i>
+                                                    </span>
+                                                    <span>Open in New Window</span>
+                                                  </label>
+                                                </div>
+                                              </div>
+                                              <div class="col-12 mb-2">
+                                                <div class="checkbox-fade fade-in-primary">
+                                                  <label>
+                                                    <input id="enable" type="checkbox" name="enable" {% if sld.active %}checked{% endif %}  />
+                                                    <span class="cr">
+                                                      <i
+                                                        class="
+                                                          cr-icon
+                                                          icofont icofont-ui-check
+                                                          txt-primary
+                                                        "
+                                                      ></i>
+                                                    </span>
+                                                    <span>Enable this slide</span>
+                                                  </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        {% comment %} <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Contact</div> {% endcomment %}
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <div class="btn my-3 add-new-slide-btn">Add Slide</div>
+                  </div>
+                  <div id="add-settings" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Settings</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="add-product-name"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Name*</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="add-product-name"
+                          name="name"
+                          placeholder="Name"
+                          value="{{slide.name}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter name</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="speed"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Speed</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="speed"
+                          name="speed"
+                          value="{{slide.speed}}"
+                          placeholder="300ms"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="enable-autoplay"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Autoplay</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable-autoplay" type="checkbox" name="autoplay" {% if slide.autoplay %}checked{% endif %} />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Autoplay</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="autoplay-speed"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Autoplay Speed</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="autoplay-speed"
+                          name="autoplay-speed"
+                          value="{{slide.autoplay_speed}}"
+                          placeholder="300"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="dots"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Dots</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="dots" type="checkbox" name="dots" {% if slide.dots %}checked{% endif %} />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Show Slider Dots</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="arrows"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Arrows</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="arrows" type="checkbox" name="arrows" {% if slide.arrows %}checked{% endif %} />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Show Prev/Next arrows</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row my-4">
+                    <div class="col-xl-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <div
+                        id="cancel-btn"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     {% endblock main %}
 
     {% block script %}

@@ -105,16 +105,20 @@
             </a>
           </li>
           <li>
-            <div class="menu">
-              <i class="fas fa-file-alt fa-left"></i>
-              <span>Pages</span>
-            </div>
+            <a href="/control/pages">
+              <div class="menu {% if page_sec %}selected active{% endif %}">
+                <i class="fas fa-file-alt fa-left"></i>
+                <span>Pages</span>
+              </div>
+            </a>
           </li>
           <li>
-            <div class="menu">
-              <i class="fas fa-camera fa-left"></i>
-              <span>Media</span>
-            </div>
+            <a href="/control/message">
+              <div class="menu {% if message_sec %}selected active{% endif %}">
+                <i class="far fa-envelope fa-left"></i>
+                <span>Message</span>
+              </div>
+            </a>
           </li>
           <li>
             <a href="/control/menu">
@@ -156,14 +160,14 @@
             </ul>
           </li>
           <li>
-            <div class="menu">
+            <div class="menu {% if slider_sec %}selected active{% endif %}">
               <i class="fa fa-paint-brush fa-left"></i>
               <span>Appearance</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
-              <li><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
+              <li class="{% if slider_list_sec or edit_slider_sec %}selected{% endif %}"><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
+              <li class="{% if sitefront_sec %}selected{% endif %}"><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
             </ul>
           </li>
           <li>

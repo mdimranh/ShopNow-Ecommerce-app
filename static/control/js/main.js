@@ -161,6 +161,11 @@ $("#add-thumbnail-input").change(function(event){
   output.src = URL.createObjectURL(event.target.files[0]);
 })
 
+$("#add-thumbnail-input-1").change(function(event){
+  var output = $(this).parent().children("label").children("img")[0]
+  output.src = URL.createObjectURL(event.target.files[0]);
+})
+
 // add color btn
 
 $("#add-color").on("click", function () {
@@ -905,6 +910,66 @@ Array.prototype.slice.call(forms)
 
   })
 
+
+
+  // menu page
+  $(".add-menu-btn").click(function(){
+    $(".menu-item.selected").removeClass("selected")
+    $("#menu-name").val("")
+    document.getElementById("menu-style").setValue("dropdown")
+    document.getElementById("menu-icon-select").reset()
+    document.getElementById("menu-category").reset()
+    document.getElementById("menu-group").reset()
+    document.getElementById("menu-subcategory").reset()
+    $("#menu-enable").attr("checked", true)
+    $("#save-btn").text("Add Menu")
+    $(".form-title").text("Add New Menu")
+    $("#id").val('')
+  })
+  $(".menu-item").click(function(){
+    $(".menu-item.selected").removeClass("selected")
+    if (!$(this).hasClass("selecded")){
+      $(this).addClass("selected")
+    }
+    $("#menu-name").val($(this).attr("name"))
+    document.getElementById("menu-style").setValue($(this).attr("style"))
+    document.getElementById("menu-icon-select").setValue($(this).attr("icon"))
+    document.getElementById("menu-category").setValue($(this).attr("category").split(","))
+    document.getElementById("menu-group").setValue($(this).attr("group").split(","))
+    document.getElementById("menu-subcategory").setValue($(this).attr("subcat").split(","))
+    if ($(this).attr("status") == 'True'){
+      $("#menu-enable").attr("checked", true)
+    }
+    $("#save-btn").text("Save")
+    $(".form-title").text($(this).attr("name"))
+    $("#id").val($(this).attr("id"))
+  })
+
+  $(".delete-menus").on("click", function(){
+    console.log($(this).parent().children(".menu-item").attr("id"))
+    var action = 'delete'
+    $.ajax({
+      url:"/control/menu/update",
+      type:"POST",
+      data:{menu_id: $(this).parent().children(".menu-item").attr("id"), action: action},
+      success: function(result) {
+        if ($("div[id="+result.id+"]").parent().children(".menu-item").hasClass("selected")){
+          $("div[id="+result.id+"]").parent().remove()
+          $("#edit-menu-form").trigger("reset")
+          document.getElementById("menu-style").setValue("dropdown")
+        }
+        else{
+          $("div[id="+result.id+"]").parent().remove()
+        }
+      },
+      headers: {
+          "X-CSRFToken": getCookie("csrftoken")
+      },
+      error: function(e){
+          console.error(JSON.stringify(e));
+      },
+    });
+  })
 
 
   //! setting file

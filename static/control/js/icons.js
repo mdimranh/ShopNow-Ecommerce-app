@@ -13,6 +13,11 @@ $(document).ready(function () {
     options: opt,
     search: true,
   });
+  VirtualSelect.init({
+    ele: "#menu-icon-select",
+    options: opt,
+    search: true,
+  });
 });
 
 // $(".get-data").on("click", function(){

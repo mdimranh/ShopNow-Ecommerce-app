@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
+from region.models import *
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, related_name="profile_info")
     phone = models.CharField(max_length=20)
@@ -25,3 +27,19 @@ class Profile(models.Model):
     class Meta:
         verbose_name_plural = 'Profiles'
         app_label = 'auth'
+
+
+class AddressBook(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    name = models.CharField(max_length=200)
+    phone = models.CharField(max_length=20)
+    country = models.ForeignKey(Country, on_delete = models.CASCADE, blank=True, null=True)
+    region = models.ForeignKey(Region, on_delete = models.CASCADE, blank=True, null=True)
+    city = models.ForeignKey(City, on_delete = models.CASCADE, blank=True, null=True)
+    area = models.ForeignKey(Area, on_delete = models.CASCADE, blank=True, null=True)
+    address = models.CharField(max_length=500)
+    default = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.user.first_name+" "+self.user.last_name
+    

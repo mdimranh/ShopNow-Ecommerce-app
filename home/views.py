@@ -19,7 +19,7 @@ def Home(request):
     subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
-    menus = Menus.objects.all().exclude(active=False)
+    menus = Menus.objects.all().exclude(active=False).order_by('position')
     product = Product.objects.all()
     total_cost = 0
     item = 0
@@ -70,30 +70,49 @@ def AboutUs(request):
         'teaminfo': teaminfo,
         'aboutus': aboutus
     }
-    return render(request, 'aboutus/about-us.html', context)
+    return render(request, 'shop/about.html', context)
 
 def ContactUs(request):
     if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            data = ContactMessage()
-            data.name = form.cleaned_data['name']
-            data.email = form.cleaned_data['email']
-            data.subject = form.cleaned_data['subject']
-            data.message = form.cleaned_data['message']
-            data.ip = request.META.get('REMOTE_ADDR')
-            data.save()
-            messages.success(request, 'Your message has been sent.')
-            return redirect(request.path_info)
+        # form = ContactForm(request.POST)
+        # if form.is_valid():
+        #     data = ContactMessage()
+        #     data.name = form.cleaned_data['name']
+        #     data.email = form.cleaned_data['email']
+        #     data.subject = form.cleaned_data['subject']
+        #     data.message = form.cleaned_data['message']
+        #     data.ip = request.META.get('REMOTE_ADDR')
+        #     data.save()
+        #     messages.success(request, 'Your message has been sent.')
+        #     return redirect(request.path_info)
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        ip = request.META.get('REMOTE_ADDR')
+        msg = ContactMessage(
+            name = name,
+            email = email,
+            # phone = phone,
+            subject=subject,
+            ip = ip,
+            message=message
+        )
+        msg.save()
+        return redirect(request.path_info)
+        
+    menus = Menus.objects.all().exclude(active=False).order_by('position')
     categorys = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
         'category': categorys,
         'aboutus': aboutus,
-        'form': ContactMessageForm
+        'form': ContactMessageForm,
+        'menus': menus
     }
-    return render(request, 'aboutus/contact.html', context)
+    return render(request, 'shop/contact.html', context)
 
 def SearchView(request):
     if request.method == 'POST':

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 from product.models import Category, Group, Subcategory
+from ckeditor_uploader.fields import RichTextUploadingField
 
 import json
 
@@ -29,15 +30,23 @@ class SiteConfiguration(SingletonModel):
 	
 
 BANNER_TYPE = (
-	('Left', 'Left'),
-	('Top', 'Top'),
-	('Middle Small', 'Middle Small'),
-	('Middle Big', 'Middle Big'),
-	('Bottom', 'Bottom')
+	('banner1', 'banner1'),
+	('banner2', 'banner2'),
+	('banner3', 'banner3'),
+	('banner4', 'banner4'),
+	('banner5', 'banner5'),
+	('banner6', 'banner6'),
+	('banner4', 'banner7'),
+	('banner8', 'banner8'),
 )
 
 class Banner(models.Model):
 	title = models.CharField(max_length=100)
+	caption1 = models.CharField(max_length=500, blank=True, null=True)
+	caption2 = models.CharField(max_length=500, blank=True, null=True)
+	caption3 = models.CharField(max_length=500, blank=True, null=True)
+	call_to_text = models.CharField(max_length=500, default="Shop Now")
+	call_to_url = models.CharField(max_length=500, default="/")
 	image = models.ImageField(upload_to = 'banner/')
 	banner_type = models.CharField(max_length=50, default='Top', choices=BANNER_TYPE)
 	active = models.BooleanField(default=True)
@@ -118,12 +127,17 @@ class ContactMessage(models.Model):
 
 class Slider(models.Model):
 	name = models.CharField(max_length=250)
+	speed = models.IntegerField(default=3000)
 	autoplay = models.BooleanField(default=True)
 	autoplay_timeout = models.IntegerField(default=4000)
+	dots = models.BooleanField(default=True)
 	arrows = models.BooleanField(default=True)
 
 	def __str__(self):
 		return self.name
+
+	def slides(self):
+		return Slide.objects.filter(slider = self).order_by("position")
 	
 	class Meta:
 		verbose_name = 'Slider'
@@ -138,6 +152,7 @@ class Slide(models.Model):
 	link_type = models.BooleanField(verbose_name='Open in new window')
 	image = models.ImageField(upload_to = 'slide/')
 	active = models.BooleanField(verbose_name='Status')
+	position = models.IntegerField(blank=True, null=True)
 
 	def __str__(self):
 		return ''
@@ -155,14 +170,14 @@ class Slide(models.Model):
 
 class SiteFront(SingletonModel):
 	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
-	top_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='top_banner')
-	left_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='left_banner1')
-	left_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='left_banner2')
-	middle_big_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_big_banner1')
-	middle_big_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_big_banner2')
-	middle_small_banner = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='middle_small_banner')
-	bottom_banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='bottom_banner1')
-	bottom_banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='bottom_banner2')
+	banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner1')
+	banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner2')
+	banner3 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner3')
+	banner4 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner4')
+	banner5 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner5')
+	banner6 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner6')
+	banner7 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner7')
+	banner8 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner8')
 
 	def __str__(self):
 		return "Site Front"
@@ -183,6 +198,7 @@ class Menus(models.Model):
 	subcategorys = models.ManyToManyField(Subcategory)
 	icon = models.CharField(max_length=200)
 	active = models.BooleanField(default=True)
+	position = models.IntegerField(blank=True, null=True)
 
 	def __str__(self):
 		return self.name
@@ -200,6 +216,46 @@ class Menus(models.Model):
 			for sub_cat in grp.subcategorys.all():
 				subcat.append(sub_cat)
 		return subcat
+
+	def categories_id(self):
+		ids = ''
+		for item in self.categorys.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids
+
+	def groups_id(self):
+		ids = ''
+		for item in self.groups.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids
+
+	def subcats_id(self):
+		ids = ''
+		for item in self.subcategorys.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids	
+
+
+class Pages(models.Model):
+	name = models.CharField(max_length=500)
+	body = RichTextUploadingField()
+	active = models.BooleanField(default=True)
+
+	def __str__(self):
+		return self.name
+	
 	
 
 class ProductCarousel(models.Model):

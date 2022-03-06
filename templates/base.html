@@ -285,7 +285,7 @@
                                             {% for category in category %}
                                             {% if category.groups.all|length > 0 %}
                                             <li class="megamenu-container">
-                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}">{{category.icon.as_html}}{{category.name}}</a>
+                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}"><i class="{{category.icon}}"></i>{{category.name}}</a>
                                                 <div class="megamenu">
                                                     <div class="row no-gutters">
                                                         <div class="col-md-8">

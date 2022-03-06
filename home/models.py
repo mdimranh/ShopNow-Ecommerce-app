@@ -74,6 +74,7 @@ class ContactMessage(models.Model):
 	)
 	name = models.CharField(max_length=200)
 	email = models.EmailField()
+	phone = models.CharField(max_length=20, blank=True, null=True)
 	subject = models.CharField(max_length=250, blank=True)
 	message = models.TextField(blank=True)
 	status = models.CharField(max_length=10, choices=STATUS, default='New')
@@ -83,7 +84,7 @@ class ContactMessage(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-    		return self.name
+		return self.name
 
 
 class SearchKeyword(models.Model):

@@ -175,26 +175,28 @@
                                             <thead>
                                                 <tr>
                                                     <th>Address Name</th>
-                                                    <th>Address</th>
                                                     <th>Region</th>
+                                                    <th>Address</th>
                                                     <th>Phone Number</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {% for ab in address_book %}
                                                 <tr>
-                                                    <td>Imran Hossain</td>
-                                                    <td>Kaliakoir, Gazipur</td>
-                                                    <td>Dhaka-Gazipur-Mouchak</td>
-                                                    <td>01942504420</td>
-                                                    <td>Default addess</td>
+                                                    <td>{{ab.name}}</td>
+                                                    <td>{{ab.country}}-{{ab.region}}-{{ab.city}}-{{ab.area}}</td>
+                                                    <td>{{ab.address}}</td>
+                                                    <td>{{ab.phone}}</td>
+                                                    <td>{% if ab.default %}Default addess{% endif %}</td>
                                                     <td class="text-warning address-edit-btn">edit</td>
                                                 </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
 
-                                        <form action="#" class="d-none" id="address-edit-form">
+                                        <form class="d-none" id="address-edit-form">
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>Address Name *</label>
@@ -203,7 +205,7 @@
 
 			                					<div class="col-sm-6">
 			                						<label>Phone *</label>
-			                						<input type="text" class="form-control" required value="{{user.last_name}}">
+			                						<input type="text" class="form-control" required>
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
@@ -212,33 +214,37 @@
 		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
                                             <div class="row">
                                                 <div class="col-sm-4">
-                                                    <label>Region *</label>
-                                                    <select class="form-control" name="" id="region">
-                                                        {% for state in state %}
-                                                            <option value="{{state.name}}">{{state.name}}</option>
+                                                    <label>Country *</label>
+                                                    <select class="form-control" name="" id="edit-country">
+                                                        <option value="null"></option>
+                                                        {% for country in countrys %}
+                                                            <option value="{{country.id}}">{{country.name}}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
 
                                                 <div class="col-sm-4">
-                                                    <label>City *</label>
+                                                    <label>Region *</label>
                                                     <select class="form-control" name="" id="city" disabled>
-                                                        <option value="">---</option>
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-sm-4">
-                                                    <label>Area *</label>
+                                                    <label>City *</label>
                                                     <select class="form-control" name="" id="area" disabled>
-                                                        <option value="">---</option>
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
-                                            </div><!-- End .row -->
-
-                                            <div class="row">
-                                                <div class="col-12">
+                                                <div class="col-sm-4">
+                                                    <label>Area *</label>
+                                                    <select class="form-control" name="" id="area" disabled>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
                                                     <label>Address *</label>
-                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                    <input type="tel" class="form-control" required>
                                                 </div>
                                             </div><!-- End .row -->
 
@@ -251,16 +257,17 @@
                                                 <span>Cancel</span>
                                             </div>
 			                			</form>
-                                        <form action="#" class="d-none" id="add-address-form">
+                                        <form class="d-none" id="add-address-form" method="post">
+                                            {% csrf_token %}
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>Address Name *</label>
-			                						<input type="text" class="form-control" required>
+			                						<input type="text" class="form-control" name="ab-name" required>
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
 			                						<label>Phone *</label>
-			                						<input type="text" class="form-control" required>
+			                						<input type="text" class="form-control" name="ab-phone" required>
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
@@ -269,35 +276,46 @@
 		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
                                             <div class="row">
                                                 <div class="col-sm-4">
-                                                    <label>Region *</label>
-                                                    <select class="form-control" name="" id="region">
-                                                        {% for item in region %}
-                                                            <option value="{{item.name}}">{{item.title}}</option>
+                                                    <label>Country *</label>
+                                                    <select class="form-control" name="ab-country" id="add-country">
+                                                        <option value="null"></option>
+                                                        {% for country in countrys %}
+                                                            <option value="{{country.id}}">{{country.name}}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
 
                                                 <div class="col-sm-4">
-                                                    <label>City *</label>
-                                                    <select class="form-control" name="" id="city" disabled>
-                                                        <option value="">---</option>
+                                                    <label>Region *</label>
+                                                    <select class="form-control" name="ab-region" id="add-region" disabled>
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-sm-4">
-                                                    <label>Area *</label>
-                                                    <select class="form-control" name="" id="area" disabled>
-                                                        <option value="">---</option>
+                                                    <label>City *</label>
+                                                    <select class="form-control" name="ab-city" id="add-city" disabled>
+                                                        <option value=""></option>
                                                     </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>Area *</label>
+                                                    <select class="form-control" name="ab-area" id="add-area" disabled>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Address *</label>
+                                                    <input type="tel" class="form-control" name="ab-address" required>
                                                 </div>
                                             </div><!-- End .row -->
 
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <label>Address *</label>
-                                                    <input type="tel" class="form-control" required>
+                                                    <input class="me-3" type="checkbox" name="default" id="default">
+                                                    <label for="default">Default Address book</label>
                                                 </div>
-                                            </div><!-- End .row -->
+                                            </div>
 
 		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
 			                					<span>Save</span>
@@ -396,5 +414,6 @@
 {% endblock custom %}
 
 {% block extra_js %}
+    <script src="{% static 'assets/profile.js' %}"></script>
     <script src="{% static 'assets/profile.js' %}"></script>
 {% endblock extra_js %}
