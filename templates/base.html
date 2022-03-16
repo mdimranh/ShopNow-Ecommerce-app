@@ -1,5 +1,6 @@
 {% load socialaccount %}
 {% load static %}
+{% load custom_tags %}
 {% load fontawesome_5 %}
 {% load solo_tags %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
@@ -38,6 +39,16 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/magnific-popup/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery.countdown.css' %}">
     <link rel="stylesheet" href="{% static 'assets/izimodal/css/iziModal.css' %}"/>
+
+
+    <!-- pnotify -->
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.brighttheme.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.history.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
+
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
@@ -125,7 +136,8 @@
                                     </li>
                                     {% if not user.is_authenticated %}
                                     <li class="login" id="login">
-                                        <a id="login-modal-btn" href="#signin-modal" data-toggle="modal">Sign in / Sign up</a>
+                                        {% comment %} <a id="login-modal-btn" href="#signin-modal" data-toggle="modal">Sign in / Sign up</a> {% endcomment %}
+                                        <a href="/auth">Sign in / Sign up</a>
                                     </li>
                                     {% endif %}
                                 </ul>
@@ -160,7 +172,7 @@
                                                 <div class="select-custom">
                                                     <select id="cat" name="category">
                                                         <option value="0">All Departments</option>
-                                                        {% for category in category %}
+                                                        {% for category in cat|categorys %}
                                                             {% if category.searchable %}                       
                                                                 <option class='bolden' value="{{category.id}}"><h4>{{category.name}}</h4></option>
                                                                 {% for group in category.groups.all %}
@@ -212,20 +224,26 @@
 
                                         <a href="/wishlist" class="wishlist-link">
                                             <i class="icon-heart-o"></i>
-                                            <span class="wishlist-count">3</span>
+                                            <span class="wishlist-count">{{user.wishlist.all|length}}</span>
                                             <span class="wishlist-txt">Wishlist</span>
                                         </a>
 
                                         <div class="dropdown cart-dropdown">
                                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                                 <i class="icon-shopping-cart"></i>
-                                                <span class="cart-count">{{item}}</span>
+                                                {% for cart in user.id|shopcart %}
+                                                {% if forloop.counter == 1 %}
+                                                <span class="cart-count">{{cart|length}}</span>
+                                                {% endif %}
+                                                {% endfor %}
                                                 <span class="cart-txt">Cart</span>
                                             </a>
 
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <div class="dropdown-cart-products" id="dropdown-cart-products">
-                                                        {% for item in shopcart %}
+                                                        {% for cart in user.id|shopcart %}
+                                                        {% if forloop.counter == 1 %}
+                                                        {% for item in cart %}
                                                         <div class="product">
                                                             <div class="product-cart-details">
                                                                 <h4 class="product-title">
@@ -246,12 +264,18 @@
                                                             <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                                         </div><!-- End .product -->
                                                         {% endfor %}
+                                                        {% endif %}
+                                                        {% endfor %}
 
                                                     </div><!-- End .cart-product -->
 
                                                     <div class="dropdown-cart-total">
                                                         <span>Total</span>
-                                                        <span class="cart-total-price" id="cart-total-price">&#2547;{{cost}}</span>
+                                                        {% for item in user.id|shopcart %}
+                                                        {% if forloop.counter == 2 %}
+                                                        <span class="cart-total-price" id="cart-total-price">&#2547;{{item}}</span>
+                                                        {% endif %}
+                                                        {% endfor %}
                                                     </div><!-- End .dropdown-cart-total -->
 
                                                     <div class="dropdown-cart-action">
@@ -282,7 +306,7 @@
                                 <div class="dropdown-menu show">
                                     <nav class="side-nav">
                                         <ul class="menu-vertical sf-arrows">
-                                            {% for category in category %}
+                                            {% for category in cat|categorys %}
                                             {% if category.groups.all|length > 0 %}
                                             <li class="megamenu-container">
                                                 <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}"><i class="{{category.icon}}"></i>{{category.name}}</a>
@@ -331,7 +355,7 @@
                         <div class="col col-lg-6 col-xl-6 col-xxl-8 header-left">
                             <nav class="main-nav">
                                 <ul class="menu sf-arrows">
-                                    {% for menu in menus %}
+                                    {% for menu in menu|menus %}
                                     {% if menu.style == 'mega' %}
                                     <li>
                                         <a href="category.html" class="sf-with-ul"><i class="{{menu.icon}}"></i>{{menu.name}}</a>
@@ -924,7 +948,7 @@
                                 </div><!-- .End .tab-pane -->
                             </div><!-- End .tab-content -->
                         </div><!-- End .form-tab -->
-                    </div><!-- End .form-box -->
+                    </div>
                 </div><!-- End .modal-body -->
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
@@ -998,9 +1022,23 @@
     <script src="{% static 'assets/js/jquery.countdown.min.js' %}"></script>
     <!-- Main JS File -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/sweetalert2.all.js' %}"></script>
     <script src="{% static 'assets/js/demos/demo-14.js' %}"></script>
     <script src="{% static 'assets/account.js' %}"></script>
     <script src="{% static 'assets/izimodal/js/iziModal.js' %}"></script>
+
+
+    <!-- pnotify -->
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.desktop.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.confirm.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.callbacks.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.animate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.history.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.mobile.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.nonblock.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/pnotify/notify.js' %}"></script>
     {% comment %} <script>
         var mdl = $("#add-product-modal").iziModal({
             radius: 0,

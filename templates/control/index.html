@@ -18,9 +18,9 @@
                   <h5>Total Sales</h5>
                   <ul>
                     <li>
-                      <i class="icofont icofont-bill-alt"></i>
+                      <i class="fa fa-money"></i>
                     </li>
-                    <li class="text-right">133</li>
+                    <li class="text-right">${{total_sales}}</li>
                   </ul>
                 </div>
               </div>
@@ -32,9 +32,9 @@
                   <h5>Total Orders</h5>
                   <ul>
                     <li>
-                      <i class="icofont icofont-shopping-cart text-info"></i>
+                      <i class="fa fa-cart-arrow-down text-info"></i>
                     </li>
-                    <li class="text-right text-info">23</li>
+                    <li class="text-right text-info">{{total_order}}</li>
                   </ul>
                 </div>
               </div>
@@ -46,7 +46,7 @@
                   <h5>Total Products</h5>
                   <ul>
                     <li>
-                      <i class="icofont icofont-cubes text-success"></i>
+                      <i class="fa fa-cubes text-success"></i>
                     </li>
                     <li class="text-right text-success">{{total_product}}</li>
                   </ul>
@@ -60,7 +60,7 @@
                   <h5>Total Customers</h5>
                   <ul>
                     <li>
-                      <i class="icofont icofont-ui-user-group text-primary"></i>
+                      <i class="fa fa-users text-primary"></i>
                     </li>
                     <li class="text-right text-primary">{{total_customer}}</li>
                   </ul>
@@ -101,7 +101,49 @@
                 <div class="card">
                   <div class="card-header">
                     <h5>
-                      <i class="icofont icofont-chart-arrows-axis fs-4 me-2"></i
+                      <i class="icofont icofont-shopping-cart fs-4 me-2"></i
+                      >Latest Orders
+                    </h5>
+                  </div>
+                  <table
+                    id="product-table"
+                    data-toggle="table"
+                    data-pagination="false"
+                    class="table table-bordered no-border nowrap search-result-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col" data-sortable="true">ID</th>
+                        <th scope="col" data-sortable="true">Customer Email</th>
+                        <th scope="col" data-sortable="true">Date</th>
+                        <th scope="col" data-sortable="true">Status</th>
+                        <th scope="col" data-sortable="true">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if orders|length == 0 %}
+                        <tr>No Result Found</tr>
+                      {% else %}
+                      {% for order in orders %}
+                      <tr>
+                        <td><a href="/control/order/{{order.id}}" class="title">{{order.id}}</a></td>
+                        <td><a href="/control/order/{{order.id}}" class="title">{{order.email}}</a></td>
+                        <td><a href="/control/order/{{order.id}}" class="title">{{order.order_date|date}}</a></td>
+                        <td><a href="/control/order/{{order.id}}" class="title">{{order.status}}</a></td>
+                        <td><a href="/control/order/{{order.id}}" class="title">{{order.total}}</a></td>
+                      </tr>
+                      {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>
+                      <i class="icofont icofont-stock-search fs-4 me-2"></i
                       >Latest Search Keyword
                     </h5>
                   </div>

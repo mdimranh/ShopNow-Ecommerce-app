@@ -452,9 +452,9 @@ textarea:focus {
 }
 
 #add-color {
-  height: 45px;
-  width: 136px;
-  white-space: nowrap;
+  height: 40px;
+  width: 40px;
+  border: 1px solid gray;
 }
 
 #add-options .option {

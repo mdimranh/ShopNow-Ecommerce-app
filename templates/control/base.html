@@ -31,6 +31,7 @@
       rel="stylesheet"
       href="{% static 'control/css/navigation-copy.css' %}"
     />
+    <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
     {% block style %}{% endblock style %}
   </head>
   <body>
@@ -86,13 +87,13 @@
             </ul>
           </li>
           <li>
-            <div class="menu">
+            <div class="menu {% if sales_sec %}selected active{% endif %}">
               <i class="fas fa-dollar-sign fa-left"></i>
               <span>Sales</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="" class="d-flex flex-fill">Orders</a></li>
+              <li class="orders {% if orders_sec %}selected{% endif %}"><a href="/control/orders" class="d-flex flex-fill">Orders</a></li>
               <li><a href="" class="d-flex flex-fill">Transections</a></li>
             </ul>
           </li>
@@ -192,6 +193,16 @@
           <span>Copyright <span class="fw-bold">©</span> <span class="current-year"></span> <a href="/" class="text-decoration-none">{{site_config.name}}</a></span>
         </div>
       </div>
+
+      <div class="overlay" id="overlay">
+        <div class="load" style="background-image: url('{{site_config.favicon.url}}');">
+          <div class="spinners">
+            <div class="spin-inner"></div>
+            <div class="spin-outter"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <script src="{% static 'control/js/jquery.min.js' %}"></script>

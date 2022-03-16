@@ -648,13 +648,10 @@
                         class="col-xl-2 col-form-label d-none d-xl-block"
                         >Color</label
                       >
-                      <div class="col-xl-10 d-flex justify-content-between color-picker-section">
-                        <div class="d-flex flex-wrap" id="color-picker">
-                          <input class="mx-1 my-1" id="color-pick" name="color" type="color" />
+                      <div class="col-xl-10 d-flex align-items-center">
+                        <div class="d-flex align-items-center flex-wrap" id="color-picker">
                         </div>
-                        <div class="btn btn-outline-success" id="add-color">
-                          Add New Color
-                        </div>
+                        <div id="add-color" class="btn mx-1 my-1"><i class="fas fa-plus"></i></div>
                       </div>
                     </div>
                     {% comment %} <div class="row mb-3">
@@ -1022,7 +1019,8 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2" id="add-category-form">
+                <form class="mt-2" id="add-category-form" method="post" enctype='multipart/form-data'>
+                  {% csrf_token %}
                   <div id="general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
@@ -1387,13 +1385,13 @@
                         class="col-xl-2 col-form-label d-none d-xl-block"
                         >Color</label
                       >
-                      <div class="col-xl-10 d-flex justify-content-between">
-                        <div class="d-flex flex-wrap" id="color-picker">
-                          <input class="mx-1 my-1" id="color-pick" type="color" />
+                      <div class="col-xl-10 d-flex align-items-center">
+                        <div class="d-flex align-items-center flex-wrap" id="color-picker">
+                          {% for color in product_details.pro_color %}
+                            <input class="mx-1 my-1" id="color-pick" type="color" value="{{color}}" />
+                          {% endfor %}
                         </div>
-                        <div class="btn btn-outline-success" id="add-color">
-                          Add New Color
-                        </div>
+                        <div id="add-color" class="btn mx-1 my-1"><i class="fas fa-plus"></i></div>
                       </div>
                     </div>
                     <div class="row mb-3">

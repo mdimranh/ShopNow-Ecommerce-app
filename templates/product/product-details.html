@@ -72,17 +72,22 @@
                             <div class="product-content">
                                 <p>{{product.short_info}}</p>
                             </div><!-- End .product-content -->
-                            <div class="details-filter-row details-row-size">
+                            {% if product.pro_color|length > 0 %}
+                            <div class="details-filter-row details-row-size for-color">
                                 <label>Color:</label>
                                 <div class="product-nav product-nav-thumbs">
-                                    {% for color in product.pro_color %}
-                                        <i class="fas fa-circle fa-2x px-1 py-1 mx-2 product-color" style="color: {{color}};"></i>
-                                    {% endfor %}
+                                    <div class="btn-group mx-3" role="group" aria-label="Basic radio toggle button group">
+                                        {% for color in product.pro_color %}
+                                            <input type="radio" class="btn-check d-none" name="color" id="btnradio{{forloop.counter}}" value="{{color}}" autocomplete="off" checked>
+                                            <label class="product-color-label px-1" for="btnradio{{forloop.counter}}"><div class="product-color {% if forloop.counter == 1 %}select{% endif %}"><span style="background: {{color}}"></span></div></label>
+                                        {% endfor %}
+                                    </div>
                                 </div><!-- End .product-nav -->
                             </div><!-- End .details-filter-row -->
+                            {% endif %}
                             {% if product.size|length > 0 %}
                             <div class="details-filter-row details-row-size">
-                                <label for="size">Size:</label>
+                                <label for="size">Size: </label>
                                 <div class="select-custom">
                                     <select name="size" id="size" class="form-control">
                                         {% for size in product.pro_size %}
@@ -111,11 +116,11 @@
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                    <input type="number" id="pro-quantity" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
                                 </div><!-- End .product-details-quantity -->
                             </div><!-- End .details-filter-row -->
                             <div class="product-details-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                <a href="#" class="btn-product btn-cart" onclick="AddProduct({{product.id}}, 'yes')"><span>add to cart</span></a>
                                 <div class="details-action-wrapper">
                                     <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
                                     <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
@@ -196,7 +201,9 @@
                                     <button class="btn btn-warning" type="submit">Submit</button>
                                 </form>
                                 <div class="col-md-6 mb-md-0 mb-4">
+
                                     {% for review in product.reviews.all %}
+                                    {% if review.user == user %}
                                     <div class="row no-gutters mb-2">
                                         <div class="">
                                             <h4 class="p-0 m-0"><a href="#">{% if user.is_authenticated %}{% if review.user.id == user.id %}<i class="fas fa-check-circle"></i>{% endif %}{% endif %} {{review.user_name}}</a></h4>
@@ -215,6 +222,30 @@
                                             </div><!-- End .review-action --> {% endcomment %}
                                         </div><!-- End .col -->
                                     </div><!-- End .row -->
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% for review in product.reviews.all %}
+                                    {% if review.user != user %}
+                                    <div class="row no-gutters mb-2">
+                                        <div class="">
+                                            <h4 class="p-0 m-0"><a href="#">{% if user.is_authenticated %}{% if review.user.id == user.id %}<i class="fas fa-check-circle"></i>{% endif %}{% endif %} {{review.user_name}}</a></h4>
+                                            <div class="ratings-container p-0 mt-1">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: {{review.rating}}%;"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                            <span class="review-date">{{review.add_on|timesince}} ago</span>
+                                            <div class="review-content m-0 p-0">
+                                                <p>{{review.comment}}</p>
+                                            </div><!-- End .review-content -->
+                                            {% comment %} <div class="review-action p-0 m-0">
+                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                            </div><!-- End .review-action --> {% endcomment %}
+                                        </div><!-- End .col -->
+                                    </div><!-- End .row -->
+                                    {% endif %}
                                     {% endfor %}
                                 </div>
                             </div><!-- End .review -->

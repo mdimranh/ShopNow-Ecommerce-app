@@ -1,10 +1,16 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import HttpResponse, JsonResponse
 
+from django.contrib.auth.models import User
+
 from .models import ShopCart, Coupon, Wishlist
 from product.models import Product
 
 from product.models import Category
+from region.models import Country, Region, City, Area
+
+from order.models import ShippingMethod, Order
+from accounts.models import AddressBook
 
 import json
 
@@ -254,10 +260,16 @@ def Checkout(request):
                 total_cost -= item.coupon.value
             else:
                 total_cost = total_cost - (total_cost * item.coupon.value / 100)
+    countrys = Country.objects.all()
+    local_shipping = ShippingMethod.objects.filter(method_type = 'local').first()
+    free_shipping = ShippingMethod.objects.filter(method_type = 'free').first()
     context = {
         'category': category,
         'shopcart': shopcart,
         'cost': total_cost,
+        'countrys': countrys,
+        'local_shipping': local_shipping,
+        'free_shipping': free_shipping,
         'item': shopcart.count()
     }
     return render(request, 'product/checkout.html', context)
@@ -282,3 +294,63 @@ def WishList(request):
         'wishlist' : wishlist
     }
     return render(request, 'product/wishlist.html', context)
+
+def WishItemDelete(request):
+    get_wishlist = Wishlist.objects.get(id = request.POST["id"])
+    get_wishlist.delete()
+    data = {
+        'msg': "Success"
+    }
+    return JsonResponse(data)
+
+def PlaceOrder(request):
+    if request.method == "POST":
+        usr = User.objects.get(id = request.POST['user_id'])
+        if request.POST['diff_address'] == 'on':
+            address_book = AddressBook(
+                    user = usr,
+                    name = request.POST['ab_name'],
+                    phone = request.POST['ab_phone'],
+                    country = Country.objects.get(id = request.POST['ab_country']),
+                    region = Region.objects.get(id = request.POST['ab_region']),
+                    city = City.objects.get(id = request.POST['ab_city']),
+                    area = Area.objects.get(id = request.POST['ab_area']),
+                    address = request.POST['ab_address'],
+                    default = False,
+                    temp = True
+                )
+            address_book.save()
+        else:
+            address_book = AddressBook.objects.get(id = request.POST['address_book'])
+
+        payment_id = request.POST['payment_id']
+        company_name = request.POST['company_name']
+        payment_mode = request.POST['payment_mode']
+        email = request.POST['email']
+        notes = request.POST['notes']
+        total = request.POST['total']
+        ordr = Order(
+            user = usr,
+            payment_id=payment_id,
+            payment_mode=payment_mode,
+            company_name=company_name,
+            email=email,
+            notes=notes,
+            address_book=address_book,
+            total=total
+        )
+        ordr.save()
+        get_shopcart = ShopCart.objects.filter(user = usr).exclude(on_order=True)
+        for cart in get_shopcart:
+            cart.order_id = ordr.id
+            cart.on_order = True
+            cart.save()
+            get_pro = Product.objects.get(id = cart.product__id)
+            qntity = get_pro.amount - int(cart.quantity)
+            if qntity < 0:
+                qntity = 0
+            get_pro.amount = qntity
+            get_pro.save()
+            ordr.shopcarts.add(cart)
+            ordr.save()
+        return HttpResponse(str(usr.first_name))

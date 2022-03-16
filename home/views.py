@@ -15,11 +15,11 @@ from django.contrib import messages
 from django.core import serializers
 
 def Home(request):
-    categorys = Category.objects.all()
-    subcategorys = Subcategory.objects.all()
+    # categorys = Category.objects.all()
+    # subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
-    menus = Menus.objects.all().exclude(active=False).order_by('position')
+    # menus = Menus.objects.all().exclude(active=False).order_by('position')
     product = Product.objects.all()
     total_cost = 0
     item = 0
@@ -44,11 +44,7 @@ def Home(request):
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {
-        'category': categorys,
-        'subcategory': subcategorys,
         'brand': brand,
-        'group': groups,
-        'menus': menus,
         'shopcart': shopcart,
         'product': product,
         'new_product': new_product,
@@ -62,11 +58,9 @@ def Home(request):
     return render(request, 'home/home.html', context)
 
 def AboutUs(request):
-    category = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
-        'category': category,
         'teaminfo': teaminfo,
         'aboutus': aboutus
     }
@@ -102,15 +96,11 @@ def ContactUs(request):
         msg.save()
         return redirect(request.path_info)
         
-    menus = Menus.objects.all().exclude(active=False).order_by('position')
-    categorys = Category.objects.all()
     teaminfo = TeamInfo.objects.all()
     aboutus = Aboutus.objects.all().first()
     context = {
-        'category': categorys,
         'aboutus': aboutus,
         'form': ContactMessageForm,
-        'menus': menus
     }
     return render(request, 'shop/contact.html', context)
 
@@ -125,7 +115,6 @@ def SearchView(request):
         paginator = Paginator(products, 12) # Show 12 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        categorys = Category.objects.all()
         teaminfo = TeamInfo.objects.all()
         aboutus = Aboutus.objects.all().first()
         if SearchKeyword.objects.filter(keyword=query).exists():
@@ -140,4 +129,4 @@ def SearchView(request):
                 result = Product.objects.filter(title__icontains = query).count()
             )
             searchKey.save()
-        return render(request, 'product/category.html', {'product': page_obj, 'category': categorys})
+        return render(request, 'product/category.html', {'product': page_obj})

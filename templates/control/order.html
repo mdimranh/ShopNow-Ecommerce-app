@@ -1,0 +1,297 @@
+{% extends 'control/base.html' %}
+{% load static %}
+{% block title %}{{site_config.name}} | Orders{% endblock title %}
+
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/tail.select-light-feather.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/jquery.filer/css/jquery.filer.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/dropzone/dist/basic.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/datedropper/datedropper.min.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.brighttheme.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.history.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
+
+    {% comment %} <link rel="stylesheet" href="{% static 'control/dropzone/dist/dropzone.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'control/image-uploader/image-uploader.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      {% if order %}
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">{{product_details.title}}</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/orders/" class="text-decoration-none breadcrumb-item text-secondary">Order</a>
+          <span class="breadcrumb-item text-secondary">{{order.id}}</span>
+        </div>
+      </div>
+      {% else %}
+      <div class="d-flex flex-fill justify-content-between align-items-center">
+        <h3 class="fw-bold">Orders</h3>
+        <div class="d-flex">
+          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
+          <a href="/control/orders/" class="text-decoration-none breadcrumb-item text-secondary">Orders</a>
+        </div>
+      </div>
+      {% endif %}
+      {% if not order %}
+      <div class="card product-list">
+          <div class="card-header">
+            <h5>All Order</h5>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <table
+                id="product-table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-pagination="true"
+                data-page-list="[5, 25, 50, 100, ALL]"
+                data-search="true"
+                data-search-highlight="true"
+                data-show-export="true"
+                data-export-types="['csv','json', 'doc']"
+                data-export-options='{
+                  "fileName": "userlist"
+                }'
+                data-filter-control="true"
+                data-show-multi-sort="true"
+                data-fixed-columns="true"
+                data-fixed-number="1"
+                {% comment %} data-show-columns="true"
+                data-show-columns-toggle-all="true" {% endcomment %}
+                data-show-toggle="true"
+                data-show-fullscreen="true"
+                data-show-pagination-switch="true"
+                {% comment %} data-show-footer="true" {% endcomment %}
+                {% comment %} data-detail-view="true" {% endcomment %}
+                data-sticky-header = "true"
+                data-checkbox = "true"
+                class="table table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-sortable="true" data-valign="middle">ID</th>
+                    <th data-sortable="true" data-valign="middle">Customer Name</th>
+                    <th data-sortable="true" data-valign="middle">Customer Email</th>
+                    {% comment %} <th data-sortable="true" data-valign="middle" data-filter-control="select">Status</th> {% endcomment %}
+                    <th data-sortable="true" data-valign="middle">Status</th>
+                    <th data-sortable="true" data-valign="middle">Total</th>
+                    <th data-sortable="true" data-valign="middle">Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in orders %}
+                  <tr>
+                    <td >{{order.id}}</td>
+                    <td ><a href="/control/order/{{order.id}}" class="title">{{order.user.first_name}} {{order.user.last_name}}</a></td>
+                    <td><a href="/control/order/{{order.id}}" class="title">{{order.email}}</a></td>
+                    <td>{{order.status}}</td>
+                    <td ><span class="money">{{order.total}}</span></td>
+                    <td>{{order.order_date|date:"d M Y"}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+      </div>
+      {% else %}
+      <div class="card">
+        <div class="container-fluid">
+          <div class="row">
+            <h4 class="py-2">Order & Account Information</h4>
+            <hr>
+            <div class="col-lg-6 col-12">
+              <p class="px-0 pb-2 m-0 fw-bolder h5">Order Information</p>
+              <p class="id d-none">{{order.id}}</p>
+              <table class="table no-border">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="h6">Order Date</th>
+                    <td class="h6">{{order.order_date|date:"d M, o"}} | {{order.order_date|time:"g:i:s A"}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Order Status</th>
+                    <td class="h6">
+                      <select class="form-select hideSearch hideClear" id="order-status">
+                        <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+                        <option value="canceled" {% if order.status == 'canceled' %}selected{% endif %}>Canceled</option>
+                        <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="pending_payment" {% if order.status == 'pending_payment' %}selected{% endif %}>Pending Payment</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Shipping Method</th>
+                    <td class="h6">{{order.payment_mode}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Order Note</th>
+                    <td class="h6">{{order.notes}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-lg-6 col-12">
+              <p class="px-0 pb-2 m-0 fw-bolder h5">Account Information</p>
+              <table class="table no-border">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="h6">Customer Name</th>
+                    <td class="h6">{{order.user.first_name}} {{order.user.last_name}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Customer Email</th>
+                    <td class="h6">{{order.email}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Customer Phone</th>
+                    <td class="h6">{{order.address_book.phone}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Customer Group</th>
+                    <td class="h6">Registered</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <h4 class="pt-4">Address Information</h4>
+            <hr>
+            <div class="col-lg-6 col-12">
+              <p class="px-0 pb-2 m-0 fw-bolder h5">Billing Address</p>
+              <table class="table no-border">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="h6">Address Name</th>
+                    <td class="h6">{{order.address_book.name}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Country</th>
+                    <td class="h6">{{order.address_book.country}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Region</th>
+                    <td class="h6">{{order.address_book.region}} - {{order.address_book.city}} - {{order.address_book.area}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Address</th>
+                    <td class="h6">{{order.address_book.address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-lg-6 col-12">
+              <p class="px-0 pb-2 m-0 fw-bolder h5">Shipping Address</p>
+              <table class="table no-border">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="h6">Address Name</th>
+                    <td class="h6">{{order.address_book.name}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Country</th>
+                    <td class="h6">{{order.address_book.country}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Region</th>
+                    <td class="h6">{{order.address_book.region}} - {{order.address_book.city}} - {{order.address_book.area}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="h6">Address</th>
+                    <td class="h6">{{order.address_book.address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <h4 class="pt-4">Item Ordered</h4>
+            <hr>
+            <div class="col-12">
+              <table class="table no-border">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Line Total</th>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for cart in order.shopcarts.all %}
+                  <tr>
+                    <td><a href="/control/product/edit-product/{{cart.product.id}}" class="text-decoration-none">{{cart.product.title}}</a></td>
+                    <td>{{cart.product.price}}</td>
+                    <td>{{cart.quantity}}</td>
+                    {% comment %} <td>৳{% widthratio cart.product.price 1 cart.quantity %}</td> {% endcomment %}
+                    <td>৳{{cart.cost}}</td>
+                    <td></td>
+                  </tr>
+                  {% endfor %}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Subtotal</td>
+                    <td>${{order.total}}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{order.Shipping_method.name}}</td>
+                    <td>৳{{order.Shipping_method.fee}}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bolder">Total</td>
+                    <td>${{order.total}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endblock main %}
+
+    {% block script %}
+      <script src="{% static 'control/js/order.js' %}"></script>
+    {% endblock script %}

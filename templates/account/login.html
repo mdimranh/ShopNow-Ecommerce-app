@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load static %}
+
+{% block custom %}
+<main class="main">
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('{% static 'assets/images/backgrounds/login-bg.jpg' %}')">
+    	<div class="container">
+    		<div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tab-content-5">
+                        <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="signin-email">Email</label>
+                                    <input type="email" class="form-control" id="signin-email" name="signin-email" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-group">
+                                    <label for="signin-password">Password</label>
+                                    <input type="password" class="form-control" id="signin-password" name="signin-password" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>LOG IN</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                    {% comment %} <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                        <label class="custom-control-label" for="signin-remember">Remember Me</label>
+                                    </div><!-- End .custom-checkbox --> {% endcomment %}
+                                    <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="{% provider_login_url "google" method="oauth2" %}" class="btn btn-login btn-g">
+                                            <i class="icon-google"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-login btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <form method="post" id="registration-form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="signup-first-name">First Name</label>
+                                    <input type="text" class="form-control" id="signup-first-name" name="signup-first-name" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-group">
+                                    <label for="signup-last-name">Last Name</label>
+                                    <input type="text" class="form-control" id="signup-last-name" name="signup-last-name" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-group">
+                                    <label for="signup-email">Email</label>
+                                    <input type="email" class="form-control" id="signup-email" name="signup-email" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-group">
+                                    <label for="signup-password">Password</label>
+                                    <input type="password" class="form-control" id="signup-password" name="signup-password" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="signup-confirm-password">Confirm password</label>
+                                        <small id="pass-alert" class="text-danger">Password don't matched</small>
+                                    </div>
+                                    <input type="password" class="form-control" id="signup-confirm-password" name="signup-confirm-password" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-footer">
+                                    <button type="submit" id="registration-btn" class="btn btn-outline-primary-2" disabled>
+                                        <span>SIGN UP</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="register-policy" required>
+                                        <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
+                                    </div><!-- End .custom-checkbox -->
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login btn-g">
+                                            <i class="icon-google"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login  btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div>
+    	</div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+</main>
+{% endblock custom %}

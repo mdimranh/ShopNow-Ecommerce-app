@@ -12,22 +12,88 @@ from django.contrib import messages
 from region.models import Country, Region, City, Area
 from accounts.models import AddressBook
 
+# def Account(request):
+#     if request.method == "POST":
+#         if 'first_name' in request.POST:
+#             first_name = request.POST['first_name']
+#             last_name = request.POST['last_name']
+#             email = request.POST['email']
+#             password = request.POST['password']
+
+#             user = User.objects.create_user(username = email, first_name = first_name, last_name = last_name, email = email)
+#             user.set_password(password)
+#             user.save()
+#             Profile.objects.create(user = user)
+#             return JsonResponse({'msg': "Account create successfully. please login first", 'success': 'yes'})
+#         else:
+#             email = request.POST['email']
+#             password = request.POST['password']
+#             user = auth.authenticate(username=email, password=password)
+
+#             if user is not None:
+#                 auth.login(request, user)
+#                 pro = Profile.objects.get(user = user)
+#                 pro.online = True
+#                 pro.save()
+#                 cart = ShopCart.objects.filter(user = user).order_by('created_at')
+#                 total_cost = 0
+#                 cart_serialize = []
+#                 cs={}
+#                 for item in cart:
+#                     price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
+#                     cost = price*item.quantity
+#                     total_cost += cost
+#                     cs = {
+#                         "id": item.id,
+#                         "category": item.product.category.name,
+#                         "title": item.product.title,
+#                         "image": item.product.image,
+#                         "main_price": str(item.product.main_price),
+#                         "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
+#                         "discount": str(item.product.discount),
+#                         "amount": item.quantity
+#                     }
+#                     cart_serialize.append(cs)
+
+
+#                 for item in cart[:1]:
+#                     if item.coupon:
+#                         if item.coupon.discount_type == 'fixed':
+#                             total_cost -= item.coupon.value
+#                         else:
+#                             total_cost = total_cost - (total_cost * item.coupon.value / 100)
+#                 item = cart.count()
+#                 context = {
+#                     'item':item,
+#                     'cost':total_cost,
+#                     'msg': 'Login Successfull',
+#                     'cart': cart_serialize,
+#                     'name': user.first_name+" "+user.last_name
+#                 }
+#                 return JsonResponse(context)
+#             else:
+#                 msg = 'Invalid username or password!'
+#                 return JsonResponse({'msg': msg})
+#         return HttpResponse({"msg": 'Something is wrong'})
+#     return render(request, "account/login.html")
+
+
 def Account(request):
     if request.method == "POST":
-        if 'first_name' in request.POST:
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            email = request.POST['email']
-            password = request.POST['password']
+        if 'signup-first-name' in request.POST:
+            first_name = request.POST['signup-first-name']
+            last_name = request.POST['signup-last-name']
+            email = request.POST['signup-email']
+            password = request.POST['signup-password']
 
             user = User.objects.create_user(username = email, first_name = first_name, last_name = last_name, email = email)
             user.set_password(password)
             user.save()
             Profile.objects.create(user = user)
-            return JsonResponse({'msg': "Account create successfully. please login first", 'success': 'yes'})
+            return redirect(request.path_info)
         else:
-            email = request.POST['email']
-            password = request.POST['password']
+            email = request.POST['signin-email']
+            password = request.POST['signin-password']
             user = auth.authenticate(username=email, password=password)
 
             if user is not None:
@@ -35,46 +101,12 @@ def Account(request):
                 pro = Profile.objects.get(user = user)
                 pro.online = True
                 pro.save()
-                cart = ShopCart.objects.filter(user = user).order_by('created_at')
-                total_cost = 0
-                cart_serialize = []
-                cs={}
-                for item in cart:
-                    price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-                    cost = price*item.quantity
-                    total_cost += cost
-                    cs = {
-                        "id": item.id,
-                        "category": item.product.category.name,
-                        "title": item.product.title,
-                        "image": item.product.image,
-                        "main_price": str(item.product.main_price),
-                        "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
-                        "discount": str(item.product.discount),
-                        "amount": item.quantity
-                    }
-                    cart_serialize.append(cs)
-
-
-                for item in cart[:1]:
-                    if item.coupon:
-                        if item.coupon.discount_type == 'fixed':
-                            total_cost -= item.coupon.value
-                        else:
-                            total_cost = total_cost - (total_cost * item.coupon.value / 100)
-                item = cart.count()
-                context = {
-                    'item':item,
-                    'cost':total_cost,
-                    'msg': 'Login Successfull',
-                    'cart': cart_serialize,
-                    'name': user.first_name+" "+user.last_name
-                }
-                return JsonResponse(context)
+                return redirect('profile')
             else:
                 msg = 'Invalid username or password!'
                 return JsonResponse({'msg': msg})
-    return HttpResponse({"msg": 'Something is wrong'})
+        return HttpResponse({"msg": 'Something is wrong'})
+    return render(request, "account/login.html")
 
 def ProfileView(request):
     if request.method == 'POST':
@@ -106,7 +138,6 @@ def ProfileView(request):
             )
             address_book.save()
             return redirect(request.path_info)
-    categorys = Category.objects.all()
     total_cost = 0
     item = 0
     countrys = Country.objects.all()
@@ -127,7 +158,6 @@ def ProfileView(request):
         item = shopcart.count()
         context = {
             'mycart': shopcart,
-            'category': categorys,
             'cost': total_cost,
             'item': item,
             'address_book': address_book,

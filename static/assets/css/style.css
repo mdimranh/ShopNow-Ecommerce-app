@@ -6880,11 +6880,18 @@ p {
   color: #fff;
   background-color: #FCB941;
 }
+.btn-product-icon.select{
+  color: #fff;
+  background-color: #FCB941;
+}
 .btn-product-icon + .btn-product-icon {
   margin-top: 1rem;
 }
-.btn-cart:before {
+.btn-cart:not(.view):before {
   content: "\e812";
+}
+.btn-cart.view:before {
+  content: "\e814";
 }
 .btn-wishlist {
   font-size: 1.6rem;
@@ -10815,6 +10822,13 @@ button:focus {
 .details-filter-row label {
   display: inline-block;
   width: 67px;
+  font-weight: 400;
+  font-size: 1.4rem;
+  margin-bottom: 0;
+}
+.details-filter-row.for-color label {
+  display: inline-block;
+  width:40px;
   font-weight: 400;
   font-size: 1.4rem;
   margin-bottom: 0;
@@ -16447,7 +16461,7 @@ tbody .product:hover{
 
 /* product details */
 
-i.product-color{
+/* i.product-color{
   border-radius: 50%;
 }
 
@@ -16457,7 +16471,7 @@ i.product-color:hover{
 
 i.product-color.select{
   border: 1px solid gray;
-}
+} */
 
 
 /*! rating */
@@ -16472,4 +16486,43 @@ i.product-color.select{
 
 .ratring-btn i.active{
     color: orange;
+}
+
+.product-color-label .product-color{
+  position: relative;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border: 2px solid transparent;
+}
+
+.product-color-label .product-color.select{
+  border: 2px solid rgba(63, 130, 65, 1);
+}
+
+.product-color-label .product-color span{
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  border: 2px solid rgba(128, 128, 128, 0.4);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* .product-color.fa-circle.select::before{
+  content: "\f058";
+  border: 2px solid red;
+  border-radius: 50%;
+} */
+
+.address_book ~ label{
+  border: 2px solid rgba(66, 83, 132, 0.2);
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+.address_book:checked ~ label{
+  border: 2px solid green;
 }

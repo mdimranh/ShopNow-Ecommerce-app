@@ -11,18 +11,42 @@ from django.contrib.auth.models import User, auth
 from accounts.models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
-from order.models import ShopCart
+from order.models import ShopCart, Order
 
-from datetime import datetime
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncDay
+from django.utils.timezone import now
+
+from datetime import datetime, timedelta
 
 def Dashboard(request):
 	total_product = Product.objects.all().count()
 	total_customer = User.objects.filter(is_staff=False, is_superuser=False).count()
+	total_order = Order.objects.all().count()
+	total_sales = Order.objects.all().aggregate(Sum("total"))['total__sum']
 	search = SearchKeyword.objects.all().order_by("-updated_at")
+	orders = Order.objects.all().order_by("order_date")
+
+	some_day = now().date() - timedelta(days = 7)
+	sales = Order.objects.filter(
+			order_date__gte = some_day,
+		).annotate(
+			day = TruncDay("order_date"),
+			order_count = Count("order_date__date")
+		).values(
+			'day',
+			'order_count'
+		)
+	for i in sales:
+		print(i['day'].strftime("%A"), i['order_count'])
+
 	context = {
 		"total_product": total_product,
 		"total_customer": total_customer,
+		"total_sales": total_sales,
+		'total_order': total_order,
 		"search": search,
+		'orders': orders,
 		"dashboard_sec": True
 	}
 	return render(request, "control/index.html", context)
@@ -214,6 +238,7 @@ def Users(request):
 	return render(request, "control/user.html", context)
 
 from django.contrib.contenttypes.models import ContentType
+
 def UserDetails(request, id):
 	user = User.objects.get(id = id)
 	perm = ContentType.objects.all()

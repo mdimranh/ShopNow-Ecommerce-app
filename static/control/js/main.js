@@ -5,7 +5,7 @@ $("#basicTree").on("changed.jstree", function (e, data) {
     $("#category-form h6").text("Category");
     $("#category-form").removeClass("d-none");
     $("#category-form #delete-btn").removeClass("d-none");
-    $("#category-form #delete-btn").attr("href", "/control/category/delete/"+getdata.id+"")
+    $("#category-form #delete-btn").attr("href", "/control/category/delete/" + getdata.id + "")
     $("#group-form").removeClass("d-none");
     $("#group-form h6").text("Add Group");
     $("#group-form #save-btn").text("Add");
@@ -17,10 +17,10 @@ $("#basicTree").on("changed.jstree", function (e, data) {
     $("#group-form #id").val(getdata.id)
     document.getElementById("icon-select").setValue((getdata.icon).replace(",", ' '));
     $("#category-form #category-name").val(getdata.name)
-    if(getdata.search === 'True'){
+    if (getdata.search === 'True') {
       $("#category-form #search").attr("checked", "checked")
     }
-    if(getdata.enable === 'True'){
+    if (getdata.enable === 'True') {
       $("#category-form #enable").attr("checked", "checked")
     }
   } else if (getdata.type === "group") {
@@ -28,7 +28,7 @@ $("#basicTree").on("changed.jstree", function (e, data) {
     $("#group-form h6").text("Group");
     $("#group-form #save-btn").text("Save");
     $("#group-form #delete-btn").removeClass("d-none");
-    $("#group-form #delete-btn").attr("href", "/control/group/delete/"+getdata.id+"")
+    $("#group-form #delete-btn").attr("href", "/control/group/delete/" + getdata.id + "")
     $("#group-form").removeClass("d-none");
     $("#subcategory-form").removeClass("d-none");
     $("#subcategory-form h6").text("Add Subcategory");
@@ -39,10 +39,10 @@ $("#basicTree").on("changed.jstree", function (e, data) {
     $("#subcategory-form #type").val(getdata.type)
     $("#subcategory-form #id").val(getdata.id)
     $("#group-form #group-name").val(getdata.name)
-    if(getdata.search === 'True'){
+    if (getdata.search === 'True') {
       $("#group-form #search").attr("checked", "checked")
     }
-    if(getdata.enable === 'True'){
+    if (getdata.enable === 'True') {
       $("#group-form #enable").attr("checked", "checked")
     }
   } else if (getdata.type === "subcategory") {
@@ -51,15 +51,15 @@ $("#basicTree").on("changed.jstree", function (e, data) {
     $("#subcategory-form").removeClass("d-none");
     $("#subcategory-form h6").text("Subcategory");
     $("#subcategory-form #save-btn").text("Save");
-    $("#subcategory-form #delete-btn").attr("href", "/control/subcategory/delete/"+getdata.id+"")
+    $("#subcategory-form #delete-btn").attr("href", "/control/subcategory/delete/" + getdata.id + "")
     $("#subcategory-form #delete-btn").removeClass("d-none");
     $("#subcategory-form #type").val(getdata.type)
     $("#subcategory-form #id").val(getdata.id)
     $("#subcategory-form #subcategory-name").val(getdata.name)
-    if(getdata.search === 'True'){
+    if (getdata.search === 'True') {
       $("#subcategory-form #search").attr("checked", "checked")
     }
-    if(getdata.enable === 'True'){
+    if (getdata.enable === 'True') {
       $("#subcategory-form #enable").attr("checked", "checked")
     }
   }
@@ -86,11 +86,11 @@ $("#add-root-category-btn").on("click", function () {
   $("#subcategory-form").addClass("d-none");
 });
 
-$(".collapse-all").on("click", function(){
+$(".collapse-all").on("click", function () {
   $("#basicTree").jstree("close_all");
 })
 
-$(".expand-all").on("click", function(){
+$(".expand-all").on("click", function () {
   $("#basicTree").jstree("open_all");
 })
 
@@ -156,12 +156,12 @@ $(".product-menu .menu-sec .submenu li").on("click", function () {
 //   };
 // };
 
-$("#add-thumbnail-input").change(function(event){
+$("#add-thumbnail-input").change(function (event) {
   var output = $(this).parent().children("label").children("img")[0]
   output.src = URL.createObjectURL(event.target.files[0]);
 })
 
-$("#add-thumbnail-input-1").change(function(event){
+$("#add-thumbnail-input-1").change(function (event) {
   var output = $(this).parent().children("label").children("img")[0]
   output.src = URL.createObjectURL(event.target.files[0]);
 })
@@ -205,10 +205,10 @@ $(".add-new-option").on("click", function () {
     .last()
     .on("click", function () {
       $(this).parent().children(".options-option").append(div1);
-      var option_increase = parseInt($(this).parent().children(".options-option").children().first().val())+1;
+      var option_increase = parseInt($(this).parent().children(".options-option").children().first().val()) + 1;
       $(this).parent().children(".options-option").children().first().val(option_increase);
       $(".new-option .fa-trash").on("click", function () {
-        var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val())-1;
+        var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val()) - 1;
         $(this).parent().parent().parent().parent().children().first().val(option_decrease);
         $(this).parent().parent().parent().remove();
       });
@@ -322,7 +322,7 @@ var div = `<div class="d-flex flex-fill align-items-center option-sec">
 
 $(".add-options-option").on("click", function () {
   $(this).parent().children(".options-option").append(div1);
-  var option_increase = parseInt($(this).parent().children(".options-option").children().first().val())+1;
+  var option_increase = parseInt($(this).parent().children(".options-option").children().first().val()) + 1;
   $(this).parent().children(".options-option").children().first().val(option_increase);
   $(this)
     .parent()
@@ -334,7 +334,7 @@ $(".add-options-option").on("click", function () {
     .children()
     .last()
     .on("click", function () {
-      var option_decrease = parseInt($(this).parent().parent().parent().children().first().val())-1;
+      var option_decrease = parseInt($(this).parent().parent().parent().children().first().val()) - 1;
       $(this).parent().parent().parent().children().first().val(option_decrease);
       $(this).parent().parent().remove();
     });
@@ -385,7 +385,7 @@ $(".option-head").on("click", function () {
 });
 
 $(".options-option .fa-trash").on("click", function () {
-  var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val())-1;
+  var option_decrease = parseInt($(this).parent().parent().parent().parent().children().first().val()) - 1;
   $(this).parent().parent().parent().parent().children().first().val(option_decrease);
   $(this).parent().parent().parent().remove();
 });
@@ -398,7 +398,7 @@ $("#add-options")
     $(this).parent().remove();
   });
 
-$(".add-product-btn").on("click", function(){
+$(".add-product-btn").on("click", function () {
   $(".product-list").addClass("d-none");
   $(".add-product-sec").removeClass("d-none");
   var el = document.querySelectorAll(".submenu");
@@ -408,7 +408,7 @@ $(".add-product-btn").on("click", function(){
   });
 })
 
-$(".add-coupon-btn").on("click", function(){
+$(".add-coupon-btn").on("click", function () {
   $(".coupon-list").addClass("d-none");
   $(".add-coupon-sec").removeClass("d-none");
   var el = document.querySelectorAll(".submenu");
@@ -417,7 +417,7 @@ $(".add-coupon-btn").on("click", function(){
     element.style.setProperty("--height", height + "px");
   });
 })
-$(".add-user-btn").on("click", function(){
+$(".add-user-btn").on("click", function () {
   $(".user-list").addClass("d-none");
   $(".add-user-sec").removeClass("d-none");
   var el = document.querySelectorAll(".submenu");
@@ -426,7 +426,7 @@ $(".add-user-btn").on("click", function(){
     element.style.setProperty("--height", height + "px");
   });
 })
-$(".add-slide-btn").on("click", function(){
+$(".add-slide-btn").on("click", function () {
   $(".slide-list").addClass("d-none");
   $(".add-slide-sec").removeClass("d-none");
   var el = document.querySelectorAll(".submenu");
@@ -457,28 +457,28 @@ $(".add-slide-btn").on("click", function(){
 
 
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
-    return cookieValue;
+  }
+  return cookieValue;
 }
 
 VirtualSelect.init({
-  ele:".hideClear.hideSearch",
+  ele: ".hideClear.hideSearch",
   search: false,
   hideClearButton: true
 })
 
 VirtualSelect.init({
-  ele:".hideClear",
+  ele: ".hideClear",
   search: true,
   hideClearButton: true
 })
@@ -488,110 +488,110 @@ VirtualSelect.init({
   search: true
 });
 
-$("#add-category-select").on('change', function(){
-    $.ajax({
-        url:"/control/productgroups/",
-        type:"POST",
-        data:{category_id: $(this).val(),},
-        success: function(result) {
-          opt = []
-          result.forEach(function(data){
-            opt.push({label: data.name, value: data.id})
-          })
-          VirtualSelect.init({
-            ele: "#add-group-select",
-            options: opt
-          })
-          VirtualSelect.init({
-            ele: "#subcategory-select",
-          })
-        },
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
-        },
-        error: function(e){
-            console.error(JSON.stringify(e));
-        },
-    });
-});
-
-$("#add-group-select").on('change', function(){
-    $.ajax({
-        url:"/control/productgroups/",
-        type:"POST",
-        data:{group_id: $(this).val(),},
-        success: function(result) {
-          opt = []
-          result.forEach(function(data){
-            opt.push({label: data.name, value: data.id})
-          })
-          VirtualSelect.init({
-            ele: "#add-subcategory-select",
-            options: opt
-          })
-        },
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
-        },
-        error: function(e){
-            console.error(JSON.stringify(e));
-        },
-    });
-});
-
-
-$("#edit-product-category-select").on('click', function(){
-  $("#edit-product-category-select").on('change', function(){
-      $.ajax({
-          url:"/control/productgroups/",
-          type:"POST",
-          data:{category_id: $(this).val(),},
-          success: function(result) {
-            opt = []
-            result.forEach(function(data){
-              opt.push({label: data.name, value: data.id})
-            })
-            VirtualSelect.init({
-              ele: "#edit-product-group-select",
-              options: opt
-            })
-            VirtualSelect.init({
-              ele: "#edit-product-subcategory-select",
-            })
-          },
-          headers: {
-              "X-CSRFToken": getCookie("csrftoken")
-          },
-          error: function(e){
-              console.error(JSON.stringify(e));
-          },
-      });
+$("#add-category-select").on('change', function () {
+  $.ajax({
+    url: "/control/productgroups/",
+    type: "POST",
+    data: { category_id: $(this).val(), },
+    success: function (result) {
+      opt = []
+      result.forEach(function (data) {
+        opt.push({ label: data.name, value: data.id })
+      })
+      VirtualSelect.init({
+        ele: "#add-group-select",
+        options: opt
+      })
+      VirtualSelect.init({
+        ele: "#subcategory-select",
+      })
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
   });
 });
 
-$("#edit-product-group-select").on('click', function(){
-  $("#edit-product-group-select").on('change', function(){
-      $.ajax({
-          url:"/control/productgroups/",
-          type:"POST",
-          data:{group_id: $(this).val(),},
-          success: function(result) {
-            opt = []
-            result.forEach(function(data){
-              opt.push({label: data.name, value: data.id})
-            })
-            VirtualSelect.init({
-              ele: "#edit-product-subcategory-select",
-              options: opt
-            })
-          },
-          headers: {
-              "X-CSRFToken": getCookie("csrftoken")
-          },
-          error: function(e){
-              console.error(JSON.stringify(e));
-          },
-      });
+$("#add-group-select").on('change', function () {
+  $.ajax({
+    url: "/control/productgroups/",
+    type: "POST",
+    data: { group_id: $(this).val(), },
+    success: function (result) {
+      opt = []
+      result.forEach(function (data) {
+        opt.push({ label: data.name, value: data.id })
+      })
+      VirtualSelect.init({
+        ele: "#add-subcategory-select",
+        options: opt
+      })
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+});
+
+
+$("#edit-product-category-select").on('click', function () {
+  $("#edit-product-category-select").on('change', function () {
+    $.ajax({
+      url: "/control/productgroups/",
+      type: "POST",
+      data: { category_id: $(this).val(), },
+      success: function (result) {
+        opt = []
+        result.forEach(function (data) {
+          opt.push({ label: data.name, value: data.id })
+        })
+        VirtualSelect.init({
+          ele: "#edit-product-group-select",
+          options: opt
+        })
+        VirtualSelect.init({
+          ele: "#edit-product-subcategory-select",
+        })
+      },
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      error: function (e) {
+        console.error(JSON.stringify(e));
+      },
+    });
+  });
+});
+
+$("#edit-product-group-select").on('click', function () {
+  $("#edit-product-group-select").on('change', function () {
+    $.ajax({
+      url: "/control/productgroups/",
+      type: "POST",
+      data: { group_id: $(this).val(), },
+      success: function (result) {
+        opt = []
+        result.forEach(function (data) {
+          opt.push({ label: data.name, value: data.id })
+        })
+        VirtualSelect.init({
+          ele: "#edit-product-subcategory-select",
+          options: opt
+        })
+      },
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      error: function (e) {
+        console.error(JSON.stringify(e));
+      },
+    });
   });
 });
 
@@ -609,27 +609,27 @@ var $remove = $('#remove')
 var selections = []
 
 function getUserIdSelections() {
-    return $.map($usertable.bootstrapTable('getSelections'), function (row) {
-      return row[2]
-    })
-  }
+  return $.map($usertable.bootstrapTable('getSelections'), function (row) {
+    return row[2]
+  })
+}
 
 $usertable.on('check.bs.table uncheck.bs.table ' +
-      'check-all.bs.table uncheck-all.bs.table',
-    function () {
-      $remove.prop('disabled', !$usertable.bootstrapTable('getSelections').length)
-      selections = getUserIdSelections()
-    })
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$usertable.bootstrapTable('getSelections').length)
+    selections = getUserIdSelections()
+  })
 
 $remove.click(function () {
-      var ids = getUserIdSelections()
-      $remove.prop('disabled', true)
-    })
+  var ids = getUserIdSelections()
+  $remove.prop('disabled', true)
+})
 
 
 var allowall = document.querySelectorAll("span[ids=allow-all]")
 for (i = 0; i < allowall.length; i++) {
-  allowall[i].addEventListener("click", function(){
+  allowall[i].addEventListener("click", function () {
     // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
     var allow = document.querySelectorAll("input[ids=allow-btn]")
     for (index = 0; index < allow.length; index++) {
@@ -640,7 +640,7 @@ for (i = 0; i < allowall.length; i++) {
 
 var denyall = document.querySelectorAll("span[ids=deny-all]")
 for (i = 0; i < allowall.length; i++) {
-  denyall[i].addEventListener("click", function(){
+  denyall[i].addEventListener("click", function () {
     // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
     var deny = document.querySelectorAll("input[ids=deny-btn]")
     for (index = 0; index < deny.length; index++) {
@@ -651,7 +651,7 @@ for (i = 0; i < allowall.length; i++) {
 
 var inheritall = document.querySelectorAll("span[ids=inherit-all]")
 for (i = 0; i < allowall.length; i++) {
-  inheritall[i].addEventListener("click", function(){
+  inheritall[i].addEventListener("click", function () {
     // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
     var inherit = document.querySelectorAll("input[ids=inherit-btn]")
     for (index = 0; index < inherit.length; index++) {
@@ -662,7 +662,7 @@ for (i = 0; i < allowall.length; i++) {
 
 var allowallsec = document.querySelectorAll("span[ids=allow]")
 for (i = 0; i < allowallsec.length; i++) {
-  allowallsec[i].addEventListener("click", function(){
+  allowallsec[i].addEventListener("click", function () {
     var allow = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=allow-btn]");
     for (index = 0; index < allow.length; index++) {
       allow[index].click();
@@ -672,7 +672,7 @@ for (i = 0; i < allowallsec.length; i++) {
 
 var denyallsec = document.querySelectorAll("span[ids=deny]")
 for (i = 0; i < denyallsec.length; i++) {
-  denyallsec[i].addEventListener("click", function(){
+  denyallsec[i].addEventListener("click", function () {
     var deny = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=deny-btn]");
     for (index = 0; index < deny.length; index++) {
       deny[index].click();
@@ -682,7 +682,7 @@ for (i = 0; i < denyallsec.length; i++) {
 
 var inheritallsec = document.querySelectorAll("span[ids=inherit]")
 for (i = 0; i < inheritallsec.length; i++) {
-  inheritallsec[i].addEventListener("click", function(){
+  inheritallsec[i].addEventListener("click", function () {
     var inherit = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=inherit-btn]");
     for (index = 0; index < inherit.length; index++) {
       inherit[index].click();
@@ -696,27 +696,27 @@ for (i = 0; i < inheritallsec.length; i++) {
 var $producttable = $('#product-table')
 
 function getProductIdSelections() {
-    return $.map($producttable.bootstrapTable('getSelections'), function (row) {
-      return row[2]
-    })
-  }
+  return $.map($producttable.bootstrapTable('getSelections'), function (row) {
+    return row[2]
+  })
+}
 
 $producttable.on('check.bs.table uncheck.bs.table ' +
-      'check-all.bs.table uncheck-all.bs.table',
-    function () {
-      $remove.prop('disabled', !$producttable.bootstrapTable('getSelections').length)
-      selections = getProductIdSelections()
-    })
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$producttable.bootstrapTable('getSelections').length)
+    selections = getProductIdSelections()
+  })
 
 $remove.click(function () {
-      var ids = getProductIdSelections()
-      var products = new Array();
-      for(i = 0; i <= ids.length-1; i++){
-        products.push(ids[i].slice(39, ids[i].length-6));
-      }
-      $("#selected-product").val(products);
-      deleteProduct();
-    })
+  var ids = getProductIdSelections()
+  var products = new Array();
+  for (i = 0; i <= ids.length - 1; i++) {
+    products.push(ids[i].slice(39, ids[i].length - 6));
+  }
+  $("#selected-product").val(products);
+  deleteProduct();
+})
 
 
 // $producttable.on("click-cell.bs.table", function(field, value, row, $element){
@@ -730,39 +730,39 @@ $remove.click(function () {
 
 // delete product
 
-function deleteProduct(products){
-    $.ajax({
-        url:"/control/product/delete-product/",
-        type:"POST",
-        data:{product: $("#selected-product").val()},
-        success: function(result) {
-          $remove.prop('disabled', true);
-          $('#product-table tr.selected').remove();
-          if (parseInt(result.total) === 1){
-            total = '1 product';
-          }
-          else{
-            total = `${result.total} products`;
-          }
-          PNotify.desktop.permission();
-          new PNotify({
-              title: 'Successfully deleted',
-              type: 'success',
-              text: `${total} deleted successfully. You can now add product.`,
-              addclass: 'stack-bottom-right',
-              desktop: {
-                  desktop: true,
-                  icon: 'assets/images/pnotify/success.png'
-              }
-          });
-        },
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
-        },
-        error: function(e){
-            console.error(JSON.stringify(e));
-        },
-    });
+function deleteProduct(products) {
+  $.ajax({
+    url: "/control/product/delete-product/",
+    type: "POST",
+    data: { product: $("#selected-product").val() },
+    success: function (result) {
+      $remove.prop('disabled', true);
+      $('#product-table tr.selected').remove();
+      if (parseInt(result.total) === 1) {
+        total = '1 product';
+      }
+      else {
+        total = `${result.total} products`;
+      }
+      PNotify.desktop.permission();
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `${total} deleted successfully. You can now add product.`,
+        addclass: 'stack-bottom-right',
+        desktop: {
+          desktop: true,
+          icon: 'assets/images/pnotify/success.png'
+        }
+      });
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
 };
 
 
@@ -773,30 +773,30 @@ function deleteProduct(products){
 // })
 
 var savebtn = document.querySelectorAll("div[id=save-btn]");
-for(i = 0; i < savebtn.length; i++){
-  savebtn[i].addEventListener('click', function(e){
-    if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0){
+for (i = 0; i < savebtn.length; i++) {
+  savebtn[i].addEventListener('click', function (e) {
+    if ($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0 || $("#add-short-desc").val().length === 0) {
       $("[for=add-general]").click();
     }
-    else if($("#add-category-select").val().length === 0){
+    else if ($("#add-category-select").val().length === 0) {
       $("[for=add-category]").click();
     }
-    else if($("#add-main-price").val().length === 0){
+    else if ($("#add-main-price").val().length === 0) {
       $("[for=add-price]").click();
     }
-    else if($("#add-thumbnail-input").val().length === 0){
+    else if ($("#add-thumbnail-input").val().length === 0) {
       $("[for=add-images]").click();
     }
-    else if($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0){
+    else if ($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0) {
       $("[for=add-seo]").click();
     }
-    else if($("#add-description").val().length === 0){
+    else if ($("#add-description").val().length === 0) {
       $("[for=add-additional]").click();
     }
   })
 }
 
-$("#color-pick").on("change", function(){
+$("#color-pick").on("change", function () {
   console.log($(this).val());
 })
 
@@ -830,44 +830,44 @@ Array.prototype.slice.call(forms)
       form.classList.add('was-validated')
 
       // select invalid input section
-      if($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0){
+      if ($("#add-product-name").val().length === 0 || $("#add-short-desc").val().length === 0 || $("#add-quantity").val().length === 0) {
         $("[for=add-general]").click();
-        if(!($(".basic").hasClass("selected"))){
+        if (!($(".basic").hasClass("selected"))) {
           $(".basic").addClass("selected");
           $(".advance").removeClass("selected");
         }
       }
-      else if($("#add-category-select").val().length === 0){
+      else if ($("#add-category-select").val().length === 0) {
         $("[for=add-category]").click();
-        if(!($(".basic").hasClass("selected"))){
+        if (!($(".basic").hasClass("selected"))) {
           $(".basic").addClass("selected");
           $(".advance").removeClass("selected");
         }
       }
-      else if($("#add-main-price").val().length === 0){
+      else if ($("#add-main-price").val().length === 0) {
         $("[for=add-price]").click();
-        if(!($(".basic").hasClass("selected"))){
+        if (!($(".basic").hasClass("selected"))) {
           $(".basic").addClass("selected");
           $(".advance").removeClass("selected");
         }
       }
-      else if($("#add-thumbnail-input").val().length === 0){
+      else if ($("#add-thumbnail-input").val().length === 0) {
         $("[for=add-images]").click();
-        if(!($(".basic").hasClass("selected"))){
+        if (!($(".basic").hasClass("selected"))) {
           $(".basic").addClass("selected");
           $(".advance").removeClass("selected");
         }
       }
-      else if($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0){
+      else if ($("#add-meta-title").val().length === 0 || $("#add-meta-keywords").val().length === 0 || $("#add-meta-descriptions").val().length === 0) {
         $("[for=add-seo]").click();
-        if(!($(".basic").hasClass("selected"))){
+        if (!($(".basic").hasClass("selected"))) {
           $(".basic").addClass("selected");
           $(".advance").removeClass("selected");
         }
       }
-      else if($("#add-description").val().length === 0){
+      else if ($("#add-description").val().length === 0) {
         $("[for=add-additional]").click();
-        if(!($(".advance").hasClass("selected"))){
+        if (!($(".advance").hasClass("selected"))) {
           $(".basic").removeClass("selected");
           $(".advance").addClass("selected");
         }
@@ -876,148 +876,148 @@ Array.prototype.slice.call(forms)
   })
 
 
-  // $("#filer_input1").on("change", function(){
-  //   var len = $(this)[0].jFiler.files_list.length;
-  //   // console.log($(this)[0].jFiler);
-  //   // console.log($(this)[0].jFiler.files_list[0]);
-  //   for (i = 0; i <= len+1; i++) {
-  //     console.log($(this)[0].jFiler.files_list[i]);
-  //   }
-  // })
+// $("#filer_input1").on("change", function(){
+//   var len = $(this)[0].jFiler.files_list.length;
+//   // console.log($(this)[0].jFiler);
+//   // console.log($(this)[0].jFiler.files_list[0]);
+//   for (i = 0; i <= len+1; i++) {
+//     console.log($(this)[0].jFiler.files_list[i]);
+//   }
+// })
 
-  $("#filer_input1").on("change", function(){
-    console.log($(this)[0].jFiler.current_file)
-  })
+$("#filer_input1").on("change", function () {
+  console.log($(this)[0].jFiler.current_file)
+})
 
 
-  //! related product table
-  var rel_pro = new Array()
-  var related_product_input = $("input[name=related-products]");
+//! related product table
+var rel_pro = new Array()
+var related_product_input = $("input[name=related-products]");
 
-  $('#related-product-table').on('change', function () {
-    if ($('#related-product-table').bootstrapTable('getSelections').length === 0){
-      rel_pro = new Array();
+$('#related-product-table').on('change', function () {
+  if ($('#related-product-table').bootstrapTable('getSelections').length === 0) {
+    rel_pro = new Array();
+    related_product_input.val(rel_pro);
+  }
+  else {
+    rel_pro = new Array();
+    $('#related-product-table').bootstrapTable('getSelections').forEach((element) => {
+      // console.log(element[2]);
+      rel_pro.push(element[2]);
       related_product_input.val(rel_pro);
-    }
-    else{
-      rel_pro = new Array();
-      $('#related-product-table').bootstrapTable('getSelections').forEach((element) => {
-        // console.log(element[2]);
-        rel_pro.push(element[2]);
-        related_product_input.val(rel_pro);
-      });
-    }
-
-  })
-
-
-
-  // menu page
-  $(".add-menu-btn").click(function(){
-    $(".menu-item.selected").removeClass("selected")
-    $("#menu-name").val("")
-    document.getElementById("menu-style").setValue("dropdown")
-    document.getElementById("menu-icon-select").reset()
-    document.getElementById("menu-category").reset()
-    document.getElementById("menu-group").reset()
-    document.getElementById("menu-subcategory").reset()
-    $("#menu-enable").attr("checked", true)
-    $("#save-btn").text("Add Menu")
-    $(".form-title").text("Add New Menu")
-    $("#id").val('')
-  })
-  $(".menu-item").click(function(){
-    $(".menu-item.selected").removeClass("selected")
-    if (!$(this).hasClass("selecded")){
-      $(this).addClass("selected")
-    }
-    $("#menu-name").val($(this).attr("name"))
-    document.getElementById("menu-style").setValue($(this).attr("style"))
-    document.getElementById("menu-icon-select").setValue($(this).attr("icon"))
-    document.getElementById("menu-category").setValue($(this).attr("category").split(","))
-    document.getElementById("menu-group").setValue($(this).attr("group").split(","))
-    document.getElementById("menu-subcategory").setValue($(this).attr("subcat").split(","))
-    if ($(this).attr("status") == 'True'){
-      $("#menu-enable").attr("checked", true)
-    }
-    $("#save-btn").text("Save")
-    $(".form-title").text($(this).attr("name"))
-    $("#id").val($(this).attr("id"))
-  })
-
-  $(".delete-menus").on("click", function(){
-    console.log($(this).parent().children(".menu-item").attr("id"))
-    var action = 'delete'
-    $.ajax({
-      url:"/control/menu/update",
-      type:"POST",
-      data:{menu_id: $(this).parent().children(".menu-item").attr("id"), action: action},
-      success: function(result) {
-        if ($("div[id="+result.id+"]").parent().children(".menu-item").hasClass("selected")){
-          $("div[id="+result.id+"]").parent().remove()
-          $("#edit-menu-form").trigger("reset")
-          document.getElementById("menu-style").setValue("dropdown")
-        }
-        else{
-          $("div[id="+result.id+"]").parent().remove()
-        }
-      },
-      headers: {
-          "X-CSRFToken": getCookie("csrftoken")
-      },
-      error: function(e){
-          console.error(JSON.stringify(e));
-      },
     });
-  })
+  }
+
+})
 
 
-  //! setting file
 
-  // social login
+// menu page
+$(".add-menu-btn").click(function () {
+  $(".menu-item.selected").removeClass("selected")
+  $("#menu-name").val("")
+  document.getElementById("menu-style").setValue("dropdown")
+  document.getElementById("menu-icon-select").reset()
+  document.getElementById("menu-category").reset()
+  document.getElementById("menu-group").reset()
+  document.getElementById("menu-subcategory").reset()
+  $("#menu-enable").attr("checked", true)
+  $("#save-btn").text("Add Menu")
+  $(".form-title").text("Add New Menu")
+  $("#id").val('')
+})
+$(".menu-item").click(function () {
+  $(".menu-item.selected").removeClass("selected")
+  if (!$(this).hasClass("selecded")) {
+    $(this).addClass("selected")
+  }
+  $("#menu-name").val($(this).attr("name"))
+  document.getElementById("menu-style").setValue($(this).attr("style"))
+  document.getElementById("menu-icon-select").setValue($(this).attr("icon"))
+  document.getElementById("menu-category").setValue($(this).attr("category").split(","))
+  document.getElementById("menu-group").setValue($(this).attr("group").split(","))
+  document.getElementById("menu-subcategory").setValue($(this).attr("subcat").split(","))
+  if ($(this).attr("status") == 'True') {
+    $("#menu-enable").attr("checked", true)
+  }
+  $("#save-btn").text("Save")
+  $(".form-title").text($(this).attr("name"))
+  $("#id").val($(this).attr("id"))
+})
 
-  $("#facebook-enable").on("click", function(){
-    if ($(this).is(":checked")){
-      $(".facebook-login-field").removeClass("d-none")
-      $("#facebook-app-id").attr("required", true)
-      $("#facebook-app-secret").attr("required", true)
-    }
-    else{
-      $(".facebook-login-field").addClass("d-none")
-      $("#facebook-app-id").removeAttr("required")
-      $("#facebook-app-secret").removeAttr("required")
-    }
-  })
+$(".delete-menus").on("click", function () {
+  console.log($(this).parent().children(".menu-item").attr("id"))
+  var action = 'delete'
+  $.ajax({
+    url: "/control/menu/update",
+    type: "POST",
+    data: { menu_id: $(this).parent().children(".menu-item").attr("id"), action: action },
+    success: function (result) {
+      if ($("div[id=" + result.id + "]").parent().children(".menu-item").hasClass("selected")) {
+        $("div[id=" + result.id + "]").parent().remove()
+        $("#edit-menu-form").trigger("reset")
+        document.getElementById("menu-style").setValue("dropdown")
+      }
+      else {
+        $("div[id=" + result.id + "]").parent().remove()
+      }
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+})
 
-  $("#google-enable").on("click", function(){
-    if ($(this).is(":checked")){
-      $(".google-login-field").removeClass("d-none")
-      $("#google-app-id").attr("required", true)
-      $("#google-app-secret").attr("required", true)
-    }
-    else{
-      $(".google-login-field").addClass("d-none")
-      $("#google-app-id").removeAttr("required")
-      $("#google-app-secret").removeAttr("required")
-    }
-  })
 
-  //* ----------------payment method-------------
-  // paypal field
+//! setting file
 
-  $("#paypal-enable").on("click", function(){
-    alert("Yes");
-    if ($(this).is(":checked")){
-      $(".paypal-field").removeClass("d-none")
-      $("#paypal-client-id").attr("required", true)
-      $("#paypal-secret").attr("required", true)
-    }
-    else{
-      $(".paypal-field").addClass("d-none")
-      $("#paypal-client-id").removeAttr("required")
-      $("#paypal-secret").removeAttr("required")
-    }
-  })
+// social login
+
+$("#facebook-enable").on("click", function () {
+  if ($(this).is(":checked")) {
+    $(".facebook-login-field").removeClass("d-none")
+    $("#facebook-app-id").attr("required", true)
+    $("#facebook-app-secret").attr("required", true)
+  }
+  else {
+    $(".facebook-login-field").addClass("d-none")
+    $("#facebook-app-id").removeAttr("required")
+    $("#facebook-app-secret").removeAttr("required")
+  }
+})
+
+$("#google-enable").on("click", function () {
+  if ($(this).is(":checked")) {
+    $(".google-login-field").removeClass("d-none")
+    $("#google-app-id").attr("required", true)
+    $("#google-app-secret").attr("required", true)
+  }
+  else {
+    $(".google-login-field").addClass("d-none")
+    $("#google-app-id").removeAttr("required")
+    $("#google-app-secret").removeAttr("required")
+  }
+})
+
+//* ----------------payment method-------------
+// paypal field
+
+$("#paypal-enable").on("click", function () {
+  alert("Yes");
+  if ($(this).is(":checked")) {
+    $(".paypal-field").removeClass("d-none")
+    $("#paypal-client-id").attr("required", true)
+    $("#paypal-secret").attr("required", true)
+  }
+  else {
+    $(".paypal-field").addClass("d-none")
+    $("#paypal-client-id").removeAttr("required")
+    $("#paypal-secret").removeAttr("required")
+  }
+})
 
 
 // all countries
@@ -1032,11 +1032,11 @@ Array.prototype.slice.call(forms)
 //   search: true,
 // });
 
-$("#country-select").on("click", function(){
-  $("#country-select").on("change", function(){
+$("#country-select").on("click", function () {
+  $("#country-select").on("change", function () {
     select = []
     selected = $("#country-select").val();
-    for (var name in selected){
+    for (var name in selected) {
       select.push({ label: selected[name], value: selected[name] });
     }
     VirtualSelect.init({
@@ -1046,4 +1046,3 @@ $("#country-select").on("click", function(){
     });
   })
 })
-

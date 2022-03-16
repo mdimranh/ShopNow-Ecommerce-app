@@ -3,6 +3,9 @@ from .views import Dashboard, Menu, MenuUpdate, Login, Users, UserDetails, Messa
 from .product import Products, EditProduct, CategoryView, ImagesSave, deleteProduct, CategoryDelete, GroupDelete, SubcategoryDelete
 from .coupon import CouponView, CouponDetails
 from .settings import SettingView, Sliders, SliderDetails, SiteFrontView, PageList, PageDetails
+from .orders import OrderList, OrderDetails
+
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path("", Dashboard, name="admin-dashboard"),
@@ -31,4 +34,6 @@ urlpatterns = [
     path("slider/<int:id>", SliderDetails, name="admin-slider-details"),
     path("sitefront", SiteFrontView, name="admin-sitefront"),
     # path("sitefront/<int:id>", SliderDetails, name="admin-sitefront"),
+    path("orders", OrderList.as_view(), name="admin-orders"),
+    path("order/<int:id>", OrderDetails.as_view(), name="admin-rrdersetails"),
 ]

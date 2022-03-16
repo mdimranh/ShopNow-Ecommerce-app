@@ -8,12 +8,17 @@
 			<h1 class="page-title">Wishlist<span>Shop</span></h1>
 		</div><!-- End .container -->
 	</div><!-- End .page-header --> {% endcomment %}
+    <div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
+    	<div class="container">
+    		<h1 class="page-title">Wishlist<span>{{site_config.name}}</span></h1>
+    	</div><!-- End .container -->
+    </div><!-- End .page-header -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/profile">{{user.first_name}} {{user.last_name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
@@ -31,12 +36,12 @@
 				</thead>
 				<tbody>
 					{% for item in wishlist %}
-					<tr id="wishitem{{item.product.id}}">
+					<tr id="item{{item.id}}">
 						<td class="product-col">
 							<div class="product">
 								<figure class="product-media">
 									<a href="#">
-										<img src="{{item.product.image.url}}" alt="Product image">
+										<img src="{{item.product.image}}" alt="Product image">
 									</a>
 								</figure>
 								<h3 class="product-title">
@@ -45,20 +50,28 @@
 							</div><!-- End .product -->
 						</td>
 						<td class="product-price">
-							<div class="d-flex flex-column">
-								<span class="new-price">{{item.product.price}}</span><clear>
-								<span class="old-price"><span>{{item.product.main_price}}</span> ({{item.product.discount}})</span>
-							</div>
+							<ul class="pt-2">
+								<li><span class="new-price">{{item.product.price}}</span></li>
+								<li><span class="old-price"><span>{{item.product.main_price}}</span> ({{item.product.discount}})</span></li>
+							</ul>
 						</td>
-						<td class="stock-col"><span class="in-stock">In stock</span></td>
+						{% if item.product.amount > 0 %}
+							<td class="stock-col"><span class="in-stock text-success">In stock</span></td>
+						{% else %}
+							<td class="stock-col"><span class="in-stock text-danger">Out of stock</span></td>
+						{% endif %}
 						<td class="action-col">
 							{% if item.product.amount > 0 %}
-								<button class="btn btn-block btn-outline-primary-2" onclick="AddProduct({{item.product.id}}, 'no')"><i class="icon-cart-plus"></i>Add to Cart</button>
+								{% if item.product.pro_color|length > 0 or item.product.size|length > 0 or item.product.pro_option %}
+									<a class="btn btn-outline-warning view" href="/products/{{item.product.id}}">View Options</a>
+								{% else %}
+									<button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{item.product.id}}, 'no')">add to cart</button>
+								{% endif %}
                             {% else %}
 								<button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>
 							{% endif %}
 						</td>
-						<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+						<td class="remove-col"><button class="btn-remove" onclick="WishItemDelete({{item.id}})"><i class="fas fa-trash text-danger"></i></button></td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -79,5 +92,5 @@
 {% endblock custom %}
 
 {% block extra_js %}
-    <script src="{% static 'assets/add-product.js' %}"></script>
+	<script src="{% static 'assets/add-product.js' %}"></script>
 {% endblock extra_js %}

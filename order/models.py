@@ -6,9 +6,9 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from product.models import Product, Category
+from accounts.models import AddressBook
+    
 
-class Order(models.Model):
-    user_id = models.CharField(max_length=200, blank=True, null=True)
 
 DIS_TYPE = (
     ('Fixed', 'Fixed'),
@@ -57,10 +57,12 @@ class UserLimits(models.Model):
 
 class ShopCart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_shopcart")
     quantity = models.IntegerField(default=1)
     coupon = models.ForeignKey(Coupon, blank=True, null=True, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    order_id = models.CharField(max_length=500, blank=True, null=True)
+    on_order = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name+''+self.user.last_name
@@ -75,13 +77,13 @@ class ShopCart(models.Model):
             return False
 
     def product_image(self):
-        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.product.image.url))
+        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.product.image))
     product_image.short_description = 'Image'
 
 
 class Wishlist(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="pro_wishlist")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wishlist")
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
@@ -93,4 +95,50 @@ class Wishlist(models.Model):
     def product_image(self):
         return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.product.image.url))
     product_image.short_description = 'Image'
+
+    def users_all_wish_pro(self):
+        print("I am here ------------------->")
+        all_wish = Wishlist.objects.filter(user = self.user)
+        lst = []
+        for item in all_wish:
+            lst.append(item.product.id)
+        print(lst)
+        return lst
+
+class ShippingMethod(models.Model):
+    name = models.CharField(max_length=200)
+    fee = models.IntegerField()
+    method_type = models.CharField(max_length=100, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    def __str__(self):
+        return self.name
+
+
+STATUS = (
+    ('processing', 'Processing'),
+    ('canceled', 'Canceled'),
+    ('completed', 'Completed'),
+    ('pending', 'Pending'),
+    ('pending_payment', 'Pending Payment'),
+)
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank=True, null=True, related_name="user_order")
+    shopcarts = models.ManyToManyField(ShopCart)
+    payment_id = models.TextField(blank=True, null=True)
+    payment_mode = models.CharField(max_length=200, blank=True, null=True)
+    company_name = models.CharField(max_length=500, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    address_book = models.ForeignKey(AddressBook, on_delete = models.DO_NOTHING, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    Shipping_method = models.ForeignKey(ShippingMethod, on_delete=models.DO_NOTHING, blank=True, null=True)
+    total = models.FloatField(blank=True, null=True)
+    order_date = models.DateTimeField(auto_created=True, blank=True, null=True)
+    status = models.CharField(choices=STATUS, max_length=200, default="processing")
+    update = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.first_name+" "+self.user.last_name
+    
     

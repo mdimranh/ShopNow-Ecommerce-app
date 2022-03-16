@@ -203,12 +203,16 @@
                                             <div class="product-countdown" data-until="+{{product.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
                                         {% endif %}
                                         <div class="product-action-vertical">
-                                            <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                            <a href="#" class="btn-product-icon btn-wishlist {% if product.id in user.wishlist.first.users_all_wish_pro %}select{% endif %}" title="Add to wishlist"><span>add to wishlist</span></a>
                                             <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
@@ -1153,7 +1157,11 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
@@ -1229,7 +1237,11 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
@@ -1327,7 +1339,11 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
@@ -1403,7 +1419,11 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
@@ -1506,7 +1526,11 @@
                                                     <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                                 </div><!-- End .product-action-vertical -->
                                                 <div class="product-action">
+                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                                    {% else %}
                                                     <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                                    {% endif %}
                                                 </div><!-- End .product-action -->
                                             </figure><!-- End .product-media -->
                                             <div class="product-body">
@@ -1552,7 +1576,11 @@
                                                     <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                                 </div><!-- End .product-action-vertical -->
                                                 <div class="product-action">
+                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                                    {% else %}
                                                     <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                                    {% endif %}
                                                 </div><!-- End .product-action -->
                                             </figure><!-- End .product-media -->
                                             <div class="product-body">
@@ -1598,7 +1626,11 @@
                                                     <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                                 </div><!-- End .product-action-vertical -->
                                                 <div class="product-action">
+                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                                    {% else %}
                                                     <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                                    {% endif %}
                                                 </div><!-- End .product-action -->
                                             </figure><!-- End .product-media -->
                                             <div class="product-body">
@@ -1676,7 +1708,11 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
                                             <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">

@@ -6,9 +6,9 @@
 * File Uploads
 */
 
-$(document).ready(function(){
+$(document).ready(function () {
 
-	'use-strict';
+    'use-strict';
 
     //Example single
     $('#filer_input_single').filer({
@@ -19,23 +19,23 @@ $(document).ready(function(){
     });
 
     //Example 2
-    $('#filer_input11').filer({
-        limit: 3,
-        maxSize: 3,
-        extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
-        changeInput: true,
-        showThumbs: true,
-        addMore: true,
-    });
+    // $('#filer_input11').filer({
+    //     limit: 3,
+    //     maxSize: 3,
+    //     extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
+    //     changeInput: true,
+    //     showThumbs: true,
+    //     addMore: true,
+    // });
 
     $('#filer_input12').filer({
-		showThumbs: true,
-		addMore: true,
-		allowDuplicates: false,
-        
-	});
+        showThumbs: true,
+        addMore: true,
+        allowDuplicates: false,
 
-	//Example 1
+    });
+
+    //Example 1
     $("#filer_input1").filer({
         limit: null,
         maxSize: null,
@@ -131,20 +131,20 @@ $(document).ready(function(){
             onProgress: null,
             onComplete: null
         },
-		files: [
-			// {
-			// 	name: "Desert.jpg",
-			// 	size: 145,
-			// 	type: "image/jpg",
-			// 	file: "assets/images/file-upload/Desert.jpg"
-			// },
-			// {
-			// 	name: "overflow.jpg",
-			// 	size: 145,
-			// 	type: "image/jpg",
-			// 	file: "assets/images/file-upload/Desert.jpg"
-			// }
-		],
+        files: [
+            // {
+            // 	name: "Desert.jpg",
+            // 	size: 145,
+            // 	type: "image/jpg",
+            // 	file: "assets/images/file-upload/Desert.jpg"
+            // },
+            // {
+            // 	name: "overflow.jpg",
+            // 	size: 145,
+            // 	type: "image/jpg",
+            // 	file: "assets/images/file-upload/Desert.jpg"
+            // }
+        ],
         addMore: true,
         clipBoardPaste: true,
         excludeName: null,
@@ -154,7 +154,7 @@ $(document).ready(function(){
         beforeSelect: null,
         onSelect: null,
         afterShow: null,
-        onRemove: function(itemEl, file, id, listEl, boxEl, newInputEl, inputEl){
+        onRemove: function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
             var file = file.name;
             // $.post('../plugins/jquery.filer/php/remove_file.php', {file: file});
         },

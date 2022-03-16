@@ -2,7 +2,7 @@
 {% load static %}
 {% block custom %}
     <main class="main">
-        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        	<div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
         		<div class="container">
         			<h1 class="page-title">Checkout<span>Shop</span></h1>
         		</div><!-- End .container -->
@@ -17,7 +17,7 @@
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
             				</form> {% endcomment %}
             			</div><!-- End .checkout-discount -->
-            			<form action="#">
+            			<form method="post" class="needs-validation" novalidate>
 		                	<div class="row">
 		                		<div class="col-lg-9">
 		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
@@ -35,6 +35,8 @@
 
 	            						<label>Company Name (Optional)</label>
 	            						<input type="text" id="company_name" class="form-control">
+
+										{% if not user.is_authenticated %}
 
 	            						<label>Country *</label>
 	            						<input type="text" id="country" class="form-control" required>
@@ -67,21 +69,91 @@
 		                					</div><!-- End .col-sm-6 -->
 		                				</div><!-- End .row -->
 
-	                					<label>Email address *</label>
-	        							<input type="email" class="form-control" required>
+										{% endif %}
 
-	        							<div class="custom-control custom-checkbox">
+	                					<label>Email address *</label>
+										<div>
+											<input type="email" id="email" class="form-control" required>
+											<span class="invalid-feedback">Please Enter Email Address</span>
+										</div>
+
+	        							{% comment %} <div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" id="checkout-create-acc">
 											<label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
-										</div><!-- End .custom-checkbox -->
+										</div><!-- End .custom-checkbox --> {% endcomment %}
+
+										<div class="address-book-sec">
+											<label for="address-book-sec">Address Book</label>
+											<div id="address-book-sec">
+												{% for address in user.address_book.all %}
+												<div class="form-check form-check-inline">
+													<input class="form-check-input d-none address_book" type="radio" name="address_book" id="address_book_{{forloop.counter}}" value="{{address.id}}" {% if forloop.counter == 1 %}checked{% endif %}>
+													<label class="form-check-label" for="address_book_{{forloop.counter}}">{{address.name}}</label>
+												</div>
+												{% endfor %}
+											</div>
+										</div>
 
 										<div class="custom-control custom-checkbox">
-											<input type="checkbox" class="custom-control-input" id="checkout-diff-address">
+											<input type="checkbox" class="custom-control-input" value="off" name="diff-address" id="checkout-diff-address">
 											<label class="custom-control-label" for="checkout-diff-address">Ship to a different address?</label>
 										</div><!-- End .custom-checkbox -->
 
+										<div id="new-address" class="d-none">
+			                				<div class="row">
+			                					<div class="col-sm-6">
+			                						<label>Address Name *</label>
+			                						<input type="text" class="form-control" id="ab-name" required>
+			                					</div><!-- End .col-sm-6 -->
+
+			                					<div class="col-sm-6">
+			                						<label>Phone *</label>
+			                						<input type="text" class="form-control" id="ab-phone" required>
+			                					</div><!-- End .col-sm-6 -->
+			                				</div><!-- End .row -->
+
+		            						{% comment %} <label>Display Name *</label>
+		            						<input type="text" class="form-control" required>
+		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label>Country *</label>
+                                                    <select class="form-control ab-country" id="add-country">
+                                                        <option value="null"></option>
+                                                        {% for country in countrys %}
+                                                            <option value="{{country.id}}">{{country.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label>Region *</label>
+                                                    <select class="form-control ab-region" id="add-region" disabled>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <label>City *</label>
+                                                    <select class="form-control ab-city" id="add-city" disabled>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>Area *</label>
+                                                    <select class="form-control ab-area" id="add-area" disabled>
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Address *</label>
+                                                    <input type="text" class="form-control" id="ab-address" required>
+                                                </div>
+                                            </div><!-- End .row -->
+			                			</div>
+
 	                					<label>Order notes (optional)</label>
-	        							<textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+	        							<textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery" id="notes"></textarea>
 		                		</div><!-- End .col-lg-9 -->
 		                		<aside class="col-lg-3">
 		                			<div class="summary">
@@ -96,22 +168,29 @@
 		                					</thead>
 
 		                					<tbody>
+												{% for item in user.user_shopcart.all %}
 		                						<tr>
-		                							<td class="py-1 text-secondary">Beige knitted elastic runner shoes</td>
-		                							<td>$84.00</td>
+		                							<td class="py-1 text-secondary">{{item.product.title}}</td>
+		                							<td>{{item.quantity}} X ৳{{item.product.price|floatformat:2}}</td>
 		                						</tr>
+												{% endfor %}
 		                						<tr>
 		                							<td class="py-3 h6">Subtotal:</td>
-		                							<td>$160.00</td>
+		                							<td>৳{{cost|floatformat:2}} ({{shopcart|length}} item{% if shopcart|length > 1 %}s{% endif %})</td>
 		                						</tr><!-- End .summary-subtotal -->
 		                						<tr>
-		                							<td class="py-3 h6">Shipping:</td>
-		                							<td>Free shipping</td>
+		                							<td class="py-3 h6">{% if cost >= free_shipping.fee %}{{free_shipping.name}}{% else %}{{local_shipping.name}}{% endif %}:</td>
+		                							<td>{% if cost >= free_shipping.fee %}0{% else %}৳{{local_shipping.fee|floatformat:2}}{% endif %}</td>
 		                						</tr>
 		                						<tr>
 		                							<td class="py-3 h5">Total:</td>
-		                							<td>$160.00</td>
+													{% if cost <= free_shipping.fee %}
+		                							<td id="total-cost">৳{{cost|add:local_shipping.fee|floatformat:2}}</td>
+													{% else %}
+		                							<td id="total-cost">৳{{cost|floatformat:2}}</td>
+													{% endif %}
 		                						</tr><!-- End .summary-total -->
+												<p class="d-none" id="usd"></p>
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
 
@@ -175,51 +254,6 @@
 																<div id="paypal-button-container"></div>
 															</div>
 															</div>
-														<script src="https://www.paypal.com/sdk/js?client-id=AUGlRSikgHWm5LgI6mQetKFBJVJ2ztieTFWPej1HOVxcqCxURrgvnmFl9t9SmhJi9d_WSGyzlsF3zDjF&disable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
-														<script>
-															function initPayPalButton() {
-															paypal.Buttons({
-																style: {
-																shape: 'rect',
-																color: 'gold',
-																layout: 'vertical',
-																label: 'paypal',
-																
-																},
-
-																{% comment %} onClick: function(data, actions){
-																	var 
-																} {% endcomment %}
-
-																createOrder: function(data, actions) {
-																return actions.order.create({
-																	purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
-																});
-																},
-
-																onApprove: function(data, actions) {
-																return actions.order.capture().then(function(orderData) {
-																	
-																	// Full available details
-																	console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-																	// Show a success message within this page, e.g.
-																	const element = document.getElementById('paypal-button-container');
-																	element.innerHTML = '';
-																	element.innerHTML = '<h3>Thank you for your payment!</h3>';
-
-																	// Or go to another URL:  actions.redirect('thank_you.html');
-																	
-																});
-																},
-
-																onError: function(err) {
-																console.log(err);
-																}
-															}).render('#paypal-button-container');
-															}
-															initPayPalButton();
-														</script>
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
@@ -229,7 +263,7 @@
 										            <h2 class="card-title">
 										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
 										                    Credit Card (Stripe)
-										                    <img src="assets/images/payments-summary.png" alt="payments cards">
+										                    <img src="{% static 'assets/images/payments-summary.png' %}" alt="payments cards">
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
@@ -244,6 +278,7 @@
 		                					<span class="btn-text">Place Order</span>
 		                					<span class="btn-hover-text">Proceed to Checkout</span>
 		                				</button>
+										<div class="btn btn-success" id="btn">Check</div>
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
 		                	</div><!-- End .row -->
@@ -256,4 +291,192 @@
 
 {% block extra_js %}
     <script src="{% static 'assets/add-product.js' %}"></script>
+    <script src="{% static 'assets/profile.js' %}"></script>
+	<script>
+		var t = $.get("https://free.currconv.com/api/v7/convert?q=BDT_USD&compact=ultra&apiKey=ead55d2b5025899d1805", function(err, resp, body){
+			$("#usd").text(($("#total-cost").text().slice(1)*body.responseJSON.BDT_USD).toFixed(2));
+		});
+	</script>
+	<script src="https://www.paypal.com/sdk/js?client-id=AUGlRSikgHWm5LgI6mQetKFBJVJ2ztieTFWPej1HOVxcqCxURrgvnmFl9t9SmhJi9d_WSGyzlsF3zDjF&disable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+	<script>
+
+		function getCookie(name) {
+			let cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				const cookies = document.cookie.split(';');
+				for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+				}
+			}
+			return cookieValue;
+		}
+
+		function initPayPalButton() {
+		paypal.Buttons({
+			style: {
+			shape: 'rect',
+			color: 'gold',
+			layout: 'vertical',
+			label: 'paypal',
+			
+			},
+			{% comment %} onClick: function(data, actions){
+				
+			},   {% endcomment %}
+			createOrder: function(data, actions) {
+				return actions.order.create({
+					purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+				});
+			},
+			onApprove: function(data, actions) {
+			return actions.order.capture().then(function(orderData) {
+				
+				// Full available details
+				console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+				{% if user.is_authenticated %}
+					data = {
+						'user_id': {{user.id}},
+						'company_name': $("#company_name").val(),
+						'email': $("#email").val(),
+						'notes': $("#notes").val(),
+						'diff_address': $("#checkout-diff-address").val(),
+						'ab_name': $("#ab-name").val(),
+						'ab_phone': $("#ab-phone").val(),
+						'ab_country': $(".ab-country").val(),
+						'ab_region': $(".ab-region").val(),
+						'ab_city': $(".ab-city").val(),
+						'ab_area': $(".ab-area").val(),
+						'ab_address': $("#ab-address").val(),
+						'address_book': $("input[name='address_book']:checked").val(),
+						'payment_mode': 'paypal',
+						'payment_id': orderData.id,
+						'total': orderData.purchase_units[0].amount.value
+					}
+					$.ajax({
+						url: "/place-order",
+						type: "POST",
+						data: data,
+
+						success: function(response){
+							Swal.fire({
+								title: 'Congratulation',
+								text: "Order confirmed successfully",
+								icon: 'success',
+								showCancelButton: false,
+								showConfirmButton: false,
+								timer: 1000
+							}).then((result) => {
+								window.location.href = "/"
+							});
+						},
+						headers: {
+							"X-CSRFToken": getCookie("csrftoken")
+						},
+					});
+				{% endif %}
+			});
+			},
+			{% comment %} onError: function(err) {
+				console.log(err);
+			} {% endcomment %}
+		}).render('#paypal-button-container');
+		}
+		initPayPalButton();
+	</script>
+	<script>
+		$("#btn").click(function(){
+			{% if user.is_authenticated %}
+				data = {
+					'user_id': {{user.id}},
+					'company_name': $("#company_name").val(),
+					'email': $("#email").val(),
+					'notes': $("#notes").val(),
+					'payment_mode': 'paypal',
+					'payment_id': 12,
+					'diff_address': $("#checkout-diff-address").val(),
+					'ab_name': $("#ab-name").val(),
+					'ab_phone': $("#ab-phone").val(),
+					'ab_country': $(".ab-country").val(),
+					'ab_region': $(".ab-region").val(),
+					'ab_city': $(".ab-city").val(),
+					'ab_area': $(".ab-area").val(),
+					'ab_address': $("#ab-address").val(),
+					{% comment %} 'total' = $("#usd").text(), {% endcomment %}
+					'address_book': $("input[name='address_book']:checked").val()
+				}
+				$.ajax({
+					url: "/place-order",
+					type: "POST",
+					data: data,
+					success: function(response){
+						Swal.fire({
+							title: 'Congratulation',
+							text: "Order confirmed successfully",
+							icon: 'success',
+							showCancelButton: false,
+							showConfirmButton: false,
+							timer: 1000
+						})
+					},
+					headers: {
+						"X-CSRFToken": getCookie("csrftoken")
+					},
+				});
+			{% endif %}
+		})
+	</script>
+	<script>
+		data = [
+			{
+			"reference_id": "default",
+			"amount": {
+				"currency_code": "USD",
+				"value": "1.00"
+			},
+			"payee": {
+				"email_address": "businessimran@gmail.com",
+				"merchant_id": "6A6E79DE7CG3A"
+			},
+			"shipping": {
+				"name": {
+				"full_name": "Md Imran Hossain"
+				},
+				"address": {
+				"address_line_1": "1 Main St",
+				"admin_area_2": "San Jose",
+				"admin_area_1": "CA",
+				"postal_code": "95131",
+				"country_code": "US"
+				}
+			},
+			"payments": {
+				"captures": [
+				{
+					"id": "7HN150551N180561T",
+					"status": "COMPLETED",
+					"amount": {
+					"currency_code": "USD",
+					"value": "1.00"
+					},
+					"final_capture": true,
+					"seller_protection": {
+					"status": "ELIGIBLE",
+					"dispute_categories": [
+						"ITEM_NOT_RECEIVED",
+						"UNAUTHORIZED_TRANSACTION"
+					]
+					},
+					"create_time": "2022-03-15T09:10:00Z",
+					"update_time": "2022-03-15T09:10:00Z"
+				}
+				]
+			}
+			}
+		]
+		console.log(data[0].amount.value)
+	</script>
 {% endblock extra_js %}

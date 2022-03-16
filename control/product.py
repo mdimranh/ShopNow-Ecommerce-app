@@ -38,7 +38,6 @@ def Products(request):
         related_product = request.POST['related-products']
         size = request.POST["size"]
         color = request.POST.getlist("color")
-
         option_names = request.POST.getlist("option-name")
         option_style = request.POST.getlist("option-style")
         count = request.POST.getlist("option-count")
@@ -130,6 +129,9 @@ def ImagesSave(request):
     return HttpResponse("Fail")
 
 def EditProduct(request, id):
+    if request.method == 'POST':
+        print("img -------------->", request.FILES.getlist("edit-additional-image[]"))
+        return redirect(request.path_info)
     product = Product.objects.get(id = id)
     categorys = Category.objects.all()
     context = {

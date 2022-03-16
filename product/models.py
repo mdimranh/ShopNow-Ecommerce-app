@@ -128,7 +128,11 @@ class Product(models.Model):
             return 0
 
     def pro_color(self):
-        return self.color[2:-2].split("', '")
+        clrs = []
+        for clr in self.color[2:-2].split("', '"):
+            if clr != '':
+                clrs.append(clr)
+        return clrs
 
     def pro_size(self):
         return self.size.split(',')
@@ -145,7 +149,6 @@ class Product(models.Model):
         no_option = False
         c = 0
         for i in self.option:
-            print("Faka -------------->",len(i[2]))
             lst = []
             arrange = str(i[2]).replace('), (', ',').replace('[(', '').replace(')]', '').replace(' ', '').replace("'", "").split(',')
             for j in range(0, len(arrange), 2):
@@ -215,7 +218,7 @@ class RecentlyView(models.Model):
     
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete = models.CASCADE, related_name="reviews")
-    user = models.ForeignKey(User, on_delete = models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank=True, null=True, related_name="user_review")
     user_name = models.CharField(max_length=200)
     rating = models.IntegerField()
     comment = models.TextField()

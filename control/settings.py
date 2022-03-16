@@ -7,6 +7,8 @@ import pytz
 
 from setting.models import Slider, Slide, SiteFront, SiteConfiguration, Pages, Banner
 
+from order.models import ShippingMethod
+
 def SettingView(request):
     if request.method == 'POST':
 
@@ -46,11 +48,51 @@ def SettingView(request):
                 social_app.save()
             return redirect(request.path_info)
 
+        elif 'free-label' in request.POST:
+            id = request.POST['id']
+            if id != 'null' and ShippingMethod.objects.filter(id = id).exists():
+                shipping_method = ShippingMethod.objects.get(id = id)
+                shipping_method.name = request.POST['free-label']
+                shipping_method.fee = request.POST['free-amount']
+                shipping_method.active = True if request.POST.get('free-shipping-enable') == 'on' else False
+                shipping_method.save()
+            else:
+                shipping_method = ShippingMethod(
+                    name = request.POST['free-label'],
+                    fee = request.POST['free-amount'],
+                    method_type= 'free',
+                    active = True if request.POST.get('free-shipping-enable') == 'on' else False
+                )
+                shipping_method.save()
+            return redirect(request.path_info)
+
+        elif 'local-label' in request.POST:
+            id = request.POST['id']
+            if id != 'null' and ShippingMethod.objects.filter(id = id).exists():
+                shipping_method = ShippingMethod.objects.get(id = id)
+                shipping_method.name = request.POST['local-label']
+                shipping_method.fee = request.POST['local-cost']
+                shipping_method.active = True if request.POST.get('local-shipping-enable') == 'on' else False
+                shipping_method.save()
+            else:
+                shipping_method = ShippingMethod(
+                    name = request.POST['local-label'],
+                    fee = request.POST['local-cost'],
+                    method_type= 'local',
+                    active = True if request.POST.get('local-shipping-enable') == 'on' else False
+                )
+                shipping_method.save()
+            return redirect(request.path_info)
+
     facebook_login = SocialApp.objects.filter(name = 'facebook').first()
     google_login = SocialApp.objects.filter(name = 'google').first()
+    free_shipping = ShippingMethod.objects.filter(method_type="free").first()
+    local_shipping = ShippingMethod.objects.filter(method_type="local").first()
     context = {
         "facebook_login": facebook_login,
         "google_login": google_login,
+        "free_shipping": free_shipping,
+        "local_shipping": local_shipping,
         'timezones': pytz.all_timezones,
         "setting_sec": True,
     }

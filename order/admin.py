@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ShopCart, Wishlist, Coupon, UserLimits, UserRestrictions
+from .models import *
 
 class ShopCartAdmin(admin.ModelAdmin):
     list_display = ['user', 'product', 'quantity', 'created_at', 'product_image', 'coupon_active']
@@ -26,3 +26,5 @@ class CouponAdmin(admin.ModelAdmin):
     inlines = [UserRestrictionInlin, UserLimitsInlin]
 
 admin.site.register(Coupon, CouponAdmin)
+admin.site.register(Order)
+admin.site.register(ShippingMethod)
