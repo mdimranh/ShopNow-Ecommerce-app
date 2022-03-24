@@ -417,6 +417,7 @@ $(".add-coupon-btn").on("click", function () {
     element.style.setProperty("--height", height + "px");
   });
 })
+
 $(".add-user-btn").on("click", function () {
   $(".user-list").addClass("d-none");
   $(".add-user-sec").removeClass("d-none");
@@ -426,6 +427,7 @@ $(".add-user-btn").on("click", function () {
     element.style.setProperty("--height", height + "px");
   });
 })
+
 $(".add-slide-btn").on("click", function () {
   $(".slide-list").addClass("d-none");
   $(".add-slide-sec").removeClass("d-none");
@@ -489,6 +491,7 @@ VirtualSelect.init({
 });
 
 $("#add-category-select").on('change', function () {
+  document.getElementById("overlay").style.display = "block";
   $.ajax({
     url: "/control/productgroups/",
     type: "POST",
@@ -505,6 +508,7 @@ $("#add-category-select").on('change', function () {
       VirtualSelect.init({
         ele: "#subcategory-select",
       })
+      document.getElementById("overlay").style.display = "none";
     },
     headers: {
       "X-CSRFToken": getCookie("csrftoken")
@@ -516,6 +520,7 @@ $("#add-category-select").on('change', function () {
 });
 
 $("#add-group-select").on('change', function () {
+  document.getElementById("overlay").style.display = "block";
   $.ajax({
     url: "/control/productgroups/",
     type: "POST",
@@ -529,6 +534,7 @@ $("#add-group-select").on('change', function () {
         ele: "#add-subcategory-select",
         options: opt
       })
+      document.getElementById("overlay").style.display = "none";
     },
     headers: {
       "X-CSRFToken": getCookie("csrftoken")
@@ -542,6 +548,7 @@ $("#add-group-select").on('change', function () {
 
 $("#edit-product-category-select").on('click', function () {
   $("#edit-product-category-select").on('change', function () {
+    document.getElementById("overlay").style.display = "block";
     $.ajax({
       url: "/control/productgroups/",
       type: "POST",
@@ -558,6 +565,7 @@ $("#edit-product-category-select").on('click', function () {
         VirtualSelect.init({
           ele: "#edit-product-subcategory-select",
         })
+        document.getElementById("overlay").style.display = "none";
       },
       headers: {
         "X-CSRFToken": getCookie("csrftoken")
@@ -571,6 +579,7 @@ $("#edit-product-category-select").on('click', function () {
 
 $("#edit-product-group-select").on('click', function () {
   $("#edit-product-group-select").on('change', function () {
+    document.getElementById("overlay").style.display = "block";
     $.ajax({
       url: "/control/productgroups/",
       type: "POST",
@@ -584,6 +593,7 @@ $("#edit-product-group-select").on('click', function () {
           ele: "#edit-product-subcategory-select",
           options: opt
         })
+        document.getElementById("overlay").style.display = "none";
       },
       headers: {
         "X-CSRFToken": getCookie("csrftoken")
@@ -599,32 +609,6 @@ $("#edit-product-group-select").on('click', function () {
 // user section
 
 //! User list table
-
-$('#user-list').on('check.bs.table', function (e, row, $element) {
-  console.log(row[2]);
-})
-
-var $usertable = $('#user-list')
-var $remove = $('#remove')
-var selections = []
-
-function getUserIdSelections() {
-  return $.map($usertable.bootstrapTable('getSelections'), function (row) {
-    return row[2]
-  })
-}
-
-$usertable.on('check.bs.table uncheck.bs.table ' +
-  'check-all.bs.table uncheck-all.bs.table',
-  function () {
-    $remove.prop('disabled', !$usertable.bootstrapTable('getSelections').length)
-    selections = getUserIdSelections()
-  })
-
-$remove.click(function () {
-  var ids = getUserIdSelections()
-  $remove.prop('disabled', true)
-})
 
 
 var allowall = document.querySelectorAll("span[ids=allow-all]")
@@ -649,16 +633,16 @@ for (i = 0; i < allowall.length; i++) {
   });
 }
 
-var inheritall = document.querySelectorAll("span[ids=inherit-all]")
-for (i = 0; i < allowall.length; i++) {
-  inheritall[i].addEventListener("click", function () {
-    // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
-    var inherit = document.querySelectorAll("input[ids=inherit-btn]")
-    for (index = 0; index < inherit.length; index++) {
-      inherit[index].click();
-    }
-  });
-}
+// var inheritall = document.querySelectorAll("span[ids=inherit-all]")
+// for (i = 0; i < allowall.length; i++) {
+//   inheritall[i].addEventListener("click", function () {
+//     // $(this).parent().parent().children("li").children().children(".btn-group").children("#allow-btn").click();
+//     var inherit = document.querySelectorAll("input[ids=inherit-btn]")
+//     for (index = 0; index < inherit.length; index++) {
+//       inherit[index].click();
+//     }
+//   });
+// }
 
 var allowallsec = document.querySelectorAll("span[ids=allow]")
 for (i = 0; i < allowallsec.length; i++) {
@@ -680,15 +664,151 @@ for (i = 0; i < denyallsec.length; i++) {
   });
 }
 
-var inheritallsec = document.querySelectorAll("span[ids=inherit]")
-for (i = 0; i < inheritallsec.length; i++) {
-  inheritallsec[i].addEventListener("click", function () {
-    var inherit = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=inherit-btn]");
-    for (index = 0; index < inherit.length; index++) {
-      inherit[index].click();
-    }
-  });
+// var inheritallsec = document.querySelectorAll("span[ids=inherit]")
+// for (i = 0; i < inheritallsec.length; i++) {
+//   inheritallsec[i].addEventListener("click", function () {
+//     var inherit = this.parentNode.parentNode.parentNode.querySelectorAll("input[ids=inherit-btn]");
+//     for (index = 0; index < inherit.length; index++) {
+//       inherit[index].click();
+//     }
+//   });
+// }
+
+var $remove = $('#remove')
+
+var $usertable = $('#user-table')
+var selections = []
+
+$usertable.on('check.bs.table uncheck.bs.table ' +
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$usertable.bootstrapTable('getSelections').length)
+    selections = getUserIdSelections()
+  })
+
+$(".user-remove").click(function () {
+  var ids = getUserIdSelections()
+  $remove.prop('disabled', true)
+})
+
+function getUserIdSelections() {
+  return $.map($usertable.bootstrapTable('getSelections'), function (row) {
+    return row[1]
+  })
 }
+
+$(".user-remove").click(function () {
+  var ids = getUserIdSelections()
+  var users = new Array();
+  for (i = 0; i <= ids.length - 1; i++) {
+    users.push(ids[i]);
+  }
+  $("#selected-user").val(users);
+  deleteUser();
+})
+
+
+function deleteUser() {
+  document.getElementById("overlay").style.display = "block";
+  $.ajax({
+    url: "/user/delete-user",
+    type: "POST",
+    data: { users: $("#selected-user").val() },
+    success: function (result) {
+      $remove.prop('disabled', true);
+      $('#user-table tr.selected').remove();
+      if (parseInt(result.total) === 1) {
+        total = '1 user';
+      }
+      else {
+        total = `${result.total} users`;
+      }
+      document.getElementById("overlay").style.display = "none";
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `${total} deleted successfully. You can now add user.`,
+        addclass: 'stack-bottom-right',
+        icon: true,
+        delay: 2500
+      });
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+};
+
+
+//! user role section
+
+var $grouptable = $('#group-table')
+var selections = []
+
+$grouptable.on('check.bs.table uncheck.bs.table ' +
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$grouptable.bootstrapTable('getSelections').length)
+    selections = getGroupIdSelections()
+  })
+
+$(".group-remove").click(function () {
+  $remove.prop('disabled', true)
+})
+
+function getGroupIdSelections() {
+  return $.map($grouptable.bootstrapTable('getSelections'), function (row) {
+    return row[1]
+  })
+}
+
+$(".group-remove").click(function () {
+  var ids = getGroupIdSelections()
+  var roles = new Array();
+  for (i = 0; i <= ids.length - 1; i++) {
+    roles.push(ids[i]);
+  }
+  $("#selected-group").val(roles);
+  deleteGroup();
+})
+
+
+function deleteGroup() {
+  document.getElementById("overlay").style.display = "block";
+  $.ajax({
+    url: "/group/delete-group",
+    type: "POST",
+    data: { groups: $("#selected-group").val() },
+    success: function (result) {
+      $remove.prop('disabled', true);
+      $('#group-table tr.selected').remove();
+      if (parseInt(result.total) === 1) {
+        total = '1 group';
+      }
+      else {
+        total = `${result.total} groups`;
+      }
+      document.getElementById("overlay").style.display = "none";
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `${total} deleted successfully. You can now add group.`,
+        addclass: 'stack-bottom-right',
+        icon: true,
+        delay: 2500
+      });
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+};
 
 
 //! product list table
@@ -708,7 +828,7 @@ $producttable.on('check.bs.table uncheck.bs.table ' +
     selections = getProductIdSelections()
   })
 
-$remove.click(function () {
+$(".pro-remove").click(function () {
   var ids = getProductIdSelections()
   var products = new Array();
   for (i = 0; i <= ids.length - 1; i++) {
@@ -731,6 +851,7 @@ $remove.click(function () {
 // delete product
 
 function deleteProduct(products) {
+  document.getElementById("overlay").style.display = "block";
   $.ajax({
     url: "/control/product/delete-product/",
     type: "POST",
@@ -744,16 +865,14 @@ function deleteProduct(products) {
       else {
         total = `${result.total} products`;
       }
-      PNotify.desktop.permission();
+      document.getElementById("overlay").style.display = "none";
       new PNotify({
         title: 'Successfully deleted',
         type: 'success',
         text: `${total} deleted successfully. You can now add product.`,
         addclass: 'stack-bottom-right',
-        desktop: {
-          desktop: true,
-          icon: 'assets/images/pnotify/success.png'
-        }
+        icon: true,
+        delay: 2500
       });
     },
     headers: {
@@ -891,6 +1010,7 @@ $("#filer_input1").on("change", function () {
 
 
 //! related product table
+
 var rel_pro = new Array()
 var related_product_input = $("input[name=related-products]");
 
@@ -946,13 +1066,14 @@ $(".menu-item").click(function () {
 })
 
 $(".delete-menus").on("click", function () {
-  console.log($(this).parent().children(".menu-item").attr("id"))
+  document.getElementById("overlay").style.display = "block";
   var action = 'delete'
   $.ajax({
     url: "/control/menu/update",
     type: "POST",
     data: { menu_id: $(this).parent().children(".menu-item").attr("id"), action: action },
     success: function (result) {
+      document.getElementById("overlay").style.display = "none";
       if ($("div[id=" + result.id + "]").parent().children(".menu-item").hasClass("selected")) {
         $("div[id=" + result.id + "]").parent().remove()
         $("#edit-menu-form").trigger("reset")
@@ -970,6 +1091,140 @@ $(".delete-menus").on("click", function () {
     },
   });
 })
+
+
+
+//! page section
+
+var $pagetable = $('#page-table')
+var selections = []
+
+$pagetable.on('check.bs.table uncheck.bs.table ' +
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$pagetable.bootstrapTable('getSelections').length)
+    selections = getPageIdSelections()
+  })
+
+$(".page-remove").click(function () {
+  $remove.prop('disabled', true)
+})
+
+function getPageIdSelections() {
+  return $.map($pagetable.bootstrapTable('getSelections'), function (row) {
+    return row[1]
+  })
+}
+
+$(".page-remove").click(function () {
+  var ids = getPageIdSelections()
+  var pages = new Array();
+  for (i = 0; i <= ids.length - 1; i++) {
+    pages.push(ids[i]);
+  }
+  $("#selected-page").val(pages);
+  deletePage();
+})
+
+
+function deletePage() {
+  document.getElementById("overlay").style.display = "block";
+  $.ajax({
+    url: "/control/page/delete-page",
+    type: "POST",
+    data: { pages: $("#selected-page").val() },
+    success: function (result) {
+      $remove.prop('disabled', true);
+      $('#page-table tr.selected').remove();
+      if (parseInt(result.total) === 1) {
+        total = '1 page';
+      }
+      else {
+        total = `${result.total} pages`;
+      }
+      document.getElementById("overlay").style.display = "none";
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `${total} deleted successfully. You can now add page.`,
+        addclass: 'stack-bottom-right',
+        icon: true,
+        delay: 2500
+      });
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+};
+
+
+
+//! coupon section
+
+var $coupontable = $('#coupon-table')
+
+$coupontable.on('check.bs.table uncheck.bs.table ' +
+  'check-all.bs.table uncheck-all.bs.table',
+  function () {
+    $remove.prop('disabled', !$coupontable.bootstrapTable('getSelections').length)
+    selections = getCouponIdSelections()
+  }
+)
+
+function getCouponIdSelections() {
+  return $.map($coupontable.bootstrapTable('getSelections'), function (row) {
+    return row[1]
+  })
+}
+
+$(".coupon-remove").click(function () {
+  var ids = getCouponIdSelections()
+  var coupons = new Array();
+  for (i = 0; i <= ids.length - 1; i++) {
+    coupons.push(ids[i]);
+  }
+  $("#selected-coupon").val(coupons);
+  deleteCoupon();
+})
+
+
+function deleteCoupon() {
+  document.getElementById("overlay").style.display = "block";
+  $.ajax({
+    url: "/control/coupon/delete-coupon",
+    type: "POST",
+    data: { coupons: $("#selected-coupon").val() },
+    success: function (result) {
+      $remove.prop('disabled', true);
+      $('#coupon-table tr.selected').remove();
+      if (parseInt(result.total) === 1) {
+        total = '1 coupon';
+      }
+      else {
+        total = `${result.total} coupons`;
+      }
+      document.getElementById("overlay").style.display = "none";
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `${total} deleted successfully. You can now add coupon.`,
+        addclass: 'stack-bottom-right',
+        icon: true,
+        delay: 2500
+      });
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+};
 
 
 //! setting file
@@ -999,6 +1254,36 @@ $("#google-enable").on("click", function () {
     $(".google-login-field").addClass("d-none")
     $("#google-app-id").removeAttr("required")
     $("#google-app-secret").removeAttr("required")
+  }
+})
+
+$("#free-shipping-enable").on("click", function () {
+  if ($(this).is(":checked")) {
+    $(".free-shipping-label-field").removeClass("d-none")
+    $(".free-shipping-amount-field").removeClass("d-none")
+    $("#free-shipping-label").attr("required", true)
+    $("#free-shipping-amount").attr("required", true)
+  }
+  else {
+    $(".free-shipping-label-field").addClass("d-none")
+    $(".free-shipping-amount-field").addClass("d-none")
+    $("#free-shipping-label").removeAttr("required")
+    $("#free-shipping-amount").removeAttr("required")
+  }
+})
+
+$("#local-shipping-enable").on("click", function () {
+  if ($(this).is(":checked")) {
+    $(".local-shipping-label-field").removeClass("d-none")
+    $(".local-shipping-amount-field").removeClass("d-none")
+    $("#local-shipping-label").attr("required", true)
+    $("#local-shipping-amount").attr("required", true)
+  }
+  else {
+    $(".local-shipping-label-field").addClass("d-none")
+    $(".local-shipping-amount-field").addClass("d-none")
+    $("#local-shipping-label").removeAttr("required")
+    $("#local-shipping-amount").removeAttr("required")
   }
 })
 
@@ -1045,4 +1330,24 @@ $("#country-select").on("click", function () {
       search: true,
     });
   })
+})
+
+
+
+$("#add-staff").click(function () {
+  if ($(this).is(":checked")) {
+    $("#add-role").removeClass("d-none")
+  }
+  else {
+    $("#add-role").addClass("d-none")
+  }
+})
+
+$("#edit-staff").click(function () {
+  if ($(this).is(":checked")) {
+    $("#edit-role").removeClass("d-none")
+  }
+  else {
+    $("#edit-role").addClass("d-none")
+  }
 })

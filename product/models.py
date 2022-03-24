@@ -1,17 +1,20 @@
 from django.db import models
 from django.utils.safestring import mark_safe
-from PIL import Image
-import json
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-
 from django.template.defaultfilters import slugify
+from django.db.models import Q, Sum, Avg
+from django.utils.timezone import now
+
+from datetime import timedelta
+from PIL import Image
+import json
 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
-
 from fontawesome_5.fields import IconField
-from django.db.models import Q, Sum, Avg
+
+# from order.models import ShopCart
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -117,6 +120,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     unique = models.TextField(blank=True, null=True)
+    total_view = models.IntegerField(default=0)
+    rate = models.FloatField(default=0)
 
     def __str__(self):
         return self.title

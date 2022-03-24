@@ -138,7 +138,7 @@
                 <tbody>
                   <tr>
                     <th scope="row" class="h6">Order Date</th>
-                    <td class="h6">{{order.order_date|date:"d M, o"}} | {{order.order_date|time:"g:i:s A"}}</td>
+                    <td class="h6">{{order.order_date|date:"d M, o"}} | {{order.order_date|time:"g:i A"}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Order Status</th>
@@ -177,7 +177,7 @@
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Customer Phone</th>
-                    <td class="h6">{{order.address_book.phone}}</td>
+                    <td class="h6">{{order.phone}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Customer Group</th>
@@ -195,20 +195,16 @@
               <table class="table no-border">
                 <tbody>
                   <tr>
-                    <th scope="row" class="h6">Address Name</th>
-                    <td class="h6">{{order.address_book.name}}</td>
-                  </tr>
-                  <tr>
                     <th scope="row" class="h6">Country</th>
-                    <td class="h6">{{order.address_book.country}}</td>
+                    <td class="h6">{{order.country}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Region</th>
-                    <td class="h6">{{order.address_book.region}} - {{order.address_book.city}} - {{order.address_book.area}}</td>
+                    <td class="h6">{{order.region}} - {{order.city}} - {{order.area}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Address</th>
-                    <td class="h6">{{order.address_book.address}}</td>
+                    <td class="h6">{{order.address}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -218,20 +214,16 @@
               <table class="table no-border">
                 <tbody>
                   <tr>
-                    <th scope="row" class="h6">Address Name</th>
-                    <td class="h6">{{order.address_book.name}}</td>
-                  </tr>
-                  <tr>
                     <th scope="row" class="h6">Country</th>
-                    <td class="h6">{{order.address_book.country}}</td>
+                    <td class="h6">{{order.country}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Region</th>
-                    <td class="h6">{{order.address_book.region}} - {{order.address_book.city}} - {{order.address_book.area}}</td>
+                    <td class="h6">{{order.region}} - {{order.city}} - {{order.area}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Address</th>
-                    <td class="h6">{{order.address_book.address}}</td>
+                    <td class="h6">{{order.address}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -255,10 +247,10 @@
                   {% for cart in order.shopcarts.all %}
                   <tr>
                     <td><a href="/control/product/edit-product/{{cart.product.id}}" class="text-decoration-none">{{cart.product.title}}</a></td>
-                    <td>{{cart.product.price}}</td>
+                    <td>৳{{cart.product.price|floatformat:2}}</td>
                     <td>{{cart.quantity}}</td>
                     {% comment %} <td>৳{% widthratio cart.product.price 1 cart.quantity %}</td> {% endcomment %}
-                    <td>৳{{cart.cost}}</td>
+                    <td>৳{{cart.cost|floatformat:2}}</td>
                     <td></td>
                   </tr>
                   {% endfor %}
@@ -267,21 +259,21 @@
                     <td></td>
                     <td></td>
                     <td>Subtotal</td>
-                    <td>${{order.total}}</td>
+                    <td>৳{{order.total_bdt|floatformat:2}}</td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{order.Shipping_method.name}}</td>
-                    <td>৳{{order.Shipping_method.fee}}</td>
+                    <td>{{order.shipping_method.name}}</td>
+                    <td>৳{{order.shipping_fee|floatformat:2}}</td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td class="fw-bolder">Total</td>
-                    <td>${{order.total}}</td>
+                    <td>৳{{order.total_bdt|floatformat:2}}</td>
                   </tr>
                 </tbody>
               </table>

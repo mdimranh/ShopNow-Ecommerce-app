@@ -139,7 +139,7 @@
                 <div class="bg-lighter trending-products">
                     <div class="heading heading-flex mb-3">
                         <div class="heading-left">
-                            <h2 class="title">Trending Today</h2><!-- End .title -->
+                            <h2 class="title">Trending Now</h2><!-- End .title -->
                         </div><!-- End .heading-left -->
                        <div class="heading-right">
                             <ul class="nav nav-pills justify-content-center" role="tablist">
@@ -1104,7 +1104,7 @@
                                 </li>
                                 {% for cat in new_product_cat %}
                                 <li class="nav-item">
-                                    <a class="nav-link" id="new-{{cat.category.name}}-link" data-toggle="tab" href="#new-{{cat.category.name}}-tab" role="tab" aria-controls="new-{{cat.category.name}}-tab" aria-selected="true">{{cat.category.name}}</a>
+                                    <a class="nav-link" id="new-{{cat.category.id}}-link" data-toggle="tab" href="#new-{{cat.category.id}}-tab" role="tab" aria-controls="new-{{cat.category.id}}-tab" aria-selected="true">{{cat.category.name}}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -1144,7 +1144,7 @@
                                 {% for product in product %}
                                 <div class="product text-center">
                                     <figure class="product-media">
-                                        <span class="product-label label-sale">Sale</span>
+                                        <span class="product-label label-sale">Sale {{product.rating}}</span>
                                         <a href="/products/{{product.id}}">
                                             <img src="{{product.image}}" alt="Product image" class="product-image">
                                         </a>
@@ -1190,7 +1190,7 @@
                             </div><!-- End .owl-carousel -->
                         </div><!-- .End .tab-pane -->
                         {% for cat in new_product_cat %}
-                        <div class="tab-pane p-0 fade" id="new-{{cat.category.name}}-tab" role="tabpanel" aria-labelledby="new-{{cat.categtory.name}}-link">
+                        <div class="tab-pane p-0 fade" id="new-{{cat.category.id}}-tab" role="tabpanel" aria-labelledby="new-{{cat.categtory.id}}-link">
                             <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                                 data-owl-options='{
                                     "nav": true, 
@@ -1459,6 +1459,7 @@
 
                 {% if procaro|length > 0 %}
                 {% for caro in procaro %}
+                {% if caro.no_pro > 0 %}
                 <div class="bg-lighter trending-products">
                     <div class="heading heading-flex mb-3">
                         <div class="heading-left">
@@ -1481,7 +1482,7 @@
                         <div class="tab-pane p-0 fade show active" id="new-all-tab" role="tabpanel" aria-labelledby="new-all-link">
                             <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                                 data-owl-options='{
-                                    "nav": false, 
+                                    "nav": true, 
                                     "dots": false,
                                     "margin": 5,
                                     "loop": false,
@@ -1508,199 +1509,15 @@
                                         }
                                     }
                                 }'>
-                                {% if caro.categorys.all|length > 0 %}
-                                    {% for item in caro.categorys.all %}
-                                        {% for product in item.product_categorys.all %}
-                                        <div class="product text-center">
-                                            <figure class="product-media">
-                                                <span class="product-label label-sale">Sale</span>
-                                                <a href="/products/{{product.id}}">
-                                                    <img src="{{product.image}}" alt="Product image" class="product-image">
-                                                </a>
-                                                {% if product.hot_deal %}
-                                                    <div class="product-countdown" data-until="+{{product.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
-                                                {% endif %}
-                                                <div class="product-action-vertical">
-                                                    <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
-                                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                                </div><!-- End .product-action-vertical -->
-                                                <div class="product-action">
-                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
-                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
-                                                    {% else %}
-                                                    <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
-                                                    {% endif %}
-                                                </div><!-- End .product-action -->
-                                            </figure><!-- End .product-media -->
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">{{product.category.name}}</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
-                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
-                                                </div><!-- End .rating-container -->
-                                                <div class="product-nav product-nav-dots">
-                                                    <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                                                </div><!-- End .product-nav -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                        {% endfor %}
-                                    {% endfor %}
-                                {% endif %}
-                                {% if caro.groups.all|length > 0 %}
-                                    {% for item in caro.groups.all %}
-                                        {% for product in item.product_groups.all %}
-                                        <div class="product text-center">
-                                            <figure class="product-media">
-                                                <span class="product-label label-sale">Sale</span>
-                                                <a href="/products/{{product.id}}">
-                                                    <img src="{{product.image}}" alt="Product image" class="product-image">
-                                                </a>
-                                                {% if product.hot_deal %}
-                                                    <div class="product-countdown" data-until="+{{product.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
-                                                {% endif %}
-                                                <div class="product-action-vertical">
-                                                    <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
-                                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                                </div><!-- End .product-action-vertical -->
-                                                <div class="product-action">
-                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
-                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
-                                                    {% else %}
-                                                    <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
-                                                    {% endif %}
-                                                </div><!-- End .product-action -->
-                                            </figure><!-- End .product-media -->
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">{{product.category.name}}</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
-                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
-                                                </div><!-- End .rating-container -->
-                                                <div class="product-nav product-nav-dots">
-                                                    <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                                                </div><!-- End .product-nav -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                        {% endfor %}
-                                    {% endfor %}
-                                {% endif %}
-                                {% if caro.subcategorys.all|length > 0 %}
-                                    {% for item in caro.subcategorys.all %}
-                                        {% for product in item.product_subcategorys.all %}
-                                        <div class="product text-center">
-                                            <figure class="product-media">
-                                                <span class="product-label label-sale">Sale</span>
-                                                <a href="/products/{{product.id}}">
-                                                    <img src="{{product.image}}" alt="Product image" class="product-image">
-                                                </a>
-                                                {% if product.hot_deal %}
-                                                    <div class="product-countdown" data-until="+{{product.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
-                                                {% endif %}
-                                                <div class="product-action-vertical">
-                                                    <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
-                                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                                </div><!-- End .product-action-vertical -->
-                                                <div class="product-action">
-                                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
-                                                    <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
-                                                    {% else %}
-                                                    <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
-                                                    {% endif %}
-                                                </div><!-- End .product-action -->
-                                            </figure><!-- End .product-media -->
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">{{product.category.name}}</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    <span class="new-price">৳{{product.price|intcomma}}</span>
-                                                    {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%)</span>{% endif %}
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( {{product.total_review}} Reviews )</span>
-                                                </div><!-- End .rating-container -->
-                                                <div class="product-nav product-nav-dots">
-                                                    <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                                    <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                                                </div><!-- End .product-nav -->
-                                            </div><!-- End .product-body -->
-                                        </div><!-- End .product -->
-                                        {% endfor %}
-                                    {% endfor %}
-                                {% endif %}
-                            </div><!-- End .owl-carousel -->
-                        </div><!-- .End .tab-pane -->
-                        {% for cat in new_product_cat %}
-                        <div class="tab-pane p-0 fade" id="new-{{cat.category.name}}-tab" role="tabpanel" aria-labelledby="new-{{cat.categtory.name}}-link">
-                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
-                                data-owl-options='{
-                                    "nav": false, 
-                                    "dots": true,
-                                    "margin": 20,
-                                    "loop": false,
-                                    "responsive": {
-                                        "0": {
-                                            "items":1
-                                        },
-                                        "480": {
-                                            "items":2
-                                        },
-                                        "768": {
-                                            "items":3
-                                        },
-                                        "992": {
-                                            "items":4
-                                        },
-                                        "1200": {
-                                            "items":3,
-                                            "nav": true
-                                        },
-                                        "1600": {
-                                            "items":5,
-                                            "nav": true
-                                        }
-                                    }
-                                }'>
-                                {% for product in new_product %}
-                                {% if product.category == cat.category %}
+                                {% for item in caro.all_product %}
                                 <div class="product text-center">
                                     <figure class="product-media">
                                         <span class="product-label label-sale">Sale</span>
-                                        <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                        <a href="/products/{{item.id}}">
+                                            <img src="{{item.image}}" alt="Product image" class="product-image">
                                         </a>
-                                        {% if product.hot_deal %}
-                                            <div class="product-countdown" data-until="+{{product.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+                                        {% if item.hot_deal %}
+                                            <div class="product-countdown" data-until="+{{item.hot_deal|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
                                         {% endif %}
                                         <div class="product-action-vertical">
                                             <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
@@ -1708,27 +1525,23 @@
                                             <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
-                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
-                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
-                                            {% else %}
-                                            <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
-                                            {% endif %}
+                                            <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{item.id}}, 'no')">add to cart</button>
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">
                                         {% comment %} <div class="product-cat">
-                                            <a href="#">{{product.category.name}}</a>
+                                            <a href="#">{{item.product.category.name}}</a>
                                         </div><!-- End .product-cat --> {% endcomment %}
-                                        <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="product.html">{{item.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">৳{{product.price|intcomma}}</span>
-                                            <span class="old-price"><span>{{product.main_price}}</span> ({{product.discount}}%%)</span>
+                                            <span class="new-price h6">৳{{item.price|intcomma}}</span>
+                                            {% if item.discount > 0 %}<span class="old-price"><span>{{item.main_price}}</span> ({{item.product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: {{product.rating}}%;"></div><!-- End .ratings-val -->
+                                                <div class="ratings-val" style="width: {{item.rating}}%;"></div><!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
-                                            <span class="ratings-text">( {{product.total_review}} Reviews )</span>
+                                            <span class="ratings-text">( {{item.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
                                             <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
@@ -1737,13 +1550,12 @@
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
-                                {% endif %}
                                 {% endfor %}
                             </div><!-- End .owl-carousel -->
                         </div><!-- .End .tab-pane -->
-                        {% endfor %}
                     </div><!-- End .tab-content -->
                 </div><!-- End .bg-lighter -->
+                {% endif %}
                 {% endfor %}
                 {% endif %}
 
@@ -1919,7 +1731,7 @@
                                             </a>
 
                                             <div class="product-action-vertical">
-                                                <button class="btn-product-icon btn-wishlist" title="Add to wishlist" onclick="AddWishlist('{{product.id}}')"><span>add to wishlist</span></button>
+                                                <button class="btn-product-icon btn-wishlist" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></button>
                                                 <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                                                 <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                             </div><!-- End .product-action-vertical -->

@@ -77,6 +77,12 @@
 											<span class="invalid-feedback">Please Enter Email Address</span>
 										</div>
 
+	                					<label>Phone *</label>
+										<div>
+											<input type="text" id="phone" name="phone" class="form-control" required>
+											<span class="invalid-feedback">Please Enter Phone</span>
+										</div>
+
 	        							{% comment %} <div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" id="checkout-create-acc">
 											<label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
@@ -101,21 +107,6 @@
 
 										<div id="new-address" class="d-none">
 			                				<div class="row">
-			                					<div class="col-sm-6">
-			                						<label>Address Name *</label>
-			                						<input type="text" class="form-control" id="ab-name" required>
-			                					</div><!-- End .col-sm-6 -->
-
-			                					<div class="col-sm-6">
-			                						<label>Phone *</label>
-			                						<input type="text" class="form-control" id="ab-phone" required>
-			                					</div><!-- End .col-sm-6 -->
-			                				</div><!-- End .row -->
-
-		            						{% comment %} <label>Display Name *</label>
-		            						<input type="text" class="form-control" required>
-		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small> {% endcomment %}
-                                            <div class="row">
                                                 <div class="col-sm-4">
                                                     <label>Country *</label>
                                                     <select class="form-control ab-country" id="add-country">
@@ -191,6 +182,12 @@
 													{% endif %}
 		                						</tr><!-- End .summary-total -->
 												<p class="d-none" id="usd"></p>
+												<p class="d-none" id="rate"></p>
+												{% if cost <= free_shipping.fee %}
+		                							<td id="total-cost-bdt"  class="d-none">{{cost|add:local_shipping.fee|floatformat:2}}</td>
+												{% else %}
+		                							<td id="total-cost-bdt"  class="d-none">{{cost|floatformat:2}}</td>
+												{% endif %}
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
 
@@ -290,193 +287,9 @@
 {% endblock custom %}
 
 {% block extra_js %}
+	{{request.user.id|json_script:'user_id'}}
     <script src="{% static 'assets/add-product.js' %}"></script>
     <script src="{% static 'assets/profile.js' %}"></script>
-	<script>
-		var t = $.get("https://free.currconv.com/api/v7/convert?q=BDT_USD&compact=ultra&apiKey=ead55d2b5025899d1805", function(err, resp, body){
-			$("#usd").text(($("#total-cost").text().slice(1)*body.responseJSON.BDT_USD).toFixed(2));
-		});
-	</script>
 	<script src="https://www.paypal.com/sdk/js?client-id=AUGlRSikgHWm5LgI6mQetKFBJVJ2ztieTFWPej1HOVxcqCxURrgvnmFl9t9SmhJi9d_WSGyzlsF3zDjF&disable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
-	<script>
-
-		function getCookie(name) {
-			let cookieValue = null;
-			if (document.cookie && document.cookie !== '') {
-				const cookies = document.cookie.split(';');
-				for (let i = 0; i < cookies.length; i++) {
-				const cookie = cookies[i].trim();
-				if (cookie.substring(0, name.length + 1) === (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-				}
-			}
-			return cookieValue;
-		}
-
-		function initPayPalButton() {
-		paypal.Buttons({
-			style: {
-			shape: 'rect',
-			color: 'gold',
-			layout: 'vertical',
-			label: 'paypal',
-			
-			},
-			{% comment %} onClick: function(data, actions){
-				
-			},   {% endcomment %}
-			createOrder: function(data, actions) {
-				return actions.order.create({
-					purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
-				});
-			},
-			onApprove: function(data, actions) {
-			return actions.order.capture().then(function(orderData) {
-				
-				// Full available details
-				console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-				{% if user.is_authenticated %}
-					data = {
-						'user_id': {{user.id}},
-						'company_name': $("#company_name").val(),
-						'email': $("#email").val(),
-						'notes': $("#notes").val(),
-						'diff_address': $("#checkout-diff-address").val(),
-						'ab_name': $("#ab-name").val(),
-						'ab_phone': $("#ab-phone").val(),
-						'ab_country': $(".ab-country").val(),
-						'ab_region': $(".ab-region").val(),
-						'ab_city': $(".ab-city").val(),
-						'ab_area': $(".ab-area").val(),
-						'ab_address': $("#ab-address").val(),
-						'address_book': $("input[name='address_book']:checked").val(),
-						'payment_mode': 'paypal',
-						'payment_id': orderData.id,
-						'total': orderData.purchase_units[0].amount.value
-					}
-					$.ajax({
-						url: "/place-order",
-						type: "POST",
-						data: data,
-
-						success: function(response){
-							Swal.fire({
-								title: 'Congratulation',
-								text: "Order confirmed successfully",
-								icon: 'success',
-								showCancelButton: false,
-								showConfirmButton: false,
-								timer: 1000
-							}).then((result) => {
-								window.location.href = "/"
-							});
-						},
-						headers: {
-							"X-CSRFToken": getCookie("csrftoken")
-						},
-					});
-				{% endif %}
-			});
-			},
-			{% comment %} onError: function(err) {
-				console.log(err);
-			} {% endcomment %}
-		}).render('#paypal-button-container');
-		}
-		initPayPalButton();
-	</script>
-	<script>
-		$("#btn").click(function(){
-			{% if user.is_authenticated %}
-				data = {
-					'user_id': {{user.id}},
-					'company_name': $("#company_name").val(),
-					'email': $("#email").val(),
-					'notes': $("#notes").val(),
-					'payment_mode': 'paypal',
-					'payment_id': 12,
-					'diff_address': $("#checkout-diff-address").val(),
-					'ab_name': $("#ab-name").val(),
-					'ab_phone': $("#ab-phone").val(),
-					'ab_country': $(".ab-country").val(),
-					'ab_region': $(".ab-region").val(),
-					'ab_city': $(".ab-city").val(),
-					'ab_area': $(".ab-area").val(),
-					'ab_address': $("#ab-address").val(),
-					{% comment %} 'total' = $("#usd").text(), {% endcomment %}
-					'address_book': $("input[name='address_book']:checked").val()
-				}
-				$.ajax({
-					url: "/place-order",
-					type: "POST",
-					data: data,
-					success: function(response){
-						Swal.fire({
-							title: 'Congratulation',
-							text: "Order confirmed successfully",
-							icon: 'success',
-							showCancelButton: false,
-							showConfirmButton: false,
-							timer: 1000
-						})
-					},
-					headers: {
-						"X-CSRFToken": getCookie("csrftoken")
-					},
-				});
-			{% endif %}
-		})
-	</script>
-	<script>
-		data = [
-			{
-			"reference_id": "default",
-			"amount": {
-				"currency_code": "USD",
-				"value": "1.00"
-			},
-			"payee": {
-				"email_address": "businessimran@gmail.com",
-				"merchant_id": "6A6E79DE7CG3A"
-			},
-			"shipping": {
-				"name": {
-				"full_name": "Md Imran Hossain"
-				},
-				"address": {
-				"address_line_1": "1 Main St",
-				"admin_area_2": "San Jose",
-				"admin_area_1": "CA",
-				"postal_code": "95131",
-				"country_code": "US"
-				}
-			},
-			"payments": {
-				"captures": [
-				{
-					"id": "7HN150551N180561T",
-					"status": "COMPLETED",
-					"amount": {
-					"currency_code": "USD",
-					"value": "1.00"
-					},
-					"final_capture": true,
-					"seller_protection": {
-					"status": "ELIGIBLE",
-					"dispute_categories": [
-						"ITEM_NOT_RECEIVED",
-						"UNAUTHORIZED_TRANSACTION"
-					]
-					},
-					"create_time": "2022-03-15T09:10:00Z",
-					"update_time": "2022-03-15T09:10:00Z"
-				}
-				]
-			}
-			}
-		]
-		console.log(data[0].amount.value)
-	</script>
+	<script src="{% static 'assets/checkout.js' %}"></script>
 {% endblock extra_js %}

@@ -28,3 +28,4 @@ class CouponAdmin(admin.ModelAdmin):
 admin.site.register(Coupon, CouponAdmin)
 admin.site.register(Order)
 admin.site.register(ShippingMethod)
+admin.site.register(PaymentMethod)

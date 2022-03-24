@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Account, Logout, ProfileView, GetCity, GetRegion, GetArea
+from .views import Account, Logout, ProfileView, GetCity, GetRegion, GetArea, DeleteUser, DeleteGroup
 
 urlpatterns = [
     path('auth/', Account, name = 'login'),
@@ -7,5 +7,7 @@ urlpatterns = [
     path('auth/logout', Logout, name = 'logout'),
     path('get-city', GetCity, name = 'getcity'),
     path('get-region', GetRegion, name = 'getregion'),
-    path('get-area', GetArea, name = 'getarea')
+    path('get-area', GetArea, name = 'getarea'),
+    path('user/delete-user', DeleteUser.as_view(), name='dleteuser'),
+    path('group/delete-group', DeleteGroup.as_view(), name='dletegroup')
 ]

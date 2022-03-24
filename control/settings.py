@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from product.models import Product, Category
+from django.views import View
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from allauth.socialaccount.models import SocialApp
@@ -7,7 +9,7 @@ import pytz
 
 from setting.models import Slider, Slide, SiteFront, SiteConfiguration, Pages, Banner
 
-from order.models import ShippingMethod
+from order.models import ShippingMethod, PaymentMethod
 
 def SettingView(request):
     if request.method == 'POST':
@@ -49,9 +51,8 @@ def SettingView(request):
             return redirect(request.path_info)
 
         elif 'free-label' in request.POST:
-            id = request.POST['id']
-            if id != 'null' and ShippingMethod.objects.filter(id = id).exists():
-                shipping_method = ShippingMethod.objects.get(id = id)
+            if ShippingMethod.objects.filter(method_type = 'free').exists():
+                shipping_method = ShippingMethod.objects.get(method_type = 'free')
                 shipping_method.name = request.POST['free-label']
                 shipping_method.fee = request.POST['free-amount']
                 shipping_method.active = True if request.POST.get('free-shipping-enable') == 'on' else False
@@ -67,9 +68,8 @@ def SettingView(request):
             return redirect(request.path_info)
 
         elif 'local-label' in request.POST:
-            id = request.POST['id']
-            if id != 'null' and ShippingMethod.objects.filter(id = id).exists():
-                shipping_method = ShippingMethod.objects.get(id = id)
+            if ShippingMethod.objects.filter(method_type = 'local').exists():
+                shipping_method = ShippingMethod.objects.get(method_type = 'local')
                 shipping_method.name = request.POST['local-label']
                 shipping_method.fee = request.POST['local-cost']
                 shipping_method.active = True if request.POST.get('local-shipping-enable') == 'on' else False
@@ -84,15 +84,27 @@ def SettingView(request):
                 shipping_method.save()
             return redirect(request.path_info)
 
+        elif 'paypal-client-id' in request.POST:
+            payment_method, create = PaymentMethod.objects.get_or_create(
+                name = 'paypal',
+            )
+            payment_method.client_id = request.POST['paypal-client-id']
+            payment_method.secret = request.POST['paypal-secret']
+            payment_method.active = True if request.POST.get('paypal-enable') == 'on' else False
+            payment_method.save()
+            return redirect(request.path_info)
+
     facebook_login = SocialApp.objects.filter(name = 'facebook').first()
     google_login = SocialApp.objects.filter(name = 'google').first()
     free_shipping = ShippingMethod.objects.filter(method_type="free").first()
     local_shipping = ShippingMethod.objects.filter(method_type="local").first()
+    paypal = PaymentMethod.objects.filter(name="paypal").first()
     context = {
         "facebook_login": facebook_login,
         "google_login": google_login,
         "free_shipping": free_shipping,
         "local_shipping": local_shipping,
+        'paypal': paypal,
         'timezones': pytz.all_timezones,
         "setting_sec": True,
     }
@@ -236,6 +248,16 @@ def PageDetails(request, id):
     }
     return render(request, "control/pages.html", context)
 
+
+class DeletePage(View):
+    def post(self, request):
+        total_page = len(request.POST["pages"].split(','))
+        for page_id in request.POST["pages"].split(','):
+            Pages.objects.get(id = page_id).delete()
+        context = {
+            'total' : total_page
+        }
+        return JsonResponse(context)
 
 
 def SiteFrontView(request):

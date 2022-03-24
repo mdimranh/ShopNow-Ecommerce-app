@@ -12,6 +12,8 @@
         <h3 class="fw-bold ms-2 ps-1">Dashboard</h3>
         <div class="container-fluid dashboard">
           <div class="row">
+
+            {% if user.is_superuser %}
             <div class="col-md-6 col-xl-3">
               <div class="card client-blocks dark-primary-border">
                 <div class="card-block">
@@ -39,6 +41,7 @@
                 </div>
               </div>
             </div>
+            {% endif %}
 
             <div class="col-md-6 col-xl-3">
               <div class="card client-blocks success-border">
@@ -54,6 +57,7 @@
               </div>
             </div>
 
+            {% if user.is_superuser %}
             <div class="col-md-6 col-xl-3">
               <div class="card client-blocks">
                 <div class="card-block">
@@ -67,8 +71,10 @@
                 </div>
               </div>
             </div>
+            {% endif %}
 
             <div class="row m-0 p-0 chart">
+              {% if user.is_superuser %}
               <div class="col-md-12 col-lg-6">
                 <div class="card">
                   <div class="card-header">
@@ -82,6 +88,7 @@
                   </div>
                 </div>
               </div>
+              {% endif %}
 
               {% comment %} <div class="col-md-12 col-lg-6">
                 <div class="card">
@@ -97,6 +104,7 @@
                 </div>
               </div> {% endcomment %}
 
+              {% if user.is_superuser %}
               <div class="col-md-12 col-lg-6">
                 <div class="card">
                   <div class="card-header">
@@ -138,6 +146,7 @@
                   </table>
                 </div>
               </div>
+              {% endif %}
 
               <div class="col-md-12 col-lg-6">
                 <div class="card">
@@ -193,13 +202,9 @@
     <script>
       var order = {
         labels: [
-          "Saturday",
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
+        {% for date, day, count in order_data %}
+          "{{day}}",
+        {% endfor %}
         ],
         datasets: [
           {
@@ -227,7 +232,7 @@
               "rgba(26, 188, 156, 0.88)",
               "rgba(26, 188, 156, 0.88)",
             ],
-            data: [65, 59, 80, 81, 56, 55, 50],
+            data: [{% for date, day, count in order_data %}{{count}},{% endfor %}],
           },
           {
             fill: {
@@ -254,7 +259,7 @@
               "rgba(93, 156, 236, 0.82)",
               "rgba(93, 156, 236, 0.82)",
             ],
-            data: [40, 50, 65, 71, 38, 30, 25],
+            data: [{% for date, day, count in complete_data %}{{count}},{% endfor %}],
           },
           {
             fill: {
@@ -263,6 +268,33 @@
               below: "rgba(145, 201, 253, 0.5)",
             },
             label: "Pending",
+            backgroundColor: [
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+              "rgba(129, 96, 183, 0.93)",
+            ],
+            hoverBackgroundColor: [
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+              "rgba(129, 96, 183, 0.82)",
+            ],
+            data: [{% for date, day, count in pending_data %}{{count}},{% endfor %}],
+          },
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.5)",
+              below: "rgba(145, 201, 253, 0.5)",
+            },
+            label: "Cancel",
             backgroundColor: [
               "rgba(173, 51, 75, 0.93)",
               "rgba(173, 51, 75, 0.93)",
@@ -281,7 +313,34 @@
               "rgba(173, 51, 75, 0.82)",
               "rgba(173, 51, 75, 0.82)",
             ],
-            data: [30, 39, 55, 61, 28, 20, 15],
+            data: [{% for date, day, count in cancel_data %}{{count}},{% endfor %}],
+          },
+          {
+            fill: {
+              target: "origin",
+              above: "rgba(145, 201, 253, 0.5)",
+              below: "rgba(145, 201, 253, 0.5)",
+            },
+            label: "Pending Payment",
+            backgroundColor: [
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+              "rgba(66, 83, 132, 0.93)",
+            ],
+            hoverBackgroundColor: [
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+              "rgba(66, 83, 132, 0.82)",
+            ],
+            data: [{% for date, day, count in ppayment_data %}{{count}},{% endfor %}],
           },
         ],
       };

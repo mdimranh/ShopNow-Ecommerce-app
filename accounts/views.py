@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.views import View
 from .models import Profile, AddressBook
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
 from product.models import Category, Product
 from order.models import ShopCart
 from datetime import datetime
-from django.contrib.auth.models import User
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User, Group, auth
 from django.contrib import messages
 
 from region.models import Country, Region, City, Area
@@ -108,6 +108,26 @@ def Account(request):
         return HttpResponse({"msg": 'Something is wrong'})
     return render(request, "account/login.html")
 
+class DeleteUser(View):
+    def post(self, request):
+        total_user = len(request.POST["users"].split(','))
+        for user_id in request.POST["users"].split(','):
+            User.objects.get(id = user_id).delete()
+        context = {
+            'total' : total_user
+        }
+        return JsonResponse(context)
+
+class DeleteGroup(View):
+    def post(self, request):
+        total_group = len(request.POST["groups"].split(','))
+        for group_id in request.POST["groups"].split(','):
+            Group.objects.get(id = group_id).delete()
+        context = {
+            'total' : total_group
+        }
+        return JsonResponse(context)
+
 def ProfileView(request):
     if request.method == 'POST':
         if 'ab-name' in request.POST:
@@ -171,7 +191,7 @@ def ProfileView(request):
 
 def Logout(request):
     user = request.user
-    pro = Profile.objects.get(user = user)
+    pro, create = Profile.objects.get_or_create(user = user)
     pro.online = False
     pro.save()
     auth.logout(request)

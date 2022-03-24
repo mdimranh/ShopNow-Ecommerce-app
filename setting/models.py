@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.safestring import mark_safe
 
-from product.models import Category, Group, Subcategory
+from product.models import Category, Group, Subcategory, Product
 from ckeditor_uploader.fields import RichTextUploadingField
 
 import json
@@ -267,5 +267,35 @@ class ProductCarousel(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	def all_product(self):
+		prod = []
+		cat_pro = Product.objects.filter(category__in = self.categories.all())
+		group_pro = Product.objects.filter(group__in = self.groups.all())
+		subcat_pro = Product.objects.filter(subcategory__in = self.subcategorys.all())
+		for pro in cat_pro:
+			prod.append(pro)
+		for pro in group_pro:
+			if pro not in prod:
+				prod.append(pro)
+		for pro in subcat_pro:
+			if pro not in prod:
+				prod.append(pro)
+		return prod
+
+	def no_pro(self):
+		prod = []
+		cat_pro = Product.objects.filter(category__in = self.categories.all())
+		group_pro = Product.objects.filter(group__in = self.groups.all())
+		subcat_pro = Product.objects.filter(subcategory__in = self.subcategorys.all())
+		for pro in cat_pro:
+			prod.append(pro)
+		for pro in group_pro:
+			if pro not in prod:
+				prod.append(pro)
+		for pro in subcat_pro:
+			if pro not in prod:
+				prod.append(pro)
+		return len(prod)
 	
 	

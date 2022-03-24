@@ -55,53 +55,24 @@
       {% endif %}
       {% if messages %}
       <div class="card product-list">
-          <div class="card-header">
-            <h5>All Messages</h5>
-            <div class="card-header-right me-3">
-              <button class="btn btn-add add-product-btn p-2">
-                <i class="fa fa-plus px-2 m-0"></i>Add Message
-              </button>
-            </div>
-          </div>
           <div class="card-block">
             <div class="dt-responsive table-responsive">
-              <div id="toolbar">
-                <button id="remove" class="btn btn-danger" disabled>
-                  <i class="fa fa-trash"></i> Delete
-                </button>
-                <input type="hidden" id="selected-product">
-              </div>
               <table
                 id="product-table"
                 data-toggle="table"
-                data-toolbar="#toolbar"
                 data-pagination="true"
                 data-page-list="[5, 25, 50, 100, ALL]"
                 data-search="true"
                 data-search-highlight="true"
-                {% comment %} data-show-export="true"
-                data-export-types="['csv','json', 'doc']"
-                data-export-options='{
-                  "fileName": "userlist"
-                }' {% endcomment %}
                 data-filter-control="true"
-                {% comment %} data-show-multi-sort="true" {% endcomment %}
                 data-fixed-columns="true"
                 data-fixed-number="1"
-                {% comment %} data-show-columns="true"
-                data-show-columns-toggle-all="true" {% endcomment %}
-                {% comment %} data-show-toggle="true"
-                data-show-fullscreen="true"
-                data-show-pagination-switch="true" {% endcomment %}
-                {% comment %} data-show-footer="true" {% endcomment %}
-                {% comment %} data-detail-view="true" {% endcomment %}
                 data-sticky-header = "true"
                 data-checkbox = "true"
                 class="table table-bordered no-border nowrap"
               >
                 <thead>
                   <tr>
-                    <th data-checkbox="true" ></th>
                     <th data-sortable="true" data-valign="middle">Name</th>
                     <th data-sortable="true" data-valign="middle">Status</th>
                     <th data-sortable="true" data-valign="middle">Message</th>
@@ -111,7 +82,6 @@
                 <tbody>
                   {% for message in messages %}
                   <tr>
-                    <td data-checkbox-enabled="false"></td>
                     <td ><a href="/control/message/{{message.id}}" class="title">{{message.name}}</a></td>
                     <td >{{message.status}}</td>
                     <td >{{message.message}}</td>
@@ -119,16 +89,6 @@
                   </tr>
                   {% endfor %}
                 </tbody>
-                {% comment %} <tfoot>
-                  <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>{{product.status}}</th>
-                    <th>Amount</th>
-                    <th>Created</th>
-                  </tr>
-                </tfoot> {% endcomment %}
               </table>
             </div>
           </div>
@@ -158,129 +118,40 @@
                   {% csrf_token %}
                   <input type="hidden" name="id" value="{{message.id}}">
                   <div id="message" class="product-form">
-                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Message</h6>
                     <hr />
                     <br />
-                    <div class="row mb-3">
-                      <label
-                        for="add-product-name"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Name*</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-product-name"
-                          name="name"
-                          value="{{message.name}}"
-                          placeholder="Name"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="add-email"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Email</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="email"
-                          class="form-control"
-                          id="add-email"
-                          name="email"
-                          value="{{message.email}}"
-                          placeholder="Email"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="add-phone"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Phone</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-phone"
-                          name="phone"
-                          value="{{message.phone}}"
-                          placeholder="Phone"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="add-subject"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Subject</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-subject"
-                          name="subject"
-                          value="{{message.subject}}"
-                          placeholder="Subject"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="add-message"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Message*</label
-                      >
-                      <div class="col-xl-10">
-                        <textarea
-                          class="form-control"
-                          name="message"
-                          id="add-message"
-                          placeholder="Write your message..."
-                        >{{message.message}}</textarea>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col-xl-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <div
-                          id="cancel-btn"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </div>
-                      </div>
-                    </div>
+                    <table class="table no-border">
+                      <tbody>
+                        <tr>
+                          <th scope="row">Name</th>
+                          <td>{{message.name}}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Email</th>
+                          <td>{{message.email}}</td>
+                        </tr>
+                        {% if message.phone %}
+                        <tr>
+                          <th scope="row">Phone</th>
+                          <td>{{message.phone}}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                          <th scope="row">Subject</th>
+                          <td>{{message.subject}}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Message</th>
+                          <td>{{message.message}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                   <div id="action" class="product-form d-none">
-                    <h6 class="mt-2 text-primary fw-bolder h4">Category</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Action</h6>
                     <hr />
                     <br />
-                    {% comment %} <div class="row mb-3">
-                      <label
-                        for="add-category-select"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Status</label
-                      >
-                      <div class="col-xl-10">
-                        <select class="form-select" id="add-category-select" name="category" required>
-                          {% for category in categorys %}
-                            <option value="{{category.id}}">{{category.name}}</option>
-                          {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">Please Select Category</div>
-                      </div>
-                    </div> {% endcomment %}
                     <div class="row mb-3">
                       <label
                         for="add-note"

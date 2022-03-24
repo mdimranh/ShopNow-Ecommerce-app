@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 
 from .models import Profile, AddressBook
 
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['name', 'phone', 'address', 'image_tag']

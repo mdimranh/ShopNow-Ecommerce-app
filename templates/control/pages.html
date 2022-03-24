@@ -21,15 +21,15 @@
     {% endblock style %}
 
     {% block main %}
-      {% if user_info %}
-        <h5 class="fw-bold mb-2">{{user_info.first_name}} {{user_info.last_name}}</h5>
+      {% if page %}
+        <h4 class="fw-bold mb-2">{{page.name}}</h4>
       {% else %}
-        <h3 class="fw-bold">User's</h3>
+        <h3 class="fw-bold">Pages</h3>
       {% endif %}
       {% if pages %}
       <div class="card user-list">
           <div class="card-header">
-            <h5>All User</h5>
+            <h5>All Pages</h5>
             <div class="card-header-right me-3">
               <button class="btn btn-add add-user-btn p-2">
                 <i class="fa fa-plus px-2 m-0"></i>Add Page
@@ -39,12 +39,13 @@
           <div class="card-block">
             <div class="dt-responsive table-responsive">
               <div id="toolbar">
-                <button id="remove" class="btn btn-danger" disabled>
+                <button id="remove" class="btn btn-danger page-remove" disabled>
                   <i class="fa fa-trash"></i> Delete
                 </button>
+                <input type="hidden" id="selected-page">
               </div>
               <table
-              id="user-list"
+              id="page-table"
               data-toolbar="#toolbar"
               data-toggle="table"
               data-sticky-header="true"
@@ -61,6 +62,7 @@
                 <thead>
                   <tr>
                     <th data-checkbox="true" ></th>
+                    <th data-visible="false" ></th>
                     <th data-sortable="true" data-valign="middle">Name</th>
                     <th data-sortable="true" data-valign="middle">Active</th>
                   </tr>
@@ -69,6 +71,7 @@
                   {% for page in pages %}
                   <tr>
                     <td data-checkbox-enabled="false"></td>
+                    <td >{{page.id}}</td>
                     <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/pages/{{page.id}}">{{page.name}}</a></td>
                     <td>{% if page.active %}<i class="fas fa-check-circle text-success"></i>{% else %}<i class="fas fa-times-circle text-danger"></i>{% endif %}</td>
                   </tr>

@@ -65,6 +65,16 @@
                 </div>
                 <div class="menu-sec">
                   <div class="menu advance d-flex flex-fill justify-content-between">
+                    <span>Social Login</span
+                    ><span class="arrow"><i class="fa fa-angle-right"></i></span>
+                  </div>
+                  <ul class="submenu">
+                    <li for="google"><p class="m-0 p-0">Google</p></li>
+                    <li for="facebook"><p class="m-0 p-0">Facebook</p></li>
+                  </ul>
+                </div>
+                <div class="menu-sec">
+                  <div class="menu advance d-flex flex-fill justify-content-between">
                     <span>Payment Methods</span
                     ><span class="arrow"><i class="fa fa-angle-right"></i></span>
                   </div>
@@ -81,7 +91,7 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                  <form id="general" class="product-form needs-validation" enctype='multipart/form-data' id="general-form" method="post" novalidate>
+                  <form id="general" class="product-form needs-validation" id="general-form" method="post" novalidate>
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
                     <br />
@@ -259,21 +269,193 @@
                       </div>
                     </div>
                   </form>
-                  <form id="free-shipping" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                  <form id="facebook" class="product-form needs-validation d-none" id="facebook-form" method="post" novalidate>
                     {% csrf_token %}
-                    <h6 class="mt-2 text-primary fw-bolder h4">Free Shipping</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Facebook</h6>
                     <hr />
                     <br />
                     <div class="row mb-1">
                       <label
                         for="facebook-enable"
                         class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="facebook-enable" type="checkbox" name="facebook-enable" {% if facebook_login.status %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                              </span>
+                              <span>Enable Facebook Login</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="id" value="null">
+                    <div class="row mb-3 facebook-login-field {% if not facebook_login.status %}d-none{% endif %}">
+                      <label
+                        for="app-id"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App ID</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="facebook-app-id"
+                          name="facebook-app-id"
+                          placeholder="App ID"
+                          value="{{facebook_login.client_id}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter App ID</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 facebook-login-field {% if not facebook_login.status %}d-none{% endif %}">
+                      <label
+                        for="app-secret"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App Secret</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="facebook-app-secret"
+                          name="facebook-app-secret"
+                          value="{{facebook_login.secret}}"
+                          placeholder="App Secret"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter App Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="google" class="product-form needs-validation d-none" id="google-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">google</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="google-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Enable</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login.status %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                              </span>
+                              <span>Enable google Login</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="id" value="null">
+                    <div class="row mb-3 google-login-field {% if not google_login.status %}d-none{% endif %}">
+                      <label
+                        for="app-id"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App ID</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="google-app-id"
+                          name="google-app-id"
+                          placeholder="App ID"
+                          value="{{google_login.client_id}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter App ID</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 google-login-field {% if not google_login.status %}d-none{% endif %}">
+                      <label
+                        for="app-secret"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >App Secret</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="google-app-secret"
+                          name="google-app-secret"
+                          value="{{google_login.secret}}"
+                          placeholder="App Secret"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter App Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="free-shipping" class="product-form needs-validation d-none" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Free Shipping</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="free-shipping-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
                         >Status</label
                       >
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="facebook-enable" type="checkbox" name="free-shipping-enable" {% if free_shipping.active %}checked{% endif %} />
+                            <input id="free-shipping-enable" type="checkbox" name="free-shipping-enable" {% if free_shipping.active %}checked{% endif %} />
                             <span class="cr mt-1">
                               <i
                                 class="
@@ -289,7 +471,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="id" value="null">
-                    <div class="row mb-3 facebook-login-field {% if not free_shipping.active %}d-none{% endif %}">
+                    <div class="row mb-3 free-shipping-label-field {% if not free_shipping.active %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -299,7 +481,7 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="facebook-app-id"
+                          id="free-shipping-label"
                           name="free-label"
                           placeholder="Method label"
                           value="{{free_shipping.name}}"
@@ -308,7 +490,7 @@
                         <div class="invalid-feedback">Please enter label</div>
                       </div>
                     </div>
-                    <div class="row mb-3 facebook-login-field {% if not free_shipping.active %}d-none{% endif %}">
+                    <div class="row mb-3 free-shipping-amount-field {% if not free_shipping.active %}d-none{% endif %}">
                       <label
                         for="app-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -318,7 +500,7 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="facebook-app-secret"
+                          id="free-shipping-amount"
                           name="free-amount"
                           value="{{free_shipping.fee}}"
                           placeholder="Minimum Amount"
@@ -345,21 +527,21 @@
                       </div>
                     </div>
                   </form>
-                  <form id="local-shipping" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                  <form id="local-shipping" class="product-form needs-validation d-none" enctype='multipart/form-data' method="post" novalidate>
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Local Shipping</h6>
                     <hr />
                     <br />
                     <div class="row mb-1">
                       <label
-                        for="google-enable"
+                        for="local-shipping-enable"
                         class="col-xl-2 col-form-label d-none d-xl-block"
                         >Status</label
                       >
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="google-enable" type="checkbox" name="local-shipping-enable" {% if local_shipping.active %}checked{% endif %} />
+                            <input id="local-shipping-enable" type="checkbox" name="local-shipping-enable" {% if local_shipping.active %}checked{% endif %} />
                             <span class="cr mt-1">
                               <i
                                 class="
@@ -375,7 +557,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="id" value="null">
-                    <div class="row mb-3 google-login-field {% if not local_shipping.active %}d-none{% endif %}">
+                    <div class="row mb-3 local-shipping-label-field {% if not local_shipping.active %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -385,7 +567,7 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="google-app-id"
+                          id="local-shipping-label"
                           name="local-label"
                           placeholder="Method Label"
                           value="{{local_shipping.name}}"
@@ -394,7 +576,7 @@
                         <div class="invalid-feedback">Please enter label</div>
                       </div>
                     </div>
-                    <div class="row mb-3 google-login-field  {% if not local_shipping.active %}d-none{% endif %}">
+                    <div class="row mb-3 local-shipping-amount-field  {% if not local_shipping.active %}d-none{% endif %}">
                       <label
                         for="app-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -404,7 +586,7 @@
                         <input
                           type="text"
                           class="form-control"
-                          id="google-app-secret"
+                          id="local-shipping-amount"
                           name="local-cost"
                           placeholder="Cost"
                           value="{{local_shipping.fee}}"
@@ -445,7 +627,7 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="paypal-enable" type="checkbox" name="paypal-enable" {% if paypal.status == True %}checked{% endif %} />
+                            <input id="paypal-enable" type="checkbox" name="paypal-enable" {% if paypal.active %}checked{% endif %} />
                             <span class="cr mt-1">
                               <i
                                 class="
@@ -460,7 +642,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3 paypal-field {% if paypal.status != True %}d-none{% endif %}">
+                    <div class="row mb-3 paypal-field {% if not paypal.active %}d-none{% endif %}">
                       <label
                         for="paypal-client-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -479,7 +661,7 @@
                         <div class="invalid-feedback">Please enter Client ID</div>
                       </div>
                     </div>
-                    <div class="row mb-3 paypal-field  {% if paypal.status != True %}d-none{% endif %}">
+                    <div class="row mb-3 paypal-field  {% if not paypal.active %}d-none{% endif %}">
                       <label
                         for="paypal-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views import View
 from django.http import HttpResponse
 from django.views.generic import DetailView
 from .models import Product, Images, Review
@@ -37,6 +38,8 @@ def ProductDetails(request, id):
                 rvw.rating = rating
                 rvw.comment = comment
                 rvw.save()
+                pro.rate = (pro.rate + rating)/2
+                pro.save()
                 return redirect(request.path_info)
             else:
                 rvw = Review(
@@ -60,6 +63,8 @@ def ProductDetails(request, id):
 
     else:
         product = Product.objects.get(id = id)
+        product.total_view += 1
+        product.save()
         total_review = Review.objects.filter(product = product).count()
         if total_review > 0:
             total_rating = float(Review.objects.filter(product = product).aggregate(Sum('rating'))['rating__sum'])
@@ -86,27 +91,63 @@ def ProductDetails(request, id):
         }
         return render(request, 'product/product-details.html', context)
 
-def CategoryProduct(request, id, slug):
-    if Category.objects.filter(id = id, slug = slug).exists():
-        product = Product.objects.filter(category__id = id)
-    elif Group.objects.filter(id = id, slug = slug).exists():
-        product = Product.objects.filter(group__id = id)
-    elif Subcategory.objects.filter(id = id, slug = slug).exists():
-        product = Product.objects.filter(subcategory__id = id)
+class CategoryProduct(View):
 
-    pd = []
-    for i in range(120):
-        for p in product:
-            pd.append(p)
-    paginator = Paginator(pd, 12) # Show 12 contacts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    categorys = Category.objects.all()
-    context = {
-        'product': page_obj,
-        'category': categorys
-    }
-    return render(request, 'product/category.html', context)
+    def get(self, request, id, slug):
+        if Category.objects.filter(id = id, slug = slug).exists():
+            product = Product.objects.filter(category__id = id).order_by('rate')
+        elif Group.objects.filter(id = id, slug = slug).exists():
+            product = Product.objects.filter(group__id = id).order_by('rate')
+        elif Subcategory.objects.filter(id = id, slug = slug).exists():
+            product = Product.objects.filter(subcategory__id = id).order_by('rate')
+
+        paginator = Paginator(product, 12) # Show 12 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        categories = Category.objects.all()
+        context = {
+            'product': page_obj,
+            'id': id,
+            'slug': slug, 
+            'categories': categories
+        }
+        return render(request, 'product/category.html', context)
+
+    def post(self, request, id, slug):
+        if request.POST['sortby'] == 'new_old':
+            if Category.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(category__id = id).order_by('-created_at')
+            elif Group.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(group__id = id).order_by('-created_at')
+            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(subcategory__id = id).order_by('-created_at')
+        elif request.POST['sortby'] == 'old_new':
+            if Category.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(category__id = id).order_by('created_at')
+            elif Group.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(group__id = id).order_by('created_at')
+            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(subcategory__id = id).order_by('created_at')
+        elif request.POST['sortby'] == 'rate':
+            if Category.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(category__id = id).order_by('-rate')
+            elif Group.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(group__id = id).order_by('-rate')
+            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+                product = Product.objects.filter(subcategory__id = id).order_by('-rate')
+
+        paginator = Paginator(product, 12) # Show 12 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        categories = Category.objects.all()
+        context = {
+            'product': page_obj,
+            'id': id,
+            'slug': slug, 
+            'categories': categories,
+            'sortby': request.POST['sortby']
+        }
+        return render(request, 'product/category.html', context)
 
 class CategoryGroupList(APIView):
     permission_classes = [IsAuthenticated,]
@@ -142,7 +183,7 @@ class ProductGroupList(APIView):
                 subcategory = {p.name:p.id for p in subcategorys}
             return JsonResponse(data = subcategory, safe=False)
 
-class ControlCayegoryList(APIView):
+class ControlCategoryList(APIView):
     permission_classes = [IsAuthenticated,]
     def post(self, request, format = None):
         if 'category_id' in request.POST:

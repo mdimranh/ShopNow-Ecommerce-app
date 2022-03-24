@@ -1,5 +1,4 @@
 from django.db import models
-from product.models import Product
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
@@ -23,7 +22,15 @@ class Coupon(models.Model):
     free_shipping = models.BooleanField()
     start_date = models.DateTimeField(default=now)
     end_date = models.DateTimeField()
-    active = models.BooleanField()
+    min_spend = models.FloatField(blank=True, null=True)
+    max_spend = models.FloatField(blank=True, null=True)
+    products = models.ManyToManyField(Product, related_name='products')
+    exclude_products = models.ManyToManyField(Product, related_name='exclude_products')
+    categories = models.ManyToManyField(Category, related_name='categories')
+    exclude_categories = models.ManyToManyField(Category, related_name="exclude_categories")
+    limit_per_coupon = models.IntegerField(blank=True, null=True)
+    limit_per_customer = models.IntegerField(blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -113,6 +120,14 @@ class ShippingMethod(models.Model):
     def __str__(self):
         return self.name
 
+class PaymentMethod(models.Model):
+    name = models.CharField(max_length=200)
+    client_id = models.TextField()
+    secret = models.TextField()
+    active = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name
+    
 
 STATUS = (
     ('processing', 'Processing'),
@@ -130,13 +145,20 @@ class Order(models.Model):
     company_name = models.CharField(max_length=500, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    address_book = models.ForeignKey(AddressBook, on_delete = models.DO_NOTHING, blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    Shipping_method = models.ForeignKey(ShippingMethod, on_delete=models.DO_NOTHING, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    area = models.CharField(max_length=300, blank=True, null=True)
+    address = models.CharField(max_length=300, blank=True, null=True)
+    shipping_method = models.ForeignKey(ShippingMethod, on_delete=models.DO_NOTHING, blank=True, null=True)
+    shipping_fee = models.CharField(max_length=5, blank=True, null=True)
     total = models.FloatField(blank=True, null=True)
-    order_date = models.DateTimeField(auto_created=True, blank=True, null=True)
+    rate = models.FloatField(blank=True, null=True)
+    total_bdt = models.FloatField(blank=True, null=True)
+    order_date = models.DateTimeField(default=now)
     status = models.CharField(choices=STATUS, max_length=200, default="processing")
-    update = models.DateTimeField(auto_now=True, blank=True, null=True)
+    update = models.DateTimeField(default=now)
 
     def __str__(self):
         return self.user.first_name+" "+self.user.last_name

@@ -32,6 +32,15 @@
       href="{% static 'control/css/navigation-copy.css' %}"
     />
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
+
+    <!-- pnotify -->
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.brighttheme.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.history.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
+
     {% block style %}{% endblock style %}
   </head>
   <body>
@@ -65,6 +74,7 @@
     </nav>
 
     <div>
+      {% if user.is_superuser %}
       <div class="sidenav" id="sidenav">
         <ul>
           <li>
@@ -142,12 +152,15 @@
             </ul>
           </li> {% endcomment %}
           <li>
-            <a href="/control/user">
-              <div class="menu users {% if user_sec %}selected active{% endif %}">
-                <i class="fas fa-users fa-left"></i>
-                <span>Users</span>
-              </div>
-            </a>
+            <div class="menu users {% if user_sec %}selected active{% endif %}">
+              <i class="fas fa-users fa-left"></i>
+              <span>Users</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li class="{% if user_list_sec or edit_user_sec %}selected{% endif %}"><a href="/control/user" class="d-flex flex-fill">User</a></li>
+              <li class="{% if role_list_sec or edit_role_sec %}selected{% endif %}"><a href="/control/role" class="d-flex flex-fill">Role</a></li>
+            </ul>
           </li>
           <li>
             <div class="menu">
@@ -187,6 +200,159 @@
           </li>
         </ul>
       </div>
+      {% else %}
+      <div class="sidenav" id="sidenav">
+        <ul>
+          <li>
+            <a href="/control/">
+              <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
+                <i class="fas fa-tachometer-alt fa-left"></i>
+                <span>Dashboard</span>
+              </div>
+            </a>
+          </li>
+          {% if perms.product %}
+          <li>
+            <div class="menu {% if product_sec %}selected active{% endif %}">
+              <i class="fas fa-cube fa-left"></i>
+              <span>Products</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              {% if perms.product.view_product or perms.product.add_product or perms.product.change_product or perms.product.delete_product %}
+              <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product" class="d-flex flex-fill">Product</a></li>
+              {% endif %}
+              {% if perms.product.view_category or perms.product.add_category or perms.product.change_category or perms.product.delete_category %}
+              <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category" class="d-flex flex-fill">Category</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          {% endif %}
+          {% if perms.order.view_order or perms.order.add_order or perms.order.change_order  or perms.order.delete_order %}
+          <li>
+            <div class="menu {% if sales_sec %}selected active{% endif %}">
+              <i class="fas fa-dollar-sign fa-left"></i>
+              <span>Sales</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li class="orders {% if orders_sec %}selected{% endif %}"><a href="/control/orders" class="d-flex flex-fill">Orders</a></li>
+              <li><a href="" class="d-flex flex-fill">Transections</a></li>
+            </ul>
+          </li>
+          {% endif %}
+          {% if perms.order.view_coupon or perms.order.add_coupon or perms.order.delete_coupon or perms.order.change_coupon %}
+          <li>
+            <a href="/control/coupon">
+              <div class="menu coupon {% if coupon_sec %}selected active{% endif %}">
+                <i class="fas fa-tags fa-left"></i>
+                <span>Coupons</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+          {% if perms.setting.add_pages or perms.setting.view_pages or perms.setting.change_pages %}
+          <li>
+            <a href="/control/pages">
+              <div class="menu {% if page_sec %}selected active{% endif %}">
+                <i class="fas fa-file-alt fa-left"></i>
+                <span>Pages</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+          {% if perms.setting.view_contact_message or perms.setting.change_contact_message %}
+          <li>
+            <a href="/control/message">
+              <div class="menu {% if message_sec %}selected active{% endif %}">
+                <i class="far fa-envelope fa-left"></i>
+                <span>Message</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+          {% if perms.setting.view_menus or perms.setting.add_menus or perms.setting.delete_menus or perms.setting.change_menus %}
+          <li>
+            <a href="/control/menu">
+              <div class="menu menus {% if menu_sec %}selected active{% endif %}">
+                <i class="fa fa-bars fa-left"></i>
+                <span>Menus</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+          {% comment %} <li class="text-center py-2 header">System</li> {% endcomment %}
+          {% comment %} <li>
+            <div class="menu">
+              <i class="fa fa-users fa-left"></i>
+              <span>Users</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="">User</a></li>
+              <li><a href="">Profile</a></li>
+            </ul>
+          </li> {% endcomment %}
+          {% if perms.auth %}
+          <li>
+            <div class="menu users {% if user_sec %}selected active{% endif %}">
+              <i class="fas fa-users fa-left"></i>
+              <span>Users</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              {% if perms.auth.view_user or perms.auth.add_user or perms.auth.change_user or perms.auth.delete_user %}
+              <li class="{% if user_list_sec or edit_user_sec %}selected{% endif %}"><a href="/control/user" class="d-flex flex-fill">User</a></li>
+              {% endif %}
+              {% if perms.auth.view_group or perms.auth.add_group or perms.auth.change_group or perms.auth.delete_group %}
+              <li class="{% if role_list_sec or edit_role_sec %}selected{% endif %}"><a href="/control/role" class="d-flex flex-fill">Role</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          {% endif %}
+          {% comment %} <li>
+            <div class="menu">
+              <i class="fa fa-globe fa-left"></i>
+              <span>Localization</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li><a href="" class="d-flex flex-fill">User</a></li>
+              <li><a href="" class="d-flex flex-fill">group</a></li>
+            </ul>
+          </li> {% endcomment %}
+          {% if perms.setting %}
+          <li>
+            <div class="menu {% if slider_sec %}selected active{% endif %}">
+              <i class="fa fa-paint-brush fa-left"></i>
+              <span>Appearance</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li class="{% if slider_list_sec or edit_slider_sec %}selected{% endif %}"><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
+              <li class="{% if sitefront_sec %}selected{% endif %}"><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
+            </ul>
+          </li>
+          {% endif %}
+          {% comment %} <li>
+            <div class="menu">
+              <i class="fa fa-bar-chart-o fa-left"></i>
+              <span>Reports</span>
+            </div>
+          </li> {% endcomment %}
+          {% if perms.setting %}
+          <li>
+            <a href="/control/settings/">
+              <div class="menu setting {% if setting_sec %}selected active{% endif %}">
+                <i class="fa fa-cogs fa-left"></i>
+                <span>Settings</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
       <div class="main mx-3 mt-3">
         {% block main %}{% endblock main %}
         <div class="copyright d-flex flex-fill justify-content-between">

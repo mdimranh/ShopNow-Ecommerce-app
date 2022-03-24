@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from django.views.generic import View
+from django.views.generic import DetailView
 from django.contrib import messages
 from product.models import Product
 from setting.models import Menus
 from home.models import SearchKeyword
-from django.contrib.auth.models import User
-
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User, auth, Permission
+from django.contrib.auth.models import Group as UserGroup
 
 from accounts.models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
@@ -14,10 +15,12 @@ from product.models import Category, Subcategory, Group, Product, Brands, Recent
 from order.models import ShopCart, Order
 
 from django.db.models import Sum, Count
-from django.db.models.functions import TruncDay
+from django.db.models.functions import TruncDay, TruncDate
 from django.utils.timezone import now
 
 from datetime import datetime, timedelta
+
+from django.contrib.contenttypes.models import ContentType
 
 def Dashboard(request):
 	total_product = Product.objects.all().count()
@@ -27,24 +30,59 @@ def Dashboard(request):
 	search = SearchKeyword.objects.all().order_by("-updated_at")
 	orders = Order.objects.all().order_by("order_date")
 
-	some_day = now().date() - timedelta(days = 7)
-	sales = Order.objects.filter(
-			order_date__gte = some_day,
-		).annotate(
-			day = TruncDay("order_date"),
-			order_count = Count("order_date__date")
-		).values(
-			'day',
-			'order_count'
-		)
-	for i in sales:
-		print(i['day'].strftime("%A"), i['order_count'])
+	def getList(day, status):
+		day = now().date() - timedelta(days = day)
+		if status == 'all':
+			query = Order.objects.filter(order_date__gte = day)
+			datas = query.annotate(
+				day = TruncDay("order_date"),
+				date = TruncDate('order_date'),
+				order_count = Count("order_date__date")
+			).values(
+				'day',
+				'date',
+				'order_count'
+			)
+		else:
+			query = Order.objects.filter(update__gte = day, status = status)
+			datas = query.annotate(
+					day = TruncDay("update"),
+					date = TruncDate('update'),
+					order_count = Count("update__date")
+				).values(
+					'day',
+					'date',
+					'order_count'
+				)
+
+		lst = []
+		for d in range(7):
+			lst.append((day, day.strftime('%A'), 0))
+			day += timedelta(days = 1)
+		for i in datas:
+			x = 0
+			for a, b, c in lst:
+				if a == i['date']:
+					lst[x] = (a, b, i['order_count'])
+				x += 1
+		return lst
+
+	order_data = getList(6, 'all')
+	complete_data = getList(6, 'completed')
+	pending_data = getList(6, 'pending')
+	cancel_data = getList(6, 'canceled')
+	ppayment_data = getList(6, 'pending_payment')
 
 	context = {
 		"total_product": total_product,
 		"total_customer": total_customer,
 		"total_sales": total_sales,
 		'total_order': total_order,
+		'order_data': order_data,
+		'complete_data': complete_data,
+		'pending_data': pending_data,
+		'cancel_data': cancel_data,
+		'ppayment_data': ppayment_data,
 		"search": search,
 		'orders': orders,
 		"dashboard_sec": True
@@ -162,7 +200,7 @@ def Login(request):
 		if user is not None:
 			if user.is_superuser:
 				auth.login(request, user)
-				pro = Profile.objects.get(user = user)
+				pro, create = Profile.objects.get_or_create(user = user)
 				pro.online = True
 				pro.save()
 				total_product = Product.objects.all().count()
@@ -172,7 +210,7 @@ def Login(request):
 				return render(request, "control/index.html", context)
 			else:
 				auth.login(request, user)
-				pro = Profile.objects.get(user = user)
+				pro, create = Profile.objects.get_or_create(user = user)
 				pro.online = True
 				pro.save()
 				categorys = Category.objects.all()
@@ -198,9 +236,9 @@ def Login(request):
 							else:
 								total_cost = total_cost - (total_cost * item.coupon.value / 100)
 					item = shopcart.count()
-				new_product = Product.objects.filter(status=True).order_by('-id')
-				new_product_cat = Product.objects.filter(status=True).distinct("category")
-				hot_product = Product.objects.filter(status=True, hot_deal__gt = datetime.now())
+				new_product = Product.objects.filter(enable=True).order_by('-id')
+				new_product_cat = Product.objects.filter(enable=True).distinct("category")
+				hot_product = Product.objects.filter(enable=True, hot_deal_end__gt = datetime.now())
 				product_carousel = ProductCarousel.objects.filter(enable = True)
 				recently_view = RecentlyView.objects.all().order_by("-on_create")
 				context = {
@@ -227,24 +265,131 @@ def Login(request):
 	return render(request, "control/login.html")
 
 
-def Users(request):
-	users = User.objects.all()
-	perm = ContentType.objects.all()
-	context = {
-		"users": users,
-		"user_sec": True,
-		"permis": perm
-	}
-	return render(request, "control/user.html", context)
+class Users(View):
+		
+	def get(self, request):
+		users = User.objects.all()
+		grp = UserGroup.objects.all()
+		context = {
+			"users": users,
+			"user_sec": True,
+			'user_list_sec':True,
+			'group': grp
+		}
+		return render(request, "control/user.html", context)
 
-from django.contrib.contenttypes.models import ContentType
+	def post(self, request):
+		staff = True if request.POST.get('staff') == 'on' else False
+		admin = True if request.POST.get('admin') == 'on' else False
+		active = True if request.POST.get('active') == 'on' else False
+		usr = User(
+			first_name = request.POST['first_name'],
+			last_name = request.POST['last_name'],
+			email = request.POST['email'],
+			password = request.POST['password'],
+			username = request.POST['email'],
+			is_superuser = admin,
+			is_staff = staff,
+			is_active = active
+		)
+		usr.save()
+		if staff == True:
+			role = UserGroup.objects.get(id = request.POST['role'])
+			usr.groups.add(role)
+			usr.save()
+		return redirect(request.path_info)
+		
 
-def UserDetails(request, id):
-	user = User.objects.get(id = id)
-	perm = ContentType.objects.all()
-	context = {
-		"user_info": user,
-		"user_sec": True,
-		"permis": perm
-	}
-	return render(request, "control/user.html", context)
+class UserDetails(View):
+		
+	def get(self, request, id):
+		user = User.objects.get(id = id)
+		grp = UserGroup.objects.all()
+		context = {
+			"user_info": user,
+			"user_sec": True,
+			'edit_user_sec':True,
+			'group': grp
+		}
+		return render(request, "control/user.html", context)
+
+	def post(self, request, id):
+		usr = User.objects.get(id = request.POST['id'])
+		staff = True if request.POST.get('staff') == 'on' else False
+		admin = True if request.POST.get('admin') == 'on' else False
+		active = True if request.POST.get('active') == 'on' else False
+		usr.first_name = request.POST['first_name']
+		usr.last_name = request.POST['last_name']
+		usr.email = request.POST['email']
+		usr.username = request.POST['email']
+		usr.is_superuser = admin
+		usr.is_staff = staff
+		usr.is_active = active
+		if len(request.POST['password']) > 1:
+			usr.set_password(request.POST['password'])
+		if staff == True:
+			role = UserGroup.objects.get(id = request.POST['role'])
+			usr.groups.clear()
+			usr.groups.add(role)
+		else:
+			usr.groups.clear()
+		usr.save()
+		return redirect(request.path_info)
+
+class Roles(View):
+			
+	def get(self, request):
+		roles = UserGroup.objects.all()
+		perm = ContentType.objects.all()
+		grp = UserGroup.objects.all()
+		context = {
+			"roles": roles,
+			"user_sec": True,
+			'role_list_sec':True,
+			"permis": perm
+		}
+		return render(request, "control/role.html", context)
+
+	def post(self, request):
+		role = UserGroup(
+			name=request.POST['name']
+		)
+		role.save()
+		prm = list(Permission.objects.all().values_list('id', flat=True))
+		for ids in prm:
+			try:
+				if request.POST[str(ids)] == 'allow':
+					role.permissions.add(ids)
+					role.save()
+			except:
+				pass
+		return redirect(request.path_info)
+
+class RoleDetails(View):
+		
+	def get(self, request, id):
+		role_details = UserGroup.objects.get(id=id)
+		perm_list = list(role_details.permissions.all().values_list('id', flat=True))
+		perm = ContentType.objects.all()
+		context = {
+			"role_details": role_details,
+			"user_sec": True,
+			'role_list_sec':True,
+			"permis": perm,
+			'perm_list': perm_list
+		}
+		return render(request, "control/role.html", context)
+
+	def post(self, request, id):
+		role = UserGroup.objects.get(id = id)
+		role.name = request.POST['name']
+		role.permissions.clear()
+		prm = list(Permission.objects.all().values_list('id', flat=True))
+		for ids in prm:
+			try:
+				if request.POST[str(ids)] == 'allow':
+					role.permissions.add(ids)
+					role.save()
+			except:
+				pass
+		return redirect(request.path_info)

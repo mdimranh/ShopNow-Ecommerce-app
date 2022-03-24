@@ -9,7 +9,7 @@ from product.models import Product
 from product.models import Category
 from region.models import Country, Region, City, Area
 
-from order.models import ShippingMethod, Order
+from order.models import ShippingMethod, PaymentMethod, Order
 from accounts.models import AddressBook
 
 import json
@@ -98,13 +98,13 @@ def AddtoCart(request):
         else:
             msg = "Not a valid code!"
             return JsonResponse({'added': 'fail', 'msg': msg})
-    if ShopCart.objects.filter(product=product, user = request.user).exists():
-        shopcart = ShopCart.objects.get(product=product, user = request.user)
+    if ShopCart.objects.filter(product=product, user = request.user, on_order=False).exists():
+        shopcart = ShopCart.objects.get(product=product, user = request.user, on_order=False)
         shopcart.quantity = int(shopcart.quantity) + 1
         shopcart.save()
         if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
             Wishlist.objects.get(product__id = request.POST['id'], user = request.user).delete()
-        cart = ShopCart.objects.filter(user = request.user)
+        cart = ShopCart.objects.filter(user = request.user, on_order=False)
         total_cost = 0
         cart_serialize = []
         cs={}
@@ -140,7 +140,7 @@ def AddtoCart(request):
     shopcart.save()
     if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
         Wishlist.objects.get(product__id = request.POST['id'], user = request.user).delete()
-    cart = ShopCart.objects.filter(user = request.user).order_by('created_at')
+    cart = ShopCart.objects.filter(user = request.user, on_order=False).order_by('created_at')
     total_cost = 0
     cart_serialize = []
     cs={}
@@ -248,7 +248,7 @@ def CartDelete(request):
 
 def Checkout(request):
     category = Category.objects.all()
-    shopcart = ShopCart.objects.filter(user = request.user)
+    shopcart = ShopCart.objects.filter(user = request.user, on_order = False)
     total_cost = 0
     for item in shopcart:
         price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
@@ -263,6 +263,7 @@ def Checkout(request):
     countrys = Country.objects.all()
     local_shipping = ShippingMethod.objects.filter(method_type = 'local').first()
     free_shipping = ShippingMethod.objects.filter(method_type = 'free').first()
+    paypal = PaymentMethod.objects.filter(name='paypal').first()
     context = {
         'category': category,
         'shopcart': shopcart,
@@ -270,11 +271,11 @@ def Checkout(request):
         'countrys': countrys,
         'local_shipping': local_shipping,
         'free_shipping': free_shipping,
+        'paypal': paypal,
         'item': shopcart.count()
     }
     return render(request, 'product/checkout.html', context)
 
-csrf_exempt
 def AddtoWishlist(request):
     if Wishlist.objects.filter(product__id = request.POST['id'], user = request.user).exists():
         context = {
@@ -307,37 +308,47 @@ def PlaceOrder(request):
     if request.method == "POST":
         usr = User.objects.get(id = request.POST['user_id'])
         if request.POST['diff_address'] == 'on':
-            address_book = AddressBook(
-                    user = usr,
-                    name = request.POST['ab_name'],
-                    phone = request.POST['ab_phone'],
-                    country = Country.objects.get(id = request.POST['ab_country']),
-                    region = Region.objects.get(id = request.POST['ab_region']),
-                    city = City.objects.get(id = request.POST['ab_city']),
-                    area = Area.objects.get(id = request.POST['ab_area']),
-                    address = request.POST['ab_address'],
-                    default = False,
-                    temp = True
-                )
-            address_book.save()
+            country = Country.objects.get(id = request.POST['ab_country']),
+            region = Region.objects.get(id = request.POST['ab_region']),
+            city = City.objects.get(id = request.POST['ab_city']),
+            area = Area.objects.get(id = request.POST['ab_area']),
+            address = request.POST['ab_address'],
         else:
             address_book = AddressBook.objects.get(id = request.POST['address_book'])
+            country = address_book.country.name
+            region = address_book.region.name
+            city = address_book.city.name
+            area = address_book.area.name
+            address = address_book.address
 
         payment_id = request.POST['payment_id']
         company_name = request.POST['company_name']
         payment_mode = request.POST['payment_mode']
         email = request.POST['email']
         notes = request.POST['notes']
+        phone = request.POST['phone']
+        rate = request.POST['rate']
         total = request.POST['total']
+        total_bdt = request.POST['total_bdt']
+        shipping_fee = 0 if float(total_bdt) >= ShippingMethod.objects.get(method_type = 'free').fee else ShippingMethod.objects.get(method_type = 'local').fee
         ordr = Order(
             user = usr,
-            payment_id=payment_id,
-            payment_mode=payment_mode,
-            company_name=company_name,
-            email=email,
-            notes=notes,
-            address_book=address_book,
-            total=total
+            payment_id = payment_id,
+            payment_mode = payment_mode,
+            company_name = company_name,
+            email = email,
+            phone = phone,
+            notes = notes,
+            country = country,
+            region = region,
+            city = city,
+            area = area,
+            address = address,
+            rate = rate,
+            shipping_fee = shipping_fee,
+            shipping_method = ShippingMethod.objects.get(method_type = 'free') if shipping_fee == 0 else ShippingMethod.objects.get(method_type = 'local'),
+            total = total,
+            total_bdt = total_bdt,
         )
         ordr.save()
         get_shopcart = ShopCart.objects.filter(user = usr).exclude(on_order=True)
@@ -345,7 +356,8 @@ def PlaceOrder(request):
             cart.order_id = ordr.id
             cart.on_order = True
             cart.save()
-            get_pro = Product.objects.get(id = cart.product__id)
+            ids = cart.product.id
+            get_pro = Product.objects.get(id = ids)
             qntity = get_pro.amount - int(cart.quantity)
             if qntity < 0:
                 qntity = 0

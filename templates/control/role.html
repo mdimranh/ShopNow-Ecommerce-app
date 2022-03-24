@@ -1,0 +1,354 @@
+{% extends 'control/base.html' %}
+{% load static %}
+
+{% block title %}{{site_config.name}} | Users{% endblock title %}
+
+    {% block style %}
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/dataTables.bootstrap4.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      {% if role_details %}
+        <h5 class="fw-bold mb-2">{{role_details.name}}</h5>
+      {% else %}
+        <h3 class="fw-bold">Roles</h3>
+      {% endif %}
+      {% if not role_details %}
+      <div class="card user-list">
+          <div class="card-header">
+            <h5>All Roles</h5>
+            <div class="card-header-right me-3">
+              <button class="btn btn-add add-user-btn p-2">
+                <i class="fa fa-plus px-2 m-0"></i>Create Role
+              </button>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <div id="toolbar">
+                <button id="remove" class="btn btn-danger group-remove" disabled>
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+                <input type="hidden" id="selected-group">
+              </div>
+              <table
+              id="group-table"
+              data-toolbar="#toolbar"
+              data-toggle="table"
+              data-sticky-header="true"
+              data-sticky-header-offset-y="40"
+              data-pagination="true"
+              data-page-list="[10, 25, 50, 100, ALL]"
+              data-search="true"
+              data-search-highlight="true"
+              data-filter-control="true"
+              data-fixed-columns="true"
+              data-fixed-number="1"
+              {% comment %} data-detail-view="true" {% endcomment %}
+              {% comment %} data-sticky-header = "true" {% endcomment %}
+              data-checkbox = "true"
+              class="table table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-checkbox="true" ></th>
+                    <th data-visible="false" ></th>
+                    <th data-sortable="true" data-valign="middle">Name</th>
+                    <th data-sortable="true" data-valign="middle">No of Permission</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for role in roles %}
+                  <tr>
+                    <td data-checkbox-enabled="false"></td>
+                    <td >{{role.id}}</td>
+                    <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/role/{{role.id}}">{{role.name}}</a></td>
+                    <td>{{role.permissions.all|length}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+      </div>
+      <div class="add-user-sec d-none card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Role Information</span>
+                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="coupon-general">
+                      <p class="m-0 p-0">General</p>
+                    </li>
+                    <li for="coupon-usage-restriction">
+                      <p class="m-0 p-0">Permission</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2" id="add-category-form" method="post">
+                    {% csrf_token %}
+                  <div id="coupon-general" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div id="coupon-usage-restriction" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">
+                      Permission
+                    </h6>
+                    <hr />
+                    <div class="row mb-3">
+                      <div class="ps-3 d-flex flex-fill justify-content-end">
+                          <span>
+                            <span class="permission-btn f-18 allow-all" ids="allow-all">Allow All</span>
+                            <span class="permission-btn f-18 deny-all" ids="deny-all">Deny All</span>
+                            {% comment %} <span class="permission-btn f-18 inherit-all" ids="inherit-all">Inherit All</span> {% endcomment %}
+                          </span>
+                        </div>
+                      <ul>
+                      {% for p in permis %}
+                      {% if p.app_label != 'contenttypes' and p.app_label != 'sessions' and p.app_label != 'home' and p.app_label != 'ipn' and p.app_label != 'authtoken' %}
+                        <li><div class="mt-3 fw-bold f-24">{% ifchanged p.app_label %}{{p.app_label}}{% endifchanged %}</div></li>
+                        {% ifchanged p.app_label %}<hr class="mt-0 p-0 mb-3">{% endifchanged %}
+                        <div>
+                        {% if p.name != 'permission' and p.name != 'profile' %}
+                          <div class="ps-3 d-flex flex-fill justify-content-between">
+                            <span class="fw-bold f-20">{{p.name}}</span>
+                            <span>
+                              <span class="permission-btn" ids="allow">Allow All</span>
+                              <span class="permission-btn" ids="deny">Deny All</span>
+                              {% comment %} <span class="permission-btn" ids="inherit">Inherit All</span> {% endcomment %}
+                            </span>
+                          </div>
+                          {% for all in p.contents.all %}
+                            <li class="ps-4 ms-2 my-3">
+                              <div class="d-flex flex-fill justify-content-between">
+                                <span>{{all.name}}</span>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                  <input class="radio-btn" ids="allow-btn" type="radio" name="{{all.id}}" autocomplete="off" value="allow"  checked>
+                                  <label class="me-3">Allow</label>
+
+                                  <input class="radio-btn" ids="deny-btn" type="radio" name="{{all.id}}" autocomplete="off" value="deny">
+                                  <label class="">Deny</label>
+
+                                  {% comment %} <input class="radio-btn" ids="inherit-btn" type="radio" name="{{all.id}}" autocomplete="off" value="inherit">
+                                  <label>Inherit</label> {% endcomment %}
+                                </div>
+                              </div>
+                            </li>
+                          {% endfor %}
+                        {% endif %}
+                        </div>
+                        {% endif %}
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-10 offset-lg-2">
+                      <button
+                        id="save-btn"
+                        type="submit"
+                        class="btn btn-primary py-1 px-3"
+                      >
+                        Save
+                      </button>
+                      <button
+                        id="cancel-btn"
+                        type="submit"
+                        class="btn btn-secondary py-1 px-3"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+      <div class="edit-user-sec card">
+        <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Role Information</span>
+                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="coupon-general">
+                      <p class="m-0 p-0">General</p>
+                    </li>
+                    <li for="coupon-usage-restriction">
+                      <p class="m-0 p-0">Permission</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2" id="add-category-form" method="post">
+                    {% csrf_token %}
+                  <div id="coupon-general" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Name</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Name"
+                          value="{{role_details.name}}"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div id="coupon-usage-restriction" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">
+                      Permission
+                    </h6>
+                    <hr />
+                    <div class="row mb-3">
+                      <div class="ps-3 d-flex flex-fill justify-content-end">
+                          <span>
+                            <span class="permission-btn f-18 allow-all" ids="allow-all">Allow All</span>
+                            <span class="permission-btn f-18 deny-all" ids="deny-all">Deny All</span>
+                            {% comment %} <span class="permission-btn f-18 inherit-all" ids="inherit-all">Inherit All</span> {% endcomment %}
+                          </span>
+                        </div>
+                      <ul>
+                      {% for p in permis %}
+                        <li><div class="mt-3 fw-bold f-24">{% ifchanged p.app_label %}{{p.app_label}}{% endifchanged %}</div></li>
+                        {% ifchanged p.app_label %}<hr class="mt-0 p-0 mb-3">{% endifchanged %}
+                        <div>
+                        <div class="ps-3 d-flex flex-fill justify-content-between">
+                          <span class="fw-bold f-20">{{p.name}}</span>
+                          <span>
+                            <span class="permission-btn" ids="allow">Allow All</span>
+                            <span class="permission-btn" ids="deny">Deny All</span>
+                            {% comment %} <span class="permission-btn" ids="inherit">Inherit All</span> {% endcomment %}
+                          </span>
+                        </div>
+                        {% for all in p.contents.all %}
+                          <li class="ps-4 ms-2 my-3">
+                            <div class="d-flex flex-fill justify-content-between">
+                              <span>{{all.name}}</span>
+                              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input class="radio-btn" ids="allow-btn" type="radio" name="{{all.id}}" autocomplete="off" value="allow"  {% if all.id in perm_list %}checked{% endif %}>
+                                <label class="me-3">Allow</label>
+
+                                <input class="radio-btn" ids="deny-btn" type="radio" name="{{all.id}}" autocomplete="off" value="deny" {% if not all.id in perm_list %}checked{% endif %}>
+                                <label class="">Deny</label>
+
+                                {% comment %} <input class="radio-btn" ids="inherit-btn" type="radio" name="{{all.id}}" autocomplete="off" value="inherit">
+                                <label>Inherit</label> {% endcomment %}
+                              </div>
+                            </div>
+                          </li>
+                        {% endfor %}
+                        </div>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white card">
+        
+      </div>
+      {% endif %}
+    {% endblock main %}
+
+    {% block script %}
+    <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
+    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    {% endblock script %}

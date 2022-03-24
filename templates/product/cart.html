@@ -35,29 +35,31 @@
 
 									<tbody id="cart-product">
                                         {% for cart in shopcart %}
-										<tr id="cart{{cart.id}}">
-											<td class="product-col">
-												<div class="product">
-													<figure class="product-media">
-														<a href="#">
-															<img src="{{cart.product.image}}" alt="Product image">
-														</a>
-													</figure>
+											{% if not cart.on_order %}
+												<tr id="cart{{cart.id}}">
+													<td class="product-col">
+														<div class="product">
+															<figure class="product-media">
+																<a href="#">
+																	<img src="{{cart.product.image}}" alt="Product image">
+																</a>
+															</figure>
 
-													<h3 class="product-title">
-														<a href="#">{{cart.product.title}}</a>
-													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
-											</td>
-											<td class="price-col">&#2547;{{cart.product.price}}</td>
-											<td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
-                                                </div><!-- End .cart-product-quantity -->
-                                            </td>
-											<td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
-											<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
-										</tr>
+															<h3 class="product-title">
+																<a href="#">{{cart.product.title}}</a>
+															</h3><!-- End .product-title -->
+														</div><!-- End .product -->
+													</td>
+													<td class="price-col">&#2547;{{cart.product.price}}</td>
+													<td class="quantity-col">
+														<div class="cart-product-quantity">
+															<input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
+														</div><!-- End .cart-product-quantity -->
+													</td>
+													<td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
+													<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
+												</tr>
+											{% endif %}
                                         {% endfor %}
 									</tbody>
 								</table><!-- End .table table-wishlist -->

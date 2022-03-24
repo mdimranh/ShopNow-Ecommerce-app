@@ -246,10 +246,9 @@ function AddWishlist(id) {
   if (document.getElementById('user').innerText === 'yes') {
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:8000/ajax/addtowishlist',
+      url: '/ajax/addtowishlist',
       data: {
-        'id': id,
-        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        'id': id
       },
       success: function (resp) {
         document.getElementById("overlay").style.display = "none";
