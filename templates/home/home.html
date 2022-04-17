@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}{{site_config.name}}{% endblock title %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'assets/css/skins/skin-demo-14.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/demos/demo-14.css' %}">

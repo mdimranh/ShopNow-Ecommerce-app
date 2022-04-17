@@ -1,0 +1,6 @@
+{% autoescape off %}
+Welcome to {{site_name}}
+Please active your account by click the link which is given below
+
+https//{{ domain }}{% url 'email_confirm' activation_key=activation_key %}
+{% endautoescape %}

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from product.models import Product, Category
 from order.models import ShopCart
 from accounts.models import AddressBook
+from region.models import *
 
 from .serializers import *
 
@@ -140,3 +141,39 @@ def AddddToCart(request):
         Wishlist.objects.get(product__id = request.POST['id'], user = request.user).delete()
     serializers = ShopcartSerializer(shopcart, many=False)
     return Response(serializers.data)
+
+@permission_classes([IsAuthenticated,])
+class AddressBookDetails(APIView):
+    def get(self, request, id, format=None):
+        address = AddressBook.objects.get(id = id)
+        address_serializers = AddressSerializer(address, many=False)
+        regions = RegionSerializer(Region.objects.filter(country=address.country), many=True)
+        cities = CitySerializer(City.objects.filter(region=address.region), many=True)
+        areas = AreaSerializer(Area.objects.filter(city=address.city), many=True)
+        context = {
+            'address' : address_serializers.data,
+            'regions': regions.data,
+            'cities': cities.data,
+            'areas': areas.data,
+        }
+        return Response(context)
+
+    # def post(self, request, format=None):
+    #     if Profile.objects.get(user = request.user):
+    #         pro = Profile.objects.get(user = request.user)
+    #         pro.phone = request.data['phone']
+    #         pro.address = request.data['address']
+    #         pro.city = request.data['city']
+    #         pro.country = request.data['country']
+    #         pro.save()
+    #         pro_ser = ProfileSerializer(pro, many=False)
+    #         return Response(pro_ser.data)
+    #     pro = Profile.objects.create(
+    #         user = request.user,
+    #         phone = request.data['phone'],
+    #         address = request.data['address'],
+    #         city = request.data['city'],
+    #         country = request.data['country']
+    #     )
+    #     pro_ser = ProfileSerializer(pro, many=False)
+    #     return Response(pro_ser.data)

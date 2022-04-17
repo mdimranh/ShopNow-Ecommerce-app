@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 
 class ShopCartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'quantity', 'created_at', 'product_image', 'coupon_active']
+    list_display = ['user', 'created_at', 'coupons']
 admin.site.register(ShopCart, ShopCartAdmin)
 
 class WishlistAdmin(admin.ModelAdmin):

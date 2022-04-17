@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-
+from django.contrib.postgres.fields import ArrayField
 from django.utils.timezone import now
 
 from product.models import Product, Category
@@ -61,12 +61,19 @@ class UserLimits(models.Model):
     class Meta:
         verbose_name = "User Limit"
 
+class Cart(models.Model):
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    options = ArrayField(
+        ArrayField(
+            models.TextField(blank=True)
+        )
+    )
 
 class ShopCart(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    carts = models.ManyToManyField(Cart)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_shopcart")
-    quantity = models.IntegerField(default=1)
-    coupon = models.ForeignKey(Coupon, blank=True, null=True, on_delete = models.CASCADE)
+    coupon = models.ManyToManyField(Coupon)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     order_id = models.CharField(max_length=500, blank=True, null=True)
     on_order = models.BooleanField(default=False)
@@ -74,19 +81,15 @@ class ShopCart(models.Model):
     def __str__(self):
         return self.user.first_name+''+self.user.last_name
 
-    def cost(self):
-        return (self.product.main_price - (self.product.main_price * self.product.discount / 100)) * self.quantity
+    def coupons(self):
+        return self.coupon.all().count()
 
-    def coupon_active(self):
-        if self.coupon:
-            return True
-        else:
-            return False
-
-    def product_image(self):
-        return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.product.image))
-    product_image.short_description = 'Image'
-
+    def free_ship(self):
+        free = False
+        for cpn in self.coupon.all():
+            if cpn.free_shipping:
+                free = True
+        return free
 
 class Wishlist(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="pro_wishlist")

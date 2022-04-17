@@ -1,4 +1,9 @@
-{% load static %} {% load solo_tags %} {% get_solo 'setting.SiteConfiguration' as site_config %}
+{% load static %}
+{% load solo_tags %}
+{% get_solo 'setting.SiteConfiguration' as site_config %}
+{% get_solo 'setting.Feature' as feature %}
+{% get_solo 'setting.EmailConfig' as email_config %}
+{% get_solo 'setting.StoreInfo' as storeinfo %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -94,6 +99,7 @@
             <ul class="submenu">
               <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product" class="d-flex flex-fill">Product</a></li>
               <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category" class="d-flex flex-fill">Category</a></li>
+              <li class="brand {% if brand_sec %}selected{% endif %}"><a href="/control/brand" class="d-flex flex-fill">Brand</a></li>
             </ul>
           </li>
           <li>
@@ -162,34 +168,43 @@
               <li class="{% if role_list_sec or edit_role_sec %}selected{% endif %}"><a href="/control/role" class="d-flex flex-fill">Role</a></li>
             </ul>
           </li>
+          {% comment %} <li>
+            <a href="/control/localization">
+              <div class="menu localization {% if localization_sec %}selected active{% endif %} ">
+                <i class="fa fa-bar-chart-o fa-left"></i>
+                <span>Localization</span>
+              </div>
+            </a>
+          </li> {% endcomment %}
           <li>
-            <div class="menu">
-              <i class="fa fa-globe fa-left"></i>
+            <div class="menu {% if localization_sec %}selected active{% endif %}">
+              <i class="fas fa-globe fa-left"></i>
               <span>Localization</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
-              <li><a href="" class="d-flex flex-fill">User</a></li>
-              <li><a href="" class="d-flex flex-fill">group</a></li>
+              <li class="{% if area_sec %}selected{% endif %}"><a href="/control/area" class="d-flex flex-fill">Area</a></li>
+              <li class="{% if currency_sec %}selected{% endif %}"><a href="/control/currency" class="d-flex flex-fill">Currency</a></li>
             </ul>
           </li>
           <li>
-            <div class="menu {% if slider_sec %}selected active{% endif %}">
+            <div class="menu {% if appearance_sec %}selected active{% endif %}">
               <i class="fa fa-paint-brush fa-left"></i>
               <span>Appearance</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
             </div>
             <ul class="submenu">
               <li class="{% if slider_list_sec or edit_slider_sec %}selected{% endif %}"><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
+              <li class="{% if banner_list_sec or edit_banner_sec %}selected{% endif %}"><a href="/control/banners" class="d-flex flex-fill">Banner</a></li>
               <li class="{% if sitefront_sec %}selected{% endif %}"><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
             </ul>
           </li>
-          <li>
+          {% comment %} <li>
             <div class="menu">
               <i class="fa fa-bar-chart-o fa-left"></i>
               <span>Reports</span>
             </div>
-          </li>
+          </li> {% endcomment %}
           <li>
             <a href="/control/settings/">
               <div class="menu setting {% if setting_sec %}selected active{% endif %}">

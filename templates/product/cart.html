@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
+{% mycurrency as mycurrency %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %}Cart - {{site_config.name}}{% endblock title %}
 {% block custom %}
     <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -23,6 +28,15 @@
 	                	<div class="row">
 	                		<div class="col-lg-9">
 	                			<table class="table table-cart table-mobile">
+									<div class="message-sec">
+										{% if messages %}
+											{% for message in messages %}
+												{% if message.extra_tags == 'quantity-update-fail' %}
+												<p class="message {{ message.tags }}"><i class="fas fa-info-circle"></i>{{message}}</p>
+												{% endif %}
+											{% endfor %}
+										{% endif %}
+									</div>
 									<thead>
 										<tr>
 											<th>Product</th>
@@ -34,7 +48,7 @@
 									</thead>
 
 									<tbody id="cart-product">
-                                        {% for cart in shopcart %}
+                                        {% for cart in shopcart.carts.all %}
 											{% if not cart.on_order %}
 												<tr id="cart{{cart.id}}">
 													<td class="product-col">
@@ -50,107 +64,87 @@
 															</h3><!-- End .product-title -->
 														</div><!-- End .product -->
 													</td>
-													<td class="price-col">&#2547;{{cart.product.price}}</td>
+													<td class="price-col{{cart.id}}" price="{{cart.product.price}}">{{mycurrency.1}}{{cart.product.price|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 													<td class="quantity-col">
-														<div class="cart-product-quantity">
-															<input type="number" id="cart-quantity" cart-id="{{cart.id}}" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0" required>
-														</div><!-- End .cart-product-quantity -->
+														<form class="cart-product-quantity" method="post">
+															{% csrf_token %}
+															{% comment %} {% csrf_token %} {% endcomment %}
+															<input type="hidden" name="cart-id" value="{{cart.id}}">
+															<input type="number" name="quantity" id="cart-quantity" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0">
+														</form><!-- End .cart-product-quantity -->
 													</td>
-													<td class="total-col">&#2547;{%widthratio cart.product.price 1 cart.quantity%}.00</td>
+													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.product.price|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 													<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
 												</tr>
 											{% endif %}
                                         {% endfor %}
 									</tbody>
 								</table><!-- End .table table-wishlist -->
-
-	                			<div class="cart-bottom">
-			            			<div class="cart-discount">
-                                        <p class="text-danger" id="coupon-fail"></p>
-										{% for cart in shopcart %}
-										{% if forloop.first %}
-										{% if cart.coupon_active %}
-                                        <p class="text-white bg-success px-3 py-1" id="coupon-success">Coupon added successfully</p>
-			            				{% else %}
-										<p class="text-white bg-success px-3 py-1 d-none" id="coupon-success">Coupon added successfully</p>
-										<div class="input-group" id="coupon-section">
-				        					<input type="text" class="form-control" id="coupon-code" placeholder="coupon code">
-				        					<div class="input-group-append">
-												<button id="coupon-btn" class="btn btn-outline-primary-2"><i class="icon-long-arrow-right"></i></button>
-											</div><!-- .End .input-group-append -->
-			        					</div><!-- End .input-group -->
-										{% endif %}
-										{% endif %}
-										{% endfor %}
-			            			</div><!-- End .cart-discount -->
-
-			            			{% comment %} <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> {% endcomment %}
-		            			</div><!-- End .cart-bottom -->
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
 	                			<div class="summary summary-cart">
 	                				<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
 
-	                				<table class="table table-summary mt-2">
-	                					<tbody>
-	                						<tr class="summary-subtotal">
-	                							<td>Subtotal:</td>
-	                							<td>&#2547;160.00</td>
-	                						</tr><!-- End .summary-subtotal -->
-											{% for cart in shopcart %}
-	                						<tr class="summary-subtotal">
-												{% if forloop.first %}
-	                							<td>Coupon:</td>
-	                							<td id="coupon-amount">{% if cart.coupon.discount_type == 'Fixed' %}&#2547;{% endif %}{{cart.coupon.value}} {% if cart.coupon.discount_type == 'Percent' %}%{% endif %}</td>
+	                				<table class="table table-summary">
+
+		                					<tbody>
+		                						<tr>
+		                							<td class="py-3 bolden">Subtotal:</td>
+		                							<td>{{mycurrency.1}}{{subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{item}} item{% if shopcart|length > 1 %}s{% endif %})</td>
+		                						</tr><!-- End .summary-subtotal -->
+		                						{% if shopcart.coupon.all|length > 0 %}
+													<tr>
+														<td class="py-1 bolden">Coupon:</td>
+														<td></td>
+													</tr>
+													{% for coupon in shopcart.coupon.all %}
+														<tr>
+															<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
+															{% if coupon.discount_type == 'Fixed' %}
+																<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+															{% else %}
+																<td>-{{coupon.value}}%</td>
+															{% endif %}
+														</tr><!-- End .summary-subtotal -->
+													{% endfor %}
 												{% endif %}
-	                						</tr><!-- End .summary-subtotal -->
-											{% endfor %}
-	                						<tr class="summary-shipping">
-	                							<td>Shipping:</td>
-	                							<td>&nbsp;</td>
-	                						</tr>
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>&#2547;0.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="standart-shipping">Standart:</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>&#2547;10.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="express-shipping">Express:</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>&#2547;20.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-estimate">
-	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-	                							<td>&nbsp;</td>
-	                						</tr><!-- End .summary-shipping-estimate -->
-
-	                						<tr class="summary-total">
-	                							<td>Total:</td>
-	                							<td id="total-cost">&#2547;{{cost}}</td>
-	                						</tr><!-- End .summary-total -->
-	                					</tbody>
-	                				</table><!-- End .table table-summary -->
+												<tr>
+		                							<td class="pt-1 bolden">Shiping Method</td>
+		                							<td></td>
+		                						</tr>
+												{% if shopcart.free_ship %}
+													<tr>
+		                								<td><i class="fas fa-dot-circle px-3 text-primary small"></i>Free Shiping:</td>
+		                								<td>{{mycurrency.1}}0</td>
+		                							</tr>
+													<tr>
+														<td class="py-3 bolden h6">Total:</td>
+														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
+													</tr>
+												{% else %}
+													<tr>
+														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{% if cost_with_coupon >= free_shipping.fee %}{{free_shipping.name}}{% else %}{{local_shipping.name}}{% endif %}:</td>
+														<td>{% if cost_with_coupon >= free_shipping.fee %}{{mycurrency.1}}0{% else %}{{mycurrency.1}}{{local_shipping.fee|mul:mycurrency.0|floatformat:2|intcomma}}{% endif %}</td>
+													</tr>
+													<tr>
+														<td class="py-3 bolden">Total:</td>
+														{% if cost <= free_shipping.fee %}
+														<td id="total-cost">{{mycurrency.1}}{{cost|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
+														{% else %}
+														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+														{% endif %}
+													</tr><!-- End .summary-total -->
+												{% endif %}
+												<p class="d-none" id="usd"></p>
+												<p class="d-none" id="rate"></p>
+												<input type="hidden" name="rate" id="rate-input">
+												{% if cost_with_coupon <= free_shipping.fee and not shopcart.free_ship %}
+		                							<td id="total-cost-bdt"  class="d-none">{{mycurrency.1}}{{cost_with_coupon|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
+												{% else %}
+		                							<td id="total-cost-bdt"  class="d-none">{{mycurrency.1}}{{cost_with_coupon|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+												{% endif %}
+		                					</tbody>
+		                				</table><!-- End .table table-summary -->
 
 	                				<a href="/cart/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
@@ -163,7 +157,3 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 {% endblock custom %}
-
-{% block extra_js %}
-    <script src="{% static 'assets/add-product.js' %}"></script>
-{% endblock extra_js %}

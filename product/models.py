@@ -5,6 +5,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.template.defaultfilters import slugify
 from django.db.models import Q, Sum, Avg
 from django.utils.timezone import now
+from datetime import date
 
 from datetime import timedelta
 from PIL import Image
@@ -70,7 +71,7 @@ class Subcategory(models.Model):
 
 class Brands(models.Model):
     name = models.CharField(max_length=50)
-    logo = models.ImageField(upload_to="product/brand")
+    logo = models.ImageField(upload_to="product/brand/")
 
     def __str__(self):
         return self.name
@@ -79,6 +80,23 @@ class Brands(models.Model):
         return mark_safe('<img src="{}" heights="60" width="60" />'.format(self.logo.url))
     image_tag.short_description = 'Image'
 
+
+class Option(models.Model):
+    label = models.CharField(max_length=100)
+    price = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.label
+    
+
+class Options(models.Model):
+    name = models.CharField(max_length=100)
+    style = models.CharField(max_length=100)
+    option = models.ManyToManyField(Option, related_name='option')
+
+    def __str__(self):
+        return self.name
+    
 
 class Product(models.Model):
     dis_type = (
@@ -105,12 +123,7 @@ class Product(models.Model):
     shipping_info = RichTextUploadingField()
     size = models.CharField(max_length=200, null=True, blank=True)
     color = models.CharField(max_length=500, null=True, blank=True)
-    # option = models.TextField(blank=True, null=True)
-    option = ArrayField(
-        ArrayField(
-            models.TextField(blank=True, null=True)
-        ), blank=True, null=True
-    )
+    option = models.ManyToManyField(Options, related_name='options', blank=True)
     enable = models.BooleanField(default=True)
     slug = models.SlugField(null=True, unique=True)
     meta_title = models.CharField(max_length=200, null=True, blank=True)
@@ -146,27 +159,30 @@ class Product(models.Model):
         related_p = []
         if self.related_product != None and len(self.related_product) > 0:
             for id in self.related_product.split(','):
-                pro = Product.objects.get(id = id)
-                related_p.append(pro)
+                try:
+                    pro = Product.objects.get(id = id)
+                    related_p.append(pro)
+                except:
+                    continue
         return related_p
 
-    def pro_option(self):
-        no_option = False
-        c = 0
-        for i in self.option:
-            lst = []
-            arrange = str(i[2]).replace('), (', ',').replace('[(', '').replace(')]', '').replace(' ', '').replace("'", "").split(',')
-            for j in range(0, len(arrange), 2):
-                if arrange[j] == '':
-                    no_option = True
-                lst.append((arrange[j], arrange[j+1]))
-            self.option[c][2] = lst
-            lst = []
-            c += 1
-        if no_option:
-            True
-        else:
-            return self.option
+    # def pro_option(self):
+    #     no_option = False
+    #     c = 0
+    #     for i in self.option:
+    #         lst = []
+    #         arrange = str(i[2]).replace('), (', ',').replace('[(', '').replace(')]', '').replace(' ', '').replace("'", "").split(',')
+    #         for j in range(0, len(arrange), 2):
+    #             if arrange[j] == '':
+    #                 no_option = True
+    #             lst.append((arrange[j], arrange[j+1]))
+    #         self.option[c][2] = lst
+    #         lst = []
+    #         c += 1
+    #     if no_option:
+    #         True
+    #     else:
+    #         return self.option
         
 
     def addtional_images(self):
@@ -181,6 +197,11 @@ class Product(models.Model):
     def rating(self):
         rating = Review.objects.filter(product=self).aggregate(Avg('rating'))['rating__avg']
         return rating if type(rating) == float else 0
+
+    def hot_deal_active(self):
+        if self.hot_deal_end >= date.today():
+            return True
+        else: return False
 
     def total_review(self):
         return Review.objects.filter(product=self).count()

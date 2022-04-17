@@ -1,10 +1,18 @@
 
-/**
-* Theme: Codefox Admin Template
-* Author: Coderthemes
- * Email: coderthemes@gmail.com
-* File Uploads
-*/
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 $(document).ready(function () {
 
@@ -105,39 +113,39 @@ $(document).ready(function () {
             drop: null,
         },
         uploadFile: {
-            // url: "/",
-            // data: null,
-            // type: 'POST',
-            // enctype: 'multipart/form-data',
-            // beforeSend: function(data, el){
-            //     var parent = el.find(".jFiler-jProgressBar").parent();
-            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-            //         $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
-            //     });
-            // },
-            // success: function(data, el){
-            //     var parent = el.find(".jFiler-jProgressBar").parent();
-            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-            //         $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
-            //     });
-            // },
-            // error: function(el){
-            //     var parent = el.find(".jFiler-jProgressBar").parent();
-            //     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-            //         $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
-            //     });
-            // },
+            url: "/control/product/imagesave/",
+            data: null,
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            beforeSend: function (data, el) {
+                var parent = el.find(".jFiler-jProgressBar").parent();
+                el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
+                    $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+                });
+            },
+            success: function (data, el) {
+                var parent = el.find(".jFiler-jProgressBar").parent();
+                el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
+                    $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+                });
+            },
+            error: function (el) {
+                var parent = el.find(".jFiler-jProgressBar").parent();
+                el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
+                    $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
+                });
+            },
             statusCode: null,
             onProgress: null,
             onComplete: null
         },
         files: [
-            // {
-            // 	name: "Desert.jpg",
-            // 	size: 145,
-            // 	type: "image/jpg",
-            // 	file: "assets/images/file-upload/Desert.jpg"
-            // },
+            {
+                name: "4d639682258ea3f0fb14dc42c28c8315.jpg",
+                size: 145,
+                type: "image/jpg",
+                file: "media/product/4d639682258ea3f0fb14dc42c28c8315.jpg"
+            },
             // {
             // 	name: "overflow.jpg",
             // 	size: 145,

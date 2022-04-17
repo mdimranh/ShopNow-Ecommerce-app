@@ -22,7 +22,7 @@
                     <li>
                       <i class="fa fa-money"></i>
                     </li>
-                    <li class="text-right">${{total_sales}}</li>
+                    <li class="text-right">$ {% if total_sales != None %}{{total_sales}}{% else %}0{% endif %}</li>
                   </ul>
                 </div>
               </div>

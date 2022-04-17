@@ -18,6 +18,15 @@ $(document).ready(function () {
     options: opt,
     search: true,
   });
+  VirtualSelect.init({
+    ele: "#feature-icon",
+    options: opt,
+    search: true,
+  });
+  var fi = document.querySelectorAll("#feature-icon")
+  fi.forEach((element) => {
+    element.setValue($(element).attr('value'))
+  })
 });
 
 // $(".get-data").on("click", function(){

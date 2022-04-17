@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
+{% mycurrency as mycurrency %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %}Checkout - {{site_config.name}}{% endblock title %}
 {% block custom %}
     <main class="main">
         	<div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
@@ -12,11 +17,18 @@
             	<div class="checkout">
 	                <div class="container">
             			<div class="checkout-discount">
-            				{% comment %} <form action="#">
-        						<input type="text" class="form-control" required id="checkout-discount-input">
+            				<form class="d-flex" method="post">
+								{% csrf_token %}
+        						<input type="text" class="form-control" name="coupon-code" required id="checkout-discount-input">
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-            				</form> {% endcomment %}
+								<button type="submit" class="text-nowrap"><i class="fas fa-arrow-right"></i></button>
+            				</form>
             			</div><!-- End .checkout-discount -->
+						{% for message in messages %}
+						{% if 'cpn-error' in message.extra_tags %}
+							<p style="margin-top: -15px; margin-left: 10px;" class="text-danger">{{message}}</p>
+						{% endif %}
+						{% endfor %}
             			<form method="post" class="needs-validation" novalidate>
 		                	<div class="row">
 		                		<div class="col-lg-9">
@@ -73,7 +85,7 @@
 
 	                					<label>Email address *</label>
 										<div>
-											<input type="email" id="email" class="form-control" required>
+											<input type="email" id="email" class="form-control" value="{{user.email}}" required>
 											<span class="invalid-feedback">Please Enter Email Address</span>
 										</div>
 
@@ -88,6 +100,7 @@
 											<label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
 										</div><!-- End .custom-checkbox --> {% endcomment %}
 
+										{% if user.address_book.all|length > 0 %}
 										<div class="address-book-sec">
 											<label for="address-book-sec">Address Book</label>
 											<div id="address-book-sec">
@@ -99,13 +112,17 @@
 												{% endfor %}
 											</div>
 										</div>
+										{% endif %}
 
-										<div class="custom-control custom-checkbox">
-											<input type="checkbox" class="custom-control-input" value="off" name="diff-address" id="checkout-diff-address">
+										<div class="custom-control custom-checkbox {% if user.address_book.all|length == 0 %}d-none{% endif %}">
+											<input type="checkbox" class="custom-control-input" value="off" name="diff-address" id="checkout-diff-address" {% if user.address_book.all|length == 0 %}checked{% endif %}>
 											<label class="custom-control-label" for="checkout-diff-address">Ship to a different address?</label>
 										</div><!-- End .custom-checkbox -->
 
-										<div id="new-address" class="d-none">
+										{% if user.address_book.all|length == 0 %}
+											<h2 class="checkout-title bold">Address Book</h2>
+										{% endif %}
+										<div id="new-address" class="{% if user.address_book.all|length > 0 %}d-none{% endif %}">
 			                				<div class="row">
                                                 <div class="col-sm-4">
                                                     <label>Country *</label>
@@ -159,34 +176,66 @@
 		                					</thead>
 
 		                					<tbody>
-												{% for item in user.user_shopcart.all %}
+												{% for item in shopcart.carts.all %}
 		                						<tr>
 		                							<td class="py-1 text-secondary">{{item.product.title}}</td>
-		                							<td>{{item.quantity}} X ৳{{item.product.price|floatformat:2}}</td>
+		                							<td>{{item.quantity}} X {{mycurrency.1}}{{item.product.price|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 		                						</tr>
 												{% endfor %}
 		                						<tr>
-		                							<td class="py-3 h6">Subtotal:</td>
-		                							<td>৳{{cost|floatformat:2}} ({{shopcart|length}} item{% if shopcart|length > 1 %}s{% endif %})</td>
+		                							<td class="py-3 bolden">Subtotal:</td>
+		                							<td>{{mycurrency.1}}{{subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{item}} item{% if shopcart|length > 1 %}s{% endif %})</td>
 		                						</tr><!-- End .summary-subtotal -->
-		                						<tr>
-		                							<td class="py-3 h6">{% if cost >= free_shipping.fee %}{{free_shipping.name}}{% else %}{{local_shipping.name}}{% endif %}:</td>
-		                							<td>{% if cost >= free_shipping.fee %}0{% else %}৳{{local_shipping.fee|floatformat:2}}{% endif %}</td>
+		                						{% if shopcart.coupon.all|length > 0 %}
+													<tr>
+														<td class="py-1 bolden">Coupon:</td>
+														<td></td>
+													</tr>
+													{% for coupon in shopcart.coupon.all %}
+														<tr>
+															<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
+															{% if coupon.discount_type == 'Fixed' %}
+																<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+															{% else %}
+																<td>-{{coupon.value}}%</td>
+															{% endif %}
+														</tr><!-- End .summary-subtotal -->
+													{% endfor %}
+												{% endif %}
+												<tr>
+		                							<td class="pt-1 bolden">Shiping Method</td>
+		                							<td></td>
 		                						</tr>
-		                						<tr>
-		                							<td class="py-3 h5">Total:</td>
-													{% if cost <= free_shipping.fee %}
-		                							<td id="total-cost">৳{{cost|add:local_shipping.fee|floatformat:2}}</td>
-													{% else %}
-		                							<td id="total-cost">৳{{cost|floatformat:2}}</td>
-													{% endif %}
-		                						</tr><!-- End .summary-total -->
+												{% if shopcart.free_ship %}
+													<tr>
+		                								<td><i class="fas fa-dot-circle px-3 text-primary small"></i>Free Shiping:</td>
+		                								<td>{{mycurrency.1}}0</td>
+		                							</tr>
+													<tr>
+														<td class="py-3 bolden h6">Total:</td>
+														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
+													</tr>
+												{% else %}
+													<tr>
+														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{% if cost_with_coupon >= free_shipping.fee %}{{free_shipping.name}}{% else %}{{local_shipping.name}}{% endif %}:</td>
+														<td>{% if cost_with_coupon >= free_shipping.fee %}{{mycurrency.1}}0{% else %}{{mycurrency.1}}{{local_shipping.fee|mul:mycurrency.0|floatformat:2|intcomma}}{% endif %}</td>
+													</tr>
+													<tr>
+														<td class="py-3 bolden">Total:</td>
+														{% if cost <= free_shipping.fee %}
+														<td id="total-cost">{{mycurrency.1}}{{cost|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
+														{% else %}
+														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+														{% endif %}
+													</tr><!-- End .summary-total -->
+												{% endif %}
 												<p class="d-none" id="usd"></p>
 												<p class="d-none" id="rate"></p>
-												{% if cost <= free_shipping.fee %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost|add:local_shipping.fee|floatformat:2}}</td>
+												<input type="hidden" name="rate" id="rate-input">
+												{% if cost_with_coupon <= free_shipping.fee and not shopcart.free_ship %}
+		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
 												{% else %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost|floatformat:2}}</td>
+		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 												{% endif %}
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
@@ -225,12 +274,12 @@
 										    <div class="card">
 										        <div class="card-header" id="heading-3">
 										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+										                <a class="" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="true" aria-controls="collapse-3">
 										                    Cash on delivery
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
-										        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+										        <div id="collapse-3" class="collapse show" aria-labelledby="heading-3" data-parent="#accordion-payment">
 										            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
@@ -239,7 +288,7 @@
 										    <div class="card">
 										        <div class="card-header" id="heading-4">
 										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
 										                    PayPal <small class="float-right paypal-link">What is PayPal?</small>
 										                </a>
 										            </h2>
@@ -250,12 +299,14 @@
 															<div style="text-align: center;">
 																<div id="paypal-button-container"></div>
 															</div>
-															</div>
+														</div>
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
 
-										    <div class="card">
+											
+
+										    {% comment %} <div class="card">
 										        <div class="card-header" id="heading-5">
 										            <h2 class="card-title">
 										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
@@ -268,14 +319,11 @@
 										            <div class="card-body"> Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
-										    </div><!-- End .card -->
+										    </div><!-- End .card --> {% endcomment %}
 										</div><!-- End .accordion -->
 
-		                				<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-		                					<span class="btn-text">Place Order</span>
-		                					<span class="btn-hover-text">Proceed to Checkout</span>
-		                				</button>
-										<div class="btn btn-success" id="btn">Check</div>
+		                				<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">Proceed to Checkout</button>
+										{% comment %} <div class="btn btn-success" id="btn">Check</div> {% endcomment %}
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
 		                	</div><!-- End .row -->

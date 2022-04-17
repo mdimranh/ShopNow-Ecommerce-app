@@ -3,57 +3,40 @@ from django.http import HttpResponseRedirect, HttpResponse
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from .forms import ContactMessageForm
-from order.models import ShopCart
+from order.models import ShopCart, Order
 from .models import SearchKeyword
 
 from django.core.paginator import Paginator
 from django.db.models import Q
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from django.contrib import messages
 
 from django.core import serializers
 
 def Home(request):
-    # categorys = Category.objects.all()
-    # subcategorys = Subcategory.objects.all()
     brand = Brands.objects.all()
     groups = Group.objects.all()
-    # menus = Menus.objects.all().exclude(active=False).order_by('position')
     product = Product.objects.all()
-    total_cost = 0
-    item = 0
-    shopcart = False
-    if request.user.is_authenticated:
-        shopcart = ShopCart.objects.filter(user = request.user)
-        total_cost = 0
-        for item in shopcart:
-            price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-            cost = price*item.quantity
-            total_cost += cost
-        for item in shopcart[:1]:
-            if item.coupon:
-                if item.coupon.discount_type == 'fixed':
-                    total_cost -= item.coupon.value
-                else:
-                    total_cost = total_cost - (total_cost * item.coupon.value / 100)
-        item = shopcart.count()
     new_product = Product.objects.filter(enable=True).order_by('-id')
     new_product_cat = Product.objects.filter(enable=True).distinct("category")
     hot_product = Product.objects.filter(enable=True, hot_deal_end__gt = date.today())
+    bestSell_range = date.today() - timedelta(days = 6)
+    best_sell = Order.objects.filter(order_date__gte = bestSell_range)
+    bs_pro_list = []
+    for scart in best_sell:
+        bs_pro_list.append(scart.product.id)
+    print("list---------->", bs_pro_list)
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {
         'brand': brand,
-        'shopcart': shopcart,
         'product': product,
         'new_product': new_product,
         'new_product_cat': new_product_cat,
         'hot_product': hot_product,
         'procaro': product_carousel,
         'recent_view': recently_view,
-        'cost': total_cost,
-        'item': item
     }
     return render(request, 'home/home.html', context)
 

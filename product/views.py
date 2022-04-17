@@ -83,13 +83,15 @@ def ProductDetails(request, id):
         categorys = Category.objects.all()
         context = {
             'product': product,
+            'products': Product.objects.all(),
             'images': images,
             'category': categorys,
             'total_review': total_review,
             'rating': rating,
             'menus': menus
         }
-        return render(request, 'product/product-details.html', context)
+        # return render(request, 'product/product-details.html', context)
+        return render(request, 'product/product-sidebar.html', context)
 
 class CategoryProduct(View):
 

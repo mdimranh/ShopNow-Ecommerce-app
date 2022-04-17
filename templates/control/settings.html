@@ -80,18 +80,19 @@
                   </div>
                   <ul class="submenu">
                     <li for="paypal"><p class="m-0 p-0">Paypal</p></li>
-                    <li for="bkash"><p class="m-0 p-0">Bkash</p></li>
+                    {% comment %} <li for="bkash"><p class="m-0 p-0">Bkash</p></li>
                     <li for="bkash"><p class="m-0 p-0">Nagod</p></li>
                     <li for="bkash"><p class="m-0 p-0">Rocket</p></li>
                     <li for="sslcommerze"><p class="m-0 p-0">SSLCommerze</p></li>
-                    <li for="stripe"><p class="m-0 p-0">Stripe</p></li>
+                    <li for="stripe"><p class="m-0 p-0">Stripe</p></li> {% endcomment %}
                     <li for="cashon"><p class="m-0 p-0">Cash On Delivery</p></li>
-                    <li for="bank"><p class="m-0 p-0">Bank Transfer</p></li>
+                    {% comment %} <li for="bank"><p class="m-0 p-0">Bank Transfer</p></li> {% endcomment %}
                   </ul>
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
                   <form id="general" class="product-form needs-validation" id="general-form" method="post" novalidate>
+                    {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
                     <br />
@@ -102,10 +103,10 @@
                         >Supported Countries</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-select" id="country-select" name="country-select" required multiple>
+                        <select class="form-select virtual-select" id="country-select" name="support-countries" required multiple>
                           {% get_countries as countries %}
                           {% for country in countries %}
-                            <option value="{{country.name}}">{{country.name}}</option>
+                            <option value="{{country.code}}">{{country.name}} ({{country.code}})</option>
                           {% endfor %}
                         </select>
                         <div class="invalid-feedback">Please Select Country</div>
@@ -118,9 +119,9 @@
                         >Default Countries</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-select" id="default-country-select" name="default-country" required>
+                        <select class="form-select virtual-select" id="default-country-select" name="default-country" required>
                           {% for country in countries %}
-                            <option value="{{country.name}}">{{country.name}}</option>
+                            <option value="{{country.code}}">{{country.name}} ({{country.code}})</option>
                           {% endfor %}
                         </select>
                         <div class="invalid-feedback">Please Select Country</div>
@@ -133,7 +134,7 @@
                         >Default Timezone</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-select" id="country-select" name="support-country" required>
+                        <select class="form-select virtual-select" id="country-select" name="support-country" required>
                           {% for timezone in timezones %}
                             <option value="{{timezone}}">{{timezone}}</option>
                           {% endfor %}
@@ -141,20 +142,20 @@
                         <div class="invalid-feedback">Please Select a Timezone</div>
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    {% comment %} <div class="row mb-3">
                       <label
                         for="country-select"
                         class="col-xl-2 col-form-label d-none d-xl-block"
                         >Customer Roles</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-select" id="country-select" name="support-country" required multiple>
+                        <select class="form-select virtual-select" id="country-select" name="support-country" required multiple>
                           <option value="Bangladesh">Bangladesh</option>
                           <option value="Pakistan">Pakistan</option>
                         </select>
                         <div class="invalid-feedback">Please Select Country</div>
                       </div>
-                    </div>
+                    </div> {% endcomment %}
                     <div class="row mb-1">
                       <label
                         for="inputEmail3"
@@ -251,6 +252,192 @@
                         </div>
                       </div>
                     </div> {% endcomment %}
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="store" class="product-form needs-validation d-none" id="store-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Store</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="store-tagline"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Tagline</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="store-tagline"
+                          name="store-tagline"
+                          placeholder="Store Tagline"
+                          value="{{storeinfo.tagline}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-phone"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Phone</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="store-phone"
+                          name="store-phone"
+                          placeholder="Store Phone"
+                          value="{{storeinfo.phone}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter phone</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-email"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Email</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="store-email"
+                          name="store-email"
+                          placeholder="Store Email"
+                          value="{{storeinfo.email}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter email</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="address1"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Address 1</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address1"
+                          name="store-address1"
+                          placeholder="Store Address 1"
+                          value="{{storeinfo.address1}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter address 1</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="address2"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Address 2</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address2"
+                          name="store-address2"
+                          placeholder="Store Address 2"
+                          value="{{storeinfo.address2}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-city"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store City</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="store-city"
+                          name="store-city"
+                          placeholder="Store City"
+                          value="{{storeinfo.city}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter city</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-country"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Country</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="form-select virtual-select hideClear" id="store-country" name="store-country">
+                          {% get_countries as countries %}
+                          {% for country in countries %}
+                            <option value="{{country.name}}" {% if storeinfo.country == country.name %}selected{% endif %}>{{country.name}} ({{country.code}})</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-state"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store State</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="store-state"
+                          name="store-state"
+                          placeholder="Store State"
+                          value="{{storeinfo.state}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter state</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="store-zip"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Store Zip</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="store-zip"
+                          name="store-zip"
+                          placeholder="Store Zip"
+                          value="{{storeinfo.zip}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter zip</div>
+                      </div>
+                    </div>
                     <div class="row mb-3">
                       <div class="col-xl-10 offset-lg-2">
                         <button
@@ -678,6 +865,206 @@
                           value="{{paypal.secret}}"
                         />
                         <div class="invalid-feedback">Please enter Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="cashon" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Paypal</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-1">
+                      <label
+                        for="cashon-enable"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Status</label
+                      >
+                      <div class="col-xl-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="cashon-enable" type="checkbox" name="cashon-enable" {% if cashon.active %}checked{% endif %} />
+                            <span class="cr mt-1">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Enable Cash On Delivery</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="currency" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Currency</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="support-currency"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Supported Currency</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="form-control" id="support-currency" name="support-currency" required multiple>
+                          {% for x, y in currencies.items %}
+                            <option value="{{y.code}}" {% if y.code in sup_currency %}selected{% endif %}>{{y.name_plural}} ({{y.symbol_native}})</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select Country</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="default-currency"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Default Currency</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="virtual-select hideClear" id="default-currency" name="default-currency" required>
+                          {% for x, y in currencies.items %}
+                            <option value="{{y.code}}">{{y.name_plural}} ({{y.symbol_native}})</option>
+                          {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please Select currency</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="mail" class="product-form needs-validation d-none" id="social-link-form" method="post">
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Social Link</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="mail-host"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Mail Host</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="mail-host"
+                          name="mail-host"
+                          value="{{email_config.email_host}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="mail-port"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Mail Port</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="mail-port"
+                          name="mail-port"
+                          value="{{email_config.email_port}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="mail-username"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Mail Username</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="mail-username"
+                          name="mail-username"
+                          value="{{email_config.email_host_user}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="mail-password"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Mail Password</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="mail-password"
+                          name="mail-password"
+                          value="{{email_config.email_host_password}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Mail Encryption</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="hideSearch hideClear" name="encrypt">
+                          <option value="ssl" {% if email_config.email_use == 'ssl' %}selected{% endif %}>SSL</option>
+                          <option value="tls" {% if email_config.email_use == 'tls' %}selected{% endif %}>TLS</option>
+                        </select>
                       </div>
                     </div>
                     <div class="row mb-3">

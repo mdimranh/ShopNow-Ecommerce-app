@@ -21,6 +21,39 @@ $('#signup-confirm-password').keyup(function () {
 });
 
 
+$(".forgot-link").click(function () {
+    $(".login-page").addClass('d-none')
+    $(".recover-page").removeClass('d-none')
+})
+
+$(".recover-cancel-btn").click(function () {
+    $(".login-page").removeClass('d-none')
+    $(".recover-page").addClass('d-none')
+})
+
+$("#new-pass-alert").css("display", "none");
+$('#new-password').keyup(function () {
+    if ($("#new-password").val() === $("#confirm-new-password").val() && $("#new-password").val().length > 0) {
+        $(".recover-btn").removeAttr("disabled");
+        $("#new-pass-alert").css('display', 'none');
+    }
+    else {
+        $(".recover-btn").attr("disabled", "true");
+        $("#new-pass-alert").css('display', 'block');
+    }
+});
+$('#confirm-new-password').keyup(function () {
+    if ($("#new-password").val() === $("#confirm-new-password").val() && $("#new-password").val().length > 0) {
+        $(".recover-btn").removeAttr("disabled");
+        $("#new-pass-alert").css('display', 'none');
+    }
+    else {
+        $(".recover-btn").attr("disabled", "true");
+        $("#new-pass-alert").css('display', 'block');
+    }
+});
+
+
 
 
 

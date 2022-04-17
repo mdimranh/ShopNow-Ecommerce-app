@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import AddtoCart, CartView, CartDelete, Checkout, WishList, AddtoWishlist, WishItemDelete, PlaceOrder
+from .views import AddToCart, CartView, CartDelete, Checkout, WishList, AddtoWishlist, WishItemDelete, PlaceOrder
 
 urlpatterns = [
-    path('ajax/addtocart', AddtoCart, name='addtocart'),
+    # path('ajax/addtocart', AddtoCart, name='addtocart'),
+    path('ajax/addtocart', AddToCart.as_view(), name='addtocart'),
     path('cart', CartView, name='cartview'),
     path('wishlist', WishList, name='wishlist'),
     path('ajax/addtowishlist', AddtoWishlist, name='addtowishlist'),

@@ -9,24 +9,6 @@ import json
 from solo.models import SingletonModel
 from fontawesome_5.fields import IconField
 from django.contrib.postgres.fields import ArrayField
-
-class SiteConfiguration(SingletonModel):
-	name = models.CharField(max_length=255, default='Buy Now')
-	phone = models.CharField(max_length=20, default = 1)
-	logo = models.ImageField(upload_to='settings/', default = 'settings/logo.png')
-	address=models.CharField(max_length=200, default = 'Dhaka')
-	twitter = models.URLField(default = 'twitter.com')
-	facebook = models.URLField(default = 'facebook.com')
-	youtube = models.URLField(default = 'youtube.com')
-	instagram = models.URLField(default = 'instagram.com')
-	favicon = models.ImageField(upload_to='settings/')
-	maintenance_mode = models.BooleanField(default=False)
-
-	def __str__(self):
-		return "Site Configuration"
-
-	class Meta:
-		verbose_name = "Site Configuration"
 	
 
 BANNER_TYPE = (
@@ -168,22 +150,22 @@ class Slide(models.Model):
 		return mark_safe('<img src="{}" heights="70" width="60" />'.format(self.image.url))
 	image_tag.short_description = 'Image'
 
-class SiteFront(SingletonModel):
-	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
-	banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner1')
-	banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner2')
-	banner3 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner3')
-	banner4 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner4')
-	banner5 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner5')
-	banner6 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner6')
-	banner7 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner7')
-	banner8 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner8')
+# class SiteFront(SingletonModel):
+# 	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
+# 	banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner1')
+# 	banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner2')
+# 	banner3 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner3')
+# 	banner4 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner4')
+# 	banner5 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner5')
+# 	banner6 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner6')
+# 	banner7 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner7')
+# 	banner8 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner8')
 
-	def __str__(self):
-		return "Site Front"
+# 	def __str__(self):
+# 		return "Site Front"
 
-	class Meta:
-		verbose_name = "Site Front"
+# 	class Meta:
+# 		verbose_name = "Site Front"
 
 menu_style = (
 	("mega", "Mega Menu"),
@@ -297,5 +279,98 @@ class ProductCarousel(models.Model):
 			if pro not in prod:
 				prod.append(pro)
 		return len(prod)
+
+
+class SiteConfiguration(SingletonModel):
+	name = models.CharField(max_length=255, default='Buy Now')
+	privacy_policy = models.ForeignKey(Pages, on_delete=models.DO_NOTHING, related_name='privacy_policy', blank=True, null=True)
+	term_condition = models.ForeignKey(Pages, on_delete=models.DO_NOTHING, related_name='term_condition', blank=True, null=True)
+	phone = models.CharField(max_length=20, default = 1, blank=True, null=True)
+	logo = models.ImageField(upload_to='settings/', default = 'settings/logo.png')
+	address=models.CharField(max_length=200, default = 'Dhaka')
+	email = models.EmailField(blank=True, null=True)
+	twitter = models.URLField(default = 'twitter.com')
+	facebook = models.URLField(default = 'facebook.com')
+	youtube = models.URLField(default = 'youtube.com')
+	instagram = models.URLField(default = 'instagram.com')
+	favicon = models.ImageField(upload_to='settings/')
+	slider = models.ForeignKey(Slider, on_delete = models.DO_NOTHING, blank=True, null=True)
+	banner1 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner1')
+	banner2 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner2')
+	banner3 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner3')
+	banner4 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner4')
+	banner5 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner5')
+	banner6 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner6')
+	banner7 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner7')
+	banner8 = models.ForeignKey(Banner, on_delete = models.DO_NOTHING, blank=True, null=True, related_name='banner8')
+	maintenance_mode = models.BooleanField(default=False)
+
+	def __str__(self):
+		return "Site Configuration"
+
+	class Meta:
+		verbose_name = "Site Configuration"
+
+class Feature(SingletonModel):
+	title1 = models.CharField(max_length=300, blank=True, null=True)
+	subtitle1 = models.CharField(max_length=300, blank=True, null=True)
+	icon1 = models.CharField(max_length=100, blank=True, null=True)
+	title2 = models.CharField(max_length=300, blank=True, null=True)
+	subtitle2 = models.CharField(max_length=300, blank=True, null=True)
+	icon2 = models.CharField(max_length=100, blank=True, null=True)
+	title3 = models.CharField(max_length=300, blank=True, null=True)
+	subtitle3 = models.CharField(max_length=300, blank=True, null=True)
+	icon3 = models.CharField(max_length=100, blank=True, null=True)
+	title4 = models.CharField(max_length=300, blank=True, null=True)
+	subtitle4 = models.CharField(max_length=300, blank=True, null=True)
+	icon4 = models.CharField(max_length=100, blank=True, null=True)
+
+class Links(models.Model):
+	name = models.CharField(max_length=50, blank=True, null=True)
+	link = models.URLField()
+
+class FooterLinks(models.Model):
+	section_name = models.CharField(max_length=200)
+	links = models.ManyToManyField(Links)
+
+class Currency(models.Model):
+	symbol = models.CharField(max_length=10)
+	name = models.CharField(max_length=100)
+	symbol_native = models.CharField(max_length=5)
+	rate = models.FloatField(default=1)
+	decimal_digits = models.CharField(max_length=2)
+	code = models.CharField(max_length=10)
+	name_plural = models.CharField(max_length=100)
+	active = models.BooleanField(default=True)
+
+	def __str__(self):
+		return self.name
+
+class Settings(models.Model):
+	default_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='defailt_currency')
+	supported_currency = models.ManyToManyField(Currency, related_name='supported_currency')
+	welcome_email = models.BooleanField(default=True)
+	order_email = models.BooleanField(default=True)
+	order_status_email = models.BooleanField(default=True)
+	invoice_email = models.BooleanField(default=True)
+
+class EmailConfig(SingletonModel):
+	email_host = models.CharField(max_length=200)
+	email_port = models.CharField(max_length=20)
+	email_use = models.CharField(max_length=10)
+	email_host_user = models.CharField(max_length=100)
+	email_host_password = models.CharField(max_length=50)
+
+class StoreInfo(SingletonModel):
+	tagline = models.TextField()
+	phone = models.CharField(max_length=20)
+	email = models.EmailField()
+	address1 = models.TextField()
+	address2 = models.TextField()
+	city = models.CharField(max_length=100)
+	country = models.CharField(max_length=50)
+	state = models.CharField(max_length=100)
+	zip = models.CharField(max_length=50)
+	
 	
 	

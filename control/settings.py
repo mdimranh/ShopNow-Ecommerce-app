@@ -7,14 +7,25 @@ from django.conf import settings
 from allauth.socialaccount.models import SocialApp
 import pytz
 
-from setting.models import Slider, Slide, SiteFront, SiteConfiguration, Pages, Banner
+from django_countries import countries
+
+import json
+import os
+
+from setting.models import *
 
 from order.models import ShippingMethod, PaymentMethod
+from region.models import *
 
 def SettingView(request):
     if request.method == 'POST':
 
-        if 'facebook-app-id' in request.POST:
+        if 'support-countries' in request.POST:
+            for c, d in countries:
+                print(c, d)
+            return redirect(request.path_info)
+
+        elif 'facebook-app-id' in request.POST:
             if SocialApp.objects.filter(provider = 'facebook').exists():
                 social_app = SocialApp.objects.get(provider = 'facebook')
                 social_app.client_id = request.POST['facebook-app-id']
@@ -94,18 +105,81 @@ def SettingView(request):
             payment_method.save()
             return redirect(request.path_info)
 
+        elif 'cashon-enable' in request.POST:
+            payment_method, create = PaymentMethod.objects.get_or_create(
+                name = 'cashon',
+            )
+            payment_method.active = True if request.POST.get('cashon-enable') == 'on' else False
+            payment_method.save()
+            return redirect(request.path_info)
+
+        elif 'support-currency' in request.POST:
+            data = open(os.path.join(settings.BASE_DIR, 'static\control\currency.json'), encoding='utf-8').read()
+            data1 = json.loads(data)
+            for cur in data1:
+                if data1[cur]['code'] in request.POST.get('support-currency'):
+                    if not Currency.objects.filter(code = data1[cur]['code']).exists():
+                        crncy = Currency(
+                            symbol = data1[cur]['symbol'],
+                            name = data1[cur]['name'],
+                            symbol_native = data1[cur]['symbol_native'],
+                            decimal_digits = data1[cur]['decimal_digits'],
+                            code = data1[cur]['code'],
+                            name_plural = data1[cur]['name_plural']
+                        )
+                        crncy.save()
+            
+            return redirect(request.path_info)
+
+        elif 'mail-host' in request.POST:
+            email_config = EmailConfig.objects.get()
+            email_config.email_host = request.POST['mail-host']
+            email_config.email_port = request.POST['mail-port']
+            email_config.email_host_user = request.POST['mail-username']
+            email_config.email_host_password = request.POST['mail-password']
+            email_config.email_host_use = request.POST['encrypt']
+            email_config.save()
+            return redirect(request.path_info)
+
+        elif 'store-phone' in request.POST:
+            sinfo = StoreInfo.objects.get()
+            sinfo.phone = request.POST['store-phone']
+            sinfo.email = request.POST['store-email']
+            sinfo.address1 = request.POST['store-address1']
+            sinfo.tagline = request.POST['store-tagline']
+            sinfo.city = request.POST['store-city']
+            sinfo.country = request.POST['store-country']
+            sinfo.state = request.POST['store-state']
+            sinfo.zip = request.POST['store-zip']
+            try:
+                sinfo.address2 = request.POST['store-address2']
+            except:
+                pass
+
+            sinfo.save()
+            return redirect(request.path_info)
+
     facebook_login = SocialApp.objects.filter(name = 'facebook').first()
     google_login = SocialApp.objects.filter(name = 'google').first()
     free_shipping = ShippingMethod.objects.filter(method_type="free").first()
     local_shipping = ShippingMethod.objects.filter(method_type="local").first()
     paypal = PaymentMethod.objects.filter(name="paypal").first()
+    cashon = PaymentMethod.objects.filter(name="cashon").first()
+    data = open(os.path.join(settings.BASE_DIR, 'static\control\currency.json'), encoding='utf-8').read()
+    data1 = json.loads(data)
+    sup_currency = Currency.objects.values_list('code', flat=True)
+    # for a in data1:
+    #     print(data1[a]['symbol'])
     context = {
         "facebook_login": facebook_login,
         "google_login": google_login,
         "free_shipping": free_shipping,
         "local_shipping": local_shipping,
         'paypal': paypal,
+        'cashon': cashon,
         'timezones': pytz.all_timezones,
+        'currencies': data1,
+        'sup_currency': sup_currency,
         "setting_sec": True,
     }
     return render(request, "control/settings.html", context)
@@ -154,8 +228,8 @@ def Sliders(request):
     slider = Slider.objects.all()
     context = {
         "slider": slider,
-        'onaction': SiteFront.objects.all().first(),
-        'slider_sec': True,
+        'onaction': SiteConfiguration.objects.all().first(),
+        'appearance_sec': True,
         'slider_list_sec': True
     }
     return render(request, "control/slider.html", context)
@@ -207,10 +281,47 @@ def SliderDetails(request, id):
     slide = Slider.objects.get(id = id)
     context = {
         'slide': slide,
-        'slider_sec': True,
+        'appearance_sec': True,
         'slider_list_sec': True
     }
     return render(request, "control/slider.html", context)
+
+
+class Banners(View):
+    def get(self, request):
+        all_banner = Banner.objects.all()
+        context = {
+            "banners": all_banner,
+            'appearance_sec': True,
+            'banner_list_sec': True
+        }
+        return render(request, 'control/banner.html', context)
+
+    def post(self, request):
+        active = True if request.POST.get('enable') == 'on' else False
+        image = request.FILES.get("thumbnail")
+        bnr = Banner(
+            title=request.POST['name'],
+            caption1=request.POST['caption1'], 
+            caption2=request.POST['caption2'], 
+            caption3=request.POST['caption3'],
+            call_to_text=request.POST['calltotext'], 
+            call_to_url=request.POST['calltourl'],
+            image = image,
+            active=active
+        )
+        bnr.save()
+        return redirect(request.path_info)
+
+class BannerDetails(View):
+    def get(self, request, id):
+        bnr = Banner.objects.get(id = id)
+        context = {
+            "banner": bnr,
+            'appearance_sec': True,
+            'edit_banner_sec': True
+        }
+        return render(request, 'control/banner.html', context)
 
 def PageList(request):
     if request.method == "POST":
@@ -266,17 +377,60 @@ def SiteFrontView(request):
         if 'name' in request.POST:
             site_config.name = request.POST['name']
             site_config.address = request.POST['address']
-            site_config.save()
-            site_front = SiteFront.objects.get()
-            site_front.slider = Slider.objects.get(id = request.POST['slider'])
+            site_config.slider = Slider.objects.get(id = request.POST['slider'])
             site_config.save()
             return redirect(request.path_info)
-        if request.FILES['logo']:
-            print("-------------")
+        elif 'logo' in request.FILES:
             site_config.logo = request.FILES.get('logo')
             site_config.favicon = request.FILES.get('favicon')
             site_config.save()
             return redirect(request.path_info)
+        # lst = [request.POST.get('banner[%d]' % i) for i in range(0, len(request.POST))]
+        elif 'banner1' in request.POST:
+            if len(request.POST['banner1']) > 0:
+                site_config.banner1 = Banner.objects.filter(id = request.POST['banner1']).first()
+            if len(request.POST['banner2']) > 0:
+                site_config.banner2 = Banner.objects.filter(id = request.POST['banner2']).first()
+            if len(request.POST['banner3']) > 0:
+                site_config.banner3 = Banner.objects.filter(id = request.POST['banner3']).first()
+            if len(request.POST['banner4']) > 0:
+                site_config.banner4 = Banner.objects.filter(id = request.POST['banner4']).first()
+            if len(request.POST['banner5']) > 0:
+                site_config.banner5 = Banner.objects.filter(id = request.POST['banner5']).first()
+            if len(request.POST['banner6']) > 0:
+                site_config.banner6 = Banner.objects.filter(id = request.POST['banner6']).first()
+            if len(request.POST['banner7']) > 0:
+                site_config.banner7 = Banner.objects.filter(id = request.POST['banner7']).first()
+            if len(request.POST['banner8']) > 0:
+                site_config.banner8 = Banner.objects.filter(id = request.POST['banner8']).first()
+            site_config.save()
+            return redirect(request.path_info)
+
+        elif 'title1' in request.POST:
+            ftr = Feature.objects.get()
+            ftr.title1 = request.POST['title1']
+            ftr.title2 = request.POST['title2']
+            ftr.title3 = request.POST['title3']
+            ftr.title4 = request.POST['title4']
+            ftr.subtitle1 = request.POST['subtitle1']
+            ftr.subtitle2 = request.POST['subtitle2']
+            ftr.subtitle3 = request.POST['subtitle3']
+            ftr.subtitle4 = request.POST['subtitle4']
+            ftr.icon1 = request.POST['icon1']
+            ftr.icon2 = request.POST['icon2']
+            ftr.icon3 = request.POST['icon3']
+            ftr.icon4 = request.POST['icon4']
+            ftr.save()
+            return redirect(request.path_info)
+
+        elif 'facebook-link' in request.POST:
+            site_config.facebook = request.POST['facebook-link']
+            site_config.twitter = request.POST['twitter']
+            site_config.youtube = request.POST['youtube']
+            site_config.instagram = request.POST['instagram']
+            site_config.save()
+            return redirect(request.path_info)
+
     siteinfo = SiteConfiguration.objects.get()
     sliders = Slider.objects.all()
     all_page = Pages.objects.all().exclude(active = False)
@@ -286,7 +440,74 @@ def SiteFrontView(request):
         'sliders': sliders,
         'pages': all_page,
         'banners': banners,
-        'slider_sec': True,
+        'appearance_sec': True,
         'sitefront_sec': True
     }
     return render(request, "control/sitefront.html", context)
+
+class Area(View):
+    def get(self, request):
+        countries = Country.objects.all()
+        context = {
+            'countries': countries,
+            'localization_sec': True,
+            'area_sec': True,
+        }
+        return render(request, 'control/area.html', context)
+
+    def post(self, request):
+        type = request.POST['type'] 
+        if type == 'add-country':
+            enable = True if request.POST.get('enable') == 'on' else False
+            Country.objects.get_or_create(name = request.POST['name'], enable = enable)
+        elif type == 'add-region':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_country = Country.objects.get(id = request.POST['id'])
+            Region.objects.get_or_create(name = request.POST['name'], country=get_country, enable = enable)
+        elif type == 'add-city':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_region = Region.objects.get(id = request.POST['id'])
+            City.objects.get_or_create(name = request.POST['name'], region=get_region, enable = enable)
+        elif type == 'add-area':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_city = City.objects.get(id = request.POST['id'])
+            Area.objects.get_or_create(name = request.POST['name'], city=get_city, enable = enable)
+        elif type == 'edit-country':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_country = Country.objects.get(id = request.POST['id'])
+            get_country.name = request.POST['name']
+            get_country.enable = enable
+            get_country.save()
+        elif type == 'edit-region':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_region = Region.objects.get(id = request.POST['id'])
+            get_region.name = request.POST['name']
+            get_region.enable = enable
+            get_region.save()
+        elif type == 'edit-city':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_city = City.objects.get(id = request.POST['id'])
+            get_city.name = request.POST['name']
+            get_city.enable = enable
+            get_city.save()
+        elif type == 'edit-area':
+            enable = True if request.POST.get('enable') == 'on' else False
+            get_area = Area.objects.get(id = request.POST['id'])
+            get_area.enable = enable
+            get_area.save()
+        return redirect(request.path_info)
+
+import json
+class LocalizationDelete(View):
+    def post(self, request):
+        data = json.loads(request.POST['info'])['data']
+        for i in data:
+            if i[0] == 'country':
+                Country.objects.get(id = i[1]).delete()
+            elif i[0] == 'region':
+                Region.objects.get(id = i[1]).delete()
+            elif i[0] == 'city':
+                City.objects.get(id = i[1]).delete()
+            elif i[0] == 'area':
+                Area.objects.get(id = i[1]).delete()
+        return JsonResponse({'msg': 'success'})

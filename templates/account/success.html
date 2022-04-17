@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/success.css' %}">
+    <title>Success</title>
+</head>
+<body>
+    <div class="main">
+        <div class="success-checkmark">
+            <div class="check-icon">
+                <span class="icon-line line-tip"></span>
+                <span class="icon-line line-long"></span>
+                <div class="icon-circle"></div>
+                <div class="icon-fix"></div>
+            </div>
+        </div>
+        <center>
+            <h3>Successfully active your account!</h3>
+            <h5>Please signin first</h5>
+            <a class="btn btn-success mt-3 px-5" href="/auth/"><p class="m-0 h4">Signin</p></a>
+            <p></p>
+        </center>
+    </div>
+</body>
+</html>

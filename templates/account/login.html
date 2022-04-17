@@ -7,6 +7,11 @@
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('{% static 'assets/images/backgrounds/login-bg.jpg' %}')">
     	<div class="container">
     		<div class="form-box">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="message mb-2 p-0 text-center {% if message.tags %}{{message.tags}}{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
                 <div class="form-tab">
                     <ul class="nav nav-pills nav-fill" role="tablist">
                         <li class="nav-item">
@@ -37,7 +42,7 @@
                                         <input type="checkbox" class="custom-control-input" id="signin-remember">
                                         <label class="custom-control-label" for="signin-remember">Remember Me</label>
                                     </div><!-- End .custom-checkbox --> {% endcomment %}
-                                    <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                    <a class="forgot-link">Forgot Your Password?</a>
                                 </div><!-- End .form-footer -->
                             </form>
                             <div class="form-choice">
@@ -112,6 +117,35 @@
                                     </div><!-- End .col-6 -->
                                 </div><!-- End .row -->
                             </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div>
+    	</div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+    <div class="recover-page d-none bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('{% static 'assets/images/backgrounds/login-bg.jpg' %}')">
+    	<div class="container">
+    		<div class="form-box">
+                <div class="form-tab">
+                    <div class="tab-content" id="tab-content-5">
+                        <div class="tab-pane fade show active" id="recover" role="tabpanel" aria-labelledby="signin-tab">
+                            <h5 class="text-center">Recover Password</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="signup-email">Email</label>
+                                    <input type="email" class="form-control" id="recover-email" name="recover-email" required>
+                                </div><!-- End .form-group -->
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>RECOVER</span>
+                                        {% comment %} <i class="icon-long-arrow-right"></i> {% endcomment %}
+                                    </button>
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>Cancel</span>
+                                    </button>
+                                </div><!-- End .form-footer -->
+                            </form>
                         </div><!-- .End .tab-pane -->
                     </div><!-- End .tab-content -->
                 </div><!-- End .form-tab -->

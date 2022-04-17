@@ -23170,7 +23170,7 @@ body.menu-sidebar .navbar-wrapper {
   padding: 6px;
   border-radius: 2px;
 }
-.select2-container--default:focus {
+/* .select2-container--default:focus {
   border-color: #1abc9c;
 }
 .select2-container--default.select2-container--open
@@ -23234,7 +23234,7 @@ body.menu-sidebar .navbar-wrapper {
   .select2-selection__arrow
   b {
   border-color: #fff transparent transparent transparent;
-}
+} */
 .ms-container .ms-list.ms-focus {
   border-color: #1abc9c;
   box-shadow: inset 0 1px 1px rgba(26, 188, 156, 0.49),

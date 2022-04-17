@@ -1,9 +1,8 @@
 {% extends 'control/base.html' %}
 {% load static %}
 {% load countries %}
-{% load static %} {% load solo_tags %}
-{% get_solo 'setting.SiteFront' as sitefront %}
-{% block title %}{{site_config.name}} | {{sitefront.slider.id}}{% endblock title %}
+{% load static %}
+{% block title %}{{site_config.name}} | Appearance{% endblock title %}
 
     {% block style %}
     <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
@@ -27,10 +26,11 @@
 
     {% block main %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
-        <h3 class="fw-bold">Setting's</h3>
+        <h3 class="fw-bold">Appearance</h3>
         <div class="d-flex">
           <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/settings/" class="text-decoration-none breadcrumb-item text-secondary">Settings</a>
+          <a class="text-decoration-none breadcrumb-item text-secondary">Appearance</a>
+          <a class="text-decoration-none breadcrumb-item text-secondary">Sitefront</a>
         </div>
       </div>
       <div class="card">
@@ -49,35 +49,17 @@
                     <li for="logo"><p class="m-0 p-0">Logo</p></li>
                     <li for="banner"><p class="m-0 p-0">Banner</p></li>
                     <li for="footer"><p class="m-0 p-0">Footer</p></li>
-                    <li for="mail"><p class="m-0 p-0">Mail</p></li>
+                    <li for="feature"><p class="m-0 p-0">Feature</p></li>
                     <li for="social-link"><p class="m-0 p-0">Social Link</p></li>
                   </ul>
                 </div>
                 <div class="menu-sec">
                   <div class="menu advance d-flex flex-fill justify-content-between">
-                    <span>Social Logins</span
+                    <span>Products</span
                     ><span class="arrow"><i class="fa fa-angle-right"></i></span>
                   </div>
                   <ul class="submenu">
-                    <li for="facebook"><p class="m-0 p-0">Facebook</p></li>
-                    <li for="google"><p class="m-0 p-0">Google</p></li>
-                    {% comment %} <li for="add-additional"><p class="m-0 p-0">Additional</p></li> {% endcomment %}
-                  </ul>
-                </div>
-                <div class="menu-sec">
-                  <div class="menu advance d-flex flex-fill justify-content-between">
-                    <span>Payment Methods</span
-                    ><span class="arrow"><i class="fa fa-angle-right"></i></span>
-                  </div>
-                  <ul class="submenu">
-                    <li for="paypal"><p class="m-0 p-0">Paypal</p></li>
-                    <li for="bkash"><p class="m-0 p-0">Bkash</p></li>
-                    <li for="bkash"><p class="m-0 p-0">Nagod</p></li>
-                    <li for="bkash"><p class="m-0 p-0">Rocket</p></li>
-                    <li for="sslcommerze"><p class="m-0 p-0">SSLCommerze</p></li>
-                    <li for="stripe"><p class="m-0 p-0">Stripe</p></li>
-                    <li for="cashon"><p class="m-0 p-0">Cash On Delivery</p></li>
-                    <li for="bank"><p class="m-0 p-0">Bank Transfer</p></li>
+                    <li for="pro-caro"><p class="m-0 p-0">Product Carousel</p></li>
                   </ul>
                 </div>
               </div>
@@ -259,9 +241,10 @@
                         >Banner 1</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner1" name="banner1">
+                        <select class="hideClear" id="banner1" name="banner1">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner1.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner1.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -273,9 +256,10 @@
                         >Banner 2</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner2" name="banner2">
+                        <select class="hideClear" id="banner2" name="banner2">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner2.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner2.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -286,9 +270,10 @@
                         >Banner 3</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner3" name="banner3">
+                        <select class="hideClear" id="banner3" name="banner3">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner3.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner3.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -299,9 +284,10 @@
                         >Banner 4</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner4" name="banner4">
+                        <select class="hideClear" id="banner4" name="banner4">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner4.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner4.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -312,9 +298,10 @@
                         >Banner 5</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner5" name="banner5">
+                        <select class="hideClear" id="banner5" name="banner5">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner5.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner5.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -325,9 +312,10 @@
                         >Banner 6</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner6" name="banner6">
+                        <select class="hideClear" id="banner6" name="banner6">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner6.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner6.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -338,9 +326,10 @@
                         >Banner 7</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner7" name="banner7">
+                        <select class="hideClear" id="banner7" name="banner7">
+                          <option></option>
                           {% for banner in banners %}
-                          <option value="{{banner.id}}" {% if banner.id == sitefront.banner7.id %}selected{% endif %} >{{banner.title}}</option>
+                          <option value="{{banner.id}}" {% if banner.id == site_config.banner7.id %}selected{% endif %} >{{banner.title}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -351,7 +340,8 @@
                         >Banner 8</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="banner8" name="banner8">
+                        <select class="hideClear" id="banner8" name="banner8">
+                          <option></option>
                           {% for banner in banners %}
                           <option value="{{banner.id}}">{{banner.title}}</option>
                           {% endfor %}
@@ -376,89 +366,321 @@
                       </div>
                     </div>
                   </form>
-                  <form id="footer" class="product-form needs-validation d-none" enctype='multipart/form-data' id="general-form" method="post" novalidate>
+                  <div id="footer" class="product-form needs-validation d-none">
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Footer</h6>
                     <hr />
                     <br />
-                    <div class="row mb-3 facebook-login-field">
+                    <nav class="profile-sec-nav">
+                      <div class="nav nav-pills" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-links-tab" data-bs-toggle="tab" data-bs-target="#nav-links" type="button" role="tab" aria-controls="nav-links" aria-selected="true">Useful Links</button>
+                        <button class="nav-link" id="nav-service-tab" data-bs-toggle="tab" data-bs-target="#nav-service" type="button" role="tab" aria-controls="nav-service" aria-selected="false">Customer Service</button>
+                      </div>
+                    </nav>
+                    <div class="tab-content mt-4" id="nav-tabContent">
+                      <div class="tab-pane fade show active" id="nav-links" role="tabpanel" aria-labelledby="nav-links-tab">
+                        <form method="post" class="needs-validation" id="links" novalidate>
+                          {% csrf_token %}
+                          <div class="row mb-3">
+                            <input type="hidden" name="useful-link">
+                            <div class="col-sm-4">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="title"
+                                placeholder="Title"
+                                required
+                              />
+                              <div class="invalid-feedback">Please enter title</div>
+                            </div>
+                            <div class="col-sm-7">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="link"
+                                placeholder="Link"
+                                required
+                              />
+                              <div class="invalid-feedback">Please enter link</div>
+                            </div>
+                            <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
+                          </div>
+                          <div id="new-link" class="d-flex flex-column"></div>
+                          <div class="btn mt-1 add-link-btn">Add Link</div>
+                          <div class="row mb-3 mt-3">
+                            <div class="col-sm-10 offset-lg-2">
+                              <button
+                                id="save-btn"
+                                type="submit"
+                                class="btn btn-primary py-1 px-3"
+                              >
+                                Save
+                              </button>
+                              <button
+                                id="cancel-btn"
+                                type="submit"
+                                class="btn btn-secondary py-1 px-3"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="tab-pane fade" id="nav-service" role="tabpanel" aria-labelledby="nav-service-tab">
+                        <form method="post" class="needs-validation" id="links" novalidate>
+                          {% csrf_token %}
+                          <div class="row mb-3">
+                            <input type="hidden" name="service-link">
+                            <div class="col-sm-4">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="title"
+                                placeholder="Title"
+                                required
+                              />
+                              <div class="invalid-feedback">Please enter title</div>
+                            </div>
+                            <div class="col-sm-7">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="link"
+                                placeholder="Link"
+                                required
+                              />
+                              <div class="invalid-feedback">Please enter link</div>
+                            </div>
+                            <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
+                          </div>
+                          <div id="new-link" class="d-flex flex-column"></div>
+                          <div class="btn mt-1 add-link-btn">Add Link</div>
+                          <div class="row mb-3 mt-3">
+                            <div class="col-sm-10 offset-lg-2">
+                              <button
+                                id="save-btn"
+                                type="submit"
+                                class="btn btn-primary py-1 px-3"
+                              >
+                                Save
+                              </button>
+                              <button
+                                id="cancel-btn"
+                                type="submit"
+                                class="btn btn-secondary py-1 px-3"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </form>
+                  <form id="feature" class="product-form needs-validation d-none" method="post" novalidate>
+                    {% csrf_token %}
+                    <h6 class="mt-2 text-primary fw-bolder h4">Feature</h6>
+                    <hr />
+                    <br />
+                    <h5 class="mt-0 mb-3 py-0">Feature 1</h5>
+                    <div class="row mb-3 ms-2">
                       <label
-                        for="name"
+                        for="title1"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Name</label
+                        >Title</label
                       >
                       <div class="col-xl-10">
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Name"
+                          id="title1"
+                          name="title1"
+                          placeholder="Title"
                           required
-                          value="{{siteinfo.name}}"
+                          value="{{feature.title1}}"
                         />
-                        <div class="invalid-feedback">Please enter site name</div>
+                        <div class="invalid-feedback">Please enter title</div>
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="subtitle1"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Subtitle</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="subtitle1"
+                          name="subtitle1"
+                          placeholder="Subtitle"
+                          required
+                          value="{% if feature.subtitle1 %}{{feature.subtitle1}}{% endif %}"
+                        />
+                        <div class="invalid-feedback">Please enter subtitle</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
                       <label
                         for="slider"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Slider</label
+                        >Icon</label
                       >
                       <div class="col-xl-10">
-                        <select class="disable" id="slider" name="slider">
-                          {% for slider in sliders %}
-                          <option value="{{slider.id}}" {% if slider.id == sitefront.slider.id %}selected{% endif %} >{{slider.name}}</option>
-                          {% endfor %}
+                        <select class="fi1" id="feature-icon" name="icon1" value="{{feature.icon1}}">
                         </select>
                       </div>
                     </div>
-                    <div class="row mb-3">
+                    <h5 class="mt-0 mb-3 py-0">Feature 2</h5>
+                    <div class="row mb-3 ms-2">
                       <label
-                        for="term"
+                        for="title2"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Terms & Condition Page</label
-                      >
-                      <div class="col-xl-10">
-                        <select class="disable" id="term" name="term">
-                          {% for page in pages %}
-                          <option value="{{page.id}}">{{page.name}}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="privacy"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Privacy Policy Page</label
-                      >
-                      <div class="col-xl-10">
-                        <select class="disable" id="privacy" name="privacy">
-                          {% for page in pages %}
-                          <option value="{{page.id}}">{{page.name}}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row mb-3 facebook-login-field">
-                      <label
-                        for="address"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Address</label
+                        >Title</label
                       >
                       <div class="col-xl-10">
                         <input
                           type="text"
                           class="form-control"
-                          id="address"
-                          name="address"
-                          placeholder="Address"
+                          id="title2"
+                          name="title2"
+                          placeholder="Title"
                           required
-                          value="{{siteinfo.address}}"
+                          value="{{feature.title4}}"
                         />
-                        <div class="invalid-feedback">Please enter Address</div>
+                        <div class="invalid-feedback">Please enter title</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="subtitle2"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Subtitle</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="subtitle2"
+                          name="subtitle2"
+                          placeholder="Subtitle"
+                          required
+                          value="{% if feature.subtitle2 %}{{feature.subtitle2}}{% endif %}"
+                        />
+                        <div class="invalid-feedback">Please enter subtitle</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Icon</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="fi2" id="feature-icon" name="icon2" value="{{feature.icon2}}">
+                        </select>
+                      </div>
+                    </div>
+                    <h5 class="mt-0 mb-3 py-0">Feature 3</h5>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="title3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Title</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="title3"
+                          name="title3"
+                          placeholder="Title"
+                          value="{{feature.title3}}"
+                          required
+                        />
+                        <div class="invalid-feedback">Please enter title</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="subtitle3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Subtitle</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="subtitle3"
+                          name="subtitle3"
+                          placeholder="Subtitle"
+                          required
+                          value="{% if feature.subtitle3 %}{{feature.subtitle3}}{% endif %}"
+                        />
+                        <div class="invalid-feedback">Please enter subtitle</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Icon</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="fi3" id="feature-icon" name="icon3" value="{{feature.icon3}}">
+                        </select>
+                      </div>
+                    </div>
+                    <h5 class="mt-0 mb-3 py-0">Feature 4</h5>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="title4"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Title</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="title4"
+                          name="title4"
+                          placeholder="Title"
+                          required
+                          value="{{feature.title4}}"
+                        />
+                        <div class="invalid-feedback">Please enter title</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="subtitle4"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Subtitle</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="subtitle4"
+                          id="subtitle4"
+                          placeholder="Subtitle"
+                          required
+                          value="{% if feature.subtitle4 %}{{feature.subtitle4}}{% endif %}"
+                        />
+                        <div class="invalid-feedback">Please enter subtitle</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 ms-2">
+                      <label
+                        for="slider"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Icon</label
+                      >
+                      <div class="col-xl-10">
+                        <select class="fi4" id="feature-icon" name="icon4" value="{{feature.icon4}}">
+                        </select>
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -479,7 +701,7 @@
                       </div>
                     </div>
                   </form>
-                  <form id="social-link" class="product-form needs-validation d-none" enctype='multipart/form-data' id="social-link-form" method="post">
+                  <form id="social-link" class="product-form needs-validation d-none" id="social-link-form" method="post">
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Social Link</h6>
                     <hr />
@@ -495,7 +717,8 @@
                           type="text"
                           class="form-control"
                           id="facebook"
-                          name="facebook"
+                          name="facebook-link"
+                          value="{{site_config.facebook}}"
                         />
                       </div>
                     </div>
@@ -511,6 +734,7 @@
                           class="form-control"
                           id="twitter"
                           name="twitter"
+                          value="{{site_config.twitter}}"
                         />
                       </div>
                     </div>
@@ -526,6 +750,7 @@
                           class="form-control"
                           id="instagram"
                           name="instagram"
+                          value="{{site_config.instagram}}"
                         />
                       </div>
                     </div>
@@ -541,6 +766,7 @@
                           class="form-control"
                           id="youtube"
                           name="youtube"
+                          value="{{site_config.youtube}}"
                         />
                       </div>
                     </div>
@@ -562,156 +788,73 @@
                       </div>
                     </div>
                   </form>
-                  <form id="google" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                  <form id="pro-caro" class="product-form needs-validation d-none" id="social-link-form" method="post">
                     {% csrf_token %}
-                    <h6 class="mt-2 text-primary fw-bolder h4">Google</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Product Carousel</h6>
                     <hr />
                     <br />
-                    <div class="row mb-1">
+                    <div class="row mb-3 facebook-login-field">
                       <label
-                        for="google-enable"
+                        for="facebook"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Status</label
-                      >
-                      <div class="col-xl-10">
-                        <div class="checkbox-fade fade-in-primary">
-                          <label>
-                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login.status == True %}checked{% endif %} />
-                            <span class="cr mt-1">
-                              <i
-                                class="
-                                  cr-icon
-                                  icofont icofont-ui-check
-                                  txt-primary
-                                "
-                              ></i>
-                            </span>
-                            <span>Enable Google Login</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3 google-login-field {% if google_login.status != True %}d-none{% endif %}">
-                      <label
-                        for="app-id"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >App ID</label
+                        >Facebook</label
                       >
                       <div class="col-xl-10">
                         <input
                           type="text"
                           class="form-control"
-                          id="google-app-id"
-                          name="google-app-id"
-                          placeholder="App ID"
-                          required
-                          value="{{google_login.client_id}}"
+                          id="facebook"
+                          name="facebook-link"
+                          value="{{site_config.facebook}}"
                         />
-                        <div class="invalid-feedback">Please enter App ID</div>
-                      </div>
-                    </div>
-                    <div class="row mb-3 google-login-field  {% if google_login.status != True %}d-none{% endif %}">
-                      <label
-                        for="app-secret"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >App Secret</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="google-app-secret"
-                          name="google-app-secret"
-                          placeholder="App ID"
-                          required
-                          value="{{google_login.secret}}"
-                        />
-                        <div class="invalid-feedback">Please enter App Secret</div>
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <div class="col-xl-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <div
-                          id="cancel-btn"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <form id="paypal" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
-                    {% csrf_token %}
-                    <h6 class="mt-2 text-primary fw-bolder h4">Paypal</h6>
-                    <hr />
-                    <br />
-                    <div class="row mb-1">
                       <label
-                        for="paypal-enable"
+                        for="twitter"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Status</label
-                      >
-                      <div class="col-xl-10">
-                        <div class="checkbox-fade fade-in-primary">
-                          <label>
-                            <input id="paypal-enable" type="checkbox" name="paypal-enable" {% if paypal.status == True %}checked{% endif %} />
-                            <span class="cr mt-1">
-                              <i
-                                class="
-                                  cr-icon
-                                  icofont icofont-ui-check
-                                  txt-primary
-                                "
-                              ></i>
-                            </span>
-                            <span>Enable Paypal</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3 paypal-field {% if paypal.status != True %}d-none{% endif %}">
-                      <label
-                        for="paypal-client-id"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Client ID</label
+                        >Twitter</label
                       >
                       <div class="col-xl-10">
                         <input
                           type="text"
                           class="form-control"
-                          id="paypal-client-id"
-                          name="paypal-client-id"
-                          placeholder="App ID"
-                          required
-                          value="{{paypal.client_id}}"
+                          id="twitter"
+                          name="twitter"
+                          value="{{site_config.twitter}}"
                         />
-                        <div class="invalid-feedback">Please enter Client ID</div>
                       </div>
                     </div>
-                    <div class="row mb-3 paypal-field  {% if paypal.status != True %}d-none{% endif %}">
+                    <div class="row mb-3">
                       <label
-                        for="paypal-secret"
+                        for="instagram"
                         class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Secret</label
+                        >Instagram</label
                       >
                       <div class="col-xl-10">
                         <input
                           type="text"
                           class="form-control"
-                          id="paypal-secret"
-                          name="paypal-secret"
-                          placeholder="Secret"
-                          required
-                          value="{{paypal.secret}}"
+                          id="instagram"
+                          name="instagram"
+                          value="{{site_config.instagram}}"
                         />
-                        <div class="invalid-feedback">Please enter Secret</div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="youtube"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Youtube</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="youtube"
+                          name="youtube"
+                          value="{{site_config.youtube}}"
+                        />
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -764,4 +907,7 @@
     <script src="{% static 'control/bootstrap-tagsinput/dist/bootstrap-tagsinput.js' %}"></script>
     <script src="{% static 'control/filer/jquery.fileuploads.init.js' %}"></script>
     <script src="{% static 'control/countries.json' %}"></script>
+    <script src="{% static 'control/fontawesome.json' %}"></script>
+    <script src="{% static 'control/font5.json' %}"></script>
+    <script src="{% static 'control/js/icons.js' %}"></script>
     {% endblock script %}

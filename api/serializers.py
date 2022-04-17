@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from django.contrib.auth.models import User
 from accounts.models import Profile, AddressBook
+from region.models import *
 
 from django.conf import settings
 
@@ -75,3 +76,18 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddressBook
         exclude = ['temp', 'user']
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+class AreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Area
+        fields = '__all__'

@@ -35,7 +35,8 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2" id="add-category-form">
+                <form class="mt-2" id="add-category-form" method="post">
+                  {% csrf_token %}
                   <div id="coupon-general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
@@ -51,6 +52,7 @@
                           type="text"
                           class="form-control"
                           id="name"
+                          name="name"
                           placeholder="Name"
                           value="{{coupon.name}}"
                         />
@@ -67,6 +69,7 @@
                           type="text"
                           class="form-control"
                           id="name"
+                          name="code"
                           placeholder="Coupon Code"
                           value="{{coupon.code}}"
                         />
@@ -79,7 +82,7 @@
                         >Discount Type</label
                       >
                       <div class="col-sm-10">
-                        <select id="discount-type">
+                        <select id="discount-type" name="discount-type">
                           <option value="Percent" {% if coupon.discount_type == "Percent" %}selected{% endif %}>Percentage</option>
                           <option value="Fixed" {% if coupon.discount_type == "Fixed" %}selected{% endif %}>Fixed</option>
                         </select>
@@ -109,7 +112,7 @@
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" {% if coupon.free_shipping %}checked{% endif %} />
+                            <input id="enable" type="checkbox" name="free-shipping" {% if coupon.free_shipping %}checked{% endif %} />
                             <span class="cr">
                               <i
                                 class="
@@ -136,6 +139,7 @@
                           class="form-control"
                           type="text"
                           placeholder="Start Date"
+                          name="start-date"
                           value="{{coupon.start_date|date:"Y-m-d"}}"
                         />
                       </div>
@@ -145,6 +149,7 @@
                           class="form-control"
                           type="text"
                           placeholder="End Date"
+                          name="end-date"
                           value="{{coupon.end_date|date:"Y-m-d"}}"
                         />
                       </div>
@@ -158,7 +163,7 @@
                       <div class="col-sm-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" name="coupon" type="checkbox" {% if coupon.active %}checked{% endif %} />
+                            <input id="enable" name="active" type="checkbox" {% if coupon.active %}checked{% endif %} />
                             <span class="cr">
                               <i
                                 class="
@@ -209,6 +214,7 @@
                           type="number"
                           class="form-control"
                           id="name"
+                          name="min-spend"
                           placeholder="Minimum Spend"
                           value="{{coupon.min_spend}}"
                         />
@@ -225,6 +231,7 @@
                           type="number"
                           class="form-control"
                           id="name"
+                          name="max-spend"
                           placeholder="Maximum Spend"
                           value="{{coupon.max_spend}}"
                         />
@@ -240,6 +247,7 @@
                         <select
                           multiple
                           id="products-select"
+                          name="products"
                           placeholder="Select Products"
                         >
                         {% for product in products %}
@@ -258,6 +266,7 @@
                         <select
                           multiple
                           id="exclude-products-select"
+                          name="exclude-products"
                           placeholder="Select Products"
                         >
                           {% for product in products %}
@@ -276,6 +285,7 @@
                         <select
                           multiple
                           id="categories-select"
+                          name="categories"
                           placeholder="Select Categories"
                         >
                           {% for category in categorys %}
@@ -294,6 +304,7 @@
                         <select
                           multiple
                           id="exclude-categories-select"
+                          name="exclide-categories"
                           placeholder="Select Categories"
                         >
                           {% for category in categorys %}
@@ -332,7 +343,7 @@
                         >Usage Limit Per Coupon</label
                       >
                       <div class="col-sm-10">
-                        <input type="number" class="form-control" value="{{coupon.limit_per_coupon}}" />
+                        <input type="number" name="limit-per-coupon" class="form-control" value="{{coupon.limit_per_coupon}}" />
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -342,7 +353,7 @@
                         >Usage Limit Per Customer</label
                       >
                       <div class="col-sm-10">
-                        <input type="number" class="form-control" value="{{coupon.limit_per_customer}}" />
+                        <input type="number" name="limit-per-customer" class="form-control" value="{{coupon.limit_per_customer}}" />
                       </div>
                     </div>
                     <div class="row mb-3">

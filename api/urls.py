@@ -20,5 +20,6 @@ urlpatterns = [
     path("wishlist", MyWishlist),
     path("wishlist/delete/<int:id>", DeleteWishlist),
     path("shopcart/add", AddddToCart),
+    path("addressbook/<int:id>", AddressBookDetails.as_view()),
 
 ]

@@ -4,10 +4,11 @@ from .models import *
 
 
 from solo.admin import SingletonModelAdmin
-from .models import SiteConfiguration, SiteFront
+from .models import SiteConfiguration, EmailConfig, Feature
 
 admin.site.register(SiteConfiguration, SingletonModelAdmin)
-admin.site.register(SiteFront, SingletonModelAdmin)
+admin.site.register(EmailConfig, SingletonModelAdmin)
+admin.site.register(Feature, SingletonModelAdmin)
 
 siteinfo = SiteConfiguration.objects.get()
 admin.site.site_header = str(siteinfo.name)
@@ -61,3 +62,5 @@ admin.site.register(ContactMessage, ContactMessageAdmin)
 admin.site.register(ProductCarousel)
 admin.site.register(Menus)
 admin.site.register(Pages)
+admin.site.register(Currency)
+admin.site.register(Settings)

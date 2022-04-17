@@ -1,8 +1,10 @@
+
 // convert curreny BDT to USD
-$.get("https://fcsapi.com/api-v2/forex/converter?symbol=BDT/USD&amount=200&access_key=ohHkx8n2tCX9BBoaGvFUwY", function (resp) {
-    $("#usd").text(($("#total-cost").text().slice(1) * resp.response.price_1x_USD).toFixed(2));
-    $("#rate").text(resp.response.price_1x_BDT);
-});
+// $.get("https://fcsapi.com/api-v2/forex/converter?symbol=BDT/USD&amount=200&access_key=ohHkx8n2tCX9BBoaGvFUwY", function (resp) {
+//     $("#usd").text(($("#total-cost").text().slice(1) * resp.response.price_1x_USD).toFixed(2));
+//     $("#rate").text(resp.response.price_1x_BDT);
+//     $("#rate-input").val(resp.response.price_1x_BDT);
+// });
 
 
 // create checkout using paypal
@@ -31,9 +33,9 @@ function initPayPalButton() {
             label: 'paypal',
 
         },
-        onClick: function (data, actions) {
-            alert($("#rate").text())
-        },
+        // onClick: function (data, actions) {
+        //     alert($("#rate").text())
+        // },
 
         createOrder: function (data, actions) {
             return actions.order.create({

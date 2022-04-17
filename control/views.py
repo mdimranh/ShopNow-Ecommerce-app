@@ -340,7 +340,7 @@ class Roles(View):
 			
 	def get(self, request):
 		roles = UserGroup.objects.all()
-		perm = ContentType.objects.all()
+		perm = ContentType.objects.all().order_by("app_label")
 		grp = UserGroup.objects.all()
 		context = {
 			"roles": roles,
@@ -370,7 +370,7 @@ class RoleDetails(View):
 	def get(self, request, id):
 		role_details = UserGroup.objects.get(id=id)
 		perm_list = list(role_details.permissions.all().values_list('id', flat=True))
-		perm = ContentType.objects.all()
+		perm = ContentType.objects.all().order_by("app_label")
 		context = {
 			"role_details": role_details,
 			"user_sec": True,

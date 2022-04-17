@@ -154,7 +154,7 @@
                         </div>
                       <ul>
                       {% for p in permis %}
-                      {% if p.app_label != 'contenttypes' and p.app_label != 'sessions' and p.app_label != 'home' and p.app_label != 'ipn' and p.app_label != 'authtoken' %}
+                      {% if p.app_label != 'account' and p.app_label != 'contenttypes' and p.app_label != 'sessions' and p.app_label != 'home' and p.app_label != 'ipn' and p.app_label != 'authtoken' %}
                         <li><div class="mt-3 fw-bold f-24">{% ifchanged p.app_label %}{{p.app_label}}{% endifchanged %}</div></li>
                         {% ifchanged p.app_label %}<hr class="mt-0 p-0 mb-3">{% endifchanged %}
                         <div>
@@ -276,6 +276,7 @@
                         </div>
                       <ul>
                       {% for p in permis %}
+                      {% if p.app_label != 'account' and p.app_label != 'contenttypes' and p.app_label != 'sessions' and p.app_label != 'home' and p.app_label != 'ipn' and p.app_label != 'authtoken' %}
                         <li><div class="mt-3 fw-bold f-24">{% ifchanged p.app_label %}{{p.app_label}}{% endifchanged %}</div></li>
                         {% ifchanged p.app_label %}<hr class="mt-0 p-0 mb-3">{% endifchanged %}
                         <div>
@@ -305,6 +306,7 @@
                           </li>
                         {% endfor %}
                         </div>
+                      {% endif %}
                       {% endfor %}
                       </ul>
                     </div>

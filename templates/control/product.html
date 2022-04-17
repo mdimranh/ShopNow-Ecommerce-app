@@ -180,6 +180,7 @@
                 <form class="mt-2 needs-validation add-pro-form" action="/control/product/" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
                   {% csrf_token %}
                   <input type="hidden" name="unique" id="unique" value="{{user.id}}{% now "hidmy" %}unique{{csrf_token}}">
+                  <input type="hidden" name="success" id="success" value="">
                   <div id="add-general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
@@ -359,7 +360,7 @@
                           class="form-control autonumber"
                           id="add-main-price"
                           name="main-price"
-                          data-a-sign="৳"
+                          {% comment %} data-a-sign="৳" {% endcomment %}
                           required
                         />
                         <div class="invalid-feedback">Please Enter Main Price</div>
@@ -448,6 +449,8 @@
                           <div class="btn btn-success mt-2" style="width: 120px;">Browse File</div>
                         </div>
                       </div>
+                    </div>
+                    <div class="d-flex flex-wrap" id="preview-images">
                     </div>
                     <div class="row mb-3">
                       <div class="col-xl-10">
@@ -724,7 +727,7 @@
                             />
                           </div>
                           <div class="col-sm-4">
-                            <select id="discount-type" name="option-style">
+                            <select class="hideClear hideSearch" id="discount-type" name="option-style">
                               <option value="dropdown">Dropdown</option>
                               <option value="radio">Radio</option>
                             </select>
@@ -1011,8 +1014,10 @@
                       ><span class="arrow"><i class="fa fa-angle-right"></i></span>
                     </div>
                     <ul class="submenu">
+                      <li for="add-related-product"><p class="m-0 p-0">Related Product</p></li>
                       <li for="attributes"><p class="m-0 p-0">Attributes</p></li>
-                      <li for="options"><p class="m-0 p-0">Options</p></li>
+                      <li for="add-options"><p class="m-0 p-0">Options</p></li>
+                      <li for="add-hot-deal"><p class="m-0 p-0">Hot Deals</p></li>
                       <li for="additional"><p class="m-0 p-0">Additional</p></li>
                     </ul>
                   </div>
@@ -1020,6 +1025,7 @@
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
                 <form class="mt-2" id="add-category-form" method="post" enctype='multipart/form-data'>
+                  <input type="hidden" name="unique" id="edit-unique" value="{{product_details.unique}}">
                   {% csrf_token %}
                   <div id="general" class="product-form">
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
@@ -1036,6 +1042,7 @@
                           type="text"
                           class="form-control"
                           id="name"
+                          name="name"
                           placeholder="Name"
                           value="{{product_details.title}}"
                         />
@@ -1080,7 +1087,7 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="enable" type="checkbox" {% if product_details.enable %}checked{% endif %} />
+                            <input id="enable" name="enable" type="checkbox" {% if product_details.enable %}checked{% endif %} />
                             <span class="cr">
                               <i
                                 class="
@@ -1125,7 +1132,7 @@
                         >Category</label
                       >
                       <div class="col-xl-10">
-                        <select id="edit-product-category-select">
+                        <select id="edit-product-category-select" name="category">
                           {% for category in categorys %}
                               <option value="{{category.id}}" {% if category.id == product_details.category.id %}selected{% endif %}>{{category.name}}</option>
                           {% endfor %}
@@ -1139,7 +1146,7 @@
                         >Group</label
                       >
                       <div class="col-xl-10">
-                        <select id="edit-product-group-select">
+                        <select id="edit-product-group-select" name="group">
                           {% for group in product_details.category.groups.all %}
                               <option value="{{group.id}}" {% if product_details.group.id == group.id %}selected{% endif %}>{{group.name}}</option>
                           {% endfor %}
@@ -1153,7 +1160,7 @@
                         >Subcategory</label
                       >
                       <div class="col-xl-10">
-                        <select id="edit-product-subcategory-select">
+                        <select id="edit-product-subcategory-select" name="subcategory">
                           {% for subcategory in product_details.group.subcategorys.all %}
                               <option value="{{subcategory.id}}" {% if product_details.subcategory.id == subcategory.id %}selected{% endif %}>{{subcategory.name}}</option>
                           {% endfor %}
@@ -1193,7 +1200,8 @@
                         <input
                           type="text"
                           class="form-control autonumber"
-                          data-a-sign="৳"
+                          name="main-price"
+                          {% comment %} data-a-sign="৳" {% endcomment %}
                           value="{{product_details.main_price}}"
                         />
                       </div>
@@ -1205,7 +1213,7 @@
                         >Discount*</label
                       >
                       <div class="col-xl-10">
-                        <input type="number" class="form-control" value="{{product_details.discount}}" />
+                        <input type="number" class="form-control" name="discount" value="{{product_details.discount}}" />
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -1215,7 +1223,7 @@
                         >Discount Type*</label
                       >
                       <div class="col-xl-10">
-                        <select id="discount-type">
+                        <select id="discount-type" name="discount-type">
                           <option value="percentage" selected>Percentage</option>
                           <option value="fixed">Fixed</option>
                         </select>
@@ -1246,10 +1254,10 @@
                     <br />
                     <div class="row mb-3">
                       <h6>Thumbnail</h6>
-                      <label for="thumbnail-input">
+                      <label for="edit-thumbnail-input">
                         <img
                           class="thumbnail"
-                          id="thumbnail"
+                          id="edit-thumbnail"
                           src="{{product_details.image}}"
                         />
                       </label>
@@ -1257,18 +1265,30 @@
                         class="d-none"
                         type="file"
                         accept="image/*"
-                        id="thumbnail-input"
-                        onchange="loadthumbnail(event)"
+                        name="thumbnail"
+                        id="edit-thumbnail-input"
+                        onchange="loadeditthumbnail(event)"
                       />
                     </div>
                     <div class="row mb-3">
                       <h6>Additional Images</h6>
-                      <input
-                        type="file"
-                        name="edit-additional-image"
-                        id="filer_input1"
-                        multiple="multiple"
-                      />
+                      <div class="dropzone mx-2" id="DidDropzone">
+                        <div class="dz-message d-flex flex-column align-items-center">
+                          <i class="fas fa-cloud-upload-alt fa-3x text-secondary"></i>
+                          <span class="my-2 text-secondary f-20">Drag & Drop files here</span>
+                          <small class="py-1 text-secondary">or</small>
+                          <div class="btn btn-success mt-2" style="width: 120px;">Browse File</div>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" id="remove-images" name="remove-images">
+                    <div class="d-flex">
+                      {% for img in product_details.images.all %}
+                      <div class="additional-image-thumbnail">
+                        <i class="fas fa-trash" id="trash" img-id="{{img.id}}"></i>
+                        <img class="thumbnail no-border" src="{{img.image}}">
+                      </div>
+                      {% endfor %}
                     </div>
                     <div class="row mb-3">
                       <div class="col-xl-10">
@@ -1304,6 +1324,7 @@
                           type="text"
                           class="form-control"
                           id="name"
+                          name="meta-title"
                           placeholder="Meta Title"
                           value="{{product_details.meta_title}}"
                         />
@@ -1320,6 +1341,7 @@
                           type="text"
                           class="form-control"
                           id="name"
+                          name="meta-keywords"
                           placeholder="Meta Keywords"
                           value="{{product_details.meta_keywords}}"
                         />
@@ -1334,7 +1356,7 @@
                       <div class="col-xl-10">
                         <textarea
                           class="form-control"
-                          name="short-desc"
+                          name="meta-descriptions"
                           id="short-desc"
                           placeholder="Meta Descriptions"
                         >{{product_details.meta_descriptions}}</textarea>
@@ -1356,6 +1378,84 @@
                         >
                           Cancel
                         </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="add-related-product" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Related Products</h6>
+                    <hr />
+                    <br />
+                    <input type="hidden" name="related-products" value="{{product_details.related_product}}">
+                    <table
+                      id="related-product-table"
+                      data-toggle="table"
+                      data-pagination="true"
+                      data-page-list="[5, 25, 50, 100, ALL]"
+                      data-search="true"
+                      data-search-highlight="true"
+                      data-filter-control="true"
+                      data-show-multi-sort="true"
+                      data-fixed-columns="true"
+                      data-fixed-number="1"
+                      data-sticky-header = "true"
+                      data-checkbox = "true"
+                      class="table table-bordered no-border nowrap"
+                    >
+                      <thead>
+                        <tr>
+                          <th data-checkbox="true" dat-formatter="checkboxFormatter"></th>
+                          <th data-searchable="false">Thumbnail</th>
+                          <th data-visible="false"></th>
+                          <th data-sortable="true" data-valign="middle">Name</th>
+                          <th data-sortable="true" data-valign="middle">Category</th>
+                          <th data-sortable="true" data-valign="middle">Price</th>
+                          <th data-sortable="true" data-valign="middle">Active</th>
+                          <th data-sortable="true" data-valign="middle">Quantity</th>
+                          <th data-sortable="true" data-valign="middle">Created</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for product in products %}
+                        <tr>
+                          <td data-checkbox-enabled="true">{% if product in product_details.related_pro %}true{% endif %}</td>
+                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
+                          <td >{{product.id}}</td>
+                          <td >{{product.title}}</td>
+                          <td >{{product.category}}</td>
+                          <td>{{product.price}}</span></td>
+                          <td class="ps-4">{% if product.enable%}<i class="icofont icofont-ui-check text-success"></i>{% else %}<i class="icofont icofont-ui-close text-danger"></i>{% endif %}</td>
+                          <td>{{product.amount}}</td>
+                          <td>{{product.created_at|date:"d M Y"}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                      {% comment %} <tfoot>
+                        <tr>
+                          <th>Name</th>
+                          <th>Category</th>
+                          <th>Price</th>
+                          <th>{{product.status}}</th>
+                          <th>Amount</th>
+                          <th>Created</th>
+                        </tr>
+                      </tfoot> {% endcomment %}
+                    </table>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
+                        </button>
+                        <div
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1395,21 +1495,6 @@
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <label
-                        for="inputEmail3"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Meta Descriptions</label
-                      >
-                      <div class="col-xl-10">
-                        <textarea
-                          class="form-control"
-                          name="short-desc"
-                          id="short-desc"
-                          placeholder="Meta Descriptions"
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
                       <div class="col-xl-10 offset-lg-2">
                         <button
                           id="save-btn"
@@ -1428,10 +1513,11 @@
                       </div>
                     </div>
                   </div>
-                  <div id="options" class="product-form d-none">
+                  <div id="add-options" class="product-form d-none">
                     <h6 class="mt-2 text-primary fw-bolder h4">Options</h6>
                     <hr />
                     <br />
+                    {% for option in product_details.option.all %}
                     <div class="d-flex flex-fill align-items-center option-sec">
                       <div class="option w-100">
                         <div
@@ -1443,7 +1529,7 @@
                             mb-3
                           "
                         >
-                          <h6 class="option-name">Option Name</h6>
+                          <h6 class="option-name">{{option.name}}</h6>
                           <span class="arrow"
                             ><i class="fa fa-angle-right"></i
                           ></span>
@@ -1459,13 +1545,15 @@
                               type="text"
                               class="form-control"
                               id="option-name"
+                              name="option-name"
+                              value="{{option.name}}"
                               placeholder="Option name"
                             />
                           </div>
                           <div class="col-sm-4">
-                            <select id="discount-type">
-                              <option value="2">Dropdown</option>
-                              <option value="1">Radio</option>
+                            <select class="hideSearch hideClear" id="discount-type" name="option-style">
+                              <option value="dropdown" {% if option.style == 'dropdown' %}selected{% endif %}>Dropdown</option>
+                              <option value="radio" {% if option.style == 'radio' %}selected{% endif %}>Radio</option>
                             </select>
                           </div>
                         </div>
@@ -1482,7 +1570,9 @@
                             </select>
                           </div>
                         </div> -->
+                        {% for opt in option.option.all %}
                         <div class="options-option">
+                          <input type="hidden" id="option-count" name="option-count" value="{{option.option.all|length}}">
                           <div class="row mb-3 mx-2">
                             <label
                               for="inputEmail3"
@@ -1493,7 +1583,8 @@
                               <input
                                 type="text"
                                 class="form-control"
-                                id="option-name"
+                                name="options-option-name"
+                                value="{{opt.label}}"
                                 placeholder="Label"
                               />
                             </div>
@@ -1501,6 +1592,8 @@
                               <input
                                 type="number"
                                 class="form-control"
+                                name="option-price"
+                                value="{{opt.price}}"
                                 placeholder="Price"
                               />
                               <div class="btn col-sm-1">
@@ -1509,10 +1602,12 @@
                             </div>
                           </div>
                         </div>
+                        {% endfor %}
                         <div class="btn add-options-option">Add option</div>
                       </div>
                       <i class="fa fa-trash fa-lg ms-3"></i>
                     </div>
+                    {% endfor %}
                     <div class="new-option"></div>
                     <div
                       class="
@@ -1536,13 +1631,110 @@
                         >
                           Save
                         </button>
-                        <button
+                        <div
                           id="cancel-btn"
                           type="submit"
                           class="btn btn-secondary py-1 px-3"
                         >
                           Cancel
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="add-hot-deal" class="product-form d-none">
+                    <h6 class="mt-2 text-primary fw-bolder h4">Hot Deals</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Date Range</label
+                      >
+                      <div class="col-sm-5">
+                        <input
+                          id="coupon-start"
+                          class="form-control"
+                          name="hot-deal-start"
+                          type="text"
+                          value="{{product_details.hot_deal_start|date:"Y-m-d"}}"
+                          placeholder="Start Date"
+                        />
+                      </div>
+                      <div class="col-sm-5">
+                        <input
+                          id="coupon-end"
+                          class="form-control"
+                          name="hot-deal-end"
+                          type="text"
+                          value="{{product_details.hot_deal_end|date:"Y-m-d"}}"
+                          placeholder="End Date"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Discount*</label
+                      >
+                      <div class="col-xl-10">
+                        <input type="number" class="form-control" name="hot-deal-discount" value="{{product_details.hot_deal_discount}}" />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="inputEmail3"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >Discount Type*</label
+                      >
+                      <div class="col-xl-10">
+                        <select id="discount-type" name="hot-deal-discount-type">
+                          <option value="percentage" {% if product_details.hot_deal_discount_type == 'percentage' %}selected{% endif %}>Percentage</option>
+                          <option value="fixed" {% if product_details.hot_deal_discount_type == 'fixed' %}selected{% endif %}>Fixed</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputEmail3"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Free Shipping</label
+                      >
+                      <div class="col-sm-10">
+                        <div class="checkbox-fade fade-in-primary">
+                          <label>
+                            <input id="enable" type="checkbox" name="hot-deal-free-shipping" {% if product_details.hot_deal_free_shipping %}checked{% endif %} />
+                            <span class="cr">
+                              <i
+                                class="
+                                  cr-icon
+                                  icofont icofont-ui-check
+                                  txt-primary
+                                "
+                              ></i>
+                            </span>
+                            <span>Allow free shipping</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-xl-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Save
                         </button>
+                        <div
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1648,5 +1840,5 @@
     <script src="{% static 'control/image-uploader/image-uploader.min.js' %}"></script>
     <script src="{% static 'control/dropzone/dist/dropzone.js' %}"></script>
     <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
-
+    {% comment %} <script src="{% static 'control/dropzone/edit-dropzone.js' %}"></script> {% endcomment %}
     {% endblock script %}

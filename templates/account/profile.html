@@ -64,17 +64,22 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <small>Default Shipping Address</small>
-                                                                <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
-                                                                <p class="user-email">{{user.email}}</p>
+                                                                {% for address in user.address_book.all %}
+                                                                    {% if address.default %}
+                                                                    <p class="m-0 p-0">{{address.country.name}}-{{address.region.name}}-{{address.city.name}}-{{address.area.name}}</p>
+                                                                    <p class="user-email">{{address.address}}</p>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </div>
-                                                            <div class="col-6">
+                                                            {% comment %} <div class="col-6">
                                                                 <small>Default Billing Address</small>
                                                                 <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
                                                                 <p class="user-email">{{user.email}}</p>
-                                                            </div>
+                                                            </div> {% endcomment %}
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {% if user.user_order.all|length > 0 %}
                                                 <div class="col-12 m-0 p-0">
                                                     <h6 class="m-0 p-0 d-flex flex-fill">Recent Orders<a href="#tab-orders" class="tab-trigger-link ml-3">edit</a></h6>
                                                     <table class="table table-cart table-mobile">
@@ -102,12 +107,14 @@
                                                         </tbody>
                                                     </table><!-- End .table table-wishlist -->
                                                 </div>
+                                                {% endif %}
                                             </div>
                                         </div>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
 								    	<h4>Orders</h4>
+                                        {% if user.user_order.all|length > 0 %}
                                         <table class="table table-cart table-mobile">
                                             <thead>
                                                 <tr>
@@ -130,6 +137,9 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
+                                        {% else %}
+                                        <h6 class="empty-wishlist"><i class="fas fa-long-arrow-alt-right"></i> No order available yet.</h6>
+                                        {% endif %}
 								    	<a href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-up"></i></a>
 								    </div><!-- .End .tab-pane -->
 
@@ -174,6 +184,7 @@
 
 								    <div class="tab-pane fade" id="tab-reviews" role="tabpanel" aria-labelledby="tab-reviews-link">
 								    	<h4>Reviews</h4>
+                                        {% if user.user_review.all|length > 0 %}
                                         <table class="table table-cart review-table">
                                             <thead>
                                                 <tr>
@@ -209,7 +220,10 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
-								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                        {% else %}
+                                        <h6 class="empty-wishlist"><i class="fas fa-long-arrow-alt-right"></i> No review available yet.</h6>
+								    	{% endif %}
+                                        <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
@@ -237,23 +251,25 @@
                                                     <td>{{ab.address}}</td>
                                                     <td>{{ab.phone}}</td>
                                                     <td>{% if ab.default %}Default addess{% endif %}</td>
-                                                    <td class="text-warning address-edit-btn">edit</td>
+                                                    <td class="text-warning address-edit-btn" add-id="{{ab.id}}">edit</td>
                                                 </tr>
                                                 {% endif %}
                                                 {% endfor %}
                                             </tbody>
                                         </table><!-- End .table table-wishlist -->
 
-                                        <form class="d-none" id="address-edit-form">
+                                        <form class="d-none" id="address-edit-form" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" id="edit-address-id">
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>Address Name *</label>
-			                						<input type="text" class="form-control" required value="{{user.first_name}}">
+			                						<input type="text" name="name" id="edit-address-name" class="form-control" required value="{{user.first_name}}">
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
 			                						<label>Phone *</label>
-			                						<input type="text" class="form-control" required>
+			                						<input type="text" name="phone" id="edit-address-phone" class="form-control" required>
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
@@ -263,7 +279,7 @@
                                             <div class="row">
                                                 <div class="col-sm-4">
                                                     <label>Country *</label>
-                                                    <select class="form-control" name="" id="edit-country">
+                                                    <select class="form-control" name="country" id="edit-country">
                                                         <option value="null"></option>
                                                         {% for country in countrys %}
                                                             <option value="{{country.id}}">{{country.name}}</option>
@@ -273,26 +289,26 @@
 
                                                 <div class="col-sm-4">
                                                     <label>Region *</label>
-                                                    <select class="form-control" name="" id="city" disabled>
+                                                    <select class="form-control" name="region" id="edit-region">
                                                         <option value=""></option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-sm-4">
                                                     <label>City *</label>
-                                                    <select class="form-control" name="" id="area" disabled>
+                                                    <select class="form-control" name="city" id="edit-city">
                                                         <option value=""></option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <label>Area *</label>
-                                                    <select class="form-control" name="" id="area" disabled>
+                                                    <select class="form-control" name="area" id="edit-area">
                                                         <option value=""></option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <label>Address *</label>
-                                                    <input type="tel" class="form-control" required>
+                                                    <input type="text" name="address" id="edit-address-address" class="form-control" required>
                                                 </div>
                                             </div><!-- End .row -->
 
@@ -379,16 +395,17 @@
 
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
 								    	<h4>Account</h4>
-                                        <form action="#" class="d-none address-edit">
+                                        <form class="d-none address-edit" method="post">
+                                            {% csrf_token %}
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>First Name *</label>
-			                						<input type="text" class="form-control" required value="{{user.first_name}}">
+			                						<input type="text" name="fname" class="form-control" required value="{{user.first_name}}">
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
 			                						<label>Last Name *</label>
-			                						<input type="text" class="form-control" required value="{{user.last_name}}">
+			                						<input type="text" name="lname" class="form-control" required value="{{user.last_name}}">
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
@@ -398,19 +415,19 @@
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <label>Email address *</label>
-                                                    <input type="email" class="form-control" required value="{{user.email}}">
+                                                    <input type="email" name="email" class="form-control" required value="{{user.email}}">
                                                 </div>
 
                                                 <div class="col-sm-6">
                                                     <label>Phone *</label>
-                                                    <input type="tel" class="form-control" required value="01942504420">
+                                                    <input type="text" name="phone" class="form-control" required value="{{user.profile_info.phone}}">
                                                 </div>
                                             </div><!-- End .row -->
 
                                             <div class="row">
                                                 <div class="col-sm-4">
                                                     <label>Birth Day</label>
-		        							        <input type="date" class="form-control" required value="{{user.email}}">
+		        							        <input type="date" name="birthday" class="form-control" required value="{{user.profile_info.birthday|date:"Y-m-d"}}">
                                                 </div>
 
                                                 <div class="col-sm-8">
@@ -418,12 +435,12 @@
                                                         <label>Gender</label>
                                                         <div class="d-flex flex-fill">
                                                             <div class="d-flex align-items-center">
-                                                                <input type="radio" class="d-none" id="male" value="male" name="gender">
-                                                                <label for="male"><span type="btn" class="btn btn-outline-warning male-btn active">Male</span></label>
+                                                                <input type="radio" class="d-none" id="male" value="male" name="gender" {% if user.profile_info.gender == 'male' %}checked{% endif %}>
+                                                                <label for="male"><span type="btn" class="btn btn-outline-warning male-btn {% if user.profile_info.gender == 'male' %}active{% endif %}">Male</span></label>
                                                             </div>
                                                             <div class="d-flex align-items-center">
-                                                                <input type="radio" class="d-none" id="female" value="female" name="gender">
-                                                                <label for="female"><span type="btn" class="btn btn-outline-warning female-btn">Female</span></label>
+                                                                <input type="radio" class="d-none" id="female" value="female" name="gender" {% if user.profile_info.gender == 'female' %}checked{% endif %}>
+                                                                <label for="female"><span type="btn" class="btn btn-outline-warning female-btn {% if user.profile_info.gender == 'female' %}active{% endif %}">Female</span></label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -438,15 +455,11 @@
                                         <div class="container-fluid address-view">
                                             <div class="row m-0 p-0">
                                                 <div class="col-lg-4 col-12 m-0 p-0">
-                                                    <h6 class="m-0 p-0">Name<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
+                                                    <h6 class="m-0 p-0">Name<span class="edit-btn"><i class="far fa-edit"></i></span></h6>
                                                     <p class="m-0 p-0">{{user.first_name}} {{user.last_name}}</p>
                                                 </div>
                                                 <div class="col-lg-4 col-12 m-0 p-0">
-                                                    <h6 class="m-0 p-0">Email<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
-                                                    <p class="m-0 p-0">{{user.email}}</p>
-                                                </div>
-                                                <div class="col-lg-4 col-12 m-0 p-0">
-                                                    <h6 class="m-0 p-0">Phone<span class="edit-btn"><i class="fa fa-pencil"></i></span></h6>
+                                                    <h6 class="m-0 p-0">Email<span class="edit-btn"><i class="far fa-edit"></i></span></h6>
                                                     <p class="m-0 p-0">{{user.email}}</p>
                                                 </div>
                                             </div>

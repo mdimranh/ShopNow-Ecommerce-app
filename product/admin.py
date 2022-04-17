@@ -4,6 +4,8 @@ from mptt.admin import DraggableMPTTAdmin
 from .models import *
 
 # admin.site.register(Images)
+admin.site.register(Options)
+admin.site.register(Option)
 
 class productImageInline(admin.TabularInline):
     model = Images

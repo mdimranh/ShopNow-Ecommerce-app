@@ -2,7 +2,7 @@ from django.urls import path
 from .views import *
 from .product import *
 from .coupon import CouponView, CouponDetails, DeleteCoupon
-from .settings import SettingView, Sliders, SliderDetails, SiteFrontView, PageList, PageDetails, DeletePage
+from .settings import *
 from .orders import OrderList, OrderDetails
 
 from django.views.generic import TemplateView
@@ -11,11 +11,15 @@ urlpatterns = [
     path("", Dashboard, name="admin-dashboard"),
     path("product/", Products, name="admin-products"),
     path("product/imagesave/", ImagesSave, name="admin-products-image-save"),
-    path("product/edit-product/<int:id>", EditProduct, name="admin-edit-product"),
+    path("product/deleteimage", deleteImage),
+    path("product/edit-product/<int:id>", EditProduct.as_view(), name="admin-edit-product"),
     path("product/delete-product/", deleteProduct, name="admin-delete-product"),
     path("category", CategoryView),
+    path("brand", BrandView.as_view()),
+    path("brand/<int:id>", BrandDetails.as_view()),
+    path("brand/delete", deleteBrand),
     path("coupon", CouponView.as_view()),
-    path("coupon/<int:id>", CouponDetails),
+    path("coupon/<int:id>", CouponDetails.as_view()),
     path("coupon/delete-coupon", DeleteCoupon.as_view()),
     path("menu", Menu),
     path("menu/update", MenuUpdate),
@@ -36,7 +40,11 @@ urlpatterns = [
     path("settings/", SettingView, name="admin-settings"),
     path("slider/", Sliders, name="admin-sliders"),
     path("slider/<int:id>", SliderDetails, name="admin-slider-details"),
+    path("banners", Banners.as_view(), name="admin-banners"),
+    path("banner/<int:id>", BannerDetails.as_view(), name="admin-banner-details"),
     path("sitefront", SiteFrontView, name="admin-sitefront"),
+    path("area", Area.as_view(), name="admin-area"),
+    path("area/delete", Area.as_view(), name="admin-area-delete"),
     # path("sitefront/<int:id>", SliderDetails, name="admin-sitefront"),
     path("orders", OrderList.as_view(), name="admin-orders"),
     path("order/<int:id>", OrderDetails.as_view(), name="admin-rrdersetails"),

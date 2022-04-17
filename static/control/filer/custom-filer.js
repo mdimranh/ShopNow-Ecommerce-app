@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
 	//Example 2
 	$("#filer_input2").filer({
@@ -85,21 +85,21 @@ $(document).ready(function(){
 			type: 'POST',
 			enctype: 'multipart/form-data',
 			synchron: true,
-			beforeSend: function(){},
-			success: function(data, itemEl, listEl, boxEl, newInputEl, inputEl, id){
+			beforeSend: function () { },
+			success: function (data, itemEl, listEl, boxEl, newInputEl, inputEl, id) {
 				var parent = itemEl.find(".jFiler-jProgressBar").parent(),
 					new_file_name = JSON.parse(data),
 					filerKit = inputEl.prop("jFiler");
 
-        		filerKit.files_list[id].name = new_file_name;
+				filerKit.files_list[id].name = new_file_name;
 
-				itemEl.find(".jFiler-jProgressBar").fadeOut("slow", function(){
+				itemEl.find(".jFiler-jProgressBar").fadeOut("slow", function () {
 					$("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
 				});
 			},
-			error: function(el){
+			error: function (el) {
 				var parent = el.find(".jFiler-jProgressBar").parent();
-				el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
+				el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
 					$("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
 				});
 			},
@@ -118,16 +118,16 @@ $(document).ready(function(){
 		beforeSelect: null,
 		onSelect: null,
 		afterShow: null,
-		onRemove: function(itemEl, file, id, listEl, boxEl, newInputEl, inputEl){
+		onRemove: function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
 			var filerKit = inputEl.prop("jFiler"),
-		        file_name = filerKit.files_list[id].name;
+				file_name = filerKit.files_list[id].name;
 
-		    $.post('./php/ajax_remove_file.php', {file: file_name});
+			$.post('./php/ajax_remove_file.php', { file: file_name });
 		},
 		onEmpty: null,
 		options: null,
 		dialogs: {
-			alert: function(text) {
+			alert: function (text) {
 				return alert(text);
 			},
 			confirm: function (text, callback) {

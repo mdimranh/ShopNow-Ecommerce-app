@@ -8,12 +8,12 @@ $("#menu-btn").on("click", function () {
 // $("#sidenav").css({ top: topnav.outerHeight() + "px" });
 
 $(".sidenav .menu").on("click", function () {
-    if ($(this).hasClass("selected")) {
-      $(this).removeClass("selected");
-    } else {
-      $(this).addClass("selected");
-      $(".sidenav .menu.selected").not($(this)).removeClass("selected");
-    }
+  if ($(this).hasClass("selected")) {
+    $(this).removeClass("selected");
+  } else {
+    $(this).addClass("selected");
+    $(".sidenav .menu.selected").not($(this)).removeClass("selected");
+  }
 });
 
 // $(window).resize(function () {

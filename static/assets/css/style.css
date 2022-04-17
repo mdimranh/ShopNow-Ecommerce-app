@@ -6895,6 +6895,7 @@ p {
 }
 .btn-wishlist {
   font-size: 1.6rem;
+  cursor: pointer;
 }
 .btn-wishlist:before {
   content: "\f234";
@@ -9572,7 +9573,7 @@ button:focus {
 .brand img {
   width: auto !important;
   max-width: 100% !important;
-  max-height: 45px;
+  max-height: 25px;
 }
 .brand:focus {
   outline: none !important;
@@ -13316,7 +13317,7 @@ button:focus {
 .checkout-discount label {
   position: absolute;
   left: 0;
-  top: 50%;
+  top: 40%;
   width: 100%;
   padding-left: 1.1rem;
   padding-right: 1.1rem;
@@ -13325,6 +13326,28 @@ button:focus {
   -ms-transform: translateY(-50%);
   opacity: 1;
   transition: all 0.3s;
+  z-index: 100;
+}
+.checkout-discount button{
+  height: 40px;
+  width: 40px;
+  border: 0.1rem dashed #d7d7d7;
+  color: gray;
+  /* border-left: none; */
+  border-radius: 0.3rem;
+  z-index: 101;
+}
+.checkout-discount button:hover{
+  background: #FCB941;
+  color: white;
+}
+.checkout-discount .form-control:focus ~ button{
+  color: #FCB941;
+  border-color: #FCB941;
+  outline: none !important;
+}
+.checkout-discount .form-control:focus ~ button:hover{
+  color: white;
 }
 .checkout-discount label span {
   color: #FCB941;
@@ -13333,6 +13356,7 @@ button:focus {
   background-color: transparent !important;
   border-radius: 0.3rem;
   border: 0.1rem dashed #d7d7d7;
+  border-right: none;
   padding-left: 1.1rem;
   padding-right: 1.1rem;
 }
@@ -16525,4 +16549,12 @@ i.product-color.select{
 
 .address_book:checked ~ label{
   border: 2px solid green;
+}
+
+.forgot-link{
+  cursor: pointer;
+}
+
+.error{
+  color: red;
 }

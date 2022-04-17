@@ -350,9 +350,10 @@ table.no-border th {
 
 textarea {
   scrollbar-width: thin;
-  resize: none;
+  /* resize: none; */
   width: 100%;
   min-height: 200px;
+  max-height: 1000px !important;
   border-radius: 5px;
   padding: 5px;
 }
@@ -363,7 +364,7 @@ textarea:focus {
 
 .ck-editor__editable {
   min-height: 200px;
-  max-height: 200px;
+  max-height: 1000px !important;
 }
 
 .ck-editor__editable p {

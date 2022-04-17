@@ -1,0 +1,14 @@
+[
+    {
+        "model": "setting.Currency",
+        "pk": "1",
+        "fields": {
+            "symbol": "$",
+            "name": "US Dollar",
+            "symbol_native": "$",
+            "decimal_digits": 2,
+            "code": "USD",
+            "name_plural": "US dollars"
+        }
+    }
+]
