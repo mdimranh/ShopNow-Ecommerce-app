@@ -36,9 +36,9 @@
                       </div>
                       <i class="fas fa-trash delete-menus text-danger"></i>
                       {% if menu.active %}
-                        <i class="fas fa-check-circle enable text-success"></i>
+                        <i class="fas fa-list-ol drag enable text-success"></i>
                       {% else %}
-                        <i class="fas fa-times-circle enable text-danger"></i>
+                        <i class="fas fa-list-ol drag enable text-danger"></i>
                       {% endif %}
                     </div>
                     {% endfor %}
@@ -209,7 +209,7 @@
       const dragArea = document.querySelector(".wrapper");
       var sortable = new Sortable(dragArea, {
         animation: 350,
-        {% comment %} handle: '.handle', {% endcomment %}
+        handle: '.drag',
         onSort: function(){
           elm = $(".menu-item")
           var ids = []

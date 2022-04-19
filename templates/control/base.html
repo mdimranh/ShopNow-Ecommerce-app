@@ -1,5 +1,6 @@
 {% load static %}
 {% load solo_tags %}
+{% load custom_tags %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
 {% get_solo 'setting.Feature' as feature %}
 {% get_solo 'setting.EmailConfig' as email_config %}
@@ -83,7 +84,7 @@
       <div class="sidenav" id="sidenav">
         <ul>
           <li>
-            <a href="/control/">
+            <a href="/control/dashboard">
               <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
                 <i class="fas fa-tachometer-alt fa-left"></i>
                 <span>Dashboard</span>
@@ -206,7 +207,7 @@
             </div>
           </li> {% endcomment %}
           <li>
-            <a href="/control/settings/">
+            <a href="/control/settings">
               <div class="menu setting {% if setting_sec %}selected active{% endif %}">
                 <i class="fa fa-cogs fa-left"></i>
                 <span>Settings</span>
@@ -219,7 +220,7 @@
       <div class="sidenav" id="sidenav">
         <ul>
           <li>
-            <a href="/control/">
+            <a href="/control/dashboard">
               <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
                 <i class="fas fa-tachometer-alt fa-left"></i>
                 <span>Dashboard</span>
@@ -236,6 +237,9 @@
             <ul class="submenu">
               {% if perms.product.view_product or perms.product.add_product or perms.product.change_product or perms.product.delete_product %}
               <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product" class="d-flex flex-fill">Product</a></li>
+              {% endif %}
+              {% if perms.product.view_brands or perms.product.add_brands or perms.product.change_brands or perms.product.delete_brands %}
+              <li class="brand {% if brand_sec %}selected{% endif %}"><a href="/control/brand" class="d-flex flex-fill">Brand</a></li>
               {% endif %}
               {% if perms.product.view_category or perms.product.add_category or perms.product.change_category or perms.product.delete_category %}
               <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category" class="d-flex flex-fill">Category</a></li>
@@ -296,7 +300,9 @@
             </a>
           </li>
           {% endif %}
-          {% comment %} <li class="text-center py-2 header">System</li> {% endcomment %}
+          {% if perms.auth or perms.settings %}
+          <li class="text-center py-2 header">System</li>
+          {% endif %}
           {% comment %} <li>
             <div class="menu">
               <i class="fa fa-users fa-left"></i>
@@ -325,6 +331,21 @@
             </ul>
           </li>
           {% endif %}
+          {% if perms.region or perms.setting.currency %}
+          <li>
+            <div class="menu {% if localization_sec %}selected active{% endif %}">
+              <i class="fas fa-globe fa-left"></i>
+              <span>Localization</span>
+              <span class="arrow"><i class="fa fa-angle-right"></i></span>
+            </div>
+            <ul class="submenu">
+              <li class="{% if area_sec %}selected{% endif %}"><a href="/control/area" class="d-flex flex-fill">Area</a></li>
+              {% if perms.setting.currency %}
+                <li class="{% if currency_sec %}selected{% endif %}"><a href="/control/currency" class="d-flex flex-fill">Currency</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          {% endif %}
           {% comment %} <li>
             <div class="menu">
               <i class="fa fa-globe fa-left"></i>
@@ -345,6 +366,7 @@
             </div>
             <ul class="submenu">
               <li class="{% if slider_list_sec or edit_slider_sec %}selected{% endif %}"><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
+              <li class="{% if banner_list_sec or edit_banner_sec %}selected{% endif %}"><a href="/control/banners" class="d-flex flex-fill">Banner</a></li>
               <li class="{% if sitefront_sec %}selected{% endif %}"><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
             </ul>
           </li>
@@ -357,7 +379,7 @@
           </li> {% endcomment %}
           {% if perms.setting %}
           <li>
-            <a href="/control/settings/">
+            <a href="/control/settings">
               <div class="menu setting {% if setting_sec %}selected active{% endif %}">
                 <i class="fa fa-cogs fa-left"></i>
                 <span>Settings</span>

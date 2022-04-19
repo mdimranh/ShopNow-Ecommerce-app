@@ -94,7 +94,11 @@
                     <td class="{{item.id}}">{{item.email}}</td>
                     <td>{% if item.is_superuser %}Admin{% elif not item.superuser and item.is_staff %}Staff{% else %}User{% endif %}</td>
                     <td>{{item.date_joined|date}}</td>
-                    <td>{% if item.profile_info.online %}<i class="far fa-dot-circle text-success me-2"></i>{% endif %}{{item.last_login|timesince}}{% if item.last_login %} ago{% else %}-{% endif %}</td>
+                    {% if item.is_authenticated %}
+                    <td><i class="far fa-dot-circle text-success me-2"></i>{{item.last_login|timesince}}{% if item.last_login %} ago{% else %}-{% endif %}</td>
+                    {% else %}
+                    <td><i class="far fa-dot-circle text-danger me-2"></i>{{item.last_logout|timesince}}{% if item.last_logout %} ago{% else %}-{% endif %}</td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
                 </tbody>

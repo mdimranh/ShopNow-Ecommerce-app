@@ -510,7 +510,7 @@ VirtualSelect.init({
 $("#add-category-select").on('change', function () {
   document.getElementById("overlay").style.display = "block";
   $.ajax({
-    url: "/control/productgroups/",
+    url: "/control/productgroups",
     type: "POST",
     data: { category_id: $(this).val(), },
     success: function (result) {
@@ -539,7 +539,7 @@ $("#add-category-select").on('change', function () {
 $("#add-group-select").on('change', function () {
   document.getElementById("overlay").style.display = "block";
   $.ajax({
-    url: "/control/productgroups/",
+    url: "/control/productgroups",
     type: "POST",
     data: { group_id: $(this).val(), },
     success: function (result) {
@@ -567,7 +567,7 @@ $("#edit-product-category-select").on('click', function () {
   $("#edit-product-category-select").on('change', function () {
     document.getElementById("overlay").style.display = "block";
     $.ajax({
-      url: "/control/productgroups/",
+      url: "/control/productgroups",
       type: "POST",
       data: { category_id: $(this).val(), },
       success: function (result) {
@@ -598,7 +598,7 @@ $("#edit-product-group-select").on('click', function () {
   $("#edit-product-group-select").on('change', function () {
     document.getElementById("overlay").style.display = "block";
     $.ajax({
-      url: "/control/productgroups/",
+      url: "/control/productgroups",
       type: "POST",
       data: { group_id: $(this).val(), },
       success: function (result) {
@@ -661,7 +661,86 @@ document.querySelectorAll("#removelink").forEach((element) => {
   })
 })
 
-// user section
+// product carousel
+
+$(".add-carousel-btn").click(function () {
+  $(".caro-item.selected").removeClass("selected")
+  $("#caro-name").val("")
+  document.getElementById("caro-category").reset()
+  if ($("#caro-group").val().length > 0) {
+    document.getElementById("caro-group").reset()
+  }
+  if ($("#caro-subcategory").val().length > 0) {
+    document.getElementById("caro-subcategory").reset()
+  }
+  $("#caro-enable").attr("checked", true)
+  $("#save-btn").text("Add Carousel")
+  $(".carousel-title").text("Add New Carousel")
+  $("#id").val('')
+})
+$(".caro-item").click(function () {
+  $(".caro-item.selected").removeClass("selected")
+  if (!$(this).hasClass("selecded")) {
+    $(this).addClass("selected")
+  }
+  $("#caro-name").val($(this).attr("name"))
+  document.getElementById("caro-category").setValue($(this).attr("category").split(","))
+  if ($(this).attr("group").length > 0) {
+    document.getElementById("caro-group").setValue($(this).attr("group").split(","))
+  }
+  else {
+    document.getElementById("caro-group").reset()
+  }
+  if ($(this).attr("subcat").length > 0) {
+    document.getElementById("caro-subcategory").setValue($(this).attr("subcat").split(","))
+  }
+  else {
+    document.getElementById("caro-subcategory").reset()
+  }
+  if ($(this).attr("status") == 'True') {
+    $("#caro-enable").attr("checked", true)
+  }
+  else {
+    $("#caro-enable").attr("checked", false)
+  }
+  $("#save-btn").text("Save")
+  $(".carousel-title").text($(this).attr("name"))
+  $("#id").val($(this).attr("id"))
+})
+
+$(".delete-carousel").on("click", function () {
+  document.getElementById("overlay").style.display = "block";
+  var action = 'delete'
+  $.ajax({
+    url: "/control/carousel/update",
+    type: "POST",
+    data: { carousel_id: $(this).parent().children(".caro-item").attr("id"), action: action },
+    success: function (result) {
+      document.getElementById("overlay").style.display = "none";
+      new PNotify({
+        title: 'Successfully deleted',
+        type: 'success',
+        text: `Selected carousel deleted successfully. You can now add carousel.`,
+        addclass: 'stack-bottom-right',
+        icon: true,
+        delay: 2500
+      });
+      if ($("div[id=" + result.id + "]").parent().children(".caro-item").hasClass("selected")) {
+        $("div[id=" + result.id + "]").parent().remove()
+        $("#edit-carousel-form").trigger("reset")
+      }
+      else {
+        $("div[id=" + result.id + "]").parent().remove()
+      }
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    error: function (e) {
+      console.error(JSON.stringify(e));
+    },
+  });
+})
 
 //! User list table
 
@@ -908,7 +987,7 @@ $(".pro-remove").click(function () {
 function deleteProduct(products) {
   document.getElementById("overlay").style.display = "block";
   $.ajax({
-    url: "/control/product/delete-product/",
+    url: "/control/product/delete-product",
     type: "POST",
     data: { product: $("#selected-product").val() },
     success: function (result) {
@@ -1110,10 +1189,23 @@ $(".menu-item").click(function () {
   document.getElementById("menu-style").setValue($(this).attr("style"))
   document.getElementById("menu-icon-select").setValue($(this).attr("icon"))
   document.getElementById("menu-category").setValue($(this).attr("category").split(","))
-  document.getElementById("menu-group").setValue($(this).attr("group").split(","))
-  document.getElementById("menu-subcategory").setValue($(this).attr("subcat").split(","))
+  if ($(this).attr("group").length > 0) {
+    document.getElementById("menu-group").setValue($(this).attr("group").split(","))
+  }
+  else {
+    document.getElementById("menu-group").reset()
+  }
+  if ($(this).attr("subcat").length > 0) {
+    document.getElementById("menu-subcategory").setValue($(this).attr("subcat").split(","))
+  }
+  else {
+    document.getElementById("menu-subcategory").reset()
+  }
   if ($(this).attr("status") == 'True') {
     $("#menu-enable").attr("checked", true)
+  }
+  else {
+    $("#menu-enable").attr("checked", false)
   }
   $("#save-btn").text("Save")
   $(".form-title").text($(this).attr("name"))

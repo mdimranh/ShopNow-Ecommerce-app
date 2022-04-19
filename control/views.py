@@ -91,7 +91,6 @@ def Dashboard(request):
 
 def Menu(request):
 	if request.method == 'POST':
-		# print("id-------->", len(request.POST['id']))
 		if len(request.POST['id']) == 0:
 			enable = True if request.POST.get("menu-enable", False) == 'on' else False
 			menu = Menus(

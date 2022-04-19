@@ -22,19 +22,26 @@ class CouponView(View):
         if len(request.POST['min-spend']) > 0:
             min_spend = request.POST['min-spend']
         else:
-            min_spend = 0
+            min_spend = None
         if len(request.POST['max-spend']) > 0:
             max_spend = request.POST['max-spend']
         else:
-            max_spend = 0
+            max_spend = None
+        try:
+            if min_spend > max_spend:
+                temp = min_spend
+                min_spend = max_spend
+                max_spend = temp
+        except:
+            pass
         if len(request.POST['limit-per-coupon']) > 0:
             limit_per_coupon = request.POST['limit-per-coupon']
         else:
-            limit_per_coupon = 0
+            limit_per_coupon = None
         if len(request.POST['limit-per-customer']) > 0:
             limit_per_customer = request.POST['limit-per-customer']
         else:
-            limit_per_customer = 0
+            limit_per_customer = None
         cpn = Coupon(
             name=request.POST['name'],
             code=request.POST['code'],

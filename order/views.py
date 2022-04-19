@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 
 from .models import ShopCart, Coupon, Wishlist
+from setting.models import Currency
 from product.models import Product
 
 from product.models import Category
@@ -235,78 +236,69 @@ class AddToCart(View):
                 msg = "Product successfully added to cart!"
                 return JsonResponse({'item':item, 'cost':total_cost, 'update_price': price,  'subtotal': subtotal, 'msg': msg, 'cart': cart_serialize})
         else:
-            scart, create = ShopCart.objects.get_or_create(user = request.user, on_order = False)
-            pro_id = request.POST['id']
+            cart_type = request.COOKIES['cart']
+            if cart_type == 'ucart':
+                scart = ShopCart.objects.get(user = request.user, on_order = False)
+            else:
+                scart = ShopCart.objects.get(device = request.COOKIES['device'], on_order = False)
+            pro_id = int(request.POST['id'])
             if Product.objects.filter(id = pro_id).exists():
-                pro_list = []
-                for cart in scart.carts.all():
-                    pro_list.append(cart.product.id)
+                pro_list = list(scart.carts.values_list('product__id', flat=True))
                 if pro_id in pro_list:
                     return JsonResponse({'msg': "Product already exist"})
                 pro = Product.objects.get(id = pro_id)
-                cart = Cart(
-                    product= pro,
-                    quantity = request.POST['quantity'],
-                    options = request.POST.getlist('options[]')
-                )
-                cart.save()
-                scart.carts.add(cart)
-                scart.save()
-                try:
-                    Wishlist.objects.filter(product = pro, user = request.user).first().delete()
-                except:
-                    pass
-                scart = ShopCart.objects.get(user = request.user, on_order=False)
-                total_cost = 0
-                cart_serialize = []
-                cs={}
-                for cart in scart.carts.all():
-                    price = cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)
-                    cost = price*cart.quantity
-                    total_cost += cost
-                    subtotal = total_cost
-                    cs = {
-                        "id": cart.id,
-                        "category": cart.product.category.name,
-                        "title": cart.product.title,
-                        "image": cart.product.image,
-                        "main_price": str(cart.product.main_price),
-                        "price": str(cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)),
-                        "discount": str(cart.product.discount),
-                        "amount": cart.quantity
+                if pro.amount < 0:
+                    return JsonResponse({'msg': "Out of stock"})
+                else:
+                    cart = Cart(
+                        product= pro,
+                        quantity = request.POST['quantity'],
+                        options = request.POST.getlist('options[]')
+                    )
+                    cart.save()
+                    scart.carts.add(cart)
+                    scart.save()
+                    try:
+                        Wishlist.objects.filter(product = pro, user = request.user).first().delete()
+                    except:
+                        pass
+                    total_cost = 0
+                    cart_serialize = []
+                    cs={}
+                    for cart in scart.carts.all():
+                        price = cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)
+                        cost = price*cart.quantity
+                        total_cost += cost
+                        subtotal = total_cost
+                        cs = {
+                            "id": cart.id,
+                            "category": cart.product.category.name,
+                            "title": cart.product.title,
+                            "image": cart.product.image,
+                            "main_price": str(cart.product.main_price),
+                            "price": str(cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)),
+                            "discount": str(cart.product.discount),
+                            "amount": cart.quantity
+                        }
+                        cart_serialize.append(cs)
+                    if scart.coupon.all().count() > 0:
+                        cpn_dis = 0
+                        for cpn in scart.coupon.all():
+                            cpn_dis += cpn.value if cpn.discount_type.lower() == 'fixed' else total_cost * cpn.value / 100
+                        total_cost -= cpn_dis
+                    item = scart.carts.all().count()
+                    msg = "Product successfully added to cart!"
+                    context = {
+                        'item':item,
+                        'cost':total_cost,
+                        'subtotal': subtotal,
+                        'msg': msg,
+                        'product': pro,
+                        'cart': cart_serialize
                     }
-                    cart_serialize.append(cs)
-                if scart.coupon.all().count() > 0:
-                    cpn_dis = 0
-                    for cpn in scart.coupon.all():
-                        cpn_dis += cpn.value if cpn.discount_type.lower() == 'fixed' else total_cost * cpn.value / 100
-                    total_cost -= cpn_dis
-                item = scart.carts.all().count()
-                msg = "Product successfully added to cart!"
-                context = {
-                    'item':item,
-                    'cost':total_cost,
-                    'subtotal': subtotal,
-                    'msg': msg,
-                    'product': pro,
-                    'cart': cart_serialize
-                }
-                return JsonResponse(context)
-
-# import json
-# @csrf_exempt
-# def GetCart(request):
-#     if request.method == 'POST':    
-#         card = ShopCart.objects.filter(user = request.user)
-#         card_list = []
-#         for p in card:
-#             if p.product.main_price > 0:
-#                 price =  float(p.product.main_price - (p.product.main_price * p.product.discount / 100))
-#             else:
-#                 price = 0
-#             card_list.append({"id": p.product.id, "name": p.product.title, "image": p.product.image.url, "price": price})
-#         shop_cart = json.dumps(card_list)
-#         return JsonResponse(shop_cart, safe=False)
+                    return JsonResponse(context)
+            else:
+                return JsonResponse({'msg': "Product is not exist."})
 
 def CartView(request):
     if request.method == 'POST':
@@ -355,6 +347,7 @@ def CartDelete(request):
     getcart.delete()
     scart = ShopCart.objects.get(user = request.user, on_order=False)
     total_cost = 0
+    subtotal = 0
     cart_serialize = []
     cs={}
     for cart in scart.carts.all():
@@ -394,23 +387,38 @@ def Checkout(request):
         if 'coupon-code' in request.POST:
             if Coupon.objects.filter(code = request.POST['coupon-code']).exists():
                 cpn = Coupon.objects.get(code = request.POST['coupon-code'])
-                scart = ShopCart.objects.get(user = request.user, on_order=False)
+                if request.COOKIES['cart'] == 'ucart':
+                    scart = ShopCart.objects.get(user = request.user, on_order=False)
+                else:
+                    scart = ShopCart.objects.get(device = request.COOKIES['device'], on_order=False)
                 cost = 0
                 total_cost = 0
                 for cart in scart.carts.all():
                     price = cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)
                     cost = price*cart.quantity
                     total_cost += cost
+                if scart.coupon.all().count() > 0:
+                    for coupon in cart.coupon.all():
+                        if coupon.discount_type == 'Percent':
+                            total_cost_with_coupon = total_cost - total_cost*coupon.value/100
+                        else:
+                            total_cost_with_coupon = total_cost - coupon.value
+                    total_cost = total_cost_with_coupon
+                    
                 cpn_used = ShopCart.objects.filter(coupon=cpn).count()
-                my_used = ShopCart.objects.filter(user = request.user, coupon = cpn).count()
-                if cpn.limit_per_coupon != 0 and cpn_used >= cpn.limit_per_coupon:
+                currency = Currency.objects.get(code = request.COOKIES['mycurrency'])
+                if request.COOKIES['cart'] == 'ucart':
+                    my_used = ShopCart.objects.filter(user = request.user, coupon = cpn).count()
+                else:
+                    my_used = ShopCart.objects.filter(device = request.COOKIES['device'], coupon = cpn).count()
+                if cpn.limit_per_coupon != None and cpn_used >= cpn.limit_per_coupon:
                     messages.error(request, 'This coupon have used maximum number of times..', extra_tags='cpn-error')
-                elif cpn.limit_per_customer != 0 and my_used >= cpn.limit_per_customer:
+                elif cpn.limit_per_customer != None and my_used >= cpn.limit_per_customer:
                     messages.error(request, 'You have used this coupon maximum number of times.', extra_tags='cpn-error')
-                elif cpn.max_spend != 0 and total_cost >= cpn.max_spend:
-                    messages.error(request, f'This coupon is valid for maximum ৳{cpn.max_spend}.', extra_tags='cpn-error')
-                elif total_cost <= cpn.min_spend:
-                    messages.error(request, f'This coupon is valid for minimum ৳{cpn.max_spend}.', extra_tags='cpn-error')
+                elif cpn.max_spend != None and total_cost >= cpn.max_spend:
+                    messages.error(request, f'This coupon is valid for maximum {currency.symbol_native}{cpn.max_spend*currency.rate}.', extra_tags='cpn-error')
+                elif cpn.min_spend != None and total_cost <= cpn.min_spend:
+                    messages.error(request, f'This coupon is valid for minimum {currency.symbol_native}{cpn.max_spend*currency.rate}.', extra_tags='cpn-error')
                 else:
                     scart.coupon.add(cpn)
                     return redirect(request.path_info)

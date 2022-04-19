@@ -9,6 +9,9 @@ import json
 from solo.models import SingletonModel
 from fontawesome_5.fields import IconField
 from django.contrib.postgres.fields import ArrayField
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 	
 
 BANNER_TYPE = (
@@ -245,6 +248,7 @@ class ProductCarousel(models.Model):
 	categories = models.ManyToManyField(Category, blank=True)
 	groups = models.ManyToManyField(Group, blank=True)
 	subcategorys = models.ManyToManyField(Subcategory, blank=True)
+	position = models.IntegerField(blank=True, null=True)
 	enable = models.BooleanField(default=True)
 
 	def __str__(self):
@@ -280,6 +284,35 @@ class ProductCarousel(models.Model):
 				prod.append(pro)
 		return len(prod)
 
+	def categories_id(self):
+		ids = ''
+		for item in self.categories.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids
+
+	def groups_id(self):
+		ids = ''
+		for item in self.groups.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids
+
+	def subcats_id(self):
+		ids = ''
+		for item in self.subcategorys.all():
+			if ids == '':
+				ids+=str(item.id)
+			else:
+				ids+=','
+				ids+=str(item.id)
+		return ids
 
 class SiteConfiguration(SingletonModel):
 	name = models.CharField(max_length=255, default='Buy Now')

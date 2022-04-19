@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views import View
 from .models import Profile, AddressBook
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
@@ -168,10 +168,12 @@ def Account(request):
 
 			if user is not None:
 				auth.login(request, user)
-				pro, create = Profile.objects.get_or_create(user = user)
-				pro.online = True
-				pro.save()
-				return redirect('profile')
+				response = HttpResponseRedirect('/profile')
+				ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
+				gcart, create = ShopCart.objects.get_or_create(device=request.COOKIES['device'], on_order=False)
+				set_cart = 'ucart' if ucart.carts.all().count() > gcart.carts.all().count() else 'gcart'
+				response.set_cookie('cart', set_cart)
+				return response
 			else:
 				messages.error(request, "User name or password don't match!!")
 				return redirect(request.path_info)
@@ -294,12 +296,8 @@ def ProfileView(request):
 	return render(request, 'account/profile.html', context)
 
 def Logout(request):
-	user = request.user
-	pro, create = Profile.objects.get_or_create(user = user)
-	pro.online = False
-	pro.save()
 	auth.logout(request)
-	return redirect(request.path_info)
+	return redirect('/')
 
 import json
 # def GetCity(request):
@@ -331,3 +329,22 @@ def GetArea(request):
 	for area in City.objects.get(id = request.POST['id']).area.all():
 		area_list.append((area.name, area.id))
 	return JsonResponse(data = area_list, safe=False)
+
+class MergeCart(View):
+	def post(self, request):
+		from_cart = request.POST['from']
+		if from_cart == 'gcart':
+			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
+			ucart = ShopCart.objects.get(user = request.user, on_order=False)
+			for cart in gcart.carts.all():
+				if cart not in ucart.carts.all():
+					ucart.carts.add(cart)
+			gcart.carts.all().delete()
+		else:
+			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
+			ucart = ShopCart.objects.get(user = request.user, on_order=False)
+			for cart in ucart.carts.all():
+				if cart not in gcart.carts.all():
+					gcart.carts.add(cart)
+			ucart.carts.all().delete()
+		return JsonResponse('success', safe=False)

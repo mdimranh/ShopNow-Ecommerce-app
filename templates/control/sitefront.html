@@ -381,8 +381,37 @@
                       <div class="tab-pane fade show active" id="nav-links" role="tabpanel" aria-labelledby="nav-links-tab">
                         <form method="post" class="needs-validation" id="links" novalidate>
                           {% csrf_token %}
+                          <input type="hidden" name="useful-link">
+                          {% if useful_links.links.all|length > 0 %}
+                          {% for links in useful_links.links.all %}
                           <div class="row mb-3">
-                            <input type="hidden" name="useful-link">
+                            <div class="col-sm-4">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="title"
+                                placeholder="Title"
+                                required
+                                value = "{{links.name}}"
+                              />
+                              <div class="invalid-feedback">Please enter title</div>
+                            </div>
+                            <div class="col-sm-7">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="link"
+                                placeholder="Link"
+                                required
+                                value = "{{links.link}}"
+                              />
+                              <div class="invalid-feedback">Please enter link</div>
+                            </div>
+                            <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
+                          </div>
+                          {% endfor %}
+                          {% else %}
+                          <div class="row mb-3">
                             <div class="col-sm-4">
                               <input
                                 type="text"
@@ -405,6 +434,7 @@
                             </div>
                             <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
                           </div>
+                          {% endif %}
                           <div id="new-link" class="d-flex flex-column"></div>
                           <div class="btn mt-1 add-link-btn">Add Link</div>
                           <div class="row mb-3 mt-3">
@@ -430,8 +460,36 @@
                       <div class="tab-pane fade" id="nav-service" role="tabpanel" aria-labelledby="nav-service-tab">
                         <form method="post" class="needs-validation" id="links" novalidate>
                           {% csrf_token %}
+                          {% if service_links.links.all|length > 0 %}
+                          {% for links in service_links.links.all %}
                           <div class="row mb-3">
-                            <input type="hidden" name="service-link">
+                            <div class="col-sm-4">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="title"
+                                placeholder="Title"
+                                required
+                                value = "{{links.name}}"
+                              />
+                              <div class="invalid-feedback">Please enter title</div>
+                            </div>
+                            <div class="col-sm-7">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="link"
+                                placeholder="Link"
+                                required
+                                value = "{{links.link}}"
+                              />
+                              <div class="invalid-feedback">Please enter link</div>
+                            </div>
+                            <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
+                          </div>
+                          {% endfor %}
+                          {% else %}
+                          <div class="row mb-3">
                             <div class="col-sm-4">
                               <input
                                 type="text"
@@ -454,6 +512,7 @@
                             </div>
                             <i id="removelink" class="fas fa-trash col-sm-1 mt-2 d-flex flex-fill justify-content-end"></i>
                           </div>
+                          {% endif %}
                           <div id="new-link" class="d-flex flex-column"></div>
                           <div class="btn mt-1 add-link-btn">Add Link</div>
                           <div class="row mb-3 mt-3">
@@ -477,7 +536,7 @@
                         </form>
                       </div>
                     </div>
-                  </form>
+                  </div>
                   <form id="feature" class="product-form needs-validation d-none" method="post" novalidate>
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Feature</h6>
@@ -788,93 +847,154 @@
                       </div>
                     </div>
                   </form>
-                  <form id="pro-caro" class="product-form needs-validation d-none" id="social-link-form" method="post">
+                  <div id="pro-caro" class="product-form needs-validation d-none" method="post">
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Product Carousel</h6>
                     <hr />
                     <br />
-                    <div class="row mb-3 facebook-login-field">
-                      <label
-                        for="facebook"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Facebook</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="facebook"
-                          name="facebook-link"
-                          value="{{site_config.facebook}}"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="twitter"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Twitter</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="twitter"
-                          name="twitter"
-                          value="{{site_config.twitter}}"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="instagram"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Instagram</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="instagram"
-                          name="instagram"
-                          value="{{site_config.instagram}}"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="youtube"
-                        class="col-xl-2 col-form-label d-none d-xl-block"
-                        >Youtube</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="youtube"
-                          name="youtube"
-                          value="{{site_config.youtube}}"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col-xl-10 offset-lg-2">
-                        <button
-                          id="save-btn"
-                          type="submit"
-                          class="btn btn-primary py-1 px-3"
-                        >
-                          Save
-                        </button>
-                        <div
-                          id="cancel-btn"
-                          class="btn btn-secondary py-1 px-3"
-                        >
-                          Cancel
+                    <div class="procaro-list">
+                      <div class="container-fluid mt-4 mx-0 px-0">
+                        <div class="row">
+                          <div class="col-lg-3 col-sm-12">
+                            <div class="card-block">
+                              <button class="btn btn-add add-carousel-btn">
+                                <i class="fa fa-plus px-2 m-0"></i>Add Carousel
+                              </button>
+                              <div class="wrapper mt-2">
+                                {% for pro_caro in pro_caro %}
+                                <div class="d-flex flex-column justify-content-center carous">
+                                  <div class="my-2 py-2 caro-item" id="{{pro_caro.id}}" name="{{pro_caro.name}}" category="{{pro_caro.categories_id}}" group="{{pro_caro.groups_id}}" subcat="{{pro_caro.subcats_id}}" status="{{pro_caro.enable}}">
+                                    <div class="d-flex align-items-center ms-4">
+                                      <h6 class="my-0 p-0 me-5">
+                                        {{pro_caro.name}}
+                                      </h6>
+                                    </div>
+                                  </div>
+                                  <i class="fas fa-trash delete-carousel text-danger"></i>
+                                  {% if pro_caro.enable %}
+                                    <i class="fas fa-list-ol drag enable text-success"></i>
+                                  {% else %}
+                                    <i class="fas fa-list-ol drag enable text-danger"></i>
+                                  {% endif %}
+                                </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-9 col-sm-12">
+                            <form class="mt-2 card" id="edit-carousel-form" method="post">
+                              <h5 class="carousel-title text-primary">Add New Carousel</h5>
+                              <hr>
+                              {% csrf_token %}
+                              <input type="hidden" name="id" id="id">
+                              <div id="caro-general">
+                                <div class="row mb-3">
+                                  <label
+                                    for="caro-name"
+                                    class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
+                                    >Name*</label
+                                  >
+                                  <div class="col-lg-10">
+                                    <input
+                                      type="text"
+                                      class="form-control"
+                                      name="caro-name"
+                                      id="caro-name"
+                                      placeholder="Name"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label
+                                    for="caro-category"
+                                    class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
+                                    >Categories</label
+                                  >
+                                  <div class="col-lg-10">
+                                    <select name="caro-category" id="caro-category" multiple required>
+                                      {% for category in categorys %}
+                                        <option value="{{category.id}}">{{category.name}}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label
+                                    for="caro-group"
+                                    class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
+                                    >Groups</label
+                                  >
+                                  <div class="col-lg-10">
+                                    <select name="caro-group" id="caro-group" multiple>
+                                      {% for group in groups %}
+                                        <option value="{{group.id}}">{{group.name}}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label
+                                    for="caro-subcategory"
+                                    class="col-lg-2 col-form-label ms-1 ms-lg-0 fw-bold"
+                                    >Subcategories</label
+                                  >
+                                  <div class="col-lg-10">
+                                    <select name="caro-subcategory" id="caro-subcategory" multiple>
+                                      {% for subcategory in subcategories %}
+                                        <option value="{{subcategory.id}}">{{subcategory.name}}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-1">
+                                  <label
+                                    for="caro-enable"
+                                    class="col-2 col-form-label"
+                                    >Status</label
+                                  >
+                                  <div class="col-lg-10 mt-2">
+                                    <div class="checkbox-fade fade-in-primary">
+                                      <label>
+                                        <input id="caro-enable" type="checkbox" name="caro-enable"/>
+                                        <span class="cr">
+                                          <i
+                                            class="
+                                              cr-icon
+                                              icofont icofont-ui-check
+                                              txt-primary
+                                            "
+                                          ></i>
+                                        </span>
+                                        <span>Enable this carousel</span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3 mt-4">
+                                  <div class="col-sm-10 offset-lg-2">
+                                    <button
+                                      id="save-btn"
+                                      type="submit"
+                                      class="btn btn-primary py-1 px-3"
+                                    >
+                                      Add Menu
+                                    </button>
+                                    {% comment %} <button
+                                      id="cancel-btn"
+                                      type="submit"
+                                      class="btn btn-secondary py-1 px-3"
+                                    >
+                                      Cancel
+                                    </button> {% endcomment %}
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </form>
+                  </div>
               </div>
             </div>
           </div>
@@ -910,4 +1030,40 @@
     <script src="{% static 'control/fontawesome.json' %}"></script>
     <script src="{% static 'control/font5.json' %}"></script>
     <script src="{% static 'control/js/icons.js' %}"></script>
+    <script src="{% static 'control/js/Sortable.js' %}"></script>
+    <script>
+      const dragArea = document.querySelector(".wrapper");
+      var sortable = new Sortable(dragArea, {
+        animation: 350,
+        handle: '.drag',
+        onSort: function(){
+          elm = $(".caro-item")
+          var ids = []
+          for(i=0; i < elm.length; i++){
+            ids.push(elm[i].getAttribute("id"))
+          }
+          ids = String(ids)
+          $.ajax({
+            url:"/control/carousel/update",
+            type:"POST",
+            data:{carousel_id: ids, action: "update"},
+            success: function(result) {
+              new PNotify({
+                title: 'Successfully updated',
+                type: 'success',
+                addclass: 'stack-bottom-right',
+                icon: true,
+                delay: 2500
+              });
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            error: function(e){
+                console.error(JSON.stringify(e));
+            },
+          });
+        }
+      })
+    </script>
     {% endblock script %}

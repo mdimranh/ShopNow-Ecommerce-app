@@ -72,14 +72,18 @@ class Cart(models.Model):
 
 class ShopCart(models.Model):
     carts = models.ManyToManyField(Cart)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_shopcart")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True, related_name="user_shopcart")
+    device = models.TextField(blank=True, null=True)
     coupon = models.ManyToManyField(Coupon)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     order_id = models.CharField(max_length=500, blank=True, null=True)
     on_order = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.user.first_name+''+self.user.last_name
+    def name(self):
+        if self.user:
+            return self.user.first_name+''+self.user.last_name
+        else:
+            return self.device
 
     def coupons(self):
         return self.coupon.all().count()

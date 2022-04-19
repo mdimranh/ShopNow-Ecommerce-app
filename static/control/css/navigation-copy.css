@@ -745,7 +745,8 @@ textarea:focus {
   }
 }
 
-.menu-item {
+.menu-item,
+.caro-item {
   border: 1px solid rgba(128, 128, 128, 0.312);
   border-radius: 5px;
   padding-left: 10px;
@@ -753,28 +754,36 @@ textarea:focus {
   cursor: pointer;
 }
 
-.menu-item.selected {
+.menu-item.selected,
+.caro-item.selected {
   border: 1px solid rgba(63, 83, 132, 0.4);
   background: #2e4eee23;
 }
 
-.menus {
+.menus,
+.carous {
   position: relative;
 }
 
-.menus .fa-trash {
+.menus .fa-trash,
+.carous .fa-trash {
   position: absolute;
   right: 10px;
   cursor: pointer;
 }
 
-.menus .enable {
+.menus .enable,
+.carous .enable {
   position: absolute;
   left: 10px;
 }
 
 .fa-times {
   cursor: pointer;
+}
+
+.drag{
+  cursor: move;
 }
 
 .slide-thumbnail {

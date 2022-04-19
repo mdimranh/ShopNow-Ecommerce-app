@@ -26,30 +26,30 @@
             	<div class="cart">
 	                <div class="container">
 	                	<div class="row">
-	                		<div class="col-lg-9">
-	                			<table class="table table-cart table-mobile">
-									<div class="message-sec">
-										{% if messages %}
-											{% for message in messages %}
-												{% if message.extra_tags == 'quantity-update-fail' %}
-												<p class="message {{ message.tags }}"><i class="fas fa-info-circle"></i>{{message}}</p>
-												{% endif %}
-											{% endfor %}
-										{% endif %}
-									</div>
-									<thead>
-										<tr>
-											<th>Product</th>
-											<th>Price</th>
-											<th>Quantity</th>
-											<th>Total</th>
-											<th></th>
-										</tr>
-									</thead>
+							{% if mycart.cart.carts.all|length > 0 %}
+								<div class="col-lg-9">
+									<table class="table table-cart table-mobile">
+										<div class="message-sec">
+											{% if messages %}
+												{% for message in messages %}
+													{% if message.extra_tags == 'quantity-update-fail' %}
+													<p class="message {{ message.tags }}"><i class="fas fa-info-circle"></i>{{message}}</p>
+													{% endif %}
+												{% endfor %}
+											{% endif %}
+										</div>
+										<thead>
+											<tr>
+												<th>Product</th>
+												<th>Price</th>
+												<th>Quantity</th>
+												<th>Total</th>
+												<th></th>
+											</tr>
+										</thead>
 
-									<tbody id="cart-product">
-                                        {% for cart in shopcart.carts.all %}
-											{% if not cart.on_order %}
+										<tbody id="cart-product">
+											{% for cart in mycart.cart.carts.all %}
 												<tr id="cart{{cart.id}}">
 													<td class="product-col">
 														<div class="product">
@@ -58,7 +58,6 @@
 																	<img src="{{cart.product.image}}" alt="Product image">
 																</a>
 															</figure>
-
 															<h3 class="product-title">
 																<a href="#">{{cart.product.title}}</a>
 															</h3><!-- End .product-title -->
@@ -76,81 +75,66 @@
 													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.product.price|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 													<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
 												</tr>
-											{% endif %}
-                                        {% endfor %}
-									</tbody>
-								</table><!-- End .table table-wishlist -->
-	                		</div><!-- End .col-lg-9 -->
-	                		<aside class="col-lg-3">
-	                			<div class="summary summary-cart">
-	                				<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+											{% endfor %}
+										</tbody>
+									</table><!-- End .table table-wishlist -->
+								</div><!-- End .col-lg-9 -->
+								<aside class="col-lg-3">
+									<div class="summary summary-cart">
+										<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
 
-	                				<table class="table table-summary">
+										<table class="table table-summary">
 
-		                					<tbody>
-		                						<tr>
-		                							<td class="py-3 bolden">Subtotal:</td>
-		                							<td>{{mycurrency.1}}{{subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{item}} item{% if shopcart|length > 1 %}s{% endif %})</td>
-		                						</tr><!-- End .summary-subtotal -->
-		                						{% if shopcart.coupon.all|length > 0 %}
+												<tbody>
 													<tr>
-														<td class="py-1 bolden">Coupon:</td>
+														<td class="py-3 bolden">Subtotal:</td>
+														<td>{{mycurrency.1}}{{mycart.subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{mycart.cart.carts.all|length}} item{% if mycart.cart|length > 1 %}s{% endif %})</td>
+													</tr><!-- End .summary-subtotal -->
+													{% if mycart.cart.coupon.all|length > 0 %}
+														<tr>
+															<td class="py-1 bolden">Coupon:</td>
+															<td></td>
+														</tr>
+														{% for coupon in mycart.cart.coupon.all %}
+															<tr>
+																<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
+																{% if coupon.discount_type == 'Fixed' %}
+																	<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+																{% else %}
+																	<td>-{{coupon.value}}%</td>
+																{% endif %}
+															</tr><!-- End .summary-subtotal -->
+														{% endfor %}
+													{% endif %}
+													{% if mycart.ship %}
+													<tr>
+														<td class="pt-1 bolden">Shiping Method</td>
 														<td></td>
 													</tr>
-													{% for coupon in shopcart.coupon.all %}
-														<tr>
-															<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
-															{% if coupon.discount_type == 'Fixed' %}
-																<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
-															{% else %}
-																<td>-{{coupon.value}}%</td>
-															{% endif %}
-														</tr><!-- End .summary-subtotal -->
-													{% endfor %}
-												{% endif %}
-												<tr>
-		                							<td class="pt-1 bolden">Shiping Method</td>
-		                							<td></td>
-		                						</tr>
-												{% if shopcart.free_ship %}
 													<tr>
-		                								<td><i class="fas fa-dot-circle px-3 text-primary small"></i>Free Shiping:</td>
-		                								<td>{{mycurrency.1}}0</td>
-		                							</tr>
+														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{mycart.ship_name}}:</td>
+														<td>{{mycurrency.1}}{{mycart.ship_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+													</tr>
 													<tr>
 														<td class="py-3 bolden h6">Total:</td>
-														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
+														<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
 													</tr>
-												{% else %}
-													<tr>
-														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{% if cost_with_coupon >= free_shipping.fee %}{{free_shipping.name}}{% else %}{{local_shipping.name}}{% endif %}:</td>
-														<td>{% if cost_with_coupon >= free_shipping.fee %}{{mycurrency.1}}0{% else %}{{mycurrency.1}}{{local_shipping.fee|mul:mycurrency.0|floatformat:2|intcomma}}{% endif %}</td>
-													</tr>
-													<tr>
-														<td class="py-3 bolden">Total:</td>
-														{% if cost <= free_shipping.fee %}
-														<td id="total-cost">{{mycurrency.1}}{{cost|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
-														{% else %}
-														<td id="total-cost">{{mycurrency.1}}{{cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
-														{% endif %}
-													</tr><!-- End .summary-total -->
-												{% endif %}
-												<p class="d-none" id="usd"></p>
-												<p class="d-none" id="rate"></p>
-												<input type="hidden" name="rate" id="rate-input">
-												{% if cost_with_coupon <= free_shipping.fee and not shopcart.free_ship %}
-		                							<td id="total-cost-bdt"  class="d-none">{{mycurrency.1}}{{cost_with_coupon|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
-												{% else %}
-		                							<td id="total-cost-bdt"  class="d-none">{{mycurrency.1}}{{cost_with_coupon|mul:mycurrency.0|floatformat:2|intcomma}}</td>
-												{% endif %}
-		                					</tbody>
-		                				</table><!-- End .table table-summary -->
+													{% endif %}
+													
+													<p class="d-none" id="usd"></p>
+													<p class="d-none" id="rate"></p>
+													<input type="hidden" name="rate" id="rate-input">
+												</tbody>
+											</table><!-- End .table table-summary -->
 
-	                				<a href="/cart/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
-	                			</div><!-- End .summary -->
+										<a href="/cart/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+									</div><!-- End .summary -->
 
-		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
-	                		</aside><!-- End .col-lg-3 -->
+									<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+								</aside><!-- End .col-lg-3 -->
+							{% else %}
+								<div class="d-flex flex-fill flex-center"><h5 class="text-center">Cart is empty</h5></div>
+							{% endif %}
 	                	</div><!-- End .row -->
 	                </div><!-- End .container -->
                 </div><!-- End .cart -->

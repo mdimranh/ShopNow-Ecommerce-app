@@ -16558,3 +16558,7 @@ i.product-color.select{
 .error{
   color: red;
 }
+
+.btn{
+  cursor: pointer;
+}

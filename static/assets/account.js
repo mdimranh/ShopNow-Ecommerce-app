@@ -248,3 +248,19 @@ $('#confirm-new-password').keyup(function () {
 //         },
 //     });
 // }
+
+
+$(".merge-cart").click(function () {
+    document.getElementById("overlay").style.display = "block";
+    $.ajax({
+        url: '/mergecart',
+        data: { from: $(this).attr('for') },
+        type: 'POST',
+        success: function (resp) {
+            window.location.reload()
+        },
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+    })
+})
