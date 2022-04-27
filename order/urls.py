@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AddToCart, CartView, CartDelete, Checkout, WishList, AddtoWishlist, WishItemDelete, PlaceOrder
+from .views import *
 
 urlpatterns = [
     # path('ajax/addtocart', AddtoCart, name='addtocart'),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('cart/checkout', Checkout, name='checkout'),
     path('ajax/cartdelete', CartDelete, name='cartdelete'),
     path('place-order', PlaceOrder, name='placeorder'),
+    path('invoice/<int:id>', Invoice.as_view(), name='invoice'),
+    path('generatepdf/<int:id>', GeneratePdf.as_view(), name='generatepdf'),
 ]

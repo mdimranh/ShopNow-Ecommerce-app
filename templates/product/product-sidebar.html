@@ -18,25 +18,6 @@
 
 {% block custom %}
 <main class="main mt-5">
-    {% comment %} <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-        <div class="container d-flex align-items-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Products</a></li>
-                <li class="breadcrumb-item active" aria-current="page">With Sidebar</li>
-            </ol>
-            <nav class="product-pager ml-auto" aria-label="Product">
-                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                    <i class="icon-angle-left"></i>
-                    <span>Prev</span>
-                </a>
-                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                    <span>Next</span>
-                    <i class="icon-angle-right"></i>
-                </a>
-            </nav><!-- End .pager-nav -->
-        </div><!-- End .container -->
-    </nav><!-- End .breadcrumb-nav --> {% endcomment %}
     <div class="page-content">
         <div class="container">
             <div class="row">
@@ -109,7 +90,7 @@
                                         <div class="select-custom">
                                             <select name="option" id="option" class="form-control" op-name="{{option.name}}">
                                                 {% for option in option.option.all %}
-                                                    <option value="{{option.price|mul:mycurrency.0|floatformat:2}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mul:mycurrency.0|floatformat:2|intcomma}}</option>
+                                                    <option opid="{{option.id}}" value="{{option.price|mul:mycurrency.0|floatformat:2}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mul:mycurrency.0|floatformat:2|intcomma}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div><!-- End .select-custom -->

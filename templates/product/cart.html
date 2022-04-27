@@ -40,8 +40,9 @@
 										</div>
 										<thead>
 											<tr>
-												<th>Product</th>
-												<th>Price</th>
+												<th>Image</th>
+												<th>Product Name</th>
+												<th>Unit Price</th>
 												<th>Quantity</th>
 												<th>Total</th>
 												<th></th>
@@ -58,12 +59,27 @@
 																	<img src="{{cart.product.image}}" alt="Product image">
 																</a>
 															</figure>
-															<h3 class="product-title">
-																<a href="#">{{cart.product.title}}</a>
-															</h3><!-- End .product-title -->
 														</div><!-- End .product -->
 													</td>
-													<td class="price-col{{cart.id}}" price="{{cart.product.price}}">{{mycurrency.1}}{{cart.product.price|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+													<td>
+														<h3 class="product-title">
+															<a href="/products/{{cart.product.id}}" class="text-nowrap">{{cart.product.title}}</a>
+															<div class="d-flex flex-column mt-1">
+																{% if cart.color %}
+																	<span class="text-nowrap small">Color: {{cart.color}}</span>
+																{% endif %}
+																{% if cart.size %}
+																	<span class="text-nowrap small">Size: {{cart.size}}</span>
+																{% endif %}
+																{% for option in cart.options.all %}
+																	<span class="text-nowrap small">{{option.parent_name}}: {{option.label}}</span>
+																{% endfor %}
+															</div>
+														</h3><!-- End .product-title -->
+													</td>
+													<td class="price-col{{cart.id}}">
+														{{mycurrency.1}}{{cart.total|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}
+													</td>
 													<td class="quantity-col">
 														<form class="cart-product-quantity" method="post">
 															{% csrf_token %}
@@ -72,7 +88,7 @@
 															<input type="number" name="quantity" id="cart-quantity" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0">
 														</form><!-- End .cart-product-quantity -->
 													</td>
-													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.product.price|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.total|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 													<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
 												</tr>
 											{% endfor %}
@@ -115,11 +131,11 @@
 														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{mycart.ship_name}}:</td>
 														<td>{{mycurrency.1}}{{mycart.ship_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
 													</tr>
+													{% endif %}
 													<tr>
 														<td class="py-3 bolden h6">Total:</td>
 														<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
 													</tr>
-													{% endif %}
 													
 													<p class="d-none" id="usd"></p>
 													<p class="d-none" id="rate"></p>

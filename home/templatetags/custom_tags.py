@@ -1,38 +1,44 @@
 from django import template
 from django.db.models import Q
-from order.models import ShopCart, ShippingMethod
+from order.models import ShopCart, ShippingMethod, Wishlist
 from product.models import Category, Subcategory, Group
 from setting.models import Menus, Currency, Settings, FooterLinks
+
+from django.conf import settings
+import os
+
+import base64
+from django.contrib.staticfiles.finders import find as find_static_file
+
+from order.cartdetails import cartDetails
 
 from django.contrib.auth.admin import User
 
 register = template.Library()
 
 @register.simple_tag(takes_context=True)
-def shopcart(context):
+def wishlist(context):
 	request = context.get("request")
 	device = request.COOKIES['device']
-	ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
-	gcart, create = ShopCart.objects.get_or_create(device=device, on_order=False)
-	if request.COOKIES.get('cart'):
-		cart_type = request.COOKIES['cart']
-		if cart_type == 'ucart':
-			cart = ucart
+	if request.user.is_authenticated:
+		user = request.user
+		if Wishlist.objects.filter(Q(device = device) | Q(user = user)).exists():
+			wlist = Wishlist.objects.get(Q(device = device) | Q(user = user))
 		else:
-			cart = gcart
+			wlist = Wishlist(
+				user=user,
+				device=device
+			)
+			wlist.save()
 	else:
-		if ucart.carts.all().count() >= gcart.carts.all().count():
-			cart = ucart
+		if Wishlist.objects.filter(device = device).exists():
+			wlist = Wishlist.objects.get(device = device)
 		else:
-			cart = gcart
-
-	total_cost = 0
-	for item in cart.carts.all():
-		price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-		cost = price*item.quantity
-		total_cost += cost
-	
-	return [cart, total_cost]
+			wlist = Wishlist(
+				device=device
+			)
+			wlist.save()
+	return wlist
 
 @register.filter
 def Categorys(value):
@@ -51,7 +57,8 @@ def currencies():
 
 @register.simple_tag
 def DefaultCurrency():
-	return Settings.objects.all().first().default_currency.code
+	currency = Settings.objects.all().first().default_currency
+	return [currency.code, currency.rate, currency.symbol_native]
 
 # @register.simple_tag(takes_context=True)
 # def mycurrency(context):
@@ -120,48 +127,7 @@ def cart(context):
 			mergefrom = 'ucart'
 			mergefrom_text = 'Merge UserCart'
 
-	total_cost = 0
-	subtotal = 0
-	for item in cart.carts.all():
-		print("option-------->", item.options)
-		price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-		cost = price*item.quantity
-		total_cost += cost
-		subtotal = total_cost
-	
-	free_ship = False
-	if cart.coupon.all().count() > 0:
-		for coupon in cart.coupon.all():
-			if coupon.discount_type == 'Percent':
-				total_cost_with_coupon = total_cost - total_cost*coupon.value/100
-			else:
-				total_cost_with_coupon = total_cost - coupon.value
-			if coupon.free_shipping:
-				free_ship = True
-		total_cost = total_cost_with_coupon
-	
-	free_shipping = ShippingMethod.objects.filter(method_type='free').first()
-	local_shipping = ShippingMethod.objects.filter(method_type='local').first()
-	ship = True
-	if free_ship:
-		if free_shipping.active:
-			ship_name = free_shipping.name
-			ship_cost = 0
-		else:
-			ship_name = 'Free Shipping'
-			ship_cost = 0
-	else:
-		if free_shipping and free_shipping.active and total_cost > free_shipping.fee:
-			ship_name = free_shipping.name
-			ship_cost = 0
-		elif local_shipping and local_shipping.active:
-			ship_name = local_shipping.name
-			ship_cost = local_shipping.fee
-			total_cost += local_shipping.fee
-		else:
-			ship = False
-			ship_name = ''
-			ship_cost = ''
+	mycart = cartDetails(cart)
 
 	return {
 		"cart": cart,
@@ -171,10 +137,36 @@ def cart(context):
 		'mergefrom': mergefrom,
 		'mergefrom_text': mergefrom_text,
 		'mergefrom_size': mergefrom_size,
-		'subtotal': subtotal,
-		'total_cost': total_cost,
-		'ship': ship,
-		'ship_name': ship_name,
-		'ship_cost': ship_cost
+		'subtotal': mycart.subtotal,
+		'total_cost': (mycart.subtotal - mycart.coupon_discount) + mycart.ship_cost,
+		'ship': True,
+		'ship_name': mycart.ship_name,
+		'ship_cost': mycart.ship_cost
 	}
+
+@register.filter
+def intformat(value, length):
+	if len(str(value)) < length:
+		no_zero = length - len(str(value))
+		return '0'*no_zero+str(value)
+	else:
+		return value
+register.filter('intformat', intformat)
+
+@register.simple_tag
+def encode_static(path, encoding="base64", file_type="image"):
+	try:
+		file_path = find_static_file(str(path))
+		ext = file_path.split('.')[-1]
+		file_str = _get_file_data(file_path).decode('utf-8')
+		return "data:{0}/{1};{2}, {3}".format(file_type, ext, encoding, file_str)
+	except IOError:
+		return
+
+def _get_file_data(file_path):
+	with open(file_path, 'rb') as f:
+		print(file_path)
+		data = base64.b64encode(f.read())
+		f.close()
+		return data
 

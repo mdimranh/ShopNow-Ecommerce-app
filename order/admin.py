@@ -6,10 +6,6 @@ class ShopCartAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_at', 'coupons']
 admin.site.register(ShopCart, ShopCartAdmin)
 
-class WishlistAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'created_at', 'product_image']
-admin.site.register(Wishlist, WishlistAdmin)
-
 class UserRestrictionInlin(admin.TabularInline):
     model = UserRestrictions
     extra = 1

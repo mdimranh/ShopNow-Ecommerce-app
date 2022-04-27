@@ -38,19 +38,10 @@
       {% if product_details %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
         <h3 class="fw-bold">{{product_details.title}}</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/product/" class="text-decoration-none breadcrumb-item text-secondary">Products</a>
-          <span class="breadcrumb-item text-secondary">Edit Products</span>
-        </div>
       </div>
       {% else %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
         <h3 class="fw-bold">Product's</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/product/" class="text-decoration-none breadcrumb-item text-secondary">Products</a>
-        </div>
       </div>
       {% endif %}
       {% if not product_details %}
@@ -985,7 +976,7 @@
       </div>
       {% endif %}
       {% if product_details %}
-      <div class="edit-product-sec card">
+      <div class="add-product-sec card">
           {% comment %} <div class="d-flex flex-fill"> {% endcomment %}
           <div class="container-fluid">
             <div class="row m-2 p-3 bg-white">
@@ -1812,8 +1803,6 @@
     {% endblock main %}
 
     {% block script %}
-    {% comment %} <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script> {% endcomment %}
-    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
     <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
@@ -1825,13 +1814,11 @@
     <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
     <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
     <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
-    <script src="{% static 'control/js/tail.select-full.js' %}"></script>
     <script src="{% static 'control/js/form-masking/inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/jquery.inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>
     <script src="{% static 'control/js/form-masking/form-mask.js' %}"></script>
     <script src="{% static 'control/jquery.filer/js/jquery.filer.min.js' %}"></script>
-    {% comment %} <script src="{% static 'control/filer/custom-filer.js' %}"></script> {% endcomment %}
     <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
     <script src="{% static 'control/datedropper/datedropper.min.js' %}"></script>
     <script src="{% static 'control/js/custom-picker.js' %}"></script>
@@ -1840,5 +1827,4 @@
     <script src="{% static 'control/image-uploader/image-uploader.min.js' %}"></script>
     <script src="{% static 'control/dropzone/dist/dropzone.js' %}"></script>
     <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
-    {% comment %} <script src="{% static 'control/dropzone/edit-dropzone.js' %}"></script> {% endcomment %}
     {% endblock script %}

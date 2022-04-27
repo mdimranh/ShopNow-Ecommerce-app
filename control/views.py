@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import View
-from django.views.generic import DetailView
+from django.views.generic import View, DetailView
 from django.contrib import messages
-from product.models import Product
-from setting.models import Menus
-from home.models import SearchKeyword
+
 from django.contrib.auth.models import User, auth, Permission
 from django.contrib.auth.models import Group as UserGroup
 
+from home.models import SearchKeyword
 from accounts.models import Profile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
@@ -16,11 +14,10 @@ from order.models import ShopCart, Order
 
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncDay, TruncDate
-from django.utils.timezone import now
-
-from datetime import datetime, timedelta
-
 from django.contrib.contenttypes.models import ContentType
+
+from django.utils.timezone import now
+from datetime import datetime, timedelta
 
 def Dashboard(request):
 	total_product = Product.objects.all().count()
@@ -201,62 +198,10 @@ def Login(request):
 				auth.login(request, user)
 				pro, create = Profile.objects.get_or_create(user = user)
 				pro.online = True
-				pro.save()
-				total_product = Product.objects.all().count()
-				context = {
-					"total_product": total_product
-				}
-				return render(request, "control/index.html", context)
+				return redirect('/control')
 			else:
 				auth.login(request, user)
-				pro, create = Profile.objects.get_or_create(user = user)
-				pro.online = True
-				pro.save()
-				categorys = Category.objects.all()
-				subcategorys = Subcategory.objects.all()
-				brand = Brands.objects.all()
-				groups = Group.objects.all()
-				menus = Menus.objects.all()
-				product = Product.objects.all()
-				total_cost = 0
-				item = 0
-				shopcart = False
-				if request.user.is_authenticated:
-					shopcart = ShopCart.objects.filter(user = request.user)
-					total_cost = 0
-					for item in shopcart:
-						price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-						cost = price*item.quantity
-						total_cost += cost
-					for item in shopcart[:1]:
-						if item.coupon:
-							if item.coupon.discount_type == 'fixed':
-								total_cost -= item.coupon.value
-							else:
-								total_cost = total_cost - (total_cost * item.coupon.value / 100)
-					item = shopcart.count()
-				new_product = Product.objects.filter(enable=True).order_by('-id')
-				new_product_cat = Product.objects.filter(enable=True).distinct("category")
-				hot_product = Product.objects.filter(enable=True, hot_deal_end__gt = datetime.now())
-				product_carousel = ProductCarousel.objects.filter(enable = True)
-				recently_view = RecentlyView.objects.all().order_by("-on_create")
-				context = {
-					'category': categorys,
-					'subcategory': subcategorys,
-					'brand': brand,
-					'group': groups,
-					'menus': menus,
-					'shopcart': shopcart,
-					'product': product,
-					'new_product': new_product,
-					'new_product_cat': new_product_cat,
-					'hot_product': hot_product,
-					'procaro': product_carousel,
-					'recent_view': recently_view,
-					'cost': total_cost,
-					'item': item
-				}
-				return render(request, 'home/home.html', context)
+				return redirect('/')
 		else:
 			messages.error(request, "Invalid username or password!")
 			return render(request, "control/login.html")

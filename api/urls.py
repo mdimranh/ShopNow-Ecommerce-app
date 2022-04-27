@@ -21,5 +21,6 @@ urlpatterns = [
     path("wishlist/delete/<int:id>", DeleteWishlist),
     path("shopcart/add", AddddToCart),
     path("addressbook/<int:id>", AddressBookDetails.as_view()),
+    path("totalcartcost/<int:id>", TotalCartCost.as_view()),
 
 ]

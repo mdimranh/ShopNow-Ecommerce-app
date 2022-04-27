@@ -7,7 +7,9 @@
 {% load solo_tags %}
 {% currencies as currencies %}
 {% mycurrency as mycurrency %}
+{% DefaultCurrency as dc %}
 {% cart as mycart %}
+{% wishlist as wishlist %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
 {% get_solo 'setting.Feature' as feature %}
 {% get_solo 'setting.StoreInfo' as storeinfo %}
@@ -58,10 +60,35 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
+    <style>
+        #preloader{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #fff;
+            z-index: 2000;
+        }
+        #status{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            background-image: url(../static/assets/preload.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: -100px 0 0 -100px;
+        }
+    </style>
     {% block extra_css %}{% endblock extra_css %}
 </head>
 
 <body>
+    <div id="preloader">
+        <div id="status" ></div>
+    </div>
     <div class="page-wrapper">
         <header class="header header-14">
             <div class="header-top">
@@ -175,7 +202,7 @@
 
                                 <div class="col-lg-4 col-xxl-5col d-flex justify-content-end align-items-center" id="cart-section">
                                     <div class="header-dropdown-link">
-                                        <div class="dropdown compare-dropdown">
+                                        {% comment %} <div class="dropdown compare-dropdown">
                                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Compare Products" aria-label="Compare Products">
                                                 <i class="icon-random"></i>
                                                 <span class="compare-txt">Compare</span>
@@ -198,11 +225,11 @@
                                                     <a href="#" class="btn btn-outline-primary-2"><span>Compare</span><i class="icon-long-arrow-right"></i></a>
                                                 </div>
                                             </div><!-- End .dropdown-menu -->
-                                        </div><!-- End .compare-dropdown -->
+                                        </div><!-- End .compare-dropdown --> {% endcomment %}
 
                                         <a href="/wishlist" class="wishlist-link">
                                             <i class="icon-heart-o"></i>
-                                            <span class="wishlist-count">{{user.wishlist.all|length}}</span>
+                                            <span class="wishlist-count">{{ wishlist.product.all|length }}</span>
                                             <span class="wishlist-txt">Wishlist</span>
                                         </a>
 
@@ -278,6 +305,7 @@
             <div class="header-bottom sticky-header">
                 <div class="container-fluid">
                     <div class="row">
+                        {% if not category_disable %}
                         <div class="col-auto col-lg-3 col-xl-3 col-xxl-2 header-left">
                             <div class="dropdown category-dropdown show is-on" data-visible="true">
                                 <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Browse Categories">
@@ -332,6 +360,7 @@
                                 </div><!-- End .dropdown-menu -->
                             </div><!-- End .category-dropdown -->
                         </div><!-- End .col-xl-3 col-xxl-2 -->
+                        {% endif %}
 
                         <div class="col col-lg-6 col-xl-6 col-xxl-8 header-left">
                             <nav class="main-nav">
@@ -967,6 +996,7 @@
     <script src="{% static 'assets/js/jquery.plugin.min.js' %}"></script>
     <script src="{% static 'assets/js/jquery.countdown.min.js' %}"></script>
     <!-- Main JS File -->
+    <script src="{% static 'assets/js/jspdf.min.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/sweetalert2.all.js' %}"></script>
     <script src="{% static 'assets/js/demos/demo-14.js' %}"></script>
@@ -1015,9 +1045,9 @@
       }
       document.cookie ='device=' + device + ";domain=;path=/"
       let currency = getCookie('mycurrency')
-      if (currency == null || currency == undefined || "{{mycurrency.2}}" == 'False'){
-        document.cookie ='mycurrency=' + '{% DefaultCurrency %}' + ";domain=;path=/"
-        $("#mycurrency").text("{% DefaultCurrency %}")
+      if (currency == null || currency == undefined || "{{dc.0}}" == 'False'){
+        document.cookie ='mycurrency=' + '{{ dc.0 }}' + ";domain=;path=/"
+        $("#mycurrency").text("{{ DefaultCurrency.0 }}")
       }
       else{
         $("#mycurrency").text(currency)
@@ -1056,6 +1086,13 @@
             zindex: 2000,
         });
     </script> {% endcomment %}
+    <script>
+        $(window).on("load", function(){
+            $('#preloader').fadeOut();
+            $('#status').fadeOut();
+        });
+        getNotification({{user.id}});
+    </script>
     <script src="{% static 'assets/add-product.js' %}"></script>
     {% block extra_js %}{% endblock extra_js %}
 </body>

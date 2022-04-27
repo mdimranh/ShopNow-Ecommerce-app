@@ -378,6 +378,8 @@ class Currency(models.Model):
 
 	def __str__(self):
 		return self.name
+			
+
 
 class Settings(models.Model):
 	default_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='defailt_currency')

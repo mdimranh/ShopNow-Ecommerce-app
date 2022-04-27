@@ -1,5 +1,7 @@
 {% extends 'control/base.html' %}
 {% load static %}
+{% load mathfilters %}
+{% load humanize %}
 {% block title %}{{site_config.name}} | Dashboard{% endblock title %}
 {% block style %}
   <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
@@ -22,7 +24,7 @@
                     <li>
                       <i class="fa fa-money"></i>
                     </li>
-                    <li class="text-right">$ {% if total_sales != None %}{{total_sales}}{% else %}0{% endif %}</li>
+                    <li class="text-right">{{dc.2}} {% if total_sales != None %}{{total_sales|mul:dc.1|floatformat:2|intcomma}}{% else %}0{% endif %}</li>
                   </ul>
                 </div>
               </div>

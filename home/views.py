@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
+
+from django.contrib import messages
+from django.core import serializers
+
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from .forms import ContactMessageForm
@@ -8,11 +12,8 @@ from .models import SearchKeyword
 
 from django.core.paginator import Paginator
 from django.db.models import Q
+
 from datetime import datetime, date, timedelta
-
-from django.contrib import messages
-
-from django.core import serializers
 
 def Home(request):
     brand = Brands.objects.all()
@@ -21,17 +22,27 @@ def Home(request):
     new_product = Product.objects.filter(enable=True).order_by('-id')
     new_product_cat = Product.objects.filter(enable=True).distinct("category")
     hot_product = Product.objects.filter(enable=True, hot_deal_end__gt = date.today())
-    bestSell_range = date.today() - timedelta(days = 6)
+    
+    # List of best selling product
+    bestSell_range = date.today() - timedelta(days = 30)
     best_sell = Order.objects.filter(order_date__gte = bestSell_range)
     bs_pro_list = []
-    for scart in best_sell:
-        bs_pro_list.append(scart.product.id)
-    print("list---------->", bs_pro_list)
+    for order in best_sell:
+        for cart in order.shopcart.carts.all():
+            bs_pro_list.append(cart.product.id)
+    bs_pro_list = sorted(bs_pro_list, key=lambda x:[bs_pro_list.count(x), x])
+    bs_pro_list.reverse()
+    bs_pro_list = list(dict.fromkeys(bs_pro_list))
+    bs_pro = []
+    for pro_id in bs_pro_list[:5]:
+        bs_pro.append(Product.objects.get(id = pro_id))
+
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
     context = {
         'brand': brand,
         'product': product,
+        'best_sold': bs_pro,
         'new_product': new_product,
         'new_product_cat': new_product_cat,
         'hot_product': hot_product,
@@ -168,3 +179,6 @@ def SearchView(request):
                 'cat_id': cat_id
             }
             return render(request, 'product/category.html', context)
+
+def error_404(request, exception):
+    return render(request, 'home/404.html')

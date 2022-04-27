@@ -821,11 +821,21 @@ $("#checkout-diff-address").click(function () {
         $(this).val("on")
         $("#new-address").removeClass("d-none")
         $(".address-book-sec").addClass("d-none")
+        $('#add-country').prop('required', true)
+        $('#add-region').prop('required', true)
+        $('#add-city').prop('required', true)
+        $('#add-area').prop('required', true)
+        $('#add-address').prop('required', true)
     }
     else {
         $(this).val("off")
         $("#new-address").addClass("d-none")
         $(".address-book-sec").removeClass("d-none")
+        $('#add-country').prop('required', false)
+        $('#add-region').prop('required', false)
+        $('#add-city').prop('required', false)
+        $('#add-area').prop('required', false)
+        $('#add-address').prop('required', false)
     }
 })
 

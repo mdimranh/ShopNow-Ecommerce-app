@@ -1,24 +1,21 @@
 from django.shortcuts import render, redirect
-from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import DetailView
-from .models import Product, Images, Review
-from product.models import Category, Group, Subcategory, RecentlyView
-from django.core.paginator import Paginator
-from django.db.models import Q, Sum
-
-from setting.models import Menus
+from django.views import View
 
 from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator
+from django.db.models import Q, Sum
+from django.db.models import Count
 
-from django.http.response import JsonResponse
-
-import datetime
+from .models import Product, Images, Review
+from product.models import Category, Group, Subcategory, RecentlyView
+from setting.models import Menus
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from django.db.models import Count
+import datetime
 
 def ProductDetails(request, id):
     if request.method == 'POST':

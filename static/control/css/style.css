@@ -45047,3 +45047,10 @@ body.menu-bottom .navbar-wrapper {
 .drag-icon:hover{
   cursor: move;
 }
+
+.dashboard .text-right{
+  font-size: 23px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}

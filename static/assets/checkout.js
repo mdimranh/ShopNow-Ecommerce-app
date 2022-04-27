@@ -1,11 +1,17 @@
 
-// convert curreny BDT to USD
-// $.get("https://fcsapi.com/api-v2/forex/converter?symbol=BDT/USD&amount=200&access_key=ohHkx8n2tCX9BBoaGvFUwY", function (resp) {
-//     $("#usd").text(($("#total-cost").text().slice(1) * resp.response.price_1x_USD).toFixed(2));
-//     $("#rate").text(resp.response.price_1x_BDT);
-//     $("#rate-input").val(resp.response.price_1x_BDT);
-// });
+var total = $("#total-amount").val()
+const shopcartid = $("#cartid").val()
 
+var mycurrency = getCookie('mycurrency')
+if (mycurrency !== 'USD') {
+    $.get(`https://fcsapi.com/api-v2/forex/converter?symbol=${mycurrency}/USD&amount=${total}&access_key=ohHkx8n2tCX9BBoaGvFUwY`, function (resp) {
+        $("#total-amount-usd").val(parseFloat(resp.response.total).toFixed(2));
+    });
+}
+
+else {
+    $("#total-amount-usd").val($("#total-amount").val())
+}
 
 // create checkout using paypal
 
@@ -33,13 +39,51 @@ function initPayPalButton() {
             label: 'paypal',
 
         },
-        // onClick: function (data, actions) {
-        //     alert($("#rate").text())
-        // },
+        onClick: function (data, actions) {
+            if ($("#checkout-diff-address").is(":checked")) {
+                if ($("#first_name").val().length > 0 &&
+                    $("#last_name").val().length > 0 &&
+                    $("#email").val().length > 0 &&
+                    $("#phone").val().length > 0 &&
+                    $("#add-country").val().length > 0 &&
+                    $("#add-region").val().length > 0 &&
+                    $("#add-city").val().length > 0 &&
+                    $("#add-area").val().length > 0 &&
+                    $("#address").val().length > 0) {
+                    return true
+                }
+                else {
+                    $("#submit-btn").click()
+                    return false
+                }
+            }
+            else {
+                if (
+                    $("#first_name").val().length > 0 &&
+                    $("#last_name").val().length > 0 &&
+                    $("#email").val().length > 0 &&
+                    $("#phone").val().length > 0
+                ) {
+                    return true
+                }
+                else {
+                    $("#submit-btn").click()
+                    return false
+                }
+            }
+        },
 
         createOrder: function (data, actions) {
             return actions.order.create({
-                purchase_units: [{ "amount": { "currency_code": "USD", "value": 1 } }]
+                application_context: {
+                    'shipping_preference': 'NO_SHIPPING'
+                },
+                purchase_units: [{
+                    "amount": {
+                        "currency_code": "USD",
+                        "value": 1
+                    }
+                }]
             });
         },
 
@@ -48,27 +92,44 @@ function initPayPalButton() {
 
                 // Full available details
                 console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                const user_id = JSON.parse(document.getElementById('user_id').textContent)
-                data = {
-                    'user_id': user_id,
-                    'company_name': $("#company_name").val(),
-                    'email': $("#email").val(),
-                    'notes': $("#notes").val(),
-                    'diff_address': $("#checkout-diff-address").val(),
-                    'ab_name': $("#ab-name").val(),
-                    'phone': $("#phone").val(),
-                    'ab_country': $(".ab-country").val(),
-                    'ab_region': $(".ab-region").val(),
-                    'ab_city': $(".ab-city").val(),
-                    'ab_area': $(".ab-area").val(),
-                    'ab_address': $("#ab-address").val(),
-                    'address_book': $("input[name='address_book']:checked").val(),
-                    'payment_mode': 'paypal',
-                    'rate': $("#rate").text(),
-                    'payment_id': orderData.id,
-                    'total': orderData.purchase_units[0].amount.value,
-                    'total_bdt': $("#total-cost-bdt").text()
+
+                if ($("#checkout-diff-address").is(":checked")) {
+                    data = {
+                        'cartid': shopcartid,
+                        'first_name': $("#first_name").val(),
+                        'last_name': $("#last_name").val(),
+                        'company_name': $("#company_name").val(),
+                        'email': $("#email").val(),
+                        'phone': $("#phone").val(),
+                        'notes': $("#notes").val(),
+                        'diff-address': 'on',
+                        'country': $("#add-country").val(),
+                        'region': $("#add-region").val(),
+                        'city': $("#add-city").val(),
+                        'area': $("#add-area").val(),
+                        'address': $("#address").val(),
+                        'payment_mode': 'paypal',
+                        'payment_id': orderData.id,
+                        'total': orderData.purchase_units[0].amount.value,
+                    }
                 }
+                else {
+                    data = {
+                        'cartid': shopcartid,
+                        'first_name': $("#first_name").val(),
+                        'last_name': $("#last_name").val(),
+                        'company_name': $("#company_name").val(),
+                        'diff-address': 'off',
+                        'email': $("#email").val(),
+                        'notes': $("#notes").val(),
+                        'phone': $("#phone").val(),
+                        'address_book': $("input[name='address_book']:checked").val(),
+                        'payment_mode': 'paypal',
+                        'payment_id': orderData.id,
+                        'total': orderData.purchase_units[0].amount.value,
+                    }
+                }
+
                 $.ajax({
                     url: "/place-order",
                     type: "POST",

@@ -18,7 +18,6 @@ class LoginRequireMidleware(MiddlewareMixin):
             if not request.user.is_authenticated:
                 return HttpResponseRedirect(reverse(settings.AUTH_LOGIN_ROUTE))
             else:
-                if not request.user.is_superuser:
-                    if not request.user.is_staff:
-                        return HttpResponseRedirect(reverse(settings.ROOT_URL))
+                if not request.user.is_superuser and not request.user.is_staff:
+                    return HttpResponseRedirect(reverse(settings.ROOT_URL))
         

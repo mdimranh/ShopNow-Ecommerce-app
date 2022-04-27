@@ -14,7 +14,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
-
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 def Products(request):
@@ -177,3 +176,14 @@ class AddressBookDetails(APIView):
     #     )
     #     pro_ser = ProfileSerializer(pro, many=False)
     #     return Response(pro_ser.data)
+
+from order.cartdetails import cartDetails
+@permission_classes([IsAuthenticated,])
+class TotalCartCost(APIView):
+    def get(self, request, id, format=None):
+        scart = ShopCart.objects.get(id = id)
+        cart = cartDetails(scart)
+        context = {
+            'total' : cart.subtotal + cart.ship_cost - cart.coupon_discount,
+        }
+        return Response(context)

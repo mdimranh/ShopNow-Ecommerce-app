@@ -96,7 +96,8 @@ def Products(request):
             for i in range(int(count[c])):
                 op = Option(
                     label = lab_pri[0][0],
-                    price = lab_pri[0][1]
+                    price = lab_pri[0][1],
+                    parent_name = op_name
                 )
                 op.save()
                 opt.option.add(op)
@@ -261,7 +262,8 @@ class EditProduct(View):
             for i in range(int(count[c])):
                 op = Option(
                     label = lab_pri[0][0],
-                    price = lab_pri[0][1]
+                    price = lab_pri[0][1],
+                    parent_name = op_name
                 )
                 op.save()
                 opt.option.add(op)

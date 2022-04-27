@@ -9030,7 +9030,7 @@ small.form-text {
 .table {
   margin-bottom: 3rem;
 }
-.table th {
+.table thead tr:not(.default) th {
   font-weight: 400;
   font-size: 1.4rem;
   line-height: 1.5;
@@ -16561,4 +16561,19 @@ i.product-color.select{
 
 .btn{
   cursor: pointer;
+}
+
+
+/*! invoice */
+
+.invoice .card{
+  border-radius: 2px;
+  border-top: 4px solid #F9B94C;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1),
+    -1px -1px 0 0 rgba(0, 0, 0, 0.1);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 30px;
+  padding: 10px;
 }

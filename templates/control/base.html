@@ -1,6 +1,7 @@
 {% load static %}
 {% load solo_tags %}
 {% load custom_tags %}
+{% DefaultCurrency as dc %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
 {% get_solo 'setting.Feature' as feature %}
 {% get_solo 'setting.EmailConfig' as email_config %}
@@ -58,13 +59,6 @@
         </div>
       </div>
       <div class="right d-flex align-items-center notification-drop">
-        <span class="px-2 notification">
-          <i class="fa fa-bell"></i>
-          <div class="notification-sec bg-success">
-            This is notification section
-          </div>
-        </span>
-        <span class="px-2 message"><i class="fas fa-comment-dots"></i></span>
         <span class="px-2 profile"
           ><i class="far fa-user fa-lg me-3"></i>
           <div class="profile-sec bg-white">
@@ -80,147 +74,10 @@
     </nav>
 
     <div>
-      {% if user.is_superuser %}
       <div class="sidenav" id="sidenav">
         <ul>
           <li>
-            <a href="/control/dashboard">
-              <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
-                <i class="fas fa-tachometer-alt fa-left"></i>
-                <span>Dashboard</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <div class="menu {% if product_sec %}selected active{% endif %}">
-              <i class="fas fa-cube fa-left"></i>
-              <span>Products</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li class="product {% if all_product_sec or edit_product_sec %}selected{% endif %}"><a href="/control/product" class="d-flex flex-fill">Product</a></li>
-              <li class="category {% if category_sec %}selected{% endif %}"><a href="/control/category" class="d-flex flex-fill">Category</a></li>
-              <li class="brand {% if brand_sec %}selected{% endif %}"><a href="/control/brand" class="d-flex flex-fill">Brand</a></li>
-            </ul>
-          </li>
-          <li>
-            <div class="menu {% if sales_sec %}selected active{% endif %}">
-              <i class="fas fa-dollar-sign fa-left"></i>
-              <span>Sales</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li class="orders {% if orders_sec %}selected{% endif %}"><a href="/control/orders" class="d-flex flex-fill">Orders</a></li>
-              <li><a href="" class="d-flex flex-fill">Transections</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="/control/coupon">
-              <div class="menu coupon {% if coupon_sec %}selected active{% endif %}">
-                <i class="fas fa-tags fa-left"></i>
-                <span>Coupons</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/control/pages">
-              <div class="menu {% if page_sec %}selected active{% endif %}">
-                <i class="fas fa-file-alt fa-left"></i>
-                <span>Pages</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/control/message">
-              <div class="menu {% if message_sec %}selected active{% endif %}">
-                <i class="far fa-envelope fa-left"></i>
-                <span>Message</span>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/control/menu">
-              <div class="menu menus {% if menu_sec %}selected active{% endif %}">
-                <i class="fa fa-bars fa-left"></i>
-                <span>Menus</span>
-              </div>
-            </a>
-          </li>
-          <li class="text-center py-2 header">System</li>
-          {% comment %} <li>
-            <div class="menu">
-              <i class="fa fa-users fa-left"></i>
-              <span>Users</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li><a href="">User</a></li>
-              <li><a href="">Profile</a></li>
-            </ul>
-          </li> {% endcomment %}
-          <li>
-            <div class="menu users {% if user_sec %}selected active{% endif %}">
-              <i class="fas fa-users fa-left"></i>
-              <span>Users</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li class="{% if user_list_sec or edit_user_sec %}selected{% endif %}"><a href="/control/user" class="d-flex flex-fill">User</a></li>
-              <li class="{% if role_list_sec or edit_role_sec %}selected{% endif %}"><a href="/control/role" class="d-flex flex-fill">Role</a></li>
-            </ul>
-          </li>
-          {% comment %} <li>
-            <a href="/control/localization">
-              <div class="menu localization {% if localization_sec %}selected active{% endif %} ">
-                <i class="fa fa-bar-chart-o fa-left"></i>
-                <span>Localization</span>
-              </div>
-            </a>
-          </li> {% endcomment %}
-          <li>
-            <div class="menu {% if localization_sec %}selected active{% endif %}">
-              <i class="fas fa-globe fa-left"></i>
-              <span>Localization</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li class="{% if area_sec %}selected{% endif %}"><a href="/control/area" class="d-flex flex-fill">Area</a></li>
-              <li class="{% if currency_sec %}selected{% endif %}"><a href="/control/currency" class="d-flex flex-fill">Currency</a></li>
-            </ul>
-          </li>
-          <li>
-            <div class="menu {% if appearance_sec %}selected active{% endif %}">
-              <i class="fa fa-paint-brush fa-left"></i>
-              <span>Appearance</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li class="{% if slider_list_sec or edit_slider_sec %}selected{% endif %}"><a href="/control/slider" class="d-flex flex-fill">Slider</a></li>
-              <li class="{% if banner_list_sec or edit_banner_sec %}selected{% endif %}"><a href="/control/banners" class="d-flex flex-fill">Banner</a></li>
-              <li class="{% if sitefront_sec %}selected{% endif %}"><a href="/control/sitefront" class="d-flex flex-fill">Sitefront</a></li>
-            </ul>
-          </li>
-          {% comment %} <li>
-            <div class="menu">
-              <i class="fa fa-bar-chart-o fa-left"></i>
-              <span>Reports</span>
-            </div>
-          </li> {% endcomment %}
-          <li>
-            <a href="/control/settings">
-              <div class="menu setting {% if setting_sec %}selected active{% endif %}">
-                <i class="fa fa-cogs fa-left"></i>
-                <span>Settings</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-      {% else %}
-      <div class="sidenav" id="sidenav">
-        <ul>
-          <li>
-            <a href="/control/dashboard">
+            <a href="/control">
               <div class="menu dashboard {% if dashboard_sec %}selected active{% endif %}">
                 <i class="fas fa-tachometer-alt fa-left"></i>
                 <span>Dashboard</span>
@@ -256,7 +113,7 @@
             </div>
             <ul class="submenu">
               <li class="orders {% if orders_sec %}selected{% endif %}"><a href="/control/orders" class="d-flex flex-fill">Orders</a></li>
-              <li><a href="" class="d-flex flex-fill">Transections</a></li>
+              {% comment %} <li><a href="" class="d-flex flex-fill">Transections</a></li> {% endcomment %}
             </ul>
           </li>
           {% endif %}
@@ -359,7 +216,7 @@
           </li> {% endcomment %}
           {% if perms.setting %}
           <li>
-            <div class="menu {% if slider_sec %}selected active{% endif %}">
+            <div class="menu {% if appearance_sec %}selected active{% endif %}">
               <i class="fa fa-paint-brush fa-left"></i>
               <span>Appearance</span>
               <span class="arrow"><i class="fa fa-angle-right"></i></span>
@@ -389,7 +246,6 @@
           {% endif %}
         </ul>
       </div>
-      {% endif %}
       <div class="main mx-3 mt-3">
         {% block main %}{% endblock main %}
         <div class="copyright d-flex flex-fill justify-content-between">
@@ -397,7 +253,7 @@
         </div>
       </div>
 
-      <div class="overlay" id="overlay">
+      <div class="overlay" id="overlay" style="display: none;">
         <div class="load" style="background-image: url('{{site_config.favicon.url}}');">
           <div class="spinners">
             <div class="spin-inner"></div>

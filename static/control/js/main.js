@@ -249,6 +249,7 @@ $(".add-new-option").on("click", function () {
     });
   VirtualSelect.init({
     ele: "select",
+    showSelectedOptionsFirst: true
   });
 });
 
@@ -494,73 +495,82 @@ VirtualSelect.init({
   ele: ".hideClear.hideSearch",
   search: false,
   hideClearButton: true,
+  showSelectedOptionsFirst: true
 })
 
 VirtualSelect.init({
   ele: ".hideClear",
   search: true,
-  hideClearButton: true
+  hideClearButton: true,
+  showSelectedOptionsFirst: true
 })
 
 VirtualSelect.init({
   ele: "select",
-  search: true
+  search: true,
+  showSelectedOptionsFirst: true
 });
 
-$("#add-category-select").on('change', function () {
-  document.getElementById("overlay").style.display = "block";
-  $.ajax({
-    url: "/control/productgroups",
-    type: "POST",
-    data: { category_id: $(this).val(), },
-    success: function (result) {
-      opt = []
-      result.forEach(function (data) {
-        opt.push({ label: data.name, value: data.id })
-      })
-      VirtualSelect.init({
-        ele: "#add-group-select",
-        options: opt
-      })
-      VirtualSelect.init({
-        ele: "#subcategory-select",
-      })
-      document.getElementById("overlay").style.display = "none";
-    },
-    headers: {
-      "X-CSRFToken": getCookie("csrftoken")
-    },
-    error: function (e) {
-      console.error(JSON.stringify(e));
-    },
+$("#add-category-select").click(function () {
+  $("#add-category-select").on('change', function () {
+    document.getElementById("overlay").style.display = "block";
+    $.ajax({
+      url: "/control/productgroups",
+      type: "POST",
+      data: { category_id: $(this).val(), },
+      success: function (result) {
+        opt = []
+        result.forEach(function (data) {
+          opt.push({ label: data.name, value: data.id })
+        })
+        VirtualSelect.init({
+          ele: "#add-group-select",
+          options: opt,
+          showSelectedOptionsFirst: true
+        })
+        VirtualSelect.init({
+          ele: "#subcategory-select",
+        })
+        document.getElementById("overlay").style.display = "none";
+      },
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      error: function (e) {
+        console.error(JSON.stringify(e));
+      },
+    });
   });
-});
+})
 
-$("#add-group-select").on('change', function () {
-  document.getElementById("overlay").style.display = "block";
-  $.ajax({
-    url: "/control/productgroups",
-    type: "POST",
-    data: { group_id: $(this).val(), },
-    success: function (result) {
-      opt = []
-      result.forEach(function (data) {
-        opt.push({ label: data.name, value: data.id })
-      })
-      VirtualSelect.init({
-        ele: "#add-subcategory-select",
-        options: opt
-      })
-      document.getElementById("overlay").style.display = "none";
-    },
-    headers: {
-      "X-CSRFToken": getCookie("csrftoken")
-    },
-    error: function (e) {
-      console.error(JSON.stringify(e));
-    },
+$("#add-group-select").click(function () {
+  $("#add-group-select").on('change', function () {
+    document.getElementById("overlay").style.display = "block";
+    $.ajax({
+      url: "/control/productgroups",
+      type: "POST",
+      data: { group_id: $(this).val(), },
+      success: function (result) {
+        opt = []
+        result.forEach(function (data) {
+          opt.push({ label: data.name, value: data.id })
+        })
+        VirtualSelect.init({
+          ele: "#add-subcategory-select",
+          options: opt,
+          showSelectedOptionsFirst: true
+        })
+        document.getElementById("overlay").style.display = "none";
+      },
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      error: function (e) {
+        console.error(JSON.stringify(e));
+      },
+    });
   });
-});
+})
 
 
 $("#edit-product-category-select").on('click', function () {
@@ -577,7 +587,8 @@ $("#edit-product-category-select").on('click', function () {
         })
         VirtualSelect.init({
           ele: "#edit-product-group-select",
-          options: opt
+          options: opt,
+          showSelectedOptionsFirst: true
         })
         VirtualSelect.init({
           ele: "#edit-product-subcategory-select",
@@ -608,7 +619,8 @@ $("#edit-product-group-select").on('click', function () {
         })
         VirtualSelect.init({
           ele: "#edit-product-subcategory-select",
-          options: opt
+          options: opt,
+          showSelectedOptionsFirst: true
         })
         document.getElementById("overlay").style.display = "none";
       },
@@ -1543,6 +1555,7 @@ $("#country-select").on("click", function () {
       ele: "#default-country-select",
       options: select,
       search: true,
+      showSelectedOptionsFirst: true
     });
   })
 })
@@ -1689,5 +1702,42 @@ $(".location-delete").click(function () {
         $("#basicTree #" + element).remove()
       });
     }
+  })
+})
+
+$(document).ready(function () {
+  select = []
+  $("#support-currency")[0].getSelectedOptions().forEach((element) => {
+    select.push({ label: element.label, value: element.value });
+  })
+  VirtualSelect.init({
+    ele: "#default-currency",
+    options: select,
+    search: false,
+  });
+  disabledOption = $("#support-currency")[0].getDisabledOptions()[0]
+  document.getElementById("default-currency").setValue(disabledOption.value)
+})
+
+$("#support-currency").click(function () {
+  $("#support-currency").change(function () {
+    select = []
+    $("#support-currency")[0].getSelectedOptions().forEach((element) => {
+      select.push({ label: element.label, value: element.value });
+    })
+    VirtualSelect.init({
+      ele: "#default-currency",
+      options: select,
+      search: false,
+    });
+    disabledOption = $("#support-currency")[0].getDisabledOptions()[0]
+    document.getElementById("default-currency").setValue(disabledOption.value)
+  })
+})
+
+$("#default-currency").click(function () {
+  $("#default-currency").change(function () {
+    a = [$(this).val()]
+    document.getElementById('support-currency').setDisabledOptions(a, keepValue = true)
   })
 })

@@ -160,7 +160,7 @@ $("#add-city").on("change", function () {
             success: function (result) {
                 document.getElementById("add-area").options.length = 0;
                 $("#add-area").attr("disabled", false)
-                $("#add-area").append(new Option('', 'null'))
+                // $("#add-area").append(new Option('', 'null'))
                 for (i = 0; i < result.length; i++) {
                     $("#add-area").append(new Option(result[i][0], result[i][1]))
                 }
@@ -257,7 +257,7 @@ $("#edit-city").on("change", function () {
             success: function (result) {
                 document.getElementById("edit-area").options.length = 0;
                 $("#edit-area").attr("disabled", false)
-                $("#edit-area").append(new Option('', 'null'))
+                // $("#edit-area").append(new Option('', 'null'))
                 for (i = 0; i < result.length; i++) {
                     $("#edit-area").append(new Option(result[i][0], result[i][1]))
                 }

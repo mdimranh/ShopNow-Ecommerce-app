@@ -1,0 +1,160 @@
+{% load static %}
+{% load humanize %}
+{% load custom_tags %}
+{% load mathfilters %}
+{% load solo_tags %}
+{% mycurrency as mycurrency %}
+{% get_solo 'setting.SiteConfiguration' as site_config %}
+{% get_solo 'setting.StoreInfo' as storeinfo %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <style>
+      @page {
+        size: letter portrait;
+        @frame content_frame {
+          left: 20pt;
+          top: 20pt;
+        }
+      }
+
+      .sitelogo{
+        width: 110px; height: auto;
+      }
+          
+      table tr td, table tr th {
+        page-break-inside: avoid;
+      }
+        
+      table, th, td {
+          border-collapse: collapse;
+      }
+      th, td {
+          padding: 2px;
+          text-align: left;
+      }
+
+      table.first {
+        margin-top: 40px;
+      }
+
+      th{
+        font-size: 12px;
+      }
+      .coupon-name{
+        font-weight: normal;
+      }
+    </style>
+    <title>Invoice</title>
+  </head>
+  <body>
+    <div class="main invoice mt-4">
+      <div class="p-4 container card">
+        <div class="row p-3" id="invoice">
+          <div class="col-12 d-flex justify-content-between">
+            <div 'siteinfo'>
+              <img class="sitelogo" src="{{ site_config.logo.path }}"><br><br>
+              <strong class="mt-10">{{site_config.name}}</strong><br>
+              <strong>{{storeinfo.address1}}</strong><br>
+              <strong>{{site_config.email}}</strong><br>
+              <strong>{{site_config.phone}}</strong>
+            </div>
+          </div>
+          <table class="first">
+            <thead>
+              <tr class="h5">
+                <th>Client Information:</th>
+                <th>Order Information:</th>
+                <th>Payment Information:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span>{{order.first_name}} {{order.last_name}}</span><br>
+                  <span>{{order.address}}</span><br>
+                  <span>{{order.area}}, {{order.region}}, {{order.country}}</span><br>
+                  <span>{{order.email}}</span><br>
+                  <span>{{order.phone}}</span>
+                </td>
+                <td>
+                  <strong>Date:</strong><span> {{order.order_date|date:"d M, o"}} | {{order.order_date|time:"g:i A"}}</span><br>
+                  <strong>Status:</strong><span> {{order.status}}</span><br>
+                  <strong>ID:</strong><span> #{{order.id|intformat:5}}</span><br>
+                  <span></span><br>
+                  <span></span><br>
+                </td>
+                <td>
+                  <strong>Payment Method:</strong><span>{% if order.payment_mode == 'cash' %} Cash On{% else %} {{order.payment_mode}}{% endif %}</span><br>
+                  <strong>Total Pay:</strong><span>{% if order.payment_mode == 'cash' %} {{symbol}}0{% else %} {{symbol}}{{order.total|mul:rate|floatformat:2}}{% endif %}</span><br>
+                  <strong>Total Due:</strong><span> {{symbol}}{{order.total|mul:rate|floatformat:2}}</span><br>
+                  <span></span><br>
+                  <span></span><br>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="first">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Line total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cart in order.shopcart.carts.all %}
+              <tr>
+                <td>
+                  <strong>{{cart.product.title}}</strong><br>
+                  {% if cart.color %}
+                    <span>Color: {{cart.color}}</span><br>
+                  {% endif %}
+                  {% if cart.size %}
+                    <span>Size: {{cart.size}}</span><br>
+                  {% endif %}
+                  {% for option in cart.options.all %}
+                    <span>{{option.parent_name}}: {{option.label}}</span><br>
+                  {% endfor %}
+                </td>
+                <td>{{symbol}}{{cart.total|mul:rate|floatformat:2|intcomma}}</td>
+                <td>{{cart.quantity}}</td>
+                <td>{{symbol}}{{cart.total|mul:rate|mul:cart.quantity|floatformat:2|intcomma}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <table class="footer-table">
+            <tbody>
+              <tr>
+                <td style="color: white;">.</td>
+                <td style="color: white;">.</td>
+                <td style="color: white;">.</td>
+                <td>
+                  <strong>Subtotal:</strong><br>
+                  <strong>{{order.ship_name}}:</strong><br>
+                  {% if order.coupons|length > 0 %}
+                    <strong>Coupon:<strong><br>
+                    {% for coupon in order.coupons %}
+                    <span class="coupon-name">{{forloop.counter}}. {{coupon.0}}</span><br>
+                    {% endfor %}
+                  {% endif %}
+                  <strong>Total:</strong>
+                </td>
+                <td>
+                  <span>{{symbol}}{{order.subtotal|mul:rate|floatformat:2|intcomma}}</span><br>
+                  <span>{{symbol}}{{order.ship_cost|mul:mycurrency.2}}</span><br>{% if order.coupons|length > 0 %}<br>{% endif %}
+                  {% for coupon in order.coupons %}
+                    <span>{% if coupon.1|last == '%' %}-{{coupon.1}}{% else %}-{{symbol}}{{coupon.1}}{% endif %}</span><br>
+                  {% endfor %}
+                  <strong>{{symbol}}{{order.total|mul:rate|floatformat:2|intcomma}}</strong><br>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

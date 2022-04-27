@@ -21,19 +21,8 @@
       <div class="d-flex flex-fill justify-content-between align-items-center">
       {% if slider %}
         <h3 class="fw-bold">Sliders</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a class="text-decoration-none breadcrumb-item text-secondary">Appearance</a>
-          <a class="text-decoration-none breadcrumb-item text-secondary">Slider</a>
-        </div>
       {% else %}
         <h3 class="fw-bold">{{slide.name}}</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a class="text-decoration-none breadcrumb-item text-secondary">Appearance</a>
-          <a href="/control/slider/" class="text-decoration-none breadcrumb-item text-secondary">Slider</a>
-          <a class="text-decoration-none breadcrumb-item text-secondary">{{slide.name}}</a>
-        </div>
       {% endif %}
       </div>
       {% if slider %}

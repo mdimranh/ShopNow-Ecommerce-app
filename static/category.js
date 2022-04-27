@@ -13,32 +13,32 @@ function getCookie(name) {
     return cookieValue;
 }
 
-jQuery(function($){
-    $(document).ready(function(){
+jQuery(function ($) {
+    $(document).ready(function () {
         let id = document.getElementById("cat_id").value;
         // document.getElementById("id_group").innerHTML = '<option value="" selected="">Empty</option>';
         sendid(id);
-        function sendid(id){
+        function sendid(id) {
             $.ajax({
-                url:"/groups/",
-                type:"POST",
-                data:{category_id: id,},
-                success: function(result) {
-                    col = $( "tr[class='form-row dynamic-subcategory_set']" );
-                    colx = $( "tr[class='form-row has_original dynamic-subcategory_set']" );
+                url: "/groups/",
+                type: "POST",
+                data: { category_id: id, },
+                success: function (result) {
+                    col = $("tr[class='form-row dynamic-subcategory_set']");
+                    colx = $("tr[class='form-row has_original dynamic-subcategory_set']");
                     rslt = [];
-                    for(var k in result){
+                    for (var k in result) {
                         rslt.push(k);
                     }
-                    for(i = 0; i < colx.length; i++){
+                    for (i = 0; i < colx.length; i++) {
                         cols = $(colx[i]);
                         col1 = cols.children('td:nth-child(3)');
                         col2 = col1.children('div:nth-child(1)');
                         col3 = col2.children('select:nth-child(1)');
                         col_id = col3.attr('id');
                         cols = document.getElementById(col_id);
-                        for(j = 0; j < cols.options.length; j++){
-                            if (rslt.indexOf(cols.options[j].innerHTML) === -1){
+                        for (j = 0; j < cols.options.length; j++) {
+                            if (rslt.indexOf(cols.options[j].innerHTML) === -1) {
                                 cols.options[j].remove();
                                 j = -1;
                             }
@@ -50,25 +50,25 @@ jQuery(function($){
                     col_id = col3.attr('id');
                     cols = document.getElementById(col_id);
                     cols.options.length = 0;
-                    for(var k in result){
+                    for (var k in result) {
                         cols.options.add(new Option(k, result[k]));
                     }
                 },
                 headers: {
                     "X-CSRFToken": getCookie("csrftoken")
                 },
-                error: function(e){
+                error: function (e) {
                     console.error(JSON.stringify(e));
                 },
             });
         }
-        $( "a[href='#']" ).click(function(){
+        $("a[href='#']").click(function () {
             let id = document.getElementById("cat_id").value;
             $.ajax({
-                url:"/groups/",
-                type:"POST",
-                data:{category_id: id,},
-                success: function(result) {
+                url: "/groups/",
+                type: "POST",
+                data: { category_id: id, },
+                success: function (result) {
                     col = $("tr[class='form-row dynamic-subcategory_set']").last();
                     col1 = col.children('td:nth-child(3)');
                     col2 = col1.children('div:nth-child(1)');
@@ -76,17 +76,17 @@ jQuery(function($){
                     col_id = col3.attr('id');
                     cols = document.getElementById(col_id);
                     cols.options.length = 0;
-                    for(var k in result){
+                    for (var k in result) {
                         cols.options.add(new Option(k, result[k]));
                     }
                 },
                 headers: {
                     "X-CSRFToken": getCookie("csrftoken")
                 },
-                error: function(e){
+                error: function (e) {
                     console.error(JSON.stringify(e));
                 },
             });
         });
-    }); 
+    });
 });

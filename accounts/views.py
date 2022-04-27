@@ -1,94 +1,27 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views import View
-from .models import Profile, AddressBook
-from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
-from product.models import Category, Product
-from order.models import ShopCart
-from datetime import datetime
+from django.contrib.sites.shortcuts import get_current_site
+
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, EmailMessage
+
 from django.contrib.auth.models import User, Group, auth
 from django.contrib import messages
 
+from .models import Profile, AddressBook, EmailConfirmed
+from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, EmailConfig, SiteConfiguration
+from product.models import Category, Product
+from order.models import ShopCart, Order
 from region.models import Country, Region, City, Area
 from accounts.models import AddressBook, Profile
+from control.emailconfig import backend
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, render
+from datetime import datetime
 
-from .models import EmailConfirmed
+from django.core.mail import EmailMultiAlternatives
 
-from django.contrib import messages
-
-from setting.models import SiteConfiguration
 siteinfo = SiteConfiguration.objects.get()
-
-# def Account(request):
-#     if request.method == "POST":
-#         if 'first_name' in request.POST:
-#             first_name = request.POST['first_name']
-#             last_name = request.POST['last_name']
-#             email = request.POST['email']
-#             password = request.POST['password']
-
-#             user = User.objects.create_user(username = email, first_name = first_name, last_name = last_name, email = email)
-#             user.set_password(password)
-#             user.save()
-#             Profile.objects.create(user = user)
-#             return JsonResponse({'msg': "Account create successfully. please login first", 'success': 'yes'})
-#         else:
-#             email = request.POST['email']
-#             password = request.POST['password']
-#             user = auth.authenticate(username=email, password=password)
-
-#             if user is not None:
-#                 auth.login(request, user)
-#                 pro = Profile.objects.get(user = user)
-#                 pro.online = True
-#                 pro.save()
-#                 cart = ShopCart.objects.filter(user = user).order_by('created_at')
-#                 total_cost = 0
-#                 cart_serialize = []
-#                 cs={}
-#                 for item in cart:
-#                     price = item.product.main_price - (item.product.main_price * item.product.discount / 100)
-#                     cost = price*item.quantity
-#                     total_cost += cost
-#                     cs = {
-#                         "id": item.id,
-#                         "category": item.product.category.name,
-#                         "title": item.product.title,
-#                         "image": item.product.image,
-#                         "main_price": str(item.product.main_price),
-#                         "price": str(item.product.main_price - (item.product.main_price * item.product.discount / 100)),
-#                         "discount": str(item.product.discount),
-#                         "amount": item.quantity
-#                     }
-#                     cart_serialize.append(cs)
-
-
-#                 for item in cart[:1]:
-#                     if item.coupon:
-#                         if item.coupon.discount_type == 'fixed':
-#                             total_cost -= item.coupon.value
-#                         else:
-#                             total_cost = total_cost - (total_cost * item.coupon.value / 100)
-#                 item = cart.count()
-#                 context = {
-#                     'item':item,
-#                     'cost':total_cost,
-#                     'msg': 'Login Successfull',
-#                     'cart': cart_serialize,
-#                     'name': user.first_name+" "+user.last_name
-#                 }
-#                 return JsonResponse(context)
-#             else:
-#                 msg = 'Invalid username or password!'
-#                 return JsonResponse({'msg': msg})
-#         return HttpResponse({"msg": 'Something is wrong'})
-#     return render(request, "account/login.html")
-
 
 def Account(request):
 	if request.method == "POST":
@@ -108,23 +41,19 @@ def Account(request):
 				user.save()
 				euser = EmailConfirmed.objects.get(user = user)
 				site = get_current_site(request)
+				email_config = EmailConfig.objects.get()
 				email = user.email
-				email_body = render_to_string(
-					'account/verify.html',
-					{
-						'email': email,
-						'domain': site.domain,
-						'activation_key': euser.activation_key,
-						'site_name': siteinfo.name,
-					}
-				)
-				send_mail(
-					subject='Email Confirmation',
-					message=email_body,
-					from_email='mdimranh.cse@gmail.com',
-					recipient_list=[email],
-					fail_silently=True
-				)
+				subject, from_email, to = 'Email Verification', email_config.email_host_user, email
+				text_content = 'Email Verification'
+				html_content = render_to_string('verify.html', context={
+					'user': user.first_name+' '+user.last_name,
+					'domain': get_current_site(request).domain,
+					'siteinfo': siteinfo,
+					'activation_key': euser.activation_key,
+				})
+				msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
 				messages.success(request, "Account created successfull. We will send you a link in your email for active your account. Please active your account by click the link.")
 				return redirect('login')
 
@@ -143,22 +72,18 @@ def Account(request):
 				usr.save()
 				euser = EmailConfirmed.objects.get(user = usr)
 				site = get_current_site(request)
-				email_body = render_to_string(
-					'account/recover.html',
-					{
-						'email': usr.email,
-						'domain': site.domain,
-						'activation_key': euser.activation_key,
-						'site_name': siteinfo.name,
-					}
-				)
-				send_mail(
-					subject='Password Recover',
-					message=email_body,
-					from_email='mdimranh.cse@gmail.com',
-					recipient_list=[usr.email],
-					fail_silently=True
-				)
+				email_config = EmailConfig.objects.get()
+				subject, from_email, to = 'Password Recover', email_config.email_host_user, usr.email
+				text_content = 'Password Recover'
+				html_content = render_to_string('recover.html', context={
+					'user': usr.first_name+' '+usr.last_name,
+					'domain': get_current_site(request).domain,
+					'siteinfo': siteinfo,
+					'activation_key': euser.activation_key,
+				})
+				msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
 				messages.success(request, "We will send you a link in your email for recover your password. Please set new password by click the link.")
 				return redirect(request.path_info)
 		else:
@@ -289,27 +214,21 @@ def ProfileView(request):
 	item = 0
 	countrys = Country.objects.all()
 	address_book = AddressBook.objects.filter(user = request.user)
+	if request.COOKIES['cart'] == 'ucart':
+		orders = Order.objects.filter(user = request.user)
+	else:
+		orders = Order.objects.filter(device=request.COOKIES['device'])
 	context = {
 		'address_book': address_book,
-		'countrys': countrys
+		'countrys': countrys,
+		'orders': orders,
+		'category_disable': True
 	}
 	return render(request, 'account/profile.html', context)
 
 def Logout(request):
 	auth.logout(request)
 	return redirect('/')
-
-import json
-# def GetCity(request):
-#     id = request.POST['id']
-#     city = []
-#     f = open('bd-districts.json', 'r', encoding='utf-8')
-#     data = json.load(f)
-#     for i in data['districts']:
-#         if i['division_id'] == id:
-#             city.append((i['name'], i["id"]))
-#     f.close()
-#     return JsonResponse(data = city, safe=False)
 
 
 def GetRegion(request):

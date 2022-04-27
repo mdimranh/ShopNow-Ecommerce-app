@@ -60,22 +60,12 @@
                   {% DefaultCurrency as defaultcurrency %}
                   <tr>
                     <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/currency/{{currency.id}}">{{currency.name}}</a></td>
-                    <td>{% if currency.code == defaultcurrency %}<i class="fas fa-check-circle text-success"></i>{% else %}<i class="fas fa-times-circle text-danger"></i>{% endif %}</td>
+                    <td>{% if currency.code == defaultcurrency.0 %}<i class="fas fa-check-circle text-success"></i>{% else %}<i class="fas fa-times-circle text-danger"></i>{% endif %}</td>
                     <td>{{currency.code}}</td>
                     <td>{{currency.rate}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
-                {% comment %} <tfoot>
-                  <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>{{product.status}}</th>
-                    <th>Amount</th>
-                    <th>Created</th>
-                  </tr>
-                </tfoot> {% endcomment %}
               </table>
             </div>
           </div>

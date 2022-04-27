@@ -12,16 +12,19 @@ $(document).ready(function () {
     ele: "#icon-select",
     options: opt,
     search: true,
+    showSelectedOptionsFirst: true
   });
   VirtualSelect.init({
     ele: "#menu-icon-select",
     options: opt,
     search: true,
+    showSelectedOptionsFirst: true
   });
   VirtualSelect.init({
     ele: "#feature-icon",
     options: opt,
     search: true,
+    showSelectedOptionsFirst: true
   });
   var fi = document.querySelectorAll("#feature-icon")
   fi.forEach((element) => {

@@ -15,7 +15,6 @@
                         <div class="intro-slide">
                             <figure class="slide-image">
                                 <picture>
-                                    <source media="(max-width: 480px)" srcset="assets/images/demos/demo-14/slider/slide-1-480w.jpg">
                                     <img src="{{slider.image.url}}" alt="Image Desc">
                                 </picture>
                             </figure><!-- End .slide-image -->
@@ -42,17 +41,17 @@
             
             <div class="col-xl-3 col-xxl-2 d-none d-xxl-block">
                 <div class="banner banner-overlay  banner-content-stretch ">
-                    <a href="#">
+                    <a href="{{site_config.banner1.call_to_url}}">
                         <img src="{{site_config.banner1.image.url}}" alt="check">
                     </a>
                     <div class="banner-content text-right">
                         <div class="price text-center">
-                            <sup class="text-white">from</sup>
+                            <sup class="text-white">{{site_config.banner1.caption1}}</sup>
                             <span class="text-white">
-                                <strong>$199</strong><sup class="text-white">,99</sup>
+                                <strong>{{site_config.banner1.caption2}}</strong><sup class="text-white">{{site_config.banner1.caption3}}</sup>
                             </span>
                         </div>
-                        <a href="#" class="banner-link">{{site_config.banner1.call_to_text}}<i class="icon-long-arrow-right"></i></a>
+                        <a href="{{site_config.banner1.call_to_url}}" class="banner-link">{{site_config.banner1.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                     </div><!-- End .banner-content -->
                 </div><!-- End .banner banner-overlay -->
             </div><!-- End .col-xl-3 col-xxl-2 -->
@@ -67,25 +66,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="{{site_config.banner3.call_to_url}}">
                                         <img src="{{site_config.banner3.image.url}}" alt="Banner img desc">
                                     </a>
                                     <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Hottest Deals</a></h4><!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white"><a href="#">Detox And Beautify <br>For Spring <br><span>Up To  20% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">check banner<i class="icon-long-arrow-right"></i></a>
+                                        <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="{{site_config.banner3.call_to_url}}">{{site_config.banner3.caption1}}</a></h4><!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner3.call_to_url}}">{{site_config.banner3.caption3}}<br><span>{{site_config.banner3.caption2}}</span></a></h3><!-- End .banner-title -->
+                                        <a href="{{site_config.banner3.call_to_url}}" class="banner-link">{{site_config.banner3.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner -->
                             </div><!-- End .col-md-6 -->
                             <div class="col-md-6">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="{{site_config.banner4.call_to_url}}">
                                         <img src="{{site_config.banner4.image.url}}" alt="Banner img desc">
                                     </a>
                                     <div class="banner-content">
-                                        <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Deal of the Day</a></h4><!-- End .banner-subtitle -->
-                                        <h3 class="banner-title text-white"><a href="#">Headphones <br><span>Up To 30% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="{{site_config.banner3.call_to_url}}">{{site_config.banner4.caption1}}</a></h4><!-- End .banner-subtitle -->
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner4.call_to_url}}">{{site_config.banner4.caption2}} <br><span>{{site_config.banner4.caption3}}</span></a></h3><!-- End .banner-title -->
+                                        <a href="{{site_config.banner4.call_to_url}}" class="banner-link">{{site_config.banner4.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner banner-overlay -->
                             </div><!-- End .col-md-6 -->
@@ -93,13 +92,13 @@
                     </div><!-- End .col-lg-3 col-xxl-4-5col -->
                     <div class="col-12 col-xxl-5col d-none d-xxl-block">
                         <div class="banner banner-overlay">
-                            <a href="#">
+                            <a href="{{site_config.banner1.call_to_url}}">
                                 <img src="{{site_config.banner5.image.url}}" alt="Banner img desc">
                             </a>
                             <div class="banner-content">
-                                <h4 class="banner-subtitle text-white"><a href="#">Clearance</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title text-white"><a href="#">Seating and Tables Clearance</a></h3><!-- End .banner-title -->
-                                <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                <h4 class="banner-subtitle text-white"><a href="{{site_config.banner1.call_to_url}}">{{site_config.banner5.caption1}}</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title text-white"><a href="{{site_config.banner1.call_to_url}}">{{site_config.banner5.caption2}}<br><span>{{site_config.banner5.caption3}}</span></a></h3><!-- End .banner-title -->
+                                <a href="{{site_config.banner1.call_to_url}}" class="banner-link">{{site_config.banner5.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner banner-overlay -->
                     </div><!-- End .col-lg-3 col-xxl-2 -->
@@ -227,9 +226,9 @@
                                             <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in product.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -307,9 +306,9 @@
                                             <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in product.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -409,9 +408,9 @@
                                             <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in product.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -489,9 +488,9 @@
                                             <span class="ratings-text">( {{product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in product.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -591,9 +590,9 @@
                                             <span class="ratings-text">( {{item.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in item.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -609,25 +608,25 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="banner banner-overlay">
-                            <a href="#">
+                            <a href="{{site_config.banner7.call_to_url}}">
                                 <img src="{{site_config.banner7.image.url}}" alt="Banner img desc">
                             </a>
                             <div class="banner-content">
-                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Spring Sale is Coming</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title text-white"><a href="#">Floral T-shirts and Vests  <br><span>Spring Sale</span></a></h3><!-- End .banner-title -->
-                                <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="{{site_config.banner7.call_to_url}}">{{site_config.banner7.caption1}}</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title text-white"><a href="{{site_config.banner7.call_to_url}}">{{site_config.banner7.caption2}}<br><span>{{site_config.banner7.caption3}}</span></a></h3><!-- End .banner-title -->
+                                <a href="{{site_config.banner7.call_to_url}}" class="banner-link">{{site_config.banner7.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
                     </div><!-- End .col-md-6 -->
                     <div class="col-md-6">
                         <div class="banner banner-overlay">
-                            <a href="#">
+                            <a href="{{site_config.banner8.call_to_url}}">
                                 <img src="{{site_config.banner8.image.url}}" alt="Banner img desc">
                             </a>
                             <div class="banner-content">
-                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="#">Amazing Value</a></h4><!-- End .banner-subtitle -->
-                                <h3 class="banner-title text-white"><a href="#">Upgrade and Save <br><span>On The Latest Apple Devices</span></a></h3><!-- End .banner-title -->
-                                <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                <h4 class="banner-subtitle text-white d-none d-sm-block"><a href="{{site_config.banner8.call_to_url}}">{{site_config.banner8.caption1}}</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title text-white"><a href="{{site_config.banner8.call_to_url}}">{{site_config.banner8.caption2}}<br><span>{{site_config.banner8.caption3}}</span></a></h3><!-- End .banner-title -->
+                                <a href="{{site_config.banner8.call_to_url}}" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner banner-overlay -->
                     </div><!-- End .col-md-6 -->
@@ -717,9 +716,9 @@
                                             <span class="ratings-text">( {{item.product.total_review}} Reviews )</span>
                                         </div><!-- End .rating-container -->
                                         <div class="product-nav product-nav-dots">
-                                            <a href="#" class="active" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            {% for  color in item.product.pro_color %}
+                                                <a style="background: {{color}};"><span class="sr-only">Color name</span></a>
+                                            {% endfor %}
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product -->
@@ -794,26 +793,26 @@
                         <div class="col-sm-6 col-xl-12">
                             <div class="widget widget-banner">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
+                                    <a href="{{site_config.banner2.call_to_url}}">
                                         <img src="{{site_config.banner2.image.url}}" alt="Banner img desc">
                                     </a>
                                     <div class="banner-content banner-content-top banner-content-right text-right">
-                                        <h3 class="banner-title text-white"><a href="#">{{site_config.banner2.caption1}}</a></h3><!-- End .banner-title -->
-                                        <h3 class="banner-title text-white"><a href="#">{{site_config.banner2.caption2}}</a></h3><!-- End .banner-title -->
-                                        <h3 class="banner-title text-white"><a href="#">{{site_config.banner2.caption3}}</a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner2.call_to_url}}">{{site_config.banner2.caption1}}</a></h3><!-- End .banner-title -->
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner2.call_to_url}}">{{site_config.banner2.caption2}}</a></h3><!-- End .banner-title -->
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner2.call_to_url}}">{{site_config.banner2.caption3}}</a></h3><!-- End .banner-title -->
+                                        <a href="{{site_config.banner2.call_to_url}}" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner banner-overlay -->
                             </div><!-- End .widget widget-banner -->
                         </div><!-- End .col-sm-6 col-xl-12 -->
                         <div class="col-sm-6 col-xl-12 mb-2">
                             <div class="widget widget-products">
-                                <h4 class="widget-title"><span>Bestsells</span><small> (last week)</small></h4><!-- End .widget-title -->
+                                <h4 class="widget-title"><span>Bestsells</span><small> (last month)</small></h4><!-- End .widget-title -->
                                 <div class="products">
-                                    {% for product in best_sell %}
+                                    {% for product in best_sold %}
                                     <div class="product product-sm">
                                         <figure class="product-media">
-                                            <a href="product.html">
+                                            <a href="/products/{{product.id}}">
                                                 <img src="{{product.image}}" alt="Product image" class="product-image">
                                             </a>
                                         </figure>
@@ -885,87 +884,17 @@
                         <div class="col-sm-6 col-xl-12">
                             <div class="widget widget-banner">
                                 <div class="banner banner-overlay">
-                                    <a href="#">
-                                        <img src="{{site_front.left_banner2.image.url}}" alt="Banner img desc">
+                                    <a href="{{site_config.banner6.call_to_url}}">
+                                        <img src="{{site_config.banner6.image.url}}" alt="Banner img desc">
                                     </a>
                                     <div class="banner-content banner-content-top">
-                                        <h3 class="banner-title text-white"><a href="#">Take Better Photos <br><span>With</span> Canon EOS <br><span>Up To 20% Off</span></a></h3><!-- End .banner-title -->
-                                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                                        <h3 class="banner-title text-white"><a href="{{site_config.banner6.call_to_url}}">{{site_config.banner6.caption1}}<br>{{site_config.banner6.caption2}}<br><span>{{site_config.banner6.caption3}}</span></a></h3><!-- End .banner-title -->
+                                        <a href="{{site_config.banner6.call_to_url}}" class="banner-link">{{site_config.banner6.call_to_text}}<i class="icon-long-arrow-right"></i></a>
                                     </div><!-- End .banner-content -->
                                 </div><!-- End .banner banner-overlay -->
                             </div><!-- End .widget widget-banner -->
                         </div><!-- End .col-sm-6 col-lg-12 -->
-                        
-                        <div class="col-sm-6 col-xl-12">
-                            <div class="widget widget-posts">
-                                <h4 class="widget-title"><span>Latest Blog Posts</span></h4><!-- End .widget-title -->
-                                <div class="owl-carousel owl-simple" data-toggle="owl" 
-                                    data-owl-options='{
-                                        "nav":false, 
-                                        "dots": true, 
-                                        "loop": false,
-                                        "autoHeight": true
-                                    }'>
-                                    <article class="entry">
-                                        <figure class="entry-media">
-                                            <a href="single.html">
-                                                <img src="{{site_config.banner6.image.url}}" alt="image desc">
-                                            </a>
-                                        </figure><!-- End .entry-media -->
-                                        <div class="entry-body">
-                                            <div class="entry-meta">
-                                                <a href="#">Nov 22, 2018</a>, 0 Comments
-                                            </div><!-- End .entry-meta -->
-                                            <h5 class="entry-title">
-                                                <a href="single.html">Sed adipiscing ornare.</a>
-                                            </h5><!-- End .entry-title -->
-                                            <div class="entry-content">
-                                                <p>Lorem ipsum dolor consectetuer adipiscing elit. Phasellus hendrerit. Pelletesque aliquet nibh ...</p>
-                                                <a href="single.html" class="read-more">Read More</a>
-                                            </div><!-- End .entry-content -->
-                                        </div><!-- End .entry-body -->
-                                    </article><!-- End .entry -->
-                                    <article class="entry">
-                                        <figure class="entry-media">
-                                            <a href="single.html">
-                                                <img src="assets/images/demos/demo-14/blog/post-2.jpg" alt="image desc">
-                                            </a>
-                                        </figure><!-- End .entry-media -->
-                                        <div class="entry-body">
-                                            <div class="entry-meta">
-                                                <a href="#">Nov 22, 2018</a>, 0 Comments
-                                            </div><!-- End .entry-meta -->
-                                            <h5 class="entry-title">
-                                                <a href="single.html">Vivamus vestibulum ntulla.</a>
-                                            </h5><!-- End .entry-title -->
-                                            <div class="entry-content">
-                                                <p>Phasellus hendrerit. Pelletesque aliquet nibh necurna In nisi neque, aliquet vel, dapibus id ... </p>
-                                                <a href="single.html" class="read-more">Read More</a>
-                                            </div><!-- End .entry-content -->
-                                        </div><!-- End .entry-body -->
-                                    </article><!-- End .entry -->
-                                    <article class="entry">
-                                        <figure class="entry-media">
-                                            <a href="single.html">
-                                                <img src="assets/images/demos/demo-14/blog/post-3.jpg" alt="image desc">
-                                            </a>
-                                        </figure><!-- End .entry-media -->
-                                        <div class="entry-body">
-                                            <div class="entry-meta">
-                                                <a href="#">Nov 22, 2018</a>, 0 Comments
-                                            </div><!-- End .entry-meta -->
-                                            <h5 class="entry-title">
-                                                <a href="single.html">Praesent placerat risus.</a>
-                                            </h5><!-- End .entry-title -->
-                                            <div class="entry-content">
-                                                <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc ...</p>
-                                                <a href="single.html" class="read-more">Read More</a>
-                                            </div><!-- End .entry-content -->
-                                        </div><!-- End .entry-body -->
-                                    </article><!-- End .entry -->
-                                </div><!-- End .owl-carousel -->
-                            </div><!-- End .widget widget-posts -->
-                        </div><!-- End .col-sm-6 col-xl-12 -->
+
                     </div><!-- End .row -->
                 </div><!-- End .sidebar sidebar-home -->
             </aside><!-- End .col-lg-3 col-xxl-2 -->

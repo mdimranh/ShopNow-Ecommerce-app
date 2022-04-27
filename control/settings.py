@@ -111,6 +111,7 @@ def SettingView(request):
 				name = 'cashon',
 			)
 			payment_method.active = True if request.POST.get('cashon-enable') == 'on' else False
+			payment_method.about = request.POST['about-cashon']
 			payment_method.save()
 			return redirect(request.path_info)
 
@@ -129,7 +130,9 @@ def SettingView(request):
 							name_plural = data1[cur]['name_plural']
 						)
 						crncy.save()
-			
+			setting = Settings.objects.all().first()
+			setting.default_currency = Currency.objects.get(code = request.POST['default-currency'])
+			setting.save()
 			return redirect(request.path_info)
 
 		elif 'mail-host' in request.POST:
@@ -608,15 +611,6 @@ class Area(View):
 			get_area.save()
 		return redirect(request.path_info)
 
-# class CurrencyView(View):
-#     	def get(self, request):
-# 		currencies = Currency.objects.all()
-# 		context = {
-# 			'currencies': currencies,
-# 			'localization_sec': True,
-# 			'currency_sec': True,
-# 		}
-# 		return render(request, 'control/currency.html', context)
 class CurrencyList(ListView):
 	model = Currency
 	template_name='control/currency.html'
@@ -646,6 +640,7 @@ class CurrencyView(View):
 		get_currency.symbol = request.POST['symbol']
 		get_currency.symbol_native = request.POST['symbol_native']
 		get_currency.rate = request.POST['rate']
+		get_currency.request = request
 		get_currency.save()
 		return redirect(request.path_info)
 

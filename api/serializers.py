@@ -57,11 +57,6 @@ class WishlistSerializer(serializers.ModelSerializer):
         model = Wishlist
         fields = '__all__'
 
-class ShopcartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ShopCart
-        fields = '__all__'
-
 class UserSrializer(serializers.ModelSerializer):
     class Meta:
         model = User

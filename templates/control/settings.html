@@ -26,10 +26,6 @@
     {% block main %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
         <h3 class="fw-bold">Setting's</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/settings/" class="text-decoration-none breadcrumb-item text-secondary">Settings</a>
-        </div>
       </div>
       <div class="card">
           <div class="container-fluid">
@@ -887,7 +883,7 @@
                   </form>
                   <form id="cashon" class="product-form needs-validation d-none" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
                     {% csrf_token %}
-                    <h6 class="mt-2 text-primary fw-bolder h4">Paypal</h6>
+                    <h6 class="mt-2 text-primary fw-bolder h4">Cash On Delivery</h6>
                     <hr />
                     <br />
                     <div class="row mb-1">
@@ -912,6 +908,27 @@
                             <span>Enable Cash On Delivery</span>
                           </label>
                         </div>
+                      </div>
+                    </div>
+                    <div class="row mb-3 paypal-field {% if not paypal.active %}d-none{% endif %}">
+                      <label
+                        for="about-cashon"
+                        class="col-xl-2 col-form-label d-none d-xl-block"
+                        >About Cash On Delivery</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="about-cashon"
+                          name="about-cashon"
+                          placeholder="About Cash On Delivery"
+                          required
+                          {% if cashon.about %}
+                            value="{{cashon.about}}"
+                          {% endif %}
+                        />
+                        <div class="invalid-feedback">Please enter about cash on delivery</div>
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -944,9 +961,9 @@
                         >Supported Currency</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-control" id="support-currency" name="support-currency" required multiple>
+                        <select class="form-control" id="support-currency" name="support-currency" required multiple keepValue>
                           {% for x, y in currencies.items %}
-                            <option value="{{y.code}}" {% if y.code in sup_currency %}selected{% endif %}>{{y.name_plural}} ({{y.symbol_native}})</option>
+                            <option value="{{y.code}}" {% if y.code == dc.0 %}disabled{% endif %} {% if y.code in sup_currency %}selected{% endif %}>{{y.name_plural}} ({{y.symbol_native}})</option>
                           {% endfor %}
                         </select>
                         <div class="invalid-feedback">Please Select Country</div>
@@ -960,9 +977,9 @@
                       >
                       <div class="col-xl-10">
                         <select class="virtual-select hideClear" id="default-currency" name="default-currency" required>
-                          {% for x, y in currencies.items %}
-                            <option value="{{y.code}}">{{y.name_plural}} ({{y.symbol_native}})</option>
-                          {% endfor %}
+                          {% comment %} {% for x, y in currencies.items %}
+                            <option value="{{y.code}}" {% if y.code == dc.0 %}selected{% endif %}>{{y.name_plural}} ({{y.symbol_native}})</option>
+                          {% endfor %} {% endcomment %}
                         </select>
                         <div class="invalid-feedback">Please Select currency</div>
                       </div>

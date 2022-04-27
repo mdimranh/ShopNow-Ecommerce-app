@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% mycurrency as mycurrency %}
+{% load humanize %}
+{% load mathfilters %}
+{% block title %}Checkout - {{site_config.name}}{% endblock title %}
+{% block custom %}
+<div class="main invoice mt-4">
+  <div class="container card">
+    <div class="d-flex flex-fill justify-content-end" style="margin-bottom: -40px; z-index: 200;">
+      {% comment %} <div class="btn btn-success" id="print-btn">Print</div> {% endcomment %}
+      <a href="/generatepdf/{{order.id}}" class="btn btn-success">Print</a>
+    </div>
+    <div class="row p-3" id="invoice">
+      <div class="col-12 d-flex justify-content-between">
+        <div>
+          <img class="p-0 m-0" src="{{site_config.logo.url}}" style="max-width: 120px; height: auto;">
+          <h6 class="bolden mt-2 mb-1">{{site_config.name}}</h6>
+          <h6 class="my-2">{{storeinfo.address1}}</h6>
+          <h6 class="my-2">{{site_config.email}}</h6>
+          <h6 class="my-2">{{site_config.phone}}</h6>
+        </div>
+      </div>
+      <div class="col-4 mt-5">
+        <h5>Client Information:</h5>
+        <h6 class="mb-0">{{order.first_name}}</h6>
+        <p class="mb-0 pb-0">{{order.address}}</p>
+        <p style="margin-top: -5px;">{{order.area}}, {{order.region}}, {{order.country}}</p>
+        <p style="margin-top: -5px;">{{order.email}}</p>
+        <p style="margin-top: -5px;">{{order.phone}}</p>
+      </div>
+      <div class="col-4 mt-5">
+        <h5>Order Information:</h5>
+        <p class="m-0 p-0"><span class="h6">Date:</span> {{order.order_date|date:"d M, o"}} | {{order.order_date|time:"g:i A"}}</p>
+        <p class="m-0 p-0"><span class="h6">Status:</span> {{order.status}}</p>
+        <p class="m-0 p-0"><span class="h6">ID:</span> #{{order.id|intformat:5}}</p>
+      </div>
+      <div class="col-4 mt-5">
+        <h5>Payment Information:</h5>
+        {% if order.payment_mode == 'cash' %}
+          <p class="m-0 p-0"><span class="h6">Payment Method:</span> Cash On</p>
+          <p class="m-0 p-0"><span class="h6">Total Pay:</span> 0</p>
+          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2}}</p>
+        {% else %}
+          <p class="m-0 p-0"><span class="h6">Payment Method:</span> {% if order.payment_mode == 'cash' %}Cash On{% else %}{{order.payment_mode}}{% endif %}</p>
+          <p class="m-0 p-0"><span class="h6">Total Pay:</span> {{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2}}</p>
+          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{due|mul:mycurrency.0|floatformat:2}}</p>
+        {% endif %}
+      </div>
+      <div class="col-12 mt-5">
+        <table class="table no-border">
+          <thead>
+            <tr class="default">
+              <th scope="col">Image</th>
+              <th scope="col">Product</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Line Total</th>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cart in order.shopcart.carts.all %}
+            <tr>
+              <td class="product-col">
+								<div class="product">
+									<figure class="product-media">
+										<a href="#">
+											<img src="{{cart.product.image}}" alt="Product image">
+										</a>
+									</figure>
+								</div><!-- End .product -->
+							</td>
+              <td>
+								<h3 class="product-title">
+									<a href="/products/{{cart.product.id}}" class="text-nowrap">{{cart.product.title}}</a></span>
+									<div class="d-flex flex-column mt-1">
+										{% if cart.color %}
+											<span class="text-nowrap small">Color: {{cart.color}}</span>
+										{% endif %}
+										{% if cart.size %}
+											<span class="text-nowrap small">Size: {{cart.size}}</span>
+										{% endif %}
+										{% for option in cart.options.all %}
+											<span class="text-nowrap small">{{option.parent_name}}: {{option.label}}</span>
+										{% endfor %}
+									</div>
+								</h3><!-- End .product-title -->
+							</td>
+              <td>{{mycurrency.1}}{{cart.total|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+              <td>{{cart.quantity}}</td>
+              <td>{{mycurrency.1}}{{cart.total|mul:mycurrency.0|mul:cart.quantity|floatformat:2|intcomma}}</td>
+              <td></td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="bolden pt-5">Subtotal</td>
+              <td class="pt-5">{{mycurrency.1}}{{order.subtotal|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="bolden">{{order.ship_name}}</td>
+              <td>{{mycurrency.1}}{{order.ship_cost|mul:mycurrency.0}}</td>
+            </tr>
+            {% if order.coupons|length > 0 %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="bolden">Coupon:</td>
+                <td></td>
+              </tr>
+              {% for coupon in order.coupons %}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><span class="pl-4">{{forloop.counter}}. {{coupon.0}}</span></td>
+                  <td>{% if coupon.1|last == '%' %}-{{coupon.1}}{% else %}-{{coupon.1}}{% endif %}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="h5 bolden">Total</td>
+              <td>{{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock custom %}

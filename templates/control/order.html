@@ -1,5 +1,8 @@
 {% extends 'control/base.html' %}
 {% load static %}
+{% load humanize %}
+{% load custom_tags %}
+{% load mathfilters %}
 {% block title %}{{site_config.name}} | Orders{% endblock title %}
 
     {% block style %}
@@ -38,19 +41,10 @@
       {% if order %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
         <h3 class="fw-bold">{{product_details.title}}</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/orders/" class="text-decoration-none breadcrumb-item text-secondary">Order</a>
-          <span class="breadcrumb-item text-secondary">{{order.id}}</span>
-        </div>
       </div>
       {% else %}
       <div class="d-flex flex-fill justify-content-between align-items-center">
         <h3 class="fw-bold">Orders</h3>
-        <div class="d-flex">
-          <a href="/control" class="text-decoration-none breadcrumb-item text-secondary"><i class="fas fa-home"></i></a>
-          <a href="/control/orders/" class="text-decoration-none breadcrumb-item text-secondary">Orders</a>
-        </div>
       </div>
       {% endif %}
       {% if not order %}
@@ -103,7 +97,7 @@
                   {% for order in orders %}
                   <tr>
                     <td >{{order.id}}</td>
-                    <td ><a href="/control/order/{{order.id}}" class="title">{{order.user.first_name}} {{order.user.last_name}}</a></td>
+                    <td ><a href="/control/order/{{order.id}}" class="title">{{order.first_name}} {{order.last_name}}</a></td>
                     <td><a href="/control/order/{{order.id}}" class="title">{{order.email}}</a></td>
                     <td>{{order.status}}</td>
                     <td ><span class="money">{{order.total}}</span></td>
@@ -153,13 +147,15 @@
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row" class="h6">Shipping Method</th>
-                    <td class="h6">{{order.payment_mode}}</td>
+                    <th scope="row" class="h6">Payment Method</th>
+                    <td class="h6">{% if order.payment_mode == 'cash' %}Cash On Delivery{% else %}Paypal{% endif %}</td>
                   </tr>
-                  <tr>
-                    <th scope="row" class="h6">Order Note</th>
-                    <td class="h6">{{order.notes}}</td>
-                  </tr>
+                  {% if order.notes|length > 0 %}
+                    <tr>
+                      <th scope="row" class="h6">Order Note</th>
+                      <td class="h6">{{order.notes}}</td>
+                    </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -169,7 +165,7 @@
                 <tbody>
                   <tr>
                     <th scope="row" class="h6">Customer Name</th>
-                    <td class="h6">{{order.user.first_name}} {{order.user.last_name}}</td>
+                    <td class="h6">{{order.first_name}} {{order.last_name}}</td>
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Customer Email</th>
@@ -181,7 +177,7 @@
                   </tr>
                   <tr>
                     <th scope="row" class="h6">Customer Group</th>
-                    <td class="h6">Registered</td>
+                    <td class="h6">{% if order.user %}Registered{% else %}Guest{% endif %}</td>
                   </tr>
                 </tbody>
               </table>
@@ -244,36 +240,46 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for cart in order.shopcarts.all %}
+                  {% for cart in order.shopcart.carts.all %}
                   <tr>
-                    <td><a href="/control/product/edit-product/{{cart.product.id}}" class="text-decoration-none">{{cart.product.title}}</a></td>
-                    <td>৳{{cart.product.price|floatformat:2}}</td>
+                    <td>{{forloop.counter}}. <a href="/control/product/edit-product/{{cart.product.id}}" class="text-decoration-none">{{cart.product.title}}</a></td>
+                    <td>{{dc.2}}{{cart.total|mul:dc.1|floatformat:2|intcomma}}</td>
                     <td>{{cart.quantity}}</td>
-                    {% comment %} <td>৳{% widthratio cart.product.price 1 cart.quantity %}</td> {% endcomment %}
-                    <td>৳{{cart.cost|floatformat:2}}</td>
+                    <td>{{dc.2}}{{cart.total|mul:dc.1|mul:cart.quantity|floatformat:2|intcomma}}</td>
                     <td></td>
                   </tr>
                   {% endfor %}
                   <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td>Subtotal</td>
-                    <td>৳{{order.total_bdt|floatformat:2}}</td>
+                    <td class="fw-bold">Subtotal</td>
+                    <td>{{dc.2}}{{order.subtotal|mul:dc.1|floatformat:2|intcomma}}</td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td>{{order.shipping_method.name}}</td>
-                    <td>৳{{order.shipping_fee|floatformat:2}}</td>
+                    <td class="fw-bold">{{order.ship_name}}</td>
+                    <td>{{dc.2}}{{order.ship_cost|mul:dc.1}}</td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
+                    <td class="fw-bold">Coupon:</td>
                     <td></td>
-                    <td class="fw-bolder">Total</td>
-                    <td>৳{{order.total_bdt|floatformat:2}}</td>
+                  </tr>
+                  {% for coupon in order.coupons %}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td><span class="ps-4">{{forloop.counter}}. {{coupon.0}}</span></td>
+                    <td>{% if coupon.1|last == '%' %}-{{coupon.1}}{% else %}-{{coupon.1}}{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="h5 fw-bolder">Total</td>
+                    <td>{{dc.2}}{{order.total|mul:dc.1|floatformat:2|intcomma}}</td>
                   </tr>
                 </tbody>
               </table>

@@ -3,22 +3,9 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}">
 {% endblock extra_css %}
+{% block title %}{{user.first_name}} {{user.last_name}}{% endblock title %}
 {% block custom %}
-<main class="main">
-    {% comment %} <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-    	<div class="container">
-    		<h1 class="page-title">My Account<span>Shop</span></h1>
-    	</div><!-- End .container -->
-    </div><!-- End .page-header --> {% endcomment %}
-    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="page">My Account</li>
-            </ol>
-        </div><!-- End .container -->
-    </nav><!-- End .breadcrumb-nav -->
+<main class="main mt-3">
 
     <div class="page-content">
             	<div class="dashboard">
@@ -79,7 +66,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {% if user.user_order.all|length > 0 %}
+                                                {% if orders|length > 0 %}
                                                 <div class="col-12 m-0 p-0">
                                                     <h6 class="m-0 p-0 d-flex flex-fill">Recent Orders<a href="#tab-orders" class="tab-trigger-link ml-3">edit</a></h6>
                                                     <table class="table table-cart table-mobile">
@@ -93,14 +80,14 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {% for order in user.user_order.all %}
+                                                            {% for order in orders %}
                                                             {% if forloop.last %}
                                                             <tr>
                                                                 <td>{{order.id}}</td>
                                                                 <td>{{order.order_date|date}}</td>
                                                                 <td>{{order.status}}</td>
                                                                 <td>&#2547;{{order.total}}</td>
-                                                                <td><a href=""><i class="fas fa-eye px-2"></i>View</a></td>
+                                                                <td><a href="/invoice/{{order.id}}"><i class="fas fa-eye px-2"></i>View</a></td>
                                                             </tr>
                                                             {% endif %}
                                                             {% endfor %}
@@ -114,7 +101,7 @@
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
 								    	<h4>Orders</h4>
-                                        {% if user.user_order.all|length > 0 %}
+                                        {% if orders|length > 0 %}
                                         <table class="table table-cart table-mobile">
                                             <thead>
                                                 <tr>
@@ -126,13 +113,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for order in user.user_order.all %}
+                                                {% for order in orders %}
                                                 <tr>
                                                     <td>{{order.id}}</td>
                                                     <td>{{order.order_date|date}}</td>
                                                     <td>{{order.status}}</td>
                                                     <td>&#2547;{{order.total}}</td>
-                                                    <td><a href=""><i class="fas fa-eye px-2"></i>View</a></td>
+                                                    <td><a href="/invoice/{{order.id}}"><i class="fas fa-eye px-2"></i>View</a></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -210,7 +197,7 @@
                                                     </td>
                                                     <td>{{review.add_on|date}}</td>
                                                     <td>
-                                                        <div class="ratings-container">
+                                                        <div class="ratings-container mb-0">
                                                             <div class="ratings">
                                                                 <div class="ratings-val" style="width: {{review.rating}}%;"></div><!-- End .ratings-val -->
                                                             </div><!-- End .ratings -->
