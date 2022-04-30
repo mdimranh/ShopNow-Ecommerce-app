@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'setting',
     'region',
 
-    'mathfilters',
+    # 'mathfilters',
 
     'ckeditor',
     'ckeditor_uploader',
