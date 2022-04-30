@@ -111,11 +111,11 @@ WSGI_APPLICATION = 'EcomApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd147doie8d7ft5',
-        'USER' : 'pymigjjaejziwh',
-        'PASSWORD' : '8b136622ed1de75d880f69e7cfa78243f48ce643b4b2167fe687d5fdcc62bc70',
+        'NAME': 'dc3rcanq73398q',
+        'USER' : 'pljxrbcmnqtmyn',
+        'PASSWORD' : '9b903427d3105c90157c8e79038cab7c9dc6e7ecd201b9b7d04b5af97a06803e',
         'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
-        'PORT': 5432,
+        'PORT': '5432',
     }
 }
 
