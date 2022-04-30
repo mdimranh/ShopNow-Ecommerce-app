@@ -92,7 +92,7 @@
                       <div class="col-xl-10">
                         <select class="disable" id="slider" name="slider">
                           {% for slider in sliders %}
-                          <option value="{{slider.id}}" {% if slider.id == sitefront.slider.id %}selected{% endif %} >{{slider.name}}</option>
+                          <option value="{{slider.id}}" {% if slider.id == siteinfo.slider.id %}selected{% endif %} >{{slider.name}}</option>
                           {% endfor %}
                         </select>
                       </div>

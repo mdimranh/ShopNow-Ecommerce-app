@@ -114,7 +114,7 @@
                   </div>
                 </div>
                 <div class="col-xxl-9 col-lg-8 col-md-6 mt-4 px-4 card">
-                  <form class="mt-2 mb-3" id="location-form" method="post">
+                  <form class="mt-2 mb-3 needs-validation" id="location-form" method="post" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="type" id="type" value="add-country">
                     <input type="hidden" name="id" id="id" value="id">
@@ -134,6 +134,7 @@
                           id="name"
                           name="name"
                           placeholder="Name"
+                          required
                         />
                       </div>
                     </div>

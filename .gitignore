@@ -2,4 +2,3 @@ venv
 media/*
 templates/others
 media/logo
-check.py

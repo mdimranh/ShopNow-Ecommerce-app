@@ -92,13 +92,16 @@ def ProductDetails(request, id):
 
 class CategoryProduct(View):
 
-    def get(self, request, id, slug):
-        if Category.objects.filter(id = id, slug = slug).exists():
+    def get(self, request, type, id):
+        if type == 'category' and Category.objects.filter(id = id).exists():
             product = Product.objects.filter(category__id = id).order_by('rate')
-        elif Group.objects.filter(id = id, slug = slug).exists():
+            query = Category.objects.get(id = id).name
+        elif type == 'group' and Group.objects.filter(id = id).exists():
             product = Product.objects.filter(group__id = id).order_by('rate')
-        elif Subcategory.objects.filter(id = id, slug = slug).exists():
+            query = Group.objects.get(id = id).name
+        elif type == 'subcategory' and Subcategory.objects.filter(id = id).exists():
             product = Product.objects.filter(subcategory__id = id).order_by('rate')
+            query = Subcategory.objects.get(id = id).name
 
         paginator = Paginator(product, 12) # Show 12 contacts per page.
         page_number = request.GET.get('page')
@@ -107,32 +110,32 @@ class CategoryProduct(View):
         context = {
             'product': page_obj,
             'id': id,
-            'slug': slug, 
-            'categories': categories
+            'categories': categories,
+            'query': query
         }
         return render(request, 'product/category.html', context)
 
-    def post(self, request, id, slug):
+    def post(self, request, id):
         if request.POST['sortby'] == 'new_old':
-            if Category.objects.filter(id = id, slug = slug).exists():
+            if Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('-created_at')
-            elif Group.objects.filter(id = id, slug = slug).exists():
+            elif Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('-created_at')
-            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+            elif Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('-created_at')
         elif request.POST['sortby'] == 'old_new':
-            if Category.objects.filter(id = id, slug = slug).exists():
+            if Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('created_at')
-            elif Group.objects.filter(id = id, slug = slug).exists():
+            elif Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('created_at')
-            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+            elif Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('created_at')
         elif request.POST['sortby'] == 'rate':
-            if Category.objects.filter(id = id, slug = slug).exists():
+            if Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('-rate')
-            elif Group.objects.filter(id = id, slug = slug).exists():
+            elif Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('-rate')
-            elif Subcategory.objects.filter(id = id, slug = slug).exists():
+            elif Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('-rate')
 
         paginator = Paginator(product, 12) # Show 12 contacts per page.

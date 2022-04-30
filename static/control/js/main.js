@@ -1324,6 +1324,12 @@ function deleteBrand() {
 
 //! page section
 
+function pagelink(link, event) {
+  navigator.clipboard.writeText(link)
+  event.classList.remove("far")
+  event.classList.add("fas")
+}
+
 var $pagetable = $('#page-table')
 var selections = []
 
@@ -1388,7 +1394,6 @@ function deletePage() {
     },
   });
 };
-
 
 
 //! coupon section

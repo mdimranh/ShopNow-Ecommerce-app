@@ -93,7 +93,7 @@ class Cart(models.Model):
 		return main_price
 
 class ShopCart(models.Model):
-	carts = models.ManyToManyField(Cart)
+	carts = models.ManyToManyField(Cart, related_name='parents')
 	user = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True, related_name="user_shopcart")
 	device = models.TextField(blank=True, null=True)
 	coupon = models.ManyToManyField(Coupon)

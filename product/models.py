@@ -170,25 +170,6 @@ class Product(models.Model):
 					continue
 		return related_p
 
-	# def pro_option(self):
-	#     no_option = False
-	#     c = 0
-	#     for i in self.option:
-	#         lst = []
-	#         arrange = str(i[2]).replace('), (', ',').replace('[(', '').replace(')]', '').replace(' ', '').replace("'", "").split(',')
-	#         for j in range(0, len(arrange), 2):
-	#             if arrange[j] == '':
-	#                 no_option = True
-	#             lst.append((arrange[j], arrange[j+1]))
-	#         self.option[c][2] = lst
-	#         lst = []
-	#         c += 1
-	#     if no_option:
-	#         True
-	#     else:
-	#         return self.option
-		
-
 	def addtional_images(self):
 		return Images.objects.filter(unique = self.unique)
 
@@ -203,9 +184,18 @@ class Product(models.Model):
 		return rating if type(rating) == float else 0
 
 	def hot_deal_active(self):
-		if self.hot_deal_end >= date.today():
+		if self.hot_deal_end > date.today():
 			return True
 		else: return False
+
+	def hd_end(self):
+		return self.hot_deal_end+timedelta(1)
+
+	def hd_disc(self):
+		if self.hot_deal_discount_type == 'percentage':
+			return f'hot deal | {self.hot_deal_discount}% '+' off'
+		else: return f'hot deal | {self.hot_deal_discount} off'
+    		 
 
 	def total_review(self):
 		return Review.objects.filter(product=self).count()

@@ -46,12 +46,24 @@ function AddProduct(id, quantity) {
         'options': options
       },
       success: function (resp) {
-        document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
-        $("#cart-total-price").parent().removeClass("d-none")
-        $("#dropdown-cart-products").empty();
-        varjson = JSON.parse(JSON.stringify(resp.cart));
-        varjson.forEach(function (data) {
-          var div = `<div class="product">
+        if (resp.msg_type == 'fail') {
+          document.getElementById("overlay").style.display = "none";
+          new PNotify({
+            title: 'Fail to add',
+            type: 'fail',
+            text: resp.msg,
+            addclass: 'stack-bottom-right',
+            icon: true,
+            delay: 2500
+          });
+        }
+        else {
+          document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
+          $("#cart-total-price").parent().removeClass("d-none")
+          $("#dropdown-cart-products").empty();
+          varjson = JSON.parse(JSON.stringify(resp.cart));
+          varjson.forEach(function (data) {
+            var div = `<div class="product">
                       <div class="product-cart-details">
                           <h4 class="product-title">
                               <a href="product.html">${data.title}</a>
@@ -68,14 +80,14 @@ function AddProduct(id, quantity) {
                       </figure>
                       <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
-          $('#dropdown-cart-products').append(div);
-        });
-        if ($("#wishitem" + id).length > 0) {
-          document.getElementById("wishitem" + id).remove();
-        }
-        $(".cart-count").text(resp.item);
-        var product = JSON.parse(resp.product);
-        var div = `<tr>
+            $('#dropdown-cart-products').append(div);
+          });
+          if ($("#wishitem" + id).length > 0) {
+            document.getElementById("wishitem" + id).remove();
+          }
+          $(".cart-count").text(resp.item);
+          var product = JSON.parse(resp.product);
+          var div = `<tr>
                     <td class="product-col">
                         <div class="product">
                             <figure class="product-media">
@@ -100,10 +112,11 @@ function AddProduct(id, quantity) {
                         </div><!-- End .cart-product-quantity -->
                     </td>
                 </tr>`;
-        document.getElementById("overlay").style.display = "none";
-        $('#modal-table-body').empty();
-        $('#modal-table-body').append(div);
-        $('#add-product-modal').iziModal('open');
+          document.getElementById("overlay").style.display = "none";
+          $('#modal-table-body').empty();
+          $('#modal-table-body').append(div);
+          $('#add-product-modal').iziModal('open');
+        }
       },
       headers: {
         "X-CSRFToken": getCookie("csrftoken")
@@ -239,23 +252,28 @@ function AddWishlist(id) {
     },
     success: function (resp) {
       document.getElementById("overlay").style.display = "none";
-      if (resp.type == 'success') {
+      if (resp.type == 'add') {
+        var type = 'success'
         $(".wishlist-count").text(parseInt($(".wishlist-count").text()) + 1)
         title = 'Successfully Added'
         document.querySelectorAll("#btn-wishlist" + id).forEach((element) => {
           $(element).addClass("select")
         })
       }
-      else {
+      else if (resp.type == 'remove') {
+        var type = 'fail'
         $(".wishlist-count").text(parseInt($(".wishlist-count").text()) - 1)
-        title = 'Fail'
+        title = 'Successfully Removed'
         document.querySelectorAll("#btn-wishlist" + id).forEach((element) => {
           $(element).removeClass("select")
         })
       }
+      else {
+        title = 'Fail'
+      }
       new PNotify({
         title: title,
-        type: resp.type,
+        type: type,
         text: resp.msg,
         addclass: 'stack-bottom-right',
         icon: true,
@@ -268,20 +286,21 @@ function AddWishlist(id) {
   });
 }
 
-function WishItemDelete(id) {
+function WishItemDelete(w_id, pro_id) {
   document.getElementById("overlay").style.display = "block";
   $.ajax({
     type: 'POST',
     url: '/ajax/deletewishlist',
     data: {
-      'id': id,
+      'wishlist_id': w_id,
+      'product_id': pro_id,
       'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
     },
     success: function (resp) {
-      $('#item' + id).remove();
+      $('#item' + pro_id).remove();
       $(".wishlist-count").text(parseInt($(".wishlist-count").text()) - 1)
       if (parseInt($(".wishlist-count").text()) == 0) {
-        $(".wishlist-table").addClass("d-none")
+        $(".table-wishlist").addClass("d-none")
         $(".empty-wishlist").removeClass("d-none")
       }
       else {

@@ -103,11 +103,11 @@
                                             <div class="product-details-quantity">
                                                 <input type="number" id="pro-quantity" class="form-control" value="1" min="1" max="{{product.amount}}" step="1" data-decimals="0" required>
                                             </div><!-- End .product-details-quantity -->
-                                            <a href="" class="btn-product btn-cart" onclick="AddProduct({{product.id}}, 'yes')"><span>add to cart</span></a>
                                         </div><!-- End .details-action-col -->
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist" onclick="AddWishlist({{product.id}})"><span>Add to Wishlist</span></a>
-                                            <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
+                                            <a href="" class="btn-product btn-cart" onclick="AddProduct({{product.id}}, 'yes')"><span>add to cart</span></a>
+                                            <a href="#" class="btn-product btn-wishlist py-3" title="Wishlist" onclick="AddWishlist({{product.id}})"><span>Add to Wishlist</span></a>
+                                            {% comment %} <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> {% endcomment %}
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
                                     <div class="product-details-footer details-footer-col">
@@ -267,17 +267,24 @@
                         {% for pro in products %}
                         <div class="product product-7 text-center">
                             <figure class="product-media">
-                                <span class="product-label label-new">New</span>
+                                {% if pro.hot_deal_active %}
+                                    <span class="product-label label-sale bg-success">{{pro.hd_disc}}</span>
+									<div class="product-countdown" data-until="+{{pro.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+								{% endif %}
                                 <a href="product.html">
                                     <img src="{{pro.image}}" alt="Product image" class="product-image">
                                 </a>
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                    <div id="btn-wishlist{{product.id}}" class="btn-product-icon btn-wishlist {% if product in wishlist.1 %}select{% endif %}" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></div>
+                                    {% comment %} <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a> {% endcomment %}
+                                    {% comment %} <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a> {% endcomment %}
                                 </div><!-- End .product-action-vertical -->
                                 <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
+                                            <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
                             <div class="product-body">
@@ -306,12 +313,13 @@
                         {% endfor %}
                     </div><!-- End .owl-carousel -->
                 </div><!-- End .col-lg-9 -->
+                {% if product.related_pro|length > 0 %}
                 <aside class="col-lg-3">
                     <div class="sidebar sidebar-product">
                         <div class="widget widget-products">
                             <h4 class="widget-title">Related Product</h4><!-- End .widget-title -->
                             <div class="products">
-                                {% for product in products %}
+                                {% for product in product.related_pro %}
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
@@ -328,7 +336,7 @@
                                 </div><!-- End .product product-sm -->
                                 {% endfor %}
                             </div><!-- End .products -->
-                            <a href="category.html" class="btn btn-outline-dark-3"><span>View More Products</span><i class="icon-long-arrow-right"></i></a>
+                            {% comment %} <a href="category.html" class="btn btn-outline-dark-3"><span>View More Products</span><i class="icon-long-arrow-right"></i></a> {% endcomment %}
                         </div><!-- End .widget widget-products -->
                         {% comment %} <div class="widget widget-banner-sidebar">
                             <div class="banner-sidebar-title">ad box 280 x 280</div><!-- End .ad-title -->
@@ -341,6 +349,7 @@
                         </div><!-- End .widget --> {% endcomment %}
                     </div><!-- End .sidebar sidebar-product -->
                 </aside><!-- End .col-lg-3 -->
+                {% endif %}
             </div><!-- End .row -->
         </div><!-- End .container -->
     </div><!-- End .page-content -->
@@ -352,6 +361,7 @@
 {% endblock custom %}
 
 {% block extra_js %}
+<script src="{% static 'assets/add-product.js' %}"></script>
 <script src="{% static 'assets/js/jquery.elevateZoom.min.js' %}"></script>
 <script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
 {% endblock extra_js %}

@@ -229,7 +229,7 @@
 
                                         <a href="/wishlist" class="wishlist-link">
                                             <i class="icon-heart-o"></i>
-                                            <span class="wishlist-count">{{ wishlist.product.all|length }}</span>
+                                            <span class="wishlist-count">{{ wishlist.1|length }}</span>
                                             <span class="wishlist-txt">Wishlist</span>
                                         </a>
 
@@ -318,7 +318,7 @@
                                             {% for category in cat|categorys %}
                                             {% if category.groups.all|length > 0 %}
                                             <li class="megamenu-container">
-                                                <a class="sf-with-ul" href="/category/{{category.id}}/{{category.slug}}"><i class="{{category.icon}}"></i>{{category.name}}</a>
+                                                <a class="sf-with-ul" href="/category/{{category.id}}"><i class="{{category.icon}}"></i>{{category.name}}</a>
                                                 <div class="megamenu">
                                                     <div class="row no-gutters">
                                                         <div class="col-md-8">
@@ -327,10 +327,10 @@
                                                                     {% for group in category.groups.all %}
                                                                         {% if group.subcategorys.all|length > 0 %}
                                                                         <div class="col-md-4">
-                                                                            <div class="menu-title"><a href="/category/{{group.id}}/{{group.slug}}">{{group.name}}</a></div><!-- End .menu-title -->
+                                                                            <div class="menu-title"><a href="/group/{{group.id}}">{{group.name}}</a></div><!-- End .menu-title -->
                                                                             <ul>
                                                                                 {% for subcat in group.subcategorys.all %}
-                                                                                    <li><a href="/category/{{subcat.id}}/{{subcat.slug}}">{{subcat.name}}</a></li>
+                                                                                    <li><a href="/subcategory/{{subcat.id}}">{{subcat.name}}</a></li>
                                                                                 {% endfor %}
                                                                             </ul>
                                                                         </div><!-- End .col-md-6 -->
@@ -379,11 +379,11 @@
                                                         {% for category in menu.categorys.all %}
                                                             {% if category.groups.all|length > 0 %}
                                                                 <div class="col-md-6">
-                                                                    <a href=""><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
+                                                                    <a href="/category/{{category.id}}"><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
                                                                     {% comment %} {% if category.groups.all|length > 0 %} {% endcomment %}
                                                                     <ul>
                                                                         {% for group in category.groups.all %}
-                                                                        <li><a href="#">{{group.name}}</a></li>
+                                                                        <li><a href="/group/{{group.id}}">{{group.name}}</a></li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                     {% comment %} {% endif %} {% endcomment %}
@@ -394,10 +394,10 @@
                                                             {% if group not in manu.cat_group %}
                                                                 {% if group.subcategorys.all|length > 0 %}
                                                                     <div class="col-md-6">
-                                                                        <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
+                                                                        <a href="/group/group.id"><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
                                                                         <ul>
                                                                             {% for subcat in group.subcategorys.all %}
-                                                                            <li><a href="#">{{subcat.name}}</a></li>
+                                                                            <li><a href="/subcategory/{{subcat.id}}">{{subcat.name}}</a></li>
                                                                             {% endfor %}
                                                                         </ul>
                                                                     </div><!-- End .col-md-6 -->
@@ -407,7 +407,7 @@
                                                         {% for category in menu.categorys.all %}
                                                             {% if category.groups.all|length == 0 %}
                                                                 <div class="col-md-6">
-                                                                    <a href=""><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
+                                                                    <a href="/category/{{category.id}}"><div class="menu-title">{{category.name}}</div></a><!-- End .menu-title -->
                                                                 </div><!-- End .col-md-6 -->
                                                             {% endif %}
                                                         {% endfor %}
@@ -415,7 +415,7 @@
                                                             {% if group not in manu.cat_group %}
                                                                 {% if group.subcategorys.all|length == 0 %}
                                                                     <div class="col-md-6">
-                                                                        <a href=""><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
+                                                                        <a href="/group/{{group.id}}"><div class="menu-title">{{group.name}}</div></a><!-- End .menu-title -->
                                                                     </div><!-- End .col-md-6 -->
                                                                 {% endif %}
                                                             {% endif %}
@@ -423,25 +423,13 @@
                                                         {% for subcat in menu.subcategorys.all %}
                                                             {% if subcat not in menu.group_subcat %}
                                                             <div class="col-md-6">
-                                                                <a href=""><div class="menu-title">{{subcat.name}}</div></a><!-- End .menu-title -->
+                                                                <a href="/subcategory/{{subcat.id}}"><div class="menu-title">{{subcat.name}}</div></a><!-- End .menu-title -->
                                                             </div><!-- End .col-md-6 -->
                                                             {% endif %}
                                                         {% endfor %}
                                                     </div><!-- End .row -->
                                                 </div><!-- End .menu-col -->
                                             </div><!-- End .col-md-8 -->
-
-                                            {% comment %} <div class="col-md-4">
-                                                <div class="banner banner-overlay">
-                                                    <a href="category.html" class="banner banner-menu">
-                                                        <img src="assets/images/menu/banner-1.jpg" alt="Banner">
-
-                                                        <div class="banner-content banner-content-top">
-                                                            <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
-                                                        </div><!-- End .banner-content -->
-                                                    </a>
-                                                </div><!-- End .banner banner-overlay -->
-                                            </div><!-- End .col-md-4 --> {% endcomment %}
                                         </div><!-- End .row -->
                                     </div><!-- End .megamenu megamenu-md -->
                                     </li>
@@ -450,16 +438,15 @@
                                         <a href="#" class="sf-with-ul"><i class="{{menu.icon}}"></i>{{menu.name}}</a>
 
                                         <ul>
-                                            {% comment %} {% if menu.categorys|length > 0 %} {% endcomment %}
                                                 {% for category in menu.categorys.all %}
                                                     {% for group in category.groups.all %}
                                                     {% if group.subcategorys.all|length > 0 %}
                                                     <li>
-                                                        <a href="about.html" class="sf-with-ul bolden">{{group.name}}</a>
+                                                        <a href="/group/{{group.id}}" class="sf-with-ul bolden">{{group.name}}</a>
 
                                                         <ul>
                                                             {% for subcategory in group.subcategorys.all %}
-                                                            <li><a href="about.html">{{subcategory.name}}</a></li>
+                                                            <li><a href="/subcategory/{{subcategory.id}}">{{subcategory.name}}</a></li>
                                                             {% endfor %}
                                                         </ul>
                                                     </li>
@@ -470,10 +457,10 @@
                                                 {% for group in menu.group %}
                                                 {% if group.subcategorys.all|length > 0 %}
                                                 <li>
-                                                    <a href="about.html" class="sf-with-ul">{{group.name}}</a>
+                                                    <a href="/group/{{group.id}}" class="sf-with-ul">{{group.name}}</a>
                                                     <ul>
                                                         {% for subcategory in group.subcategorys.all %}
-                                                        <li><a href="about.html">{{subcategory.name}}</a></li>
+                                                        <li><a href="/subcategory/{{subcategory.id}}">{{subcategory.name}}</a></li>
                                                         {% endfor %}
                                                     </ul>
                                                 </li>
@@ -563,14 +550,13 @@
                                 </div><!-- End .col-lg-5 -->
                                 
                                 <div class="col-lg-7">
-                                    <form action="#">
-                                        <div class="input-group">
-                                            <input type="email" class="form-control" placeholder="Enter your Email Address" aria-label="Email Adress" required>
-                                            <div class="input-group-append">
-                                                <button class="btn" type="submit">Subscribe</button>
-                                            </div><!-- .End .input-group-append -->
-                                        </div><!-- .End .input-group -->
-                                    </form>
+                                    <div class="input-group">
+                                        <input type="email" id="newsletter-email" class="form-control" placeholder="Enter your Email Address" aria-label="Email Adress" required>
+                                        <div class="input-group-append">
+                                            <button class="btn" id="add-newsletter-email">Subscribe</button>
+                                        </div><!-- .End .input-group-append -->
+                                    </div><!-- .End .input-group -->
+                                    <p id="newsletter-message" class="text-danger"></p>
                                 </div><!-- End .col-lg-7 -->
                             </div><!-- End .row -->
                         </div><!-- End .col-xl-8 offset-2 -->

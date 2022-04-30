@@ -48,6 +48,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/dist/pnotify.mobile.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'control/pnotify/notify.css' %}">
 
+    <link rel="stylesheet" href="{% static 'control/richtexteditor/richtexteditor/rte_theme_default.css' %}"/>
+
     {% block style %}{% endblock style %}
   </head>
   <body>
@@ -157,20 +159,19 @@
             </a>
           </li>
           {% endif %}
+          {% if perms.newsletter.view_newsletter or perms.newsletter.add_newsletter or perms.newsletter.delete_newsletter or perms.newsletter.change_newsletter %}
+          <li>
+            <a href="/control/newsletter">
+              <div class="menu newsletters {% if newsletter_sec %}selected active{% endif %}">
+                <i class="fas fa-envelope fa-left"></i>
+                <span>Newsletter</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
           {% if perms.auth or perms.settings %}
           <li class="text-center py-2 header">System</li>
           {% endif %}
-          {% comment %} <li>
-            <div class="menu">
-              <i class="fa fa-users fa-left"></i>
-              <span>Users</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li><a href="">User</a></li>
-              <li><a href="">Profile</a></li>
-            </ul>
-          </li> {% endcomment %}
           {% if perms.auth %}
           <li>
             <div class="menu users {% if user_sec %}selected active{% endif %}">
@@ -203,17 +204,6 @@
             </ul>
           </li>
           {% endif %}
-          {% comment %} <li>
-            <div class="menu">
-              <i class="fa fa-globe fa-left"></i>
-              <span>Localization</span>
-              <span class="arrow"><i class="fa fa-angle-right"></i></span>
-            </div>
-            <ul class="submenu">
-              <li><a href="" class="d-flex flex-fill">User</a></li>
-              <li><a href="" class="d-flex flex-fill">group</a></li>
-            </ul>
-          </li> {% endcomment %}
           {% if perms.setting %}
           <li>
             <div class="menu {% if appearance_sec %}selected active{% endif %}">
@@ -228,12 +218,6 @@
             </ul>
           </li>
           {% endif %}
-          {% comment %} <li>
-            <div class="menu">
-              <i class="fa fa-bar-chart-o fa-left"></i>
-              <span>Reports</span>
-            </div>
-          </li> {% endcomment %}
           {% if perms.setting %}
           <li>
             <a href="/control/settings">
@@ -278,6 +262,9 @@
     <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.mobile.js' %}"></script>
     <script type="text/javascript" src="{% static 'control/pnotify/dist/pnotify.nonblock.js' %}"></script>
     <script type="text/javascript" src="{% static 'control/pnotify/notify.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'control/richtexteditor/richtexteditor/rte.js' %}"></script>
+    <script type="text/javascript" src="{% static 'control/richtexteditor/richtexteditor/plugins/all_plugins.js' %}"></script>
 
     {% block script %}{% endblock script %}
     <script src="{% static 'control/js/main.js' %}"></script>

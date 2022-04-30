@@ -3,6 +3,7 @@ from .views import *
 from .product import *
 from .coupon import CouponView, CouponDetails, DeleteCoupon
 from .settings import *
+from .newsletter import NewsletterList, AddNewsletter, NewsletterDetails
 from .orders import OrderList, OrderDetails
 
 from django.views.generic import TemplateView
@@ -50,4 +51,7 @@ urlpatterns = [
     path("/currency/<int:id>", CurrencyView.as_view(), name="admin-currency-view"),
     path("/orders", OrderList.as_view(), name="admin-orders"),
     path("/order/<int:id>", OrderDetails.as_view(), name="admin-rrdersetails"),
+    path("/newsletter", NewsletterList.as_view(), name="admin-newsletterlist"),
+    path("/addnewsletter", AddNewsletter.as_view(), name="admin-addnewsletter"),
+    path("/newsletter/<int:id>", NewsletterDetails.as_view(), name="admin-newsletter-details"),
 ]

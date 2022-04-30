@@ -44,6 +44,7 @@
         <h3 class="fw-bold">Product's</h3>
       </div>
       {% endif %}
+      <input type="hidden" id="add-pro" value="{% if product_details %}true{% else %}false{% endif %}">
       {% if not product_details %}
       <div class="card product-list">
           <div class="card-header">
@@ -1812,8 +1813,6 @@
     <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
     <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
     <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
-    <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
-    <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
     <script src="{% static 'control/js/form-masking/inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/jquery.inputmask.js' %}"></script>
     <script src="{% static 'control/js/form-masking/autoNumeric.js' %}"></script>
@@ -1827,4 +1826,15 @@
     <script src="{% static 'control/image-uploader/image-uploader.min.js' %}"></script>
     <script src="{% static 'control/dropzone/dist/dropzone.js' %}"></script>
     <script src="{% static 'control/dropzone/dropzone.js' %}"></script>
+    <script>
+      {% if not product_details %}
+      var add_description = new RichTextEditor("#add-description", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      var add_additional_info = new RichTextEditor("#add-additional-info", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      var add_shipping_info = new RichTextEditor("#add-shipping-info", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      {% else %}
+      var description = new RichTextEditor("#description", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      var additional_info = new RichTextEditor("#additional-info", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      var shipping_info = new RichTextEditor("#shipping-info", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+      {% endif %}
+    </script>
     {% endblock script %}

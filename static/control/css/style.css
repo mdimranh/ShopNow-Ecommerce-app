@@ -45054,3 +45054,8 @@ body.menu-bottom .navbar-wrapper {
   bottom: 10px;
   right: 10px;
 }
+
+.page-link{
+  border: transparent;
+  cursor: pointer;
+}

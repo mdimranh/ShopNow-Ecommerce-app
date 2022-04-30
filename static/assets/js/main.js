@@ -853,3 +853,78 @@ Array.prototype.slice.call(forms)
             form.classList.add('was-validated')
         }, false)
     })
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+$("#add-newsletter-email").click(function () {
+    $(this).prop('disabled', true)
+    var spinner = `<div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>`
+    const main = $(this).text()
+    $(this).text('')
+    $(this).append(spinner)
+    if (validateEmail($("#newsletter-email").val())) {
+        $.ajax({
+            url: '/newsletter/add-email',
+            type: 'POST',
+            data: {
+                'email': $("#newsletter-email").val()
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            success: function (resp) {
+                $("#add-newsletter-email").prop('disabled', false)
+                $("#add-newsletter-email").text(main)
+                if (resp.type == 'add') {
+                    $("#newsletter-message").addClass("d-none")
+                    $("#newsletter-email").val('')
+                    new PNotify({
+                        title: 'Succefully added',
+                        type: 'success',
+                        text: 'Your email is added to our newsletter',
+                        addclass: 'stack-bottom-right',
+                        icon: true,
+                        delay: 2500
+                    });
+                }
+                else {
+                    $("#newsletter-message").addClass("d-none")
+                    new PNotify({
+                        title: 'Email Exist',
+                        type: 'warning',
+                        text: 'Your email is already exist in our newsletter',
+                        addclass: 'stack-bottom-right',
+                        icon: true,
+                        delay: 2500
+                    });
+                }
+            }
+        })
+    }
+    else {
+        $("#newsletter-message").removeClass("d-none")
+        $("#newsletter-message").text("Please enter a valid email")
+        $(this).prop('disabled', false)
+        $(this).text(main)
+    }
+})
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}

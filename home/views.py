@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 
+from django.views.generic import View
+
 from django.contrib import messages
 from django.core import serializers
 
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from .forms import ContactMessageForm
-from order.models import ShopCart, Order
+from setting.models import Pages
+from order.models import ShopCart, Order, Cart
 from .models import SearchKeyword
 
 from django.core.paginator import Paginator
@@ -39,6 +42,17 @@ def Home(request):
 
     product_carousel = ProductCarousel.objects.filter(enable = True)
     recently_view = RecentlyView.objects.all().order_by("-on_create")
+    ls = []
+    latest_sold = Order.objects.all().order_by('order_date')
+    for order in latest_sold:
+        for cart in order.shopcart.carts.all():
+            if cart.product not in ls:
+                ls.append(cart.product)
+                if len(ls) > 2:
+                    break
+        if len(ls) > 2:
+            break
+    print(ls)
     context = {
         'brand': brand,
         'product': product,
@@ -46,57 +60,11 @@ def Home(request):
         'new_product': new_product,
         'new_product_cat': new_product_cat,
         'hot_product': hot_product,
+        'latest_sold': ls,
         'procaro': product_carousel,
         'recent_view': recently_view,
     }
     return render(request, 'home/home.html', context)
-
-def AboutUs(request):
-    teaminfo = TeamInfo.objects.all()
-    aboutus = Aboutus.objects.all().first()
-    context = {
-        'teaminfo': teaminfo,
-        'aboutus': aboutus
-    }
-    return render(request, 'shop/about.html', context)
-
-def ContactUs(request):
-    if request.method == 'POST':
-        # form = ContactForm(request.POST)
-        # if form.is_valid():
-        #     data = ContactMessage()
-        #     data.name = form.cleaned_data['name']
-        #     data.email = form.cleaned_data['email']
-        #     data.subject = form.cleaned_data['subject']
-        #     data.message = form.cleaned_data['message']
-        #     data.ip = request.META.get('REMOTE_ADDR')
-        #     data.save()
-        #     messages.success(request, 'Your message has been sent.')
-        #     return redirect(request.path_info)
-        name = request.POST['name']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        subject = request.POST['subject']
-        message = request.POST['message']
-        ip = request.META.get('REMOTE_ADDR')
-        msg = ContactMessage(
-            name = name,
-            email = email,
-            # phone = phone,
-            subject=subject,
-            ip = ip,
-            message=message
-        )
-        msg.save()
-        return redirect(request.path_info)
-        
-    teaminfo = TeamInfo.objects.all()
-    aboutus = Aboutus.objects.all().first()
-    context = {
-        'aboutus': aboutus,
-        'form': ContactMessageForm,
-    }
-    return render(request, 'shop/contact.html', context)
 
 def SearchView(request):
     if request.method == 'POST':
@@ -182,3 +150,10 @@ def SearchView(request):
 
 def error_404(request, exception):
     return render(request, 'home/404.html')
+
+class PageView(View):
+    def get(self, request, slug, *args, **kwargs):
+        page = Pages.objects.get(slug = slug)
+        return render(request, 'home/page.html', context={
+            'page': page
+        })

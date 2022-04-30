@@ -30,7 +30,8 @@ class AddToCart(View):
 		if 'update-quantity' in request.POST:
 			getcart = Cart.objects.get(id = request.POST['id'])
 			if getcart.product.amount < int(request.POST["update-quantity"]):
-				msg = f"We have only {getcart.product.amount} product"
+				s = 's' if getcart.product.amount > 1 else ''
+				msg = f"We have only {getcart.product.amount} product{s}"
 				msg_type = 'fail'
 				return JsonResponse({'msg':msg, 'msg_type':msg_type})
 			else:
@@ -58,19 +59,9 @@ class AddToCart(View):
 					}
 					cart_serialize.append(cs)
 				
-				if scart.coupon.all().count() > 0:
-					cpn_dis = 0
-					for cpn in scart.coupon.all():
-						cpn_dis += cpn.value if cpn.discount_type.lower() == 'fixed' else total_cost * cpn.value / 100
-					total_cost -= cpn_dis
-				
-				local_shipping = ShippingMethod.objects.filter(method_type = 'local').first()
-				free_shipping = ShippingMethod.objects.filter(method_type = 'free').first()
-				if total_cost <= float(free_shipping.fee):
-					total_cost += local_shipping.fee
-				item = scart.carts.all().count()
+				cart = cartDetails(scart)
 				msg = "Product successfully added to cart!"
-				return JsonResponse({'item':item, 'cost':total_cost, 'update_price': price,  'subtotal': subtotal, 'msg': msg, 'cart': cart_serialize})
+				return JsonResponse({'msg_type':'success', 'item':scart.carts.all().count(), 'cost':cart.subtotal, 'subtotal': cart.subtotal, 'msg': msg, 'cart': cart_serialize})
 		else:
 			cart_type = request.COOKIES['cart']
 			if cart_type == 'ucart':
@@ -81,10 +72,10 @@ class AddToCart(View):
 			if Product.objects.filter(id = pro_id).exists():
 				pro_list = list(scart.carts.values_list('product__id', flat=True))
 				if pro_id in pro_list:
-					return JsonResponse({'msg': "Product already exist"})
+					return JsonResponse({'msg_type':'fail', 'msg': "Product already exist to your cart."})
 				pro = Product.objects.get(id = pro_id)
 				if pro.amount < 0:
-					return JsonResponse({'msg': "Out of stock"})
+					return JsonResponse({'msg_type':'fail', 'msg': "Out of stock"})
 				else:
 					try:
 						color = request.POST['color']
@@ -128,6 +119,7 @@ class AddToCart(View):
 					msg = "Product successfully added to cart!"
 					mycart = cartDetails(scart)
 					context = {
+						'msg_type':'success',
 						'item':item,
 						'cost': mycart.subtotal - mycart.coupon_discount,
 						'subtotal': mycart.subtotal,
@@ -341,23 +333,34 @@ def AddtoWishlist(request):
 				device=device
 			)
 			wlist.save()
+	cart_type = request.COOKIES['cart']
+	if cart_type == 'ucart':
+		scart = ShopCart.objects.get(user = request.user, on_order=False)
+	else:
+		scart = ShopCart.objects.get(device = device, on_order=False)
+	cart_pro_list = []
+	for cart in scart.carts.all():
+		cart_pro_list.append(cart.product)
 	if product in wlist.product.all():
-		return JsonResponse({'type': 'fail', 'msg': 'Product already exist.'})
+		wlist.product.remove(product)
+		return JsonResponse({'type': 'remove', 'msg': 'Product successfully removed from wishlist.'})
+	elif product in cart_pro_list:
+		return JsonResponse({'type': 'fail', 'msg': 'Product already exist to your cart.'})
 	else:
 		wlist.product.add(product)
-		return JsonResponse({'type': 'success', 'msg': 'Product successfully added to wishlist.'})
+		return JsonResponse({'type': 'add', 'msg': 'Product successfully added to wishlist.'})
 
 def WishList(request):
-	wishlist = Wishlist.objects.filter(user = request.user)
+	# wishlist = Wishlist.objects.filter(user = request.user)
 	context = {
-		'wishlist' : wishlist,
 		'category_disable': True
 	}
 	return render(request, 'product/wishlist.html', context)
 
 def WishItemDelete(request):
-	get_wishlist = Wishlist.objects.get(id = request.POST["id"])
-	get_wishlist.delete()
+	get_wishlist = Wishlist.objects.get(id = request.POST["wishlist_id"])
+	pro = Product.objects.get(id = request.POST['product_id'])
+	get_wishlist.product.remove(pro)
 	data = {
 		'msg': "Success"
 	}

@@ -1,0 +1,201 @@
+{% extends 'control/base.html' %}
+{% load static %}
+
+{% block title %}{{site_config.name}} | Newsletter{% endblock title %}
+
+    {% block style %}
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/dataTables.bootstrap4.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'control/css/table/responsive.bootstrap4.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'control/virtual-select/virtual-select.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.css' %}">
+    <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.css' %}">
+    <link rel="stylesheet" href="{% static 'control/css/style.css' %}" />
+    {% endblock style %}
+
+    {% block main %}
+      {% if not newsletter %}
+        <h3 class="fw-bold">Newsletters</h3>
+      {% endif %}
+      {% if not newsletter %}
+      <div class="card user-list">
+          <div class="card-header">
+            <h5>All Newsletter</h5>
+            <div class="card-header-right me-3">
+              <button class="btn btn-add add-user-btn p-2">
+                <i class="fa fa-plus px-2 m-0"></i>New Newsletter
+              </button>
+            </div>
+          </div>
+          <div class="card-block">
+            <div class="dt-responsive table-responsive">
+              <table
+              id="page-table"
+              data-toggle="table"
+              data-sticky-header="true"
+              data-sticky-header-offset-y="40"
+              data-pagination="true"
+              data-page-list="[10, 25, 50, 100, ALL]"
+              data-search="true"
+              data-search-highlight="true"
+              data-fixed-columns="true"
+              data-fixed-number="1"
+              data-checkbox = "true"
+              class="table table-bordered no-border nowrap"
+              >
+                <thead>
+                  <tr>
+                    <th data-sortable="true" data-valign="middle">Subject</th>
+                    <th data-sortable="true" data-valign="middle">Total Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for newsletter in newsletters %}
+                  <tr>
+                    <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/newsletter/{{newsletter.id}}">{{newsletter.subject}}</a></td>
+                    <td class="fw-bold">{{newsletter.total_email}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                {% comment %} <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>{{product.status}}</th>
+                    <th>Amount</th>
+                    <th>Created</th>
+                  </tr>
+                </tfoot> {% endcomment %}
+              </table>
+            </div>
+          </div>
+      </div>
+      <div class="add-user-sec {% if not newsletter %}d-none{% endif %} card">
+          <div class="container-fluid">
+            <div class="row m-2 p-3 bg-white">
+              <div class="product-menu col-xl-3 col-lg-4">
+                <div class="menu-sec">
+                  <div
+                    class="menu disable d-flex flex-fill justify-content-between selected"
+                  >
+                    <span>Email Information</span>
+                    {% comment %} <span class="arrow"><i class="fa fa-angle-right"></i></span> {% endcomment %}
+                  </div>
+                  <ul class="submenu">
+                    <li class="selected" for="coupon-general">
+                      <p class="m-0 p-0">General</p>
+                    </li>
+                    {% comment %} <li for="coupon-usage-restriction">
+                      <p class="m-0 p-0">SEO</p>
+                    </li> {% endcomment %}
+                  </ul>
+                </div>
+              </div>
+              <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
+                <form class="mt-2" id="add-category-form" method="post" action="/control/addnewsletter">
+                  {% csrf_token %}
+                  <div id="coupon-general" class="product-form">
+                    <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
+                    <hr />
+                    <br />
+                    <div class="row mb-3">
+                      <label
+                        for="subject"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Subject</label
+                      >
+                      <div class="col-xl-10">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="subject"
+                          name="subject"
+                          placeholder="Subject"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label
+                        for="body"
+                        class="col-sm-2 col-form-label d-none d-xl-block"
+                        >Body</label
+                      >
+                      <div class="col-xl-10">
+                        <textarea
+                          type="text"
+                          class="form-control"
+                          id="body"
+                          name="body"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="row mb-3 mt-3">
+                      <div class="col-sm-10 offset-lg-2">
+                        <button
+                          id="save-btn"
+                          type="submit"
+                          class="btn btn-primary py-1 px-3"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          id="cancel-btn"
+                          type="submit"
+                          class="btn btn-secondary py-1 px-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+      <div class="card container mt-3">
+        <div class="row">
+          <div class="col-12" style="border-bottom: 2px solid #D8D8D8;">
+            <div class="d-flex flex-fill justify-content-between">
+              <h5>{{newsletter.subject}}</h5>
+              <h6>{{newsletter.send_date}}</h6>
+            </div>
+          </div>
+          <div class="col-12 mt-4">
+            {{newsletter.body|safe}}
+          </div>
+          <div class="col-12 mt-4">
+            <div class="d-flex flex-fill justify-content-center">
+              <div class="btn btn-info" onClick="history.back();">Back</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endblock main %}
+
+    {% block script %}
+    <script src="{% static 'control/js/table/jquery.dataTables.min.js' %}"></script>
+    {% comment %} <script src="{% static 'control/js/table/dataTables.buttons.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'control/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/export/bootstrap-table-export.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.js' %}"></script>
+    <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
+    <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
+    <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
+    <script>
+      var body = new RichTextEditor("#body", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+    </script>
+    {% endblock script %}

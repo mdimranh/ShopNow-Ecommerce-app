@@ -14,7 +14,16 @@
     </div><!-- End .page-header -->
     <div class="page-content">
     	<div class="container">
-			<table class="table table-wishlist table-mobile">
+			<div class="empty-wishlist {% if wishlist.0.product.all|length > 0 %}d-none{% endif %}">
+				<div class="d-flex flex-fill justify-content-center">
+					<div class="d-flex flex-column align-items-center">
+						<i class="fas fa-shopping-cart fa-4x"></i>
+						<h5 class="mt-2">Wishlist is empty</h5>
+						<a href="/" class="btn btn-outline-warning btn-block mb-3"><i class="fas fa-long-arrow-alt-up"></i><span>Go Shop</span></a>
+					</div>
+				</div>
+			</div>
+			<table class="table table-wishlist table-mobile {% if wishlist.0.product.all|length == 0 %}d-none{% endif %}">
 				<thead>
 					<tr>
 						<th>Product</th>
@@ -25,7 +34,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for item in wishlist.product.all %}
+					{% for item in wishlist.0.product.all %}
 					<tr id="item{{item.id}}">
 						<td class="product-col">
 							<div class="product">
@@ -61,7 +70,7 @@
 								<button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>
 							{% endif %}
 						</td>
-						<td class="remove-col"><button class="btn-remove" onclick="WishItemDelete({{item.id}})"><i class="fas fa-trash text-danger"></i></button></td>
+						<td class="remove-col"><button class="btn-remove" onclick="WishItemDelete({{wishlist.0.id}}, {{item.id}})"><i class="fas fa-trash text-danger"></i></button></td>
 					</tr>
 					{% endfor %}
 				</tbody>

@@ -36,17 +36,24 @@
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3 pro">
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
-                                        {% comment %} <span class="product-label label-new">New</span> {% endcomment %}
-                                        <a href="product.html">
+                                        {% if product.hot_deal_active %}
+                                            <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
+											<div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+										{% endif %}
+                                        <a href="/products/{{product.id}}">
                                             <img src="{{product.image}}" alt="Product image" class="product-image">
                                         </a>
                                         <div class="product-action-vertical">
-                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                            <div id="btn-wishlist{{product.id}}" class="btn-product-icon btn-wishlist {% if product in wishlist.1 %}select{% endif %}" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></div>
+                                            {% comment %} <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a> {% endcomment %}
+                                            {% comment %} <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a> {% endcomment %}
                                         </div><!-- End .product-action-vertical -->
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            {% if product.pro_color|length > 0 or product.size|length > 0 or product.pro_option %}
+                                            <a class="btn-product btn-cart view" href="/products/{{product.id}}">View Options</a>
+                                            {% else %}
+                                            <button class="btn-product btn-cart" title="Add to cart" onclick="AddProduct({{product.id}}, 'no')">add to cart</button>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
                                     <div class="product-body">

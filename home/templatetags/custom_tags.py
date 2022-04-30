@@ -38,7 +38,10 @@ def wishlist(context):
 				device=device
 			)
 			wlist.save()
-	return wlist
+	pro_list = []
+	for pro in wlist.product.all():
+		pro_list.append(pro)
+	return [wlist, pro_list]
 
 @register.filter
 def Categorys(value):
@@ -152,21 +155,4 @@ def intformat(value, length):
 	else:
 		return value
 register.filter('intformat', intformat)
-
-@register.simple_tag
-def encode_static(path, encoding="base64", file_type="image"):
-	try:
-		file_path = find_static_file(str(path))
-		ext = file_path.split('.')[-1]
-		file_str = _get_file_data(file_path).decode('utf-8')
-		return "data:{0}/{1};{2}, {3}".format(file_type, ext, encoding, file_str)
-	except IOError:
-		return
-
-def _get_file_data(file_path):
-	with open(file_path, 'rb') as f:
-		print(file_path)
-		data = base64.b64encode(f.read())
-		f.close()
-		return data
 

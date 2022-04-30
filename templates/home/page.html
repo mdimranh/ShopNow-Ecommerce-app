@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}{{page.name}} - {{site_config.name}}{% endblock title %}
+{% block custom %}
+<div class="container">
+    {{page.body|safe}}
+</div>
+{% endblock custom %}

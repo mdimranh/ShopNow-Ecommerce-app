@@ -10,8 +10,9 @@ from solo.models import SingletonModel
 from fontawesome_5.fields import IconField
 from django.contrib.postgres.fields import ArrayField
 
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.utils.text import slugify
 	
 
 BANNER_TYPE = (
@@ -237,9 +238,16 @@ class Pages(models.Model):
 	name = models.CharField(max_length=500)
 	body = RichTextUploadingField()
 	active = models.BooleanField(default=True)
+	slug = models.SlugField(max_length=300, unique=True, blank=True, null=True)
 
 	def __str__(self):
 		return self.name
+
+
+@receiver(pre_save, sender=Pages)
+def populate_slug(sender, instance, **kwargs):
+	instance.slug = slugify(instance.name)
+
 	
 	
 

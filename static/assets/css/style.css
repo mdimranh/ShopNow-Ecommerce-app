@@ -16577,3 +16577,7 @@ i.product-color.select{
   margin-bottom: 30px;
   padding: 10px;
 }
+
+.btn:disabled{
+  cursor: not-allowed !important;
+}

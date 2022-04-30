@@ -64,6 +64,7 @@
                     <th data-checkbox="true" ></th>
                     <th data-visible="false" ></th>
                     <th data-sortable="true" data-valign="middle">Name</th>
+                    <th data-sortable="true" data-valign="middle">Link</th>
                     <th data-sortable="true" data-valign="middle">Active</th>
                   </tr>
                 </thead>
@@ -73,6 +74,7 @@
                     <td data-checkbox-enabled="false"></td>
                     <td >{{page.id}}</td>
                     <td class="fw-bold product-title"><a class="text-decoration-none" href="/control/pages/{{page.id}}">{{page.name}}</a></td>
+                    <td >{{request.META.HTTP_HOST}}/page/{{page.slug}}<i class="far fa-copy ms-3 fa-lg page-link" onClick="pagelink('{{request.META.HTTP_HOST}}/page/{{page.slug}}', this)"></i></td>
                     <td>{% if page.active %}<i class="fas fa-check-circle text-success"></i>{% else %}<i class="fas fa-times-circle text-danger"></i>{% endif %}</td>
                   </tr>
                   {% endfor %}
@@ -198,42 +200,6 @@
                       </div>
                     </div>
                   </div>
-                  {% comment %} <div id="coupon-usage-restriction" class="product-form d-none">
-                    <h6 class="mt-2 text-primary fw-bolder h4">
-                      SEO
-                    </h6>
-                    <hr />
-                    <div class="row mb-3">
-                      <label
-                        for="name"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Meta Title</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="name"
-                          placeholder="Name"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label
-                        for="name"
-                        class="col-sm-2 col-form-label d-none d-xl-block"
-                        >Meta Description</label
-                      >
-                      <div class="col-xl-10">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="name"
-                          placeholder="Name"
-                        />
-                      </div>
-                    </div>
-                  </div> {% endcomment %}
                 </form>
               </div>
             </div>
@@ -253,6 +219,7 @@
     <script src="{% static 'control/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js' %}"></script>
     <script src="{% static 'control/tableexport/tableExport.min.js' %}"></script>
     <script src="{% static 'control/virtual-select/virtual-select.min.js' %}"></script>
-    <script src="{% static 'control/ckeditor/build/ckeditor.js' %}"></script>
-    <script src="{% static 'control/ckeditor/build/style.js' %}"></script>
+    <script>
+      var body = new RichTextEditor("#body", { skin: "blue", toolbar: "default", editorResizeMode: "height" });
+    </script>
     {% endblock script %}

@@ -17,6 +17,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 APPEND_SLASH=False
 
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -30,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'newsletter',
 
     'django_countries',
 
@@ -69,6 +73,7 @@ MIDDLEWARE = [
     'control.middleware.LoginRequireMidleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'EcomApp.urls'
