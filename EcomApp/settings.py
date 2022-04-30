@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-uv6=7*m*1cmfh4k+bz9=!(s2oe9=0f_3p@zk%i@0=))bdv!)w4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shopnowbd.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['shopnowbd.herokuapp.com']
 APPEND_SLASH=False
 
 import mimetypes
@@ -112,8 +112,8 @@ DATABASES = {
         'NAME': 'd292lfbpr7tu8g',
         'USER' : 'kdxguudlgwkroy',
         'PASSWORD' : 'b6bea23cb234e9b91a81aa5ec6d2f489389a304fc693a260a854e235b54ef433',
+        'PORT': '5432',
         'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
-        'PORT': '5432'
     }
 }
 
