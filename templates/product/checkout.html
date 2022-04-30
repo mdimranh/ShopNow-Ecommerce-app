@@ -3,7 +3,6 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% load mathfilters %}
 {% block title %}Checkout - {{site_config.name}}{% endblock title %}
 {% block custom %}
     <main class="main">
@@ -150,12 +149,12 @@
 												{% for item in mycart.cart.carts.all %}
 		                						<tr>
 		                							<td class="py-1">{{forloop.counter}}. {{item.product.title}}</td>
-		                							<td>{{item.quantity}} X {{mycurrency.1}}{{item.total|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+		                							<td>{{item.quantity}} X {{mycurrency.1}}{{item.total|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 		                						</tr>
 												{% endfor %}
 		                						<tr>
 		                							<td class="py-3 bolden">Subtotal:</td>
-		                							<td>{{mycurrency.1}}{{mycart.subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{mycart.cart.carts.all|length}} item{% if mycart.cart|length > 1 %}s{% endif %})</td>
+		                							<td>{{mycurrency.1}}{{mycart.subtotal|mult:mycurrency.0|floatformat:2|intcomma}} ({{mycart.cart.carts.all|length}} item{% if mycart.cart|length > 1 %}s{% endif %})</td>
 		                						</tr><!-- End .summary-subtotal -->
 		                						{% if mycart.cart.coupon.all|length > 0 %}
 													<tr>
@@ -166,7 +165,7 @@
 														<tr>
 															<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
 															{% if coupon.discount_type == 'Fixed' %}
-																<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+																<td>-{{mycurrency.1}}{{coupon.value|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 															{% else %}
 																<td>-{{coupon.value}}%</td>
 															{% endif %}
@@ -180,20 +179,20 @@
 													</tr>
 													<tr>
 														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{mycart.ship_name}}:</td>
-														<td>{{mycurrency.1}}{{mycart.ship_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+														<td>{{mycurrency.1}}{{mycart.ship_cost|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 													</tr>
 												{% endif %}
 												<tr>
 													<td class="py-3 bolden h6">Total:</td>
-													<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
+													<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mult:mycurrency.0|floatformat:2|intcomma}}</td >
 												</tr>
 												<p class="d-none" id="usd"></p>
 												<p class="d-none" id="rate"></p>
 												<input type="hidden" name="rate" id="rate-input">
 												{% if cost_with_coupon <= free_shipping.fee and not shopcart.free_ship %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|add:local_shipping.fee|mul:mycurrency.0|floatformat:2}}</td>
+		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|add:local_shipping.fee|mult:mycurrency.0|floatformat:2}}</td>
 												{% else %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 												{% endif %}
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
@@ -243,8 +242,8 @@
                 </div><!-- End .checkout -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
-		<input type="hidden" id="total-amount" value="{{mycart.total_cost|mul:mycurrency.0|floatformat:2}}">
-		<input type="hidden" id="total-amount-usd" value="{{mycart.total_cost|mul:mycurrency.0|floatformat:2}}">
+		<input type="hidden" id="total-amount" value="{{mycart.total_cost|mult:mycurrency.0|floatformat:2}}">
+		<input type="hidden" id="total-amount-usd" value="{{mycart.total_cost|mult:mycurrency.0|floatformat:2}}">
 {% endblock custom %}
 
 {% block extra_js %}

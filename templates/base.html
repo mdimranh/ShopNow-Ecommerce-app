@@ -3,7 +3,6 @@
 {% load humanize %}
 {% load custom_tags %}
 {% load fontawesome_5 %}
-{% load mathfilters %}
 {% load solo_tags %}
 {% currencies as currencies %}
 {% mycurrency as mycurrency %}
@@ -259,7 +258,7 @@
                                                                     </h4>
                                                                     <span class="cart-product-info">
                                                                         <span class="cart-product-qty">{{item.quantity}}</span>
-                                                                        X {{mycurrency.1}}{{item.product.price|mul:mycurrency.0|floatformat:2|intcomma}}
+                                                                        X {{mycurrency.1}}{{item.product.price|mult:mycurrency.0|floatformat:2|intcomma}}
                                                                     </span>
                                                                 </div><!-- End .product-cart-details -->
                                                                 <figure class="product-image-container">
@@ -278,7 +277,7 @@
                                                     {% endif %}
                                                 </div><!-- End .cart-product -->
                                                 <div class="dropdown-cart-total">
-                                                    <span class="{% if not mycart.subtotal > 0 %}d-none{% endif %}"><span class="h6">Total: </span><span class="cart-total-price" id="cart-total-price">{{mycurrency.1}}{{mycart.subtotal|mul:mycurrency.0|floatformat:2|intcomma}}</span></span>    
+                                                    <span class="{% if not mycart.subtotal > 0 %}d-none{% endif %}"><span class="h6">Total: </span><span class="cart-total-price" id="cart-total-price">{{mycurrency.1}}{{mycart.subtotal|mult:mycurrency.0|floatformat:2|intcomma}}</span></span>    
                                                 </div><!-- End .dropdown-cart-total -->
                                                 <div class="dropdown-cart-action">
                                                     {% if mycart.cart.carts.all|length > 0 %}

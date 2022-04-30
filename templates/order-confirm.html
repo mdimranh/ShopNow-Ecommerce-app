@@ -1,7 +1,6 @@
 {% load static %}
 {% load humanize %}
 {% load custom_tags %}
-{% load mathfilters %}
 {% load solo_tags %}
 {% get_solo 'setting.SiteConfiguration' as site_config %}
 {% get_solo 'setting.StoreInfo' as storeinfo %}
@@ -839,7 +838,7 @@
                                             line-height: 21px;
                                           "
                                         >
-                                          {{currency.symbol_native}}{{order.total|mul:currency.rate}}
+                                          {{currency.symbol_native}}{{order.total|mult:currency.rate}}
                                         </td>
                                       </tr>
                                     </table>
@@ -1470,7 +1469,7 @@
                                             text-align: center;
                                           "
                                         >
-                                          {{currency.symbol_native}}{{cart.total|mul:currency.rate}}
+                                          {{currency.symbol_native}}{{cart.total|mult:currency.rate}}
                                         </td>
                                       </tr>
                                     </table>
@@ -1752,7 +1751,7 @@
                                             line-height: 27px;
                                           "
                                         >
-                                          {{currency.symbol_native}}{{order.subtotal|mul:currency.rate}}
+                                          {{currency.symbol_native}}{{order.subtotal|mult:currency.rate}}
                                         </td>
                                       </tr>
                                       <tr style="border-collapse: collapse">
@@ -1777,7 +1776,7 @@
                                             color: #d48344;
                                           "
                                         >
-                                          <strong>{{currency.symbol_native}}{{order.ship_cost|mul:currency.rate}}</strong>
+                                          <strong>{{currency.symbol_native}}{{order.ship_cost|mult:currency.rate}}</strong>
                                         </td>
                                       </tr>
                                       <tr style="border-collapse: collapse">
@@ -1826,7 +1825,7 @@
                                             color: #d48344;
                                           "
                                         >
-                                          <strong>{{currency.symbol_native}}{{order.total|mul:currency.rate}}</strong>
+                                          <strong>{{currency.symbol_native}}{{order.total|mult:currency.rate}}</strong>
                                         </td>
                                       </tr>
                                     </table>

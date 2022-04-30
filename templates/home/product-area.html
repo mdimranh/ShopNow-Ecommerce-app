@@ -1,7 +1,6 @@
 {% load static %}
 {% load humanize %}
 {% load custom_tags %}
-{% load mathfilters %}
 {% wishlist as wishlist %}
 {% mycurrency as mycurrency %}
 <main class="main">
@@ -219,8 +218,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
+                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -301,8 +300,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
+                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -405,8 +404,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
+                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -487,8 +486,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            <span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%%)</span>
+                                            <span class="new-price h6">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            <span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%%)</span>
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -595,8 +594,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{item.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{item.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            {% if item.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{item.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{item.product.discount}}%)</span>{% endif %}
+                                            <span class="new-price h6">{{mycurrency.1}}{{item.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            {% if item.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{item.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{item.product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -727,8 +726,8 @@
                                         </div><!-- End .product-cat --> {% endcomment %}
                                         <h3 class="product-title"><a href="product.html">{{item.product.title}}</a></h3><!-- End .product-title -->
                                         <div class="product-price mt-1 d-flex flex-column">
-                                            <span class="new-price h6">{{mycurrency.1}}{{item.product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            {% if item.product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{item.product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{item.product.discount}}%)</span>{% endif %}
+                                            <span class="new-price h6">{{mycurrency.1}}{{item.product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            {% if item.product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{item.product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{item.product.discount}}%)</span>{% endif %}
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
@@ -884,8 +883,8 @@
                                             </div><!-- End .product-cat --> {% endcomment %}
                                             <h3 class="product-title"><a href="product.html">{{product.title}}</a></h3><!-- End .product-title -->
                                             <div class="product-price mt-1 d-flex flex-column">
-                                                <span class="new-price h6">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                                {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
+                                                <span class="new-price h6">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                                {% if product.discount > 0 %}<span class="old-price"><span>{{mycurrency.1}}{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span> ({{product.discount}}%)</span>{% endif %}
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">

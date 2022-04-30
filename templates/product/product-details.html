@@ -3,7 +3,6 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% load mathfilters %}
 {% block title %}{{product.title}} - {{site_config.name}}{% endblock title %}
 {% block extra_css %}
     <!-- Plugins CSS File -->
@@ -71,7 +70,7 @@
                                 </div><!-- End .ratings -->
                                 <a class="ratings-text" href="#product-review-link" id="review-link">( {{total_review}} Reviews )</a>
                             </div><!-- End .rating-container -->
-                            <div class="product-price" id="pro-price" price="{{product.price|mul:mycurrency.0|floatformat:2}}">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</div><!-- End .product-price -->
+                            <div class="product-price" id="pro-price" price="{{product.price|mult:mycurrency.0|floatformat:2}}">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</div><!-- End .product-price -->
                             <div class="product-content">
                                 <p>{{product.short_info}}</p>
                             </div><!-- End .product-content -->
@@ -107,7 +106,7 @@
                                 <div class="select-custom">
                                     <select name="option" id="option" class="form-control" op-name="{{option.name}}">
                                         {% for option in option.option.all %}
-                                            <option value="{{option.price}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mul:mycurrency.0|floatformat:2}}</option>
+                                            <option value="{{option.price}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mult:mycurrency.0|floatformat:2}}</option>
                                         {% endfor %}
                                     </select>
                                 </div><!-- End .select-custom -->
@@ -341,7 +340,7 @@
 
                 <div class="col-6 justify-content-end">
                     <div class="product-price">
-                        {{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}
+                        {{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}
                     </div><!-- End .product-price -->
                     <div class="product-details-quantity">
                         <input type="number" id="sticky-cart-qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>

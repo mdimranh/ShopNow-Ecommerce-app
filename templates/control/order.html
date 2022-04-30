@@ -2,7 +2,6 @@
 {% load static %}
 {% load humanize %}
 {% load custom_tags %}
-{% load mathfilters %}
 {% block title %}{{site_config.name}} | Orders{% endblock title %}
 
     {% block style %}
@@ -243,9 +242,9 @@
                   {% for cart in order.shopcart.carts.all %}
                   <tr>
                     <td>{{forloop.counter}}. <a href="/control/product/edit-product/{{cart.product.id}}" class="text-decoration-none">{{cart.product.title}}</a></td>
-                    <td>{{dc.2}}{{cart.total|mul:dc.1|floatformat:2|intcomma}}</td>
+                    <td>{{dc.2}}{{cart.total|mult:dc.1|floatformat:2|intcomma}}</td>
                     <td>{{cart.quantity}}</td>
-                    <td>{{dc.2}}{{cart.total|mul:dc.1|mul:cart.quantity|floatformat:2|intcomma}}</td>
+                    <td>{{dc.2}}{{cart.total|mult:dc.1|mult:cart.quantity|floatformat:2|intcomma}}</td>
                     <td></td>
                   </tr>
                   {% endfor %}
@@ -253,13 +252,13 @@
                     <td></td>
                     <td></td>
                     <td class="fw-bold">Subtotal</td>
-                    <td>{{dc.2}}{{order.subtotal|mul:dc.1|floatformat:2|intcomma}}</td>
+                    <td>{{dc.2}}{{order.subtotal|mult:dc.1|floatformat:2|intcomma}}</td>
                   </tr>
                   <tr>
                     <td></td>
                     <td></td>
                     <td class="fw-bold">{{order.ship_name}}</td>
-                    <td>{{dc.2}}{{order.ship_cost|mul:dc.1}}</td>
+                    <td>{{dc.2}}{{order.ship_cost|mult:dc.1}}</td>
                   </tr>
                   <tr>
                     <td></td>
@@ -279,7 +278,7 @@
                     <td></td>
                     <td></td>
                     <td class="h5 fw-bolder">Total</td>
-                    <td>{{dc.2}}{{order.total|mul:dc.1|floatformat:2|intcomma}}</td>
+                    <td>{{dc.2}}{{order.total|mult:dc.1|floatformat:2|intcomma}}</td>
                   </tr>
                 </tbody>
               </table>

@@ -156,3 +156,9 @@ def intformat(value, length):
 		return value
 register.filter('intformat', intformat)
 
+@register.filter
+def multiplication(value1, value2):
+	result = float(value1) * float(value2)
+	return result
+register.filter('mult', multiplication)
+

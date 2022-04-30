@@ -3,7 +3,6 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% load mathfilters %}
 {% block title %}{{product.title}} - {{site_config.name}}{% endblock title %}
 {% block extra_css %}
     <!-- Plugins CSS File -->
@@ -54,7 +53,7 @@
                                         </div><!-- End .ratings -->
                                         <a class="ratings-text" href="#product-review-link" id="review-link">( {{total_review}} Reviews )</a>
                                     </div><!-- End .rating-container -->
-                                    <div class="product-price" id="pro-price" price="{{product.price|mul:mycurrency.0}}" currency="{{mycurrency.1}}">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</div><!-- End .product-price -->
+                                    <div class="product-price" id="pro-price" price="{{product.price|mult:mycurrency.0}}" currency="{{mycurrency.1}}">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</div><!-- End .product-price -->
                                     <div class="product-content">
                                         <p>{{product.short_info}}</p>
                                     </div><!-- End .product-content -->
@@ -90,7 +89,7 @@
                                         <div class="select-custom">
                                             <select name="option" id="option" class="form-control" op-name="{{option.name}}">
                                                 {% for option in option.option.all %}
-                                                    <option opid="{{option.id}}" value="{{option.price|mul:mycurrency.0|floatformat:2}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mul:mycurrency.0|floatformat:2|intcomma}}</option>
+                                                    <option opid="{{option.id}}" value="{{option.price|mult:mycurrency.0|floatformat:2}}" {% if forloop.counter == 1 %}selected{% endif %} name="{{option.label}}">{{option.label}} + {{mycurrency.1}}{{option.price|mult:mycurrency.0|floatformat:2|intcomma}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div><!-- End .select-custom -->
@@ -293,7 +292,7 @@
                                 </div><!-- End .product-cat -->
                                 <h3 class="product-title"><a href="product.html">{{pro.title}}</a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    {{mycurrency.1}}{{pro.price|mul:mycurrency.0|floatformat:2|intcomma}}
+                                    {{mycurrency.1}}{{pro.price|mult:mycurrency.0|floatformat:2|intcomma}}
                                 </div><!-- End .product-price -->
                                 <div class="ratings-container">
                                     <div class="ratings">
@@ -329,8 +328,8 @@
                                     <div class="product-body">
                                         <h5 class="product-title"><a href="product.html">{{product.title}}</a></h5><!-- End .product-title -->
                                         <div class="product-price">
-                                            <span class="new-price">{{mycurrency.1}}{{product.main_price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
-                                            <span class="old-price">{{mycurrency.1}}{{product.price|mul:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            <span class="new-price">{{mycurrency.1}}{{product.main_price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
+                                            <span class="old-price">{{mycurrency.1}}{{product.price|mult:mycurrency.0|floatformat:2|intcomma}}</span>
                                         </div><!-- End .product-price -->
                                     </div><!-- End .product-body -->
                                 </div><!-- End .product product-sm -->

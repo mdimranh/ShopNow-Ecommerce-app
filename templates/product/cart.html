@@ -3,7 +3,6 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% load mathfilters %}
 {% block title %}Cart - {{site_config.name}}{% endblock title %}
 {% block custom %}
     <main class="main">
@@ -78,7 +77,7 @@
 														</h3><!-- End .product-title -->
 													</td>
 													<td class="price-col{{cart.id}}">
-														{{mycurrency.1}}{{cart.total|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}
+														{{mycurrency.1}}{{cart.total|mult:cart.quantity|mult:mycurrency.0|floatformat:2|intcomma}}
 													</td>
 													<td class="quantity-col">
 														<form class="cart-product-quantity" method="post">
@@ -88,7 +87,7 @@
 															<input type="number" name="quantity" id="cart-quantity" class="form-control amount" value="{{cart.quantity}}" min="1" max="{{cart.product.amount}}" step="1" data-decimals="0">
 														</form><!-- End .cart-product-quantity -->
 													</td>
-													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.total|mul:cart.quantity|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+													<td class="total-col{{cart.id}}">{{mycurrency.1}}{{cart.total|mult:cart.quantity|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 													<td class="remove-col"><button class="btn-remove" onclick="CartDelete({{cart.id}})"><i class="icon-close"></i></button></td>
 												</tr>
 											{% endfor %}
@@ -104,7 +103,7 @@
 												<tbody>
 													<tr>
 														<td class="py-3 bolden">Subtotal:</td>
-														<td>{{mycurrency.1}}{{mycart.subtotal|mul:mycurrency.0|floatformat:2|intcomma}} ({{mycart.cart.carts.all|length}} item{% if mycart.cart|length > 1 %}s{% endif %})</td>
+														<td>{{mycurrency.1}}{{mycart.subtotal|mult:mycurrency.0|floatformat:2|intcomma}} ({{mycart.cart.carts.all|length}} item{% if mycart.cart|length > 1 %}s{% endif %})</td>
 													</tr><!-- End .summary-subtotal -->
 													{% if mycart.cart.coupon.all|length > 0 %}
 														<tr>
@@ -115,7 +114,7 @@
 															<tr>
 																<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{coupon.code}}</td>
 																{% if coupon.discount_type == 'Fixed' %}
-																	<td>-{{mycurrency.1}}{{coupon.value|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+																	<td>-{{mycurrency.1}}{{coupon.value|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 																{% else %}
 																	<td>-{{coupon.value}}%</td>
 																{% endif %}
@@ -129,12 +128,12 @@
 													</tr>
 													<tr>
 														<td><i class="fas fa-dot-circle px-3 text-primary small"></i>{{mycart.ship_name}}:</td>
-														<td>{{mycurrency.1}}{{mycart.ship_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+														<td>{{mycurrency.1}}{{mycart.ship_cost|mult:mycurrency.0|floatformat:2|intcomma}}</td>
 													</tr>
 													{% endif %}
 													<tr>
 														<td class="py-3 bolden h6">Total:</td>
-														<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mul:mycurrency.0|floatformat:2|intcomma}}</td >
+														<td id="total-cost">{{mycurrency.1}}{{mycart.total_cost|mult:mycurrency.0|floatformat:2|intcomma}}</td >
 													</tr>
 													
 													<p class="d-none" id="usd"></p>
