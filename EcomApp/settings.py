@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'setting',
     'region',
 
+    'mathfilters',
+
     'ckeditor',
     'ckeditor_uploader',
     'fontawesome_5',
