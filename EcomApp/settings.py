@@ -4,8 +4,6 @@ from pathlib import Path
 import django_heroku
 import dj_database_url
 
-os.environ['DATABASE_URL']
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -111,9 +109,9 @@ WSGI_APPLICATION = 'EcomApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd292lfbpr7tu8g',
-        'USER' : 'kdxguudlgwkroy',
-        'PASSWORD' : 'b6bea23cb234e9b91a81aa5ec6d2f489389a304fc693a260a854e235b54ef433',
+        'NAME': 'dcfp4gm47aprpm',
+        'USER' : 'dmjwoaizpqhxjp',
+        'PASSWORD' : '44ecda8af2656d70be46c4e3182a6a63d5152ee34d6bc8ce1cb4cb90d719d849',
         'PORT': '5432',
         'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
     }
