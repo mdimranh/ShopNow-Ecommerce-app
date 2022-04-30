@@ -1,6 +1,8 @@
 import os
 
 from pathlib import Path
+import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +16,7 @@ SECRET_KEY = 'django-insecure-uv6=7*m*1cmfh4k+bz9=!(s2oe9=0f_3p@zk%i@0=))bdv!)w4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['shopnowbd.herokuapp.com', 'localhost']
 APPEND_SLASH=False
 
 import mimetypes
@@ -108,10 +110,11 @@ WSGI_APPLICATION = 'EcomApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecomapp',
-        'USER' : 'postgres',
-        'PASSWORD' : 'mdimranh',
-        'HOST' : 'localhost',
+        'NAME': 'd147doie8d7ft5',
+        'USER' : 'pymigjjaejziwh',
+        'PASSWORD' : '8b136622ed1de75d880f69e7cfa78243f48ce643b4b2167fe687d5fdcc62bc70',
+        'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
+        'PORT': 5432,
     }
 }
 
@@ -216,6 +219,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedMainfestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -294,3 +299,5 @@ JAZZMIN_UI_TWEAKS = {
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'mdimranh.cse@gmail.com'
 # EMAIL_HOST_PASSWORD = 'yycpjtrriwopnysc'
+
+django_heroku.settings(locals())
