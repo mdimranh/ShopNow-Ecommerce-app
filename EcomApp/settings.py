@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'setting',
     'region',
 
+    'mathfilters',
+
     'ckeditor',
     'ckeditor_uploader',
     'fontawesome_5',
@@ -113,7 +115,7 @@ DATABASES = {
         'USER' : 'kdxguudlgwkroy',
         'PASSWORD' : 'b6bea23cb234e9b91a81aa5ec6d2f489389a304fc693a260a854e235b54ef433',
         'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'PORT': '5432'
     }
 }
 
