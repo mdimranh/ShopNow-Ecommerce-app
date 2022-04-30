@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-uv6=7*m*1cmfh4k+bz9=!(s2oe9=0f_3p@zk%i@0=))bdv!)w4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shopnowbd.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 APPEND_SLASH=False
 
 import mimetypes
