@@ -9,12 +9,11 @@ from django.core.mail import send_mail, EmailMessage
 from django.contrib.auth.models import User, Group, auth
 from django.contrib import messages
 
-from .models import Profile, AddressBook, EmailConfirmed
+from .models import UserProfile, AddressBook, EmailConfirmed
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, EmailConfig, SiteConfiguration
 from product.models import Category, Product
 from order.models import ShopCart, Order
 from region.models import Country, Region, City, Area
-from accounts.models import AddressBook, Profile
 from control.emailconfig import backend
 
 from datetime import datetime
@@ -60,7 +59,7 @@ def Account(request):
 			user = User.objects.create_user(username = email, first_name = first_name, last_name = last_name, email = email)
 			user.set_password(password)
 			user.save()
-			Profile.objects.create(user = user)
+			UserProfile.objects.create(user = user)
 			return redirect(request.path_info)
 		elif 'recover-email' in request.POST:
 			if not User.objects.filter(email = request.POST['recover-email']).exists():
@@ -92,7 +91,7 @@ def Account(request):
 			user = auth.authenticate(username=email, password=password)
 
 			if user is not None:
-				pro, create = Profile.objects.get_or_create(user=user)
+				pro, create = UserProfile.objects.get_or_create(user=user)
 				auth.login(request, user)
 				response = HttpResponseRedirect('/profile')
 				ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
@@ -205,7 +204,7 @@ def ProfileView(request):
 			usr.first_name = request.POST['fname']
 			usr.last_name = request.POST['lname']
 			usr.save()
-			pro, create = Profile.objects.get_or_create(user = usr)
+			pro, create = UserProfile.objects.get_or_create(user = usr)
 			pro.birthday = request.POST['birthday']
 			pro.phone = request.POST['phone']
 			pro.gender = request.POST['gender']

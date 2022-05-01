@@ -32,18 +32,6 @@ def create_user_email_confirmation(sender, instance, created, **kwargs):
         email_confirmed_instance.activation_key = activation_key
         email_confirmed_instance.save()
 
-class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name="profile_info")
-    phone = models.CharField(max_length=20)
-    birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10, blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username
-
-    def name(self):
-        return self.user.first_name+" "+self.user.last_name
-
 
 class AddressBook(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, related_name="address_book")
@@ -60,13 +48,17 @@ class AddressBook(models.Model):
     def __str__(self):
         return self.name+" ("+self.user.first_name+" "+self.user.last_name+")"
 
-    
-@receiver(post_save, sender=User)
-def user_profile(sender, instance, **kwargs):
-    pro = Profile(
-        user=instance
-    )
-    pro.save()
+class UserProfile(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name="profile_info")
+    phone = models.CharField(max_length=20)
+    birthday = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def name(self):
+        return self.user.first_name+" "+self.user.last_name
     
 
     
