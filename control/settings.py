@@ -169,7 +169,7 @@ def SettingView(request):
 	local_shipping = ShippingMethod.objects.filter(method_type="local").first()
 	paypal = PaymentMethod.objects.filter(name="paypal").first()
 	cashon = PaymentMethod.objects.filter(name="cashon").first()
-	data = open(os.path.join(settings.BASE_DIR, 'app/static/control/currency.json'), encoding='utf-8').read()
+	data = open(os.path.join(settings.BASE_DIR, 'static/control/currency.json'), encoding='utf-8').read()
 	data1 = json.loads(data)
 	sup_currency = Currency.objects.values_list('code', flat=True)
 	# for a in data1:
