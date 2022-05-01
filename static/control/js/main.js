@@ -1536,6 +1536,17 @@ $("#paypal-enable").on("click", function () {
   }
 })
 
+$("#cashon-enable").on("click", function () {
+  if ($(this).is(":checked")) {
+    $(".cashon-field").removeClass("d-none")
+    $("#about-cashon").attr("required", true)
+  }
+  else {
+    $(".cashon-field").addClass("d-none")
+    $("#about-cashon").attr("required", false)
+  }
+})
+
 
 // all countries
 

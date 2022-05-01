@@ -839,7 +839,9 @@
                           id="paypal-client-id"
                           name="paypal-client-id"
                           placeholder="App ID"
-                          required
+                          {% if paypal.active %}
+                            required
+                          {% endif %}
                           value="{{paypal.client_id}}"
                         />
                         <div class="invalid-feedback">Please enter Client ID</div>
@@ -858,7 +860,9 @@
                           id="paypal-secret"
                           name="paypal-secret"
                           placeholder="Secret"
-                          required
+                          {% if paypal.active %}
+                            required
+                          {% endif %}
                           value="{{paypal.secret}}"
                         />
                         <div class="invalid-feedback">Please enter Secret</div>
@@ -911,7 +915,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3 paypal-field {% if not paypal.active %}d-none{% endif %}">
+                    <div class="row mb-3 cashon-field {% if not paypal.active %}d-none{% endif %}">
                       <label
                         for="about-cashon"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -924,6 +928,9 @@
                           id="about-cashon"
                           name="about-cashon"
                           placeholder="About Cash On Delivery"
+                          {% if cashon.active %}
+                            required
+                          {% endif %}
                           required
                           {% if cashon.about %}
                             value="{{cashon.about}}"

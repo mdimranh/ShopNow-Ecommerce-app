@@ -116,7 +116,7 @@ def SettingView(request):
 			return redirect(request.path_info)
 
 		elif 'support-currency' in request.POST:
-			data = open(os.path.join(settings.BASE_DIR, 'static\control\currency.json'), encoding='utf-8').read()
+			data = open(os.path.join(settings.BASE_DIR, 'static/control/currency.json'), encoding='utf-8').read()
 			data1 = json.loads(data)
 			for cur in data1:
 				if data1[cur]['code'] in request.POST.get('support-currency'):
