@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'fontawesome_5',
-    # 'mathfilters',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [
