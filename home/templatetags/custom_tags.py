@@ -89,7 +89,10 @@ register.filter('footerlink', FLinks)
 @register.simple_tag(takes_context=True)
 def cart(context):
 	request = context.get("request")
-	device = request.COOKIES['device']
+	if request.COOKIES.get('device'):
+		device = request.COOKIES['device']
+	else:
+    	device = 'temp'
 	if request.user.is_authenticated:
 		ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
 	gcart, create = ShopCart.objects.get_or_create(device=device, on_order=False)
