@@ -148,7 +148,7 @@ def CartView(request):
 
 def CartDelete(request):
 	getcart = Cart.objects.get(id = request.POST['id'])
-	scart = getcart.shopcart_set.all().first()
+	scart = getcart.shopcart_set.get()
 	cart = cartDetails(scart)
 	getcart.delete()
 	msg = "Product successfully deleted"
@@ -286,7 +286,7 @@ def Checkout(request):
 			try:
 				return redirect('/profile')
 			finally:
-				mail_config = EmailConfig.objects.all().first()
+				mail_config = EmailConfig.objects.get()
 				subject, from_email, to = 'Confirm order', mail_config.email_host_user, email
 				text_content = 'Confirm order'
 				html_content = render_to_string('order-confirm.html', context={

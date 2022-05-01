@@ -16,18 +16,7 @@ from control.emailconfig import backend
 class NewsletterEmail(models.Model):
     email = models.EmailField()
     active = models.BooleanField(default=True)
-
-email_config = EmailConfig.objects.all().first()
-@receiver(post_save, sender=NewsletterEmail)
-def WelcomeNewsletter(sender, instance, **kwargs):
-    subject, from_email, to = 'Welcome to newsletter', email_config.email_host_user, instance.email
-    text_content = 'Welcome to newsletter.'
-    html_content = render_to_string('newsletter/welcome-newsletter.html', context={
-        'domain': get_current_site(instance.request).domain
-    })
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    
 
 
 class Newsletter(models.Model):

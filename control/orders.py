@@ -75,12 +75,12 @@ class OrderDetails(View):
             return JsonResponse(context)
         finally:
             if request.POST['status'] == 'completed':
-                mail_config = EmailConfig.objects.all().first()
+                mail_config = EmailConfig.objects.get()
                 subject, from_email, to = 'Confirm delivered', mail_config.email_host_user, get_order.email
                 text_content = 'Confirm delivered'
                 html_content = render_to_string('order-delivard.html', context={
                     'order': get_order,
-                    'currency': Settings.objects.all().first().default_currency
+                    'currency': Settings.objects.get().default_currency
                 })
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
                 msg.attach_alternative(html_content, "text/html")

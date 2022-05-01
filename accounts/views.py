@@ -21,7 +21,7 @@ from datetime import datetime
 
 from django.core.mail import EmailMultiAlternatives
 
-siteinfo = SiteConfiguration.objects.all().first()
+siteinfo = SiteConfiguration.objects.get()
 
 def Account(request):
 	if request.method == "POST":
@@ -41,7 +41,7 @@ def Account(request):
 				user.save()
 				euser = EmailConfirmed.objects.get(user = user)
 				site = get_current_site(request)
-				email_config = EmailConfig.objects.all().first()
+				email_config = EmailConfig.objects.get()
 				email = user.email
 				subject, from_email, to = 'Email Verification', email_config.email_host_user, email
 				text_content = 'Email Verification'
@@ -72,7 +72,7 @@ def Account(request):
 				usr.save()
 				euser = EmailConfirmed.objects.get(user = usr)
 				site = get_current_site(request)
-				email_config = EmailConfig.objects.all().first()
+				email_config = EmailConfig.objects.get()
 				subject, from_email, to = 'Password Recover', email_config.email_host_user, usr.email
 				text_content = 'Password Recover'
 				html_content = render_to_string('recover.html', context={

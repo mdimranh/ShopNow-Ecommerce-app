@@ -60,7 +60,7 @@ def currencies():
 
 @register.simple_tag
 def DefaultCurrency():
-	currency = Settings.objects.all().first().default_currency
+	currency = Settings.objects.get().default_currency
 	return [currency.code, currency.rate, currency.symbol_native]
 
 # @register.simple_tag(takes_context=True)
