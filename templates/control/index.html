@@ -1,6 +1,7 @@
 {% extends 'control/base.html' %}
 {% load static %}
 {% load humanize %}
+{% load custom_tags %}
 {% block title %}{{site_config.name}} | Dashboard{% endblock title %}
 {% block style %}
   <link rel="stylesheet" href="{% static 'control/bootstrap-table/dist/bootstrap-table.min.css' %}" />
