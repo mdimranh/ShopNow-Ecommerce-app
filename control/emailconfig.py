@@ -3,7 +3,7 @@ from django.core.mail.backends.smtp import EmailBackend
 
 from setting.models import EmailConfig
 
-config = EmailConfig.objects.get()
+config = EmailConfig.objects.all().first()
 
 backend = EmailBackend(
         host=config.email_host,

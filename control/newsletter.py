@@ -25,7 +25,7 @@ class AddNewsletter(View):
         try:
             return redirect('/control/newsletter')
         finally:
-            email_config = EmailConfig.objects.get()
+            email_config = EmailConfig.objects.all().first()
             subject, from_email, to = request.POST['subject'], email_config.email_host_user, list(NewsletterEmail.objects.all().values_list('email', flat=True))
             text_content = request.POST['subject']
             html_content = str(request.POST['body'])

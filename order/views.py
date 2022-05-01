@@ -286,7 +286,7 @@ def Checkout(request):
 			try:
 				return redirect('/profile')
 			finally:
-				mail_config = EmailConfig.objects.get()
+				mail_config = EmailConfig.objects.all().first()
 				subject, from_email, to = 'Confirm order', mail_config.email_host_user, email
 				text_content = 'Confirm order'
 				html_content = render_to_string('order-confirm.html', context={

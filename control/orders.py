@@ -75,7 +75,7 @@ class OrderDetails(View):
             return JsonResponse(context)
         finally:
             if request.POST['status'] == 'completed':
-                mail_config = EmailConfig.objects.get()
+                mail_config = EmailConfig.objects.all().first()
                 subject, from_email, to = 'Confirm delivered', mail_config.email_host_user, get_order.email
                 text_content = 'Confirm delivered'
                 html_content = render_to_string('order-delivard.html', context={

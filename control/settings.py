@@ -136,7 +136,7 @@ def SettingView(request):
 			return redirect(request.path_info)
 
 		elif 'mail-host' in request.POST:
-			email_config = EmailConfig.objects.get()
+			email_config = EmailConfig.objects.all().first()
 			email_config.email_host = request.POST['mail-host']
 			email_config.email_port = request.POST['mail-port']
 			email_config.email_host_user = request.POST['mail-username']
@@ -146,7 +146,7 @@ def SettingView(request):
 			return redirect(request.path_info)
 
 		elif 'store-phone' in request.POST:
-			sinfo = StoreInfo.objects.get()
+			sinfo = StoreInfo.objects.all().first()
 			sinfo.phone = request.POST['store-phone']
 			sinfo.email = request.POST['store-email']
 			sinfo.address1 = request.POST['store-address1']
@@ -411,7 +411,7 @@ def SiteFrontView(request):
 			return redirect(request.path_info)
 
 		elif 'title1' in request.POST:
-			ftr = Feature.objects.get()
+			ftr = Feature.objects.all().first()
 			ftr.title1 = request.POST['title1']
 			ftr.title2 = request.POST['title2']
 			ftr.title3 = request.POST['title3']
@@ -508,7 +508,7 @@ def SiteFrontView(request):
 				get_carousel.save()
 			return redirect(request.path_info)
 
-	siteinfo = SiteConfiguration.objects.get()
+	siteinfo = SiteConfiguration.objects.all().first()
 	useful_links, create = FooterLinks.objects.get_or_create(section_name = 'useful')
 	service_links, create = FooterLinks.objects.get_or_create(section_name = 'service')
 	sliders = Slider.objects.all()

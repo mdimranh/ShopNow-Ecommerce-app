@@ -17,7 +17,7 @@ class NewsletterEmail(models.Model):
     email = models.EmailField()
     active = models.BooleanField(default=True)
 
-email_config = EmailConfig.objects.get()
+email_config = EmailConfig.objects.all().first()
 @receiver(post_save, sender=NewsletterEmail)
 def WelcomeNewsletter(sender, instance, **kwargs):
     subject, from_email, to = 'Welcome to newsletter', email_config.email_host_user, instance.email
