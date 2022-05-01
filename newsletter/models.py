@@ -6,13 +6,6 @@ from django.dispatch import receiver
 
 from django.contrib.postgres.fields import ArrayField
 
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-
-from setting.models import EmailConfig
-from control.emailconfig import backend
-
 class NewsletterEmail(models.Model):
     email = models.EmailField()
     active = models.BooleanField(default=True)

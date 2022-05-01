@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.views import View
 from .models import NewsletterEmail
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+
 from setting.models import EmailConfig
 from control.emailconfig import backend
 

@@ -85,8 +85,8 @@
                 </td>
                 <td>
                   <strong>Payment Method:</strong><span>{% if order.payment_mode == 'cash' %} Cash On{% else %} {{order.payment_mode}}{% endif %}</span><br>
-                  <strong>Total Pay:</strong><span>{% if order.payment_mode == 'cash' %} {{symbol}}0{% else %} {{symbol}}{{order.total|mul:rate|floatformat:2}}{% endif %}</span><br>
-                  <strong>Total Due:</strong><span> {{symbol}}{{order.total|mul:rate|floatformat:2}}</span><br>
+                  <strong>Total Pay:</strong><span>{% if order.payment_mode == 'cash' %} {{symbol}}0{% else %} {{symbol}}{{order.total|mult:rate|floatformat:2}}{% endif %}</span><br>
+                  <strong>Total Due:</strong><span> {{symbol}}{{order.total|mult:rate|floatformat:2}}</span><br>
                   <span></span><br>
                   <span></span><br>
                 </td>
@@ -117,9 +117,9 @@
                     <span>{{option.parent_name}}: {{option.label}}</span><br>
                   {% endfor %}
                 </td>
-                <td>{{symbol}}{{cart.total|mul:rate|floatformat:2|intcomma}}</td>
+                <td>{{symbol}}{{cart.total|mult:rate|floatformat:2|intcomma}}</td>
                 <td>{{cart.quantity}}</td>
-                <td>{{symbol}}{{cart.total|mul:rate|mul:cart.quantity|floatformat:2|intcomma}}</td>
+                <td>{{symbol}}{{cart.total|mult:rate|mult:cart.quantity|floatformat:2|intcomma}}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -142,12 +142,12 @@
                   <strong>Total:</strong>
                 </td>
                 <td>
-                  <span>{{symbol}}{{order.subtotal|mul:rate|floatformat:2|intcomma}}</span><br>
-                  <span>{{symbol}}{{order.ship_cost|mul:mycurrency.2}}</span><br>{% if order.coupons|length > 0 %}<br>{% endif %}
+                  <span>{{symbol}}{{order.subtotal|mult:rate|floatformat:2|intcomma}}</span><br>
+                  <span>{{symbol}}{{order.ship_cost|mult:mycurrency.2}}</span><br>{% if order.coupons|length > 0 %}<br>{% endif %}
                   {% for coupon in order.coupons %}
                     <span>{% if coupon.1|last == '%' %}-{{coupon.1}}{% else %}-{{symbol}}{{coupon.1}}{% endif %}</span><br>
                   {% endfor %}
-                  <strong>{{symbol}}{{order.total|mul:rate|floatformat:2|intcomma}}</strong><br>
+                  <strong>{{symbol}}{{order.total|mult:rate|floatformat:2|intcomma}}</strong><br>
                 </td>
               </tr>
             </tbody>

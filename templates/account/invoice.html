@@ -3,7 +3,6 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% load mathfilters %}
 {% block title %}Checkout - {{site_config.name}}{% endblock title %}
 {% block custom %}
 <div class="main invoice mt-4">
@@ -41,11 +40,11 @@
         {% if order.payment_mode == 'cash' %}
           <p class="m-0 p-0"><span class="h6">Payment Method:</span> Cash On</p>
           <p class="m-0 p-0"><span class="h6">Total Pay:</span> 0</p>
-          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2}}</p>
+          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{order.total|mult:mycurrency.0|floatformat:2}}</p>
         {% else %}
           <p class="m-0 p-0"><span class="h6">Payment Method:</span> {% if order.payment_mode == 'cash' %}Cash On{% else %}{{order.payment_mode}}{% endif %}</p>
-          <p class="m-0 p-0"><span class="h6">Total Pay:</span> {{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2}}</p>
-          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{due|mul:mycurrency.0|floatformat:2}}</p>
+          <p class="m-0 p-0"><span class="h6">Total Pay:</span> {{mycurrency.1}}{{order.total|mult:mycurrency.0|floatformat:2}}</p>
+          <p class="m-0 p-0"><span class="h6">Total Due:</span> {{mycurrency.1}}{{due|mult:mycurrency.0|floatformat:2}}</p>
         {% endif %}
       </div>
       <div class="col-12 mt-5">
@@ -88,9 +87,9 @@
 									</div>
 								</h3><!-- End .product-title -->
 							</td>
-              <td>{{mycurrency.1}}{{cart.total|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+              <td>{{mycurrency.1}}{{cart.total|mult:mycurrency.0|floatformat:2|intcomma}}</td>
               <td>{{cart.quantity}}</td>
-              <td>{{mycurrency.1}}{{cart.total|mul:mycurrency.0|mul:cart.quantity|floatformat:2|intcomma}}</td>
+              <td>{{mycurrency.1}}{{cart.total|mult:mycurrency.0|mult:cart.quantity|floatformat:2|intcomma}}</td>
               <td></td>
             </tr>
             {% endfor %}
@@ -99,14 +98,14 @@
               <td></td>
               <td></td>
               <td class="bolden pt-5">Subtotal</td>
-              <td class="pt-5">{{mycurrency.1}}{{order.subtotal|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+              <td class="pt-5">{{mycurrency.1}}{{order.subtotal|mult:mycurrency.0|floatformat:2|intcomma}}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
               <td></td>
               <td class="bolden">{{order.ship_name}}</td>
-              <td>{{mycurrency.1}}{{order.ship_cost|mul:mycurrency.0}}</td>
+              <td>{{mycurrency.1}}{{order.ship_cost|mult:mycurrency.0}}</td>
             </tr>
             {% if order.coupons|length > 0 %}
               <tr>
@@ -131,7 +130,7 @@
               <td></td>
               <td></td>
               <td class="h5 bolden">Total</td>
-              <td>{{mycurrency.1}}{{order.total|mul:mycurrency.0|floatformat:2|intcomma}}</td>
+              <td>{{mycurrency.1}}{{order.total|mult:mycurrency.0|floatformat:2|intcomma}}</td>
             </tr>
           </tbody>
         </table>
