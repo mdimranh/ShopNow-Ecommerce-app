@@ -92,7 +92,7 @@ def cart(context):
 	if request.COOKIES.get('device'):
 		device = request.COOKIES['device']
 	else:
-    	device = 'temp'
+		device = 'temp'
 	if request.user.is_authenticated:
 		ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
 	gcart, create = ShopCart.objects.get_or_create(device=device, on_order=False)
