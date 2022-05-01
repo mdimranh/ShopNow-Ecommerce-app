@@ -112,7 +112,7 @@ DATABASES = {
         'NAME': 'dcfp4gm47aprpm',
         'USER' : 'dmjwoaizpqhxjp',
         'PASSWORD' : '44ecda8af2656d70be46c4e3182a6a63d5152ee34d6bc8ce1cb4cb90d719d849',
-        # 'PORT': '5432',
+        'PORT': 5432,
         'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
     }
 }
