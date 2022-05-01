@@ -1,25 +1,25 @@
-# from django.shortcuts import render, redirect, get_object_or_404
-# from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-# from django.views import View
-# from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.views import View
+from django.contrib.sites.shortcuts import get_current_site
 
-# from django.template.loader import render_to_string
-# from django.core.mail import send_mail, EmailMessage
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, EmailMessage
 
-# from django.contrib.auth.models import User, Group, auth
-# from django.contrib import messages
+from django.contrib.auth.models import User, Group, auth
+from django.contrib import messages
 
-# from .models import Profile, AddressBook, EmailConfirmed
+from .models import Profile, AddressBook, EmailConfirmed
 # from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, EmailConfig, SiteConfiguration
-# from product.models import Category, Product
-# from order.models import ShopCart, Order
-# from region.models import Country, Region, City, Area
-# from accounts.models import AddressBook, Profile
-# from control.emailconfig import backend
+from product.models import Category, Product
+from order.models import ShopCart, Order
+from region.models import Country, Region, City, Area
+from accounts.models import AddressBook, Profile
+from control.emailconfig import backend
 
-# from datetime import datetime
+from datetime import datetime
 
-# from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 
 # siteinfo = SiteConfiguration.objects.get()
 
