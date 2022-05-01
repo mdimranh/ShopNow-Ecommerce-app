@@ -92,8 +92,8 @@ def Account(request):
 			user = auth.authenticate(username=email, password=password)
 
 			if user is not None:
-				auth.login(request, user)
 				pro, create = Profile.objects.get_or_create(user=user)
+				auth.login(request, user)
 				response = HttpResponseRedirect('/profile')
 				ucart, create = ShopCart.objects.get_or_create(user=request.user, on_order=False)
 				gcart, create = ShopCart.objects.get_or_create(device=request.COOKIES['device'], on_order=False)
