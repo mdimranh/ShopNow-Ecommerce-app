@@ -10,8 +10,8 @@ admin.site.register(SiteConfiguration, SingletonModelAdmin)
 admin.site.register(EmailConfig, SingletonModelAdmin)
 admin.site.register(Feature, SingletonModelAdmin)
 
-siteinfo = SiteConfiguration.objects.get()
-admin.site.site_header = str(siteinfo.name)
+# siteinfo = SiteConfiguration.objects.get()
+# admin.site.site_header = str(siteinfo.name)
 
 class SlideInline(admin.TabularInline):
     model = Slide
