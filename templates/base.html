@@ -1029,6 +1029,15 @@
         device = uuidv4()
       }
       document.cookie ='device=' + device + ";domain=;path=/"
+        let cart = getCookie('cart')
+        if (cart == null || cart == undefined){
+            {% if user.is_authinticated %}
+            cart = 'gcart'
+            document.cookie ='cart=' + cart + ";domain=;path=/"
+            {% else %}
+            document.cookie ='cart=' + 'ucart' + ";domain=;path=/"
+            {% endif %}
+        }
       let currency = getCookie('mycurrency')
       if (currency == null || currency == undefined || "{{dc.0}}" == 'False'){
         document.cookie ='mycurrency=' + '{{ dc.0 }}' + ";domain=;path=/"
