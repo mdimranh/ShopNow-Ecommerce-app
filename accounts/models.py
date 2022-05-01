@@ -76,6 +76,7 @@ def user_profile(sender, instance, **kwargs):
     pro = Profile(
         user=instance
     )
+    pro.save()
     
 
     
