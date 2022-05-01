@@ -121,7 +121,7 @@ def cart(context):
 			else:
 				mergefrom_size = 0
 	else:
-		if ucart.carts.all().count() >= gcart.carts.all().count():
+		if request.user.is_authenticated and ucart.carts.all().count() >= gcart.carts.all().count():
 			cart = ucart
 			title = 'User Cart'
 			type = 'gcart'

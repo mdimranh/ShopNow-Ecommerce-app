@@ -1,6 +1,7 @@
 {% extends 'control/base.html' %}
 {% load static %}
-{% block title %}Coupons{% endblock title %}
+{% load custom_tags %}
+{% block title %}{{site_config.name}} | Coupons{% endblock title %}
   {% block style %}
     <link
       rel="stylesheet"

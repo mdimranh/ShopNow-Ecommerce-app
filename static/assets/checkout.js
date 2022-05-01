@@ -81,7 +81,7 @@ function initPayPalButton() {
                 purchase_units: [{
                     "amount": {
                         "currency_code": "USD",
-                        "value": 1
+                        "value": $("#total-amount-usd")
                     }
                 }]
             });

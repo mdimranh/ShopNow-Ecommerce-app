@@ -212,6 +212,7 @@
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
 
+											{% if paypal.client_id %}
 										    <div class="card">
 										        <div class="card-header" id="heading-4">
 										            <h2 class="card-title">
@@ -230,6 +231,7 @@
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
+											{% endif %}
 										</div><!-- End .accordion -->
 
 		                				<button type="submit" id="submit-btn" class="btn btn-outline-primary-2 btn-order btn-block">Proceed to Checkout</button>
