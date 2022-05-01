@@ -249,21 +249,21 @@
 # 		area_list.append((area.name, area.id))
 # 	return JsonResponse(data = area_list, safe=False)
 
-# class MergeCart(View):
-# 	def post(self, request):
-# 		from_cart = request.POST['from']
-# 		if from_cart == 'gcart':
-# 			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
-# 			ucart = ShopCart.objects.get(user = request.user, on_order=False)
-# 			for cart in gcart.carts.all():
-# 				if cart not in ucart.carts.all():
-# 					ucart.carts.add(cart)
-# 			gcart.carts.all().delete()
-# 		else:
-# 			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
-# 			ucart = ShopCart.objects.get(user = request.user, on_order=False)
-# 			for cart in ucart.carts.all():
-# 				if cart not in gcart.carts.all():
-# 					gcart.carts.add(cart)
-# 			ucart.carts.all().delete()
-# 		return JsonResponse('success', safe=False)
+class MergeCart(View):
+	def post(self, request):
+		from_cart = request.POST['from']
+		if from_cart == 'gcart':
+			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
+			ucart = ShopCart.objects.get(user = request.user, on_order=False)
+			for cart in gcart.carts.all():
+				if cart not in ucart.carts.all():
+					ucart.carts.add(cart)
+			gcart.carts.all().delete()
+		else:
+			gcart = ShopCart.objects.get(device=request.COOKIES['device'], on_order=False)
+			ucart = ShopCart.objects.get(user = request.user, on_order=False)
+			for cart in ucart.carts.all():
+				if cart not in gcart.carts.all():
+					gcart.carts.add(cart)
+			ucart.carts.all().delete()
+		return JsonResponse('success', safe=False)
