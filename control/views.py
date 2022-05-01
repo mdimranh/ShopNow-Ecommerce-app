@@ -7,7 +7,6 @@ from django.contrib.auth.models import User, auth, Permission
 from django.contrib.auth.models import Group as UserGroup
 
 from home.models import SearchKeyword
-from accounts.models import UserProfile
 from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, ProductCarousel, Menus
 from product.models import Category, Subcategory, Group, Product, Brands, RecentlyView
 from order.models import ShopCart, Order
@@ -195,11 +194,9 @@ def Login(request):
 
 		if user is not None:
 			if user.is_superuser:
-				pro = UserProfile.objects.get_or_create(user=user)
 				auth.login(request, user)
 				return redirect('/control')
 			else:
-				pro = UserProfile.objects.get_or_create(user=user)
 				auth.login(request, user)
 				return redirect('/')
 		else:

@@ -3,16 +3,6 @@ $(".edit-btn").on('click', function () {
     $(".address-view").addClass('d-none');
 });
 
-$(".male-btn").on('click', function () {
-    $(this).addClass("active");
-    $(".female-btn").removeClass("active");
-})
-
-$(".female-btn").on('click', function () {
-    $(this).addClass("active");
-    $(".male-btn").removeClass("active");
-})
-
 $(".address-edit-btn").on("click", function () {
     $("#address-edit-form").removeClass("d-none");
     $(".address").addClass("d-none");

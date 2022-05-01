@@ -5,7 +5,7 @@ from order.models import ShopCart, Wishlist
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from django.contrib.auth.models import User
-from accounts.models import UserProfile, AddressBook
+from accounts.models import AddressBook
 from region.models import *
 
 from django.conf import settings
@@ -61,11 +61,6 @@ class UserSrializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email']
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        exclude = ['user']
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:

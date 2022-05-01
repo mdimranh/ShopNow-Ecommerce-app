@@ -69,40 +69,6 @@ def RegistrationApi(request):
 class tokenApi(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-@permission_classes([IsAuthenticated,])
-class UserDetails(APIView):
-    def get(self, request, format=None):
-        usr = User.objects.get(id = request.user.id)
-        serializers = UserSrializer(usr, many=False)
-        pro, create = Profile.objects.get_or_create(user = request.user)
-        pro_ser = ProfileSerializer(pro, many=False)
-        add_book = AddressBook.objects.filter(user = request.user)
-        add_ser = AddressSerializer(add_book, many=True)
-        lst = {'user' : serializers.data,
-            'profile' : pro_ser.data,
-            'address' : add_ser.data
-        }
-        return Response(lst)
-    def post(self, request, format=None):
-        if Profile.objects.get(user = request.user):
-            pro = Profile.objects.get(user = request.user)
-            pro.phone = request.data['phone']
-            pro.address = request.data['address']
-            pro.city = request.data['city']
-            pro.country = request.data['country']
-            pro.save()
-            pro_ser = ProfileSerializer(pro, many=False)
-            return Response(pro_ser.data)
-        pro = Profile.objects.create(
-            user = request.user,
-            phone = request.data['phone'],
-            address = request.data['address'],
-            city = request.data['city'],
-            country = request.data['country']
-        )
-        pro_ser = ProfileSerializer(pro, many=False)
-        return Response(pro_ser.data)
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated,])
 def MyShopcart(request):

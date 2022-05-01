@@ -404,34 +404,6 @@
                                                     <label>Email address *</label>
                                                     <input type="email" name="email" class="form-control" required value="{{user.email}}">
                                                 </div>
-
-                                                <div class="col-sm-6">
-                                                    <label>Phone *</label>
-                                                    <input type="text" name="phone" class="form-control" required value="{{user.profile_info.phone}}">
-                                                </div>
-                                            </div><!-- End .row -->
-
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <label>Birth Day</label>
-		        							        <input type="date" name="birthday" class="form-control" required value="{{user.profile_info.birthday|date:"Y-m-d"}}">
-                                                </div>
-
-                                                <div class="col-sm-8">
-                                                    <div class="d-flex flex-column">
-                                                        <label>Gender</label>
-                                                        <div class="d-flex flex-fill">
-                                                            <div class="d-flex align-items-center">
-                                                                <input type="radio" class="d-none" id="male" value="male" name="gender" {% if user.profile_info.gender == 'male' %}checked{% endif %}>
-                                                                <label for="male"><span type="btn" class="btn btn-outline-warning male-btn {% if user.profile_info.gender == 'male' %}active{% endif %}">Male</span></label>
-                                                            </div>
-                                                            <div class="d-flex align-items-center">
-                                                                <input type="radio" class="d-none" id="female" value="female" name="gender" {% if user.profile_info.gender == 'female' %}checked{% endif %}>
-                                                                <label for="female"><span type="btn" class="btn btn-outline-warning female-btn {% if user.profile_info.gender == 'female' %}active{% endif %}">Female</span></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div><!-- End .row -->
 
 		                					<button type="submit" class="btn btn-outline-primary-2 mt-5 profile-submit-btn">
