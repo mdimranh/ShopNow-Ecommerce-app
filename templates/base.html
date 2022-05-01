@@ -1028,10 +1028,10 @@
       if (device == null || device == undefined){
         device = uuidv4()
       }
-      document.cookie ='device=' + device + ";domain=;path=/"
+      document.cookie ='device=' + device + ";domain='{{request.site.domain}}';path=/"
       let currency = getCookie('mycurrency')
       if (currency == null || currency == undefined || "{{dc.0}}" == 'False'){
-        document.cookie ='mycurrency=' + '{{ dc.0 }}' + ";domain=;path=/"
+        document.cookie ='mycurrency=' + '{{ dc.0 }}' + ";domain='{{request.site.domain}}';path=/"
         $("#mycurrency").text("{{ DefaultCurrency.0 }}")
       }
       else{
@@ -1044,17 +1044,17 @@
                 $(element).remove()
             }
             $(element).click(function(){
-                document.cookie ='mycurrency=' + $(this).text() + ";domain=;path=/"
+                document.cookie ='mycurrency=' + $(this).text() + ";domain='{{request.site.domain}}';path=/"
                 window.location.reload()
             })
         })
 
     {% if not user.is_authenticated %}
-        document.cookie ='cart=' + 'gcart' + ";domain=;path=/"
+        document.cookie ='cart=' + 'gcart' + ";domain='{{request.site.domain}}';path=/"
     {% endif %}
 
     $(".change-cart").click(function(){
-        document.cookie ='cart=' + $(this).attr('for') + ";domain=;path=/"
+        document.cookie ='cart=' + $(this).attr('for') + ";domain='{{request.site.domain}}';path=/"
         window.location.reload()
     })
     </script>
