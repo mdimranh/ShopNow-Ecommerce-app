@@ -52,7 +52,6 @@ class Profile(models.Model):
 
     class Meta:
         verbose_name_plural = 'Profiles'
-        app_label = 'auth'
 
 
 class AddressBook(models.Model):
