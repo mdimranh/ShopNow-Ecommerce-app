@@ -9,7 +9,7 @@ import home
 
 urlpatterns = [
     path('control', include('control.urls')),
-    # path('admin', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', include('home.urls')),
     path('', include('product.urls')),
     path('', include('accounts.urls')),
