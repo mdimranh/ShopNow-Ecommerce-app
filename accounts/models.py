@@ -33,25 +33,16 @@ def create_user_email_confirmation(sender, instance, created, **kwargs):
         email_confirmed_instance.save()
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE, related_name="profile_info")
+    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name="profile_info")
     phone = models.CharField(max_length=20)
     birthday = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
-    image = models.ImageField(upload_to = 'user/', blank=True)
 
     def __str__(self):
         return self.user.username
 
     def name(self):
         return self.user.first_name+" "+self.user.last_name
-
-    def image_tag(self):
-        if self.image:
-            return mark_safe('<img src="{}" height="50" weight="50" />'.format(self.image.url))
-    image_tag.short_description = 'Image'
-
-    class Meta:
-        verbose_name_plural = 'Profiles'
 
 
 class AddressBook(models.Model):
