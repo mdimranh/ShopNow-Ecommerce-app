@@ -1,24 +1,15 @@
 from django.core.mail import EmailMessage
 from django.core.mail.backends.smtp import EmailBackend
 
-# from setting.models import EmailConfig
+from setting.models import EmailConfig
 
-# config = EmailConfig.objects.get()
-
-# backend = EmailBackend(
-#         host=config.email_host,
-#         port=config.email_port,
-#         username=config.email_host_user,
-#         password=config.email_host_password,
-#         use_tls=True,
-#         fail_silently=True
-#     )
+config = EmailConfig.objects.get()
 
 backend = EmailBackend(
-        host='smtp.gmail.com',
-        port=587,
-        username='mdimranh.cse@gmail.com',
-        password='yycpjtrriwopnysc',
+        host=config.email_host,
+        port=config.email_port,
+        username=config.email_host_user,
+        password=config.email_host_password,
         use_tls=True,
         fail_silently=True
     )
