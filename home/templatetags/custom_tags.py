@@ -19,7 +19,10 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def wishlist(context):
 	request = context.get("request")
-	device = request.COOKIES['device']
+	if request.COOKIES.get('device'):
+		device = request.COOKIES['device']
+	else:
+		device = 'temp'
 	if request.user.is_authenticated:
 		user = request.user
 		if Wishlist.objects.filter(Q(device = device) | Q(user = user)).exists():
