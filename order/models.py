@@ -6,17 +6,8 @@ from django.utils.safestring import mark_safe
 from django.contrib.postgres.fields import ArrayField
 from django.utils.timezone import now
 
-from django.core.mail import EmailMultiAlternatives
-
 from product.models import Product, Category, Option
 from accounts.models import AddressBook
-
-from setting.models import EmailConfig
-from django.template.loader import render_to_string
-
-from setting.models import Currency, SiteConfiguration
-
-from control.emailconfig import backend
 	
 
 
