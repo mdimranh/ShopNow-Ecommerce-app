@@ -196,9 +196,11 @@ def Login(request):
 		if user is not None:
 			if user.is_superuser:
 				auth.login(request, user)
+				pro = Profile.objects.get_or_create()
 				return redirect('/control')
 			else:
 				auth.login(request, user)
+				pro = Profile.objects.get_or_create()
 				return redirect('/')
 		else:
 			messages.error(request, "Invalid username or password!")
