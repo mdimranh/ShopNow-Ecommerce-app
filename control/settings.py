@@ -559,7 +559,7 @@ class CarouselUpdate(View):
 			return JsonResponse(context)
 			
 
-class Area(View):
+class AreaView(View):
 	def get(self, request):
 		countries = Country.objects.all()
 		context = {
