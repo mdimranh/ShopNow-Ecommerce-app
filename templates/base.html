@@ -1032,10 +1032,10 @@
         let cart = getCookie('cart')
         if (cart == null || cart == undefined){
             {% if user.is_authinticated %}
-            cart = 'gcart'
+            cart = 'ucart'
             document.cookie ='cart=' + cart + ";domain=;path=/"
             {% else %}
-            document.cookie ='cart=' + 'ucart' + ";domain=;path=/"
+            document.cookie ='cart=' + 'gcart' + ";domain=;path=/"
             {% endif %}
         }
       let currency = getCookie('mycurrency')
