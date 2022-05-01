@@ -128,6 +128,7 @@ def cart(context):
 			type_text = 'GuestCart'
 			mergefrom = 'gcart'
 			mergefrom_text = 'Merge GuestCart'
+			mergefrom_size = gcart.carts.all().count()
 		else:
 			cart = gcart
 			title = 'Guest Cart'
@@ -135,6 +136,7 @@ def cart(context):
 			type_text = 'UserCart'
 			mergefrom = 'ucart'
 			mergefrom_text = 'Merge UserCart'
+			mergefrom_size = gcart.carts.all().count()
 
 	mycart = cartDetails(cart)
 
