@@ -196,8 +196,6 @@ def Login(request):
 		if user is not None:
 			if user.is_superuser:
 				auth.login(request, user)
-				pro, create = Profile.objects.get_or_create(user = user)
-				pro.online = True
 				return redirect('/control')
 			else:
 				auth.login(request, user)
