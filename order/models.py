@@ -184,7 +184,6 @@ class Order(models.Model):
 	)
 	coupon_disc = models.CharField(max_length=10, blank=True, null=True)
 	total = models.FloatField(blank=True, null=True)
-	rate = models.FloatField(blank=True, null=True)
 	order_date = models.DateTimeField(default=now)
 	status = models.CharField(choices=STATUS, max_length=200, default="processing")
 	update = models.DateTimeField(default=now)

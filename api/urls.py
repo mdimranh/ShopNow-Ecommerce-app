@@ -12,7 +12,7 @@ urlpatterns = [
     path("category/<int:id>", CategoryDetails),
     path("login", obtain_auth_token),
     path("registration", RegistrationApi),
-    path("users", UserDetails.as_view()),
+    # path("users", UserDetails.as_view()),
     path("token", TokenObtainPairView.as_view()),
     path("token/refresh", TokenRefreshView.as_view()),
     path("tokenapi", tokenApi.as_view()),

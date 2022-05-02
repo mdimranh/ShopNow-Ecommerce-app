@@ -52,7 +52,6 @@ def Home(request):
                     break
         if len(ls) > 2:
             break
-    print(ls)
     context = {
         'brand': brand,
         'product': product,

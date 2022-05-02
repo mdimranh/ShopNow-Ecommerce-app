@@ -2,6 +2,7 @@
   {% load static %}
   {% load fontawesome_5 %}
   {% load solo_tags %}
+  {% load custom_tags %}
   {% get_solo 'setting.SiteConfiguration' as site_config %}
     <!-- Bootstrap CSS -->
     {% block title %}{{site_config.name}} | Categorys{% endblock title %}

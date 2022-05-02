@@ -25,8 +25,10 @@ def wishlist(context):
 		device = 'temp'
 	if request.user.is_authenticated:
 		user = request.user
-		if Wishlist.objects.filter(Q(device = device) | Q(user = user)).exists():
-			wlist = Wishlist.objects.get(Q(device = device) | Q(user = user))
+		if Wishlist.objects.filter(user = user).exists():
+			wlist = Wishlist.objects.get(user = user)
+		elif Wishlist.objects.filter(device = device).exists():
+			wlist = Wishlist.objects.get(device = device)
 		else:
 			wlist = Wishlist(
 				user=user,

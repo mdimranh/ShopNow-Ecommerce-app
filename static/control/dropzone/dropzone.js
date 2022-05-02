@@ -26,7 +26,7 @@ function getCookie(name) {
 // $("#unique").val(getCookie('unique'))
 
 var Drop = Dropzone.options.DidDropzone = {
-  url: '/control/product/imagesave/',
+  url: '/control/product/imagesave',
   autoProcessQueue: true,
   paramName: "images",
   uploadMultiple: true,

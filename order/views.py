@@ -230,10 +230,6 @@ def Checkout(request):
 				payment_id = None
 				payment_mode = 'cash'
 			try:
-				total = request.POST['total']
-			except:
-				total = float(cart.subtotal) + float(cart.ship_cost) - float(cart.coupon_discount)
-			try:
 				company_name = request.POST['company_name']
 			except:
 				company_name = None
@@ -276,8 +272,8 @@ def Checkout(request):
 				ship_cost=cart.ship_cost,
 				coupons = couponlist,
 				coupon_disc=cart.coupon_discount,
-				total=total,
-				rate=total/(cart.subtotal + cart.ship_cost - cart.coupon_discount)
+				total=cart.subtotal + cart.ship_cost - cart.coupon_discount,
+				paid=cart.subtotal + cart.ship_cost - cart.coupon_discount,
 			)
 			ordr.user_currency = request.COOKIES['mycurrency']
 			ordr.save()
@@ -424,8 +420,8 @@ def PlaceOrder(request):
 			ship_name=cart.ship_name,
 			ship_cost=cart.ship_cost,
 			coupon_disc=cart.coupon_discount,
-			total=total,
-			rate=total/(cart.subtotal + cart.ship_cost - cart.coupon_discount)
+			total=cart.subtotal + cart.ship_cost - cart.coupon_discount,
+			paid=0
 		)
 		ordr.save()
 		return HttpResponse(str(usr.first_name))
@@ -438,7 +434,7 @@ class Invoice(TemplateView):
 		ordr = Order.objects.get(id = kwargs['id'])
 		context['order'] = Order.objects.get(id = kwargs['id'])
 		cart = cartDetails(ordr.shopcart)
-		context['due'] = cart.totalcost - ordr.total
+		context['due'] = ordr.total - ordr.paid
 		context['category_disable'] = True
 		return context
 
@@ -455,14 +451,16 @@ class GeneratePdf(View):
 			context = {
 				'order': Order.objects.get(id = kwargs['id']),
 				'rate': crncy.rate,
-				'symbol': crncy.symbol_native
+				'symbol': crncy.symbol_native,
+				'due': ordr.total - ordr.paid
 			}
 			pdf = render_to_pdf('account/invoice_pdf.html', context)
 		except:
 			context = {
 				'order': Order.objects.get(id = kwargs['id']),
 				'rate': crncy.rate,
-				'symbol': f'{crncy.code} '
+				'symbol': f'{crncy.code} ',
+				'due': ordr.total - ordr.paid
 			}
 			pdf = render_to_pdf('account/invoice_pdf.html', context)
 

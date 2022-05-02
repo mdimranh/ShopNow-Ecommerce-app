@@ -170,7 +170,7 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                <form class="mt-2 needs-validation add-pro-form" action="/control/product/" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
+                <form class="mt-2 needs-validation add-pro-form" action="/control/product" enctype='multipart/form-data' id="add-category-form" method="post" novalidate>
                   {% csrf_token %}
                   <input type="hidden" name="unique" id="unique" value="{{user.id}}{% now "hidmy" %}unique{{csrf_token}}">
                   <input type="hidden" name="success" id="success" value="">
@@ -285,7 +285,8 @@
                         >Category</label
                       >
                       <div class="col-xl-10">
-                        <select class="form-select" id="add-category-select" name="category" required>
+                        <select class="form-select hideClear" id="add-category-select" name="category" required>
+                          <option></option>
                           {% for category in categorys %}
                             <option value="{{category.id}}">{{category.name}}</option>
                           {% endfor %}

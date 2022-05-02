@@ -86,7 +86,7 @@
                 <td>
                   <strong>Payment Method:</strong><span>{% if order.payment_mode == 'cash' %} Cash On{% else %} {{order.payment_mode}}{% endif %}</span><br>
                   <strong>Total Pay:</strong><span>{% if order.payment_mode == 'cash' %} {{symbol}}0{% else %} {{symbol}}{{order.total|mult:rate|floatformat:2}}{% endif %}</span><br>
-                  <strong>Total Due:</strong><span> {{symbol}}{{order.total|mult:rate|floatformat:2}}</span><br>
+                  <strong>Total Due:</strong><span> {{symbol}}{{due|mult:rate|floatformat:2}}</span><br>
                   <span></span><br>
                   <span></span><br>
                 </td>
