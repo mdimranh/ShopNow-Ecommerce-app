@@ -189,11 +189,6 @@
 												<p class="d-none" id="usd"></p>
 												<p class="d-none" id="rate"></p>
 												<input type="hidden" name="rate" id="rate-input">
-												{% if cost_with_coupon <= free_shipping.fee and not shopcart.free_ship %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|add:local_shipping.fee|mult:mycurrency.0|floatformat:2}}</td>
-												{% else %}
-		                							<td id="total-cost-bdt"  class="d-none">{{cost_with_coupon|mult:mycurrency.0|floatformat:2|intcomma}}</td>
-												{% endif %}
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
 
