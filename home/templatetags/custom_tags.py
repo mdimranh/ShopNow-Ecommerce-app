@@ -175,7 +175,7 @@ register.filter('mult', multiplication)
 
 @register.filter
 def getperms(value):
-	return Permission.objects.filter(content_type == value)
+	return Permission.objects.filter(content_type = value)
 register.filter('getperms', getperms)
 
 
