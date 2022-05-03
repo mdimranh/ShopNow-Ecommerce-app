@@ -3,6 +3,7 @@ from django.db.models import Q
 from order.models import ShopCart, ShippingMethod, Wishlist
 from product.models import Category, Subcategory, Group
 from setting.models import Menus, Currency, Settings, FooterLinks
+from django.contrib.auth.models import Permission
 
 from django.conf import settings
 import os
@@ -171,4 +172,10 @@ def multiplication(value1, value2):
 	result = float(value1) * float(value2)
 	return result
 register.filter('mult', multiplication)
+
+@register.filter
+def getperms(value):
+	return Permission.objects.filter(content_type == value)
+register.filter('getperms', getperms)
+
 
