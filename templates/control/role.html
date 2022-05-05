@@ -2,7 +2,7 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block title %}{{site_config.name}} | Users{% endblock title %}
+{% block title %}{{site_config.name}} | {% if role_details %}{{role_details.name}}{% else %}Roles{% endif %}{% endblock title %}
 
     {% block style %}
     <link
