@@ -167,7 +167,7 @@ class EditProduct(View):
 
     def post(self, request, id):
         pro = Product.objects.get(id = id)
-        for removed_img_id in request.POST['remove-images']:
+        for removed_img_id in request.POST['remove-images'].split(','):
             Images.objects.get(id = removed_img_id).delete()
 
         name = request.POST["name"]
