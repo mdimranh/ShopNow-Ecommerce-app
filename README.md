@@ -31,7 +31,6 @@ Start the server
 
 ```bash
   python manage.py runserver
-  Now click here
-
-http://localhost:8000
 ```
+Now click here
+http://localhost:8000
