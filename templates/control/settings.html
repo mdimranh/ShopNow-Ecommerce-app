@@ -42,7 +42,7 @@
                   <ul class="submenu">
                     {% comment %} <li class="selected" for="general"><p class="m-0 p-0">General</p></li> {% endcomment %}
                     {% comment %} <li for="maintenance"><p class="m-0 p-0">Maintenance</p></li> {% endcomment %}
-                    <li for="store"><p class="m-0 p-0">Store</p></li>
+                    <li  class="selected" for="store"><p class="m-0 p-0">Store</p></li>
                     <li for="currency"><p class="m-0 p-0">Currency</p></li>
                     <li for="mail"><p class="m-0 p-0">Mail</p></li>
                     {% comment %} <li for="newsletter"><p class="m-0 p-0">Newsletter</p></li> {% endcomment %}
@@ -88,7 +88,7 @@
                 </div>
               </div>
               <div class="products-form col-xl-9 col-lg-8 ps-lg-5">
-                  <form id="general" class="product-form needs-validation" id="general-form" method="post" novalidate>
+                  <form id="general" class="product-form needs-validation d-none" id="general-form" method="post" novalidate>
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">General</h6>
                     <hr />
@@ -267,7 +267,7 @@
                       </div>
                     </div>
                   </form>
-                  <form id="store" class="product-form needs-validation d-none" id="store-form" method="post" novalidate>
+                  <form id="store" class="product-form needs-validation" id="store-form" method="post" novalidate>
                     {% csrf_token %}
                     <h6 class="mt-2 text-primary fw-bolder h4">Store</h6>
                     <hr />
