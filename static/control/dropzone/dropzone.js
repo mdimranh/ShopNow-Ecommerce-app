@@ -106,3 +106,51 @@ var Drop = Dropzone.options.DidDropzone = {
   success: function (file, json) {
   },
 }
+
+
+var editDrop = Dropzone.options.editDropzone = {
+  url: '/control/product/imagesave',
+  autoProcessQueue: true,
+  paramName: "images",
+  uploadMultiple: true,
+  maxFilesize: 200,
+  clickable: true,
+  acceptedFiles: '.jpg,.jpeg,.JPEG,.JPG,.png,.PNG',
+  parallelUploads: 100,
+  maxFiles: 100,
+  addRemoveLinks: true,
+  headers: {
+    "X-CSRFToken": getCookie("csrftoken")
+  },
+
+  init: function () {
+    myDropzone = this;
+    myDropzone.on('sending', function (data, xhr, formData) {
+      formData.append('unique', $("#edit-unique").val());
+    });
+    myDropzone.on('successmultiple', function (file, resp) {
+      var elem = $(".dz-remove")
+      console.log(elem.length, resp.ids.length)
+      for (i = elem.length - resp.ids.length; i < elem.length; i++) {
+        $(elem[i]).html(`<i class="fas fa-trash" id="trash" img_id="${resp.ids[i - (elem.length - resp.ids.length)]}"></i>`);
+        document.querySelectorAll("#trash").forEach((element) => {
+          $(element).click(function () {
+            $.ajax({
+              url: '/control/product/deleteimage',
+              type: 'POST',
+              data: { id: $(element).attr('img_id') },
+              success: function (resp) {
+                $('i[img_id = "' + resp.id + '"]').parent().parent().remove()
+              },
+              headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+              },
+            })
+          })
+        })
+      }
+    });
+  },
+  success: function (file, json) {
+  },
+}
