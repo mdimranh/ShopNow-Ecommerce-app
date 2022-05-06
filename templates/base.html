@@ -59,7 +59,7 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/overlay.css' %}">
-    <style>
+    {% comment %} <style>
         #preloader{
             position: fixed;
             top: 0;
@@ -80,14 +80,14 @@
             background-position: center;
             margin: -100px 0 0 -100px;
         }
-    </style>
+    </style> {% endcomment %}
     {% block extra_css %}{% endblock extra_css %}
 </head>
 
 <body>
-    <div id="preloader">
+    {% comment %} <div id="preloader">
         <div id="status" ></div>
-    </div>
+    </div> {% endcomment %}
     <div class="page-wrapper">
         <header class="header header-14">
             <div class="header-top">
@@ -1068,13 +1068,12 @@
     })
     </script>
     
-    <script>
+    {% comment %} <script>
         $(window).on("load", function(){
             $('#preloader').fadeOut();
             $('#status').fadeOut();
         });
-        getNotification({{user.id}});
-    </script>
+    </script> {% endcomment %}
     <script src="{% static 'assets/add-product.js' %}"></script>
     {% block extra_js %}{% endblock extra_js %}
 </body>
