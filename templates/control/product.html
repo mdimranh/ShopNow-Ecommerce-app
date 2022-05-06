@@ -45,7 +45,7 @@
         <h3 class="fw-bold">Product's</h3>
       </div>
       {% endif %}
-      <input type="hidden" id="add-pro" value="{% if product_details %}true{% else %}false{% endif %}">
+      <input type="hidden" id="edit-pro" value="{% if product_details %}true{% else %}false{% endif %}">
       {% if not product_details %}
       <div class="card product-list">
           <div class="card-header">
@@ -1266,7 +1266,7 @@
                     </div>
                     <div class="row mb-3">
                       <h6>Additional Images</h6>
-                      <div class="dropzone mx-2" id="editDropzone">
+                      <div class="dropzone mx-2" id="DidDropzone">
                         <div class="dz-message d-flex flex-column align-items-center">
                           <i class="fas fa-cloud-upload-alt fa-3x text-secondary"></i>
                           <span class="my-2 text-secondary f-20">Drag & Drop files here</span>
