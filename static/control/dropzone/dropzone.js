@@ -56,7 +56,7 @@ var Drop = Dropzone.options.DidDropzone = {
   init: function () {
     myDropzone = this;
     myDropzone.on('sending', function (data, xhr, formData) {
-      if ($('#edit-pro').val() == 'True') {
+      if ($('#edit-pro').val() == 'true') {
         formData.append('unique', $("#edit-unique").val());
       }
       else {
