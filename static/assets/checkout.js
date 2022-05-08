@@ -93,7 +93,7 @@ function initPayPalButton() {
                 // Full available details
                 console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-                if ($("#checkout-diff-address").is(":checked")) {
+                if ($("#checkout-diff-address").val() == 'on') {
                     data = {
                         'cartid': shopcartid,
                         'first_name': $("#first_name").val(),
