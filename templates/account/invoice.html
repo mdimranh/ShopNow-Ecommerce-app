@@ -3,13 +3,13 @@
 {% load custom_tags %}
 {% mycurrency as mycurrency %}
 {% load humanize %}
-{% block title %}Checkout - {{site_config.name}}{% endblock title %}
+{% block title %}Invoice{% endblock title %}
 {% block custom %}
 <div class="main invoice mt-4">
   <div class="container card">
     <div class="d-flex flex-fill justify-content-end" style="margin-bottom: -40px; z-index: 200;">
       {% comment %} <div class="btn btn-success" id="print-btn">Print</div> {% endcomment %}
-      <a href="/generatepdf/{{order.id}}" class="btn btn-success">Print</a>
+      <a href="/generatepdf/{{order.id}}" target="_blank" class="btn btn-success">Print</a>
     </div>
     <div class="row p-3" id="invoice">
       <div class="col-12 d-flex justify-content-between">

@@ -31,15 +31,13 @@ def SettingView(request):
 				social_app = SocialApp.objects.get(provider = 'facebook')
 				social_app.client_id = request.POST['facebook-app-id']
 				social_app.secret = request.POST['facebook-app-secret']
-				social_app.status = True if request.POST.get('facebook-enable') == 'on' else False
 				social_app.save()
 			else:
 				social_app = SocialApp(
 					provider = 'facebook',
 					name='facebook',
 					client_id = request.POST['facebook-app-id'],
-					secret = request.POST['facebook-app-secret'],
-					status = True
+					secret = request.POST['facebook-app-secret']
 				)
 				social_app.save()
 			return redirect(request.path_info)
@@ -49,15 +47,13 @@ def SettingView(request):
 				social_app = SocialApp.objects.get(provider = 'google')
 				social_app.client_id = request.POST['google-app-id']
 				social_app.secret = request.POST['google-app-secret']
-				social_app.status = True if request.POST.get('google-enable') == 'on' else False
 				social_app.save()
 			else:
 				social_app = SocialApp(
 					provider = 'google',
 					name = 'google',
 					client_id = request.POST['google-app-id'],
-					secret = request.POST['google-app-secret'],
-					status = True
+					secret = request.POST['google-app-secret']
 				)
 				social_app.save()
 			return redirect(request.path_info)

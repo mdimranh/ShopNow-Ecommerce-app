@@ -467,7 +467,7 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="facebook-enable" type="checkbox" name="facebook-enable" {% if facebook_login.status %}checked{% endif %} />
+                            <input id="facebook-enable" type="checkbox" name="facebook-enable" {% if facebook_login %}checked{% endif %} />
                             <span class="cr mt-1">
                               <i
                                 class="
@@ -483,7 +483,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="id" value="null">
-                    <div class="row mb-3 facebook-login-field {% if not facebook_login.status %}d-none{% endif %}">
+                    <div class="row mb-3 facebook-login-field {% if not facebook_login %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -553,7 +553,7 @@
                       <div class="col-xl-10">
                         <div class="checkbox-fade fade-in-primary">
                           <label>
-                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login.status %}checked{% endif %} />
+                            <input id="google-enable" type="checkbox" name="google-enable" {% if google_login %}checked{% endif %} />
                             <span class="cr mt-1">
                               <i
                                 class="
@@ -569,7 +569,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="id" value="null">
-                    <div class="row mb-3 google-login-field {% if not google_login.status %}d-none{% endif %}">
+                    <div class="row mb-3 google-login-field {% if not google_login %}d-none{% endif %}">
                       <label
                         for="app-id"
                         class="col-xl-2 col-form-label d-none d-xl-block"
@@ -588,7 +588,7 @@
                         <div class="invalid-feedback">Please enter App ID</div>
                       </div>
                     </div>
-                    <div class="row mb-3 google-login-field {% if not google_login.status %}d-none{% endif %}">
+                    <div class="row mb-3 google-login-field {% if not google_login %}d-none{% endif %}">
                       <label
                         for="app-secret"
                         class="col-xl-2 col-form-label d-none d-xl-block"
