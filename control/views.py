@@ -193,12 +193,13 @@ def Login(request):
 		user = auth.authenticate(username=email, password=password)
 
 		if user is not None:
-			if user.is_superuser:
+			if user.is_superuser or user.is_staff:
 				auth.login(request, user)
 				return redirect('/control')
 			else:
 				auth.login(request, user)
-				return redirect('/')
+				messages.error(request, "You have not permission to access admin panel.")
+				return render('control/login.html')
 		else:
 			messages.error(request, "Invalid username or password!")
 			return render(request, "control/login.html")

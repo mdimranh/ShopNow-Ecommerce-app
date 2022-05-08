@@ -3,6 +3,7 @@ from django.urls import resolve, reverse
 from django.http import HttpResponseRedirect
 from EcomApp import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 
 
 class LoginRequireMidleware(MiddlewareMixin):
@@ -19,5 +20,7 @@ class LoginRequireMidleware(MiddlewareMixin):
                 return HttpResponseRedirect(reverse(settings.AUTH_LOGIN_ROUTE))
             else:
                 if not request.user.is_superuser and not request.user.is_staff:
-                    return HttpResponseRedirect(reverse(settings.ROOT_URL))
+                    # return HttpResponseRedirect(reverse(settings.ROOT_URL))
+                    messages.error(request, "You haven't permission to access admin panel.")
+                    return render('control/login.html')
         
