@@ -1,6 +1,5 @@
 
 var total = $("#total-amount").val()
-const shopcartid = $("#cartid").val()
 
 var mycurrency = getCookie('mycurrency')
 if (mycurrency !== 'USD') {
@@ -95,7 +94,7 @@ function initPayPalButton() {
 
                 if ($("#checkout-diff-address").val() == 'on') {
                     data = {
-                        'cartid': shopcartid,
+                        'cartid': $("#cartid").val(),
                         'first_name': $("#first_name").val(),
                         'last_name': $("#last_name").val(),
                         'company_name': $("#company_name").val(),
@@ -115,7 +114,7 @@ function initPayPalButton() {
                 }
                 else {
                     data = {
-                        'cartid': shopcartid,
+                        'cartid': $("#cartid").val(),
                         'first_name': $("#first_name").val(),
                         'last_name': $("#last_name").val(),
                         'company_name': $("#company_name").val(),
