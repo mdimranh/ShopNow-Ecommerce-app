@@ -131,7 +131,7 @@ function initPayPalButton() {
                 }
 
                 $.ajax({
-                    url: "/place-order",
+                    url: "/cart/checkout",
                     type: "POST",
                     data: data,
 
@@ -144,7 +144,7 @@ function initPayPalButton() {
                             showConfirmButton: false,
                             timer: 1000
                         }).then((result) => {
-                            window.location.href = "/profile"
+                            window.location.href = "/"
                         });
                     },
                     headers: {
