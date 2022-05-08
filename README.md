@@ -9,12 +9,12 @@
 
 ## Demo Shop
 
-Shop:
+**Shop**:
 http://shopnowbd.herokuapp.com
 
 ### Admin:
-**username**: admin@gmail.com
-**password**: admin
+**username**: admin@gmail.com <br/>
+**password**: admin <br/>
 **link**: http://shopnowbd.herokuapp.com/control
 
 ## Run Locally
