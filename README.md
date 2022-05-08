@@ -7,6 +7,16 @@
 
 **Server:** Python, Django, Django-Rest-Framework
 
+## Demo Shop
+
+Shop:
+http://shopnowbd.herokuapp.com
+
+**Admin**:
+username: admin@gmail.com
+password: admin
+link: http://shopnowbd.herokuapp.com/control
+
 ## Run Locally
 
 Clone the project
