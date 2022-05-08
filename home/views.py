@@ -148,7 +148,7 @@ def SearchView(request):
             return render(request, 'product/category.html', context)
 
 def error_404(request, exception):
-    return render(request, 'home/404.html')
+    return render(request, 'home/404.html', status='404')
 
 class PageView(View):
     def get(self, request, slug, *args, **kwargs):

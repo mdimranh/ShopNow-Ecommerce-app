@@ -9,7 +9,7 @@ import home
 
 urlpatterns = [
     path('control', include('control.urls')),
-    path('admin', admin.site.urls),
+    path('adminpanel', admin.site.urls),
     path('', include('home.urls')),
     path('', include('product.urls')),
     path('', include('accounts.urls')),
@@ -20,6 +20,6 @@ urlpatterns = [
     path('api/', include('api.urls'))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-from django.conf.urls import handler400
+from django.conf.urls import handler404
 
-urls.handler400 = home.views.error_404
+handler404 = home.views.error_404
