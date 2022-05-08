@@ -80,6 +80,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'EcomApp.urls'
 
 # AUTH_EXEMPT_ROUTES = ('admin-login', )
+LOGIN_REDIRECT_URL = "/"
 AUTH_LOGIN_ROUTE = 'admin-login'
 ROOT_URL = 'home'
 
