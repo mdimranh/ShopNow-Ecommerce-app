@@ -13,8 +13,8 @@
 http://shopnowbd.herokuapp.com
 
 ### Admin:
-**username**: ```bash admin@gmail.com ```<br/>
-**password**: ```bash admin ```bash<br/>
+**username**: admin@gmail.com<br/>
+**password**: admin<br/>
 **link**: http://shopnowbd.herokuapp.com/control
 
 ## Run Locally
