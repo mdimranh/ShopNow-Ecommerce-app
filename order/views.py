@@ -272,15 +272,14 @@ def Checkout(request):
 				ship_cost=cart.ship_cost,
 				coupons = couponlist,
 				coupon_disc=cart.coupon_discount,
-				total=cart.subtotal + cart.ship_cost - cart.coupon_discount,
-				paid=cart.subtotal + cart.ship_cost - cart.coupon_discount,
+				total=cart.subtotal + cart.ship_cost - cart.coupon_discount
 			)
 			ordr.user_currency = request.COOKIES['mycurrency']
 			ordr.save()
 			scart.on_order = True
 			scart.save()
 			try:
-				return redirect('/profile')
+				return redirect('/')
 			finally:
 				mail_config = EmailConfig.objects.get()
 				subject, from_email, to = 'Confirm order', mail_config.email_host_user, email
