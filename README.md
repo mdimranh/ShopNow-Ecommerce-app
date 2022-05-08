@@ -13,7 +13,7 @@
 http://shopnowbd.herokuapp.com
 
 ### Admin:
-**username**: admin@gmail.com<br/>
+**username**: ```admin@gmail.com```<br/>
 **password**: admin<br/>
 **link**: http://shopnowbd.herokuapp.com/control
 
