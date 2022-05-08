@@ -20,6 +20,20 @@ $(".add-new-slide-btn").click(function () {
     var id = "#" + $(this).attr("for")
     $(id).attr("src", URL.createObjectURL(event.target.files[0]));
   })
+  var form = document.getElementById("edit-slide-form")
+  form.addEventListener('submit', function (event) {
+    var inp = $("input[type=file]")
+    event.preventDefault()
+    event.stopPropagation()
+    var ar = []
+    for (i = 0; i < inp.length; i++) {
+      if (inp[i].files.length != 0) {
+        ar.push(i)
+      }
+    }
+    $("#pos").val(ar)
+    form.submit()
+  })
 })
 
 function slide(num) {
