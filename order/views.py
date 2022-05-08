@@ -9,9 +9,12 @@ from django.contrib import messages
 
 from django.db.models import Q
 
-from control.emailconfig import backend
-from setting.models import EmailConfig
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+
+from setting.models import EmailConfig
+from control.emailconfig import backend
 
 from setting.models import Currency
 
