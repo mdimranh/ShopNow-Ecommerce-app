@@ -436,7 +436,7 @@
                     <div class="wrapper">
                       <input type="hidden" id="change_image" name="change_image">
                       {% for sld in slide.slides %}
-                      <div class="d-flex flex-column mb-4" slide-id="sld.id">
+                      <div class="d-flex flex-column mb-4" slide-id="{{sld.id}}">
                             <div class="d-flex flex-fill mt-2 mb-4 justify-content-between"><h6><i class="fas fa-th-list me-3 drag-icon handle"></i>Image Slide</h6><i class="fas fa-times fa-lg"></i></div>
                             <div class="d-flex flex-column flex-xl-row align-items-center align-items-xl-start">
                                 <div class="me-4">

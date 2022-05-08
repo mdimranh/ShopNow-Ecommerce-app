@@ -2,28 +2,28 @@ var wrapper_len = $(".wrapper").children().length
 $("#wrapper_len").val(wrapper_len)
 
 var wrap_len = $(".wrapper").children().length
-for (i = 1; i <= wrap_len; i++){
-  $("#add-thumbnail-input-"+i).change(function(event){
-    var id = "#"+$(this).attr("for")
+for (i = 1; i <= wrap_len; i++) {
+  $("#add-thumbnail-input-" + i).change(function (event) {
+    var id = "#" + $(this).attr("for")
     $(id).attr("src", URL.createObjectURL(event.target.files[0]));
   })
 }
 
-$(".add-new-slide-btn").click(function(){
-    wrapper_len = parseInt($("#wrapper_len").val()) + 1
-    $("#wrapper_len").val(wrapper_len)
-    $(".wrapper").append(slide(wrapper_len))
-    $(".fa-times").click(function(){
-        $(this).parent().parent().remove()
-    })
-    $("#new-add-thumbnail-input-"+wrapper_len).change(function(event){
-      var id = "#"+$(this).attr("for")
-      $(id).attr("src", URL.createObjectURL(event.target.files[0]));
-    })
+$(".add-new-slide-btn").click(function () {
+  wrapper_len = parseInt($("#wrapper_len").val()) + 1
+  $("#wrapper_len").val(wrapper_len)
+  $(".wrapper").append(slide(wrapper_len))
+  $(".fa-times").click(function () {
+    $(this).parent().parent().remove()
+  })
+  $("#new-add-thumbnail-input-" + wrapper_len).change(function (event) {
+    var id = "#" + $(this).attr("for")
+    $(id).attr("src", URL.createObjectURL(event.target.files[0]));
+  })
 })
 
-function slide(num){
-    var slide = `<div class="d-flex flex-column mb-4">
+function slide(num) {
+  var slide = `<div class="d-flex flex-column mb-4">
     <div class="d-flex flex-fill mt-2 mb-4 justify-content-between"><h6><i class="fas fa-th-list me-3 drag-icon handle"></i>Image Slide</h6><i class="fas fa-times fa-lg"></i></div>
         <div class="d-flex flex-column flex-xl-row align-items-center align-items-xl-start">
             <div class="me-4">
@@ -123,25 +123,25 @@ function slide(num){
             </div>
         </div>
     </div>`
-    return slide
+  return slide
 }
 
-$(".fa-times").click(function(){
+$(".fa-times").click(function () {
   $(this).parent().parent().remove()
 })
 
 
 var form = document.getElementById("edit-slide-form")
 form.addEventListener('submit', function (event) {
-    var inp = $("input[type=file]")
-    event.preventDefault()
-    event.stopPropagation()
-    var ar = []
-    for (i=0; i<inp.length; i++){
-      if (inp[i].files.length != 0){
-        ar.push(i)
-      }
+  var inp = $("input[type=file]")
+  event.preventDefault()
+  event.stopPropagation()
+  var ar = []
+  for (i = 0; i < inp.length; i++) {
+    if (inp[i].files.length != 0) {
+      ar.push(i)
     }
-    $("#pos").val(ar)
-    form.submit()
+  }
+  $("#pos").val(ar)
+  form.submit()
 })

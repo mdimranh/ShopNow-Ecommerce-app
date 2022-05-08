@@ -240,7 +240,10 @@ def Sliders(request):
 
 def SliderDetails(request, id):
 	if request.method == 'POST':
-		change = request.POST["pos"].split(',')
+		try:
+			change = request.POST["pos"].split(',')
+		except:
+			change = []
 		new_thumb = request.FILES.getlist("thumbnail")
 		slide = Slider.objects.get(id = id)
 		ids = request.POST.getlist("id")
