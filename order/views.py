@@ -289,7 +289,8 @@ def Checkout(request):
 				text_content = 'Confirm order'
 				html_content = render_to_string('order-confirm.html', context={
 					'order': ordr,
-					'currency': Currency.objects.get(code = request.COOKIES['mycurrency'])
+					'currency': Currency.objects.get(code = request.COOKIES['mycurrency']),
+					'domain': get_current_site(request).domain
 				})
 				msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
 				msg.attach_alternative(html_content, "text/html")

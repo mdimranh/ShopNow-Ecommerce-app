@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 from setting.models import Currency, SiteConfiguration
 from django.core.mail import EmailMultiAlternatives
 from control.emailconfig import backend
+from django.contrib.sites.shortcuts import get_current_site
 
 # class OrderList(View):
 #     def get(self, request):
@@ -80,7 +81,8 @@ class OrderDetails(View):
                 text_content = 'Confirm delivered'
                 html_content = render_to_string('order-delivard.html', context={
                     'order': get_order,
-                    'currency': Settings.objects.get().default_currency
+                    'currency': Settings.objects.get().default_currency,
+                    'domain': get_current_site(request).domain
                 })
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
                 msg.attach_alternative(html_content, "text/html")
