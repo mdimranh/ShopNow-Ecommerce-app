@@ -437,7 +437,7 @@ class Invoice(TemplateView):
 		ordr = Order.objects.get(id = kwargs['id'])
 		context['order'] = Order.objects.get(id = kwargs['id'])
 		cart = cartDetails(ordr.shopcart)
-		context['due'] = ordr.total - ordr.paid
+		context['due'] = ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
 		context['category_disable'] = True
 		return context
 
@@ -455,7 +455,7 @@ class GeneratePdf(View):
 				'order': Order.objects.get(id = kwargs['id']),
 				'rate': crncy.rate,
 				'symbol': crncy.symbol_native,
-				'due': ordr.total - ordr.paid
+				'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
 			}
 			pdf = render_to_pdf('account/invoice_pdf.html', context)
 		except:
@@ -463,7 +463,7 @@ class GeneratePdf(View):
 				'order': Order.objects.get(id = kwargs['id']),
 				'rate': crncy.rate,
 				'symbol': f'{crncy.code} ',
-				'due': ordr.total - ordr.paid
+				'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
 			}
 			pdf = render_to_pdf('account/invoice_pdf.html', context)
 
