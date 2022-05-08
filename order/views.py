@@ -369,7 +369,7 @@ def PlaceOrder(request):
 			region = Region.objects.get(id = request.POST['add-region']).name
 			city = City.objects.get(id = request.POST['add-city']).name
 			area = Area.objects.get(id = request.POST['add-area']).name
-			address = request.POST['add-address']
+			address = request.POST['address']
 		else:
 			address_book = AddressBook.objects.get(id = request.POST['address_book'])
 			country = address_book.country.name
