@@ -364,7 +364,7 @@ def WishItemDelete(request):
 
 def PlaceOrder(request):
 	if request.method == "POST":
-		if request.POST['diff-address'] == 'off':
+		if request.POST['diff-address'] == 'on':
 			country = Country.objects.get(id = request.POST['add-country']).name
 			region = Region.objects.get(id = request.POST['add-region']).name
 			city = City.objects.get(id = request.POST['add-city']).name
