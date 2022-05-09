@@ -31,18 +31,18 @@
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
                                         {% comment %} <span class="product-label label-top">Top</span> {% endcomment %}
-                                        <img id="product-zoom" src="{{product.image}}" data-zoom-image="{{product.image}}" alt="product image">
+                                        <img id="product-zoom" src="{{product.image.url}}" data-zoom-image="{{product.image.url}}" alt="product image">
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
                                         </a>
                                     </figure><!-- End .product-main-image -->
                                     <div id="product-zoom-gallery" class="product-image-gallery align-items-center">
-                                        <a class="product-gallery-item active" href="#" data-image="{{product.image}}" data-zoom-image="{{product.image}}">
-                                            <img src="{{product.image}}" alt="product side">
+                                        <a class="product-gallery-item active" href="#" data-image="{{product.image.url}}" data-zoom-image="{{product.image.url}}">
+                                            <img src="{{product.image.url}}" alt="product side">
                                         </a>
                                         {% for image in product.addtional_images %}
-                                        <a class="product-gallery-item active" href="#" data-image="{{image.image}}" data-zoom-image="{{image.image}}">
-                                            <img src="{{image.image}}" alt="product side">
+                                        <a class="product-gallery-item active" href="#" data-image="{{image.image.url}}" data-zoom-image="{{image.image.url}}">
+                                            <img src="{{image.image.url}}" alt="product side">
                                         </a>
                                         {% endfor %}
                                     </div><!-- End .product-image-gallery -->
@@ -275,7 +275,7 @@
 									<div class="product-countdown" data-until="+{{pro.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
 								{% endif %}
                                 <a href="product.html">
-                                    <img src="{{pro.image}}" alt="Product image" class="product-image">
+                                    <img src="{{pro.image.url}}" alt="Product image" class="product-image">
                                 </a>
                                 <div class="product-action-vertical">
                                     <div id="btn-wishlist{{product.id}}" class="btn-product-icon btn-wishlist {% if product in wishlist.1 %}select{% endif %}" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></div>
@@ -307,7 +307,7 @@
                                 <div class="product-nav product-nav-thumbs">
                                     {% for image in pro.additional_images %}
                                     <a href="#" class="active">
-                                        <img src="{{image.image}}" alt="product desc">
+                                        <img src="{{image.image.url}}" alt="product desc">
                                     </a>
                                     {% endfor %}
                                 </div><!-- End .product-nav -->
@@ -326,7 +326,7 @@
                                 <div class="product product-sm">
                                     <figure class="product-media">
                                         <a href="product.html">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                     </figure>
                                     <div class="product-body">

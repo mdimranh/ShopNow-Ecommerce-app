@@ -202,7 +202,7 @@
                                             <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if product.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -284,7 +284,7 @@
                                             <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if product.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -388,7 +388,7 @@
                                             <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if product.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -470,7 +470,7 @@
                                             <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if product.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -578,7 +578,7 @@
                                             <span class="product-label label-sale bg-success">{{item.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{item.id}}">
-                                            <img src="{{item.image}}" alt="Product image" class="product-image">
+                                            <img src="{{item.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if item.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{item.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -714,7 +714,7 @@
                                             <span class="product-label label-sale bg-success">{{item.product.hd_disc}}</span>
                                         {% endif %}
                                         <a href="/products/{{item.product.id}}">
-                                            <img src="{{item.product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{item.product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         {% if item.product.hot_deal_active %}
                                             <div class="product-countdown" data-until="+{{item.product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
@@ -848,7 +848,7 @@
                                     <div class="product product-sm">
                                         <figure class="product-media">
                                             <a href="/products/{{product.id}}">
-                                                <img src="{{product.image}}" alt="Product image" class="product-image">
+                                                <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                             </a>
                                         </figure>
                                         <div class="product-body">
@@ -876,7 +876,7 @@
                                                 <span class="product-label label-sale bg-success">{{product.hd_disc}}</span>
                                             {% endif %}
                                             <a href="/products/{{product.id}}">
-                                                <img src="{{product.image}}" alt="Product image" class="product-image">
+                                                <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                             </a>
                                             <div class="product-action-vertical">
                                                 <div id="btn-wishlist{{product.id}}" class="btn-product-icon btn-wishlist {% if product in wishlist.1 %}select{% endif %}" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></div>

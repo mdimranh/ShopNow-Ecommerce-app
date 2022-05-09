@@ -109,7 +109,7 @@
                   {% for product in products %}
                   <tr>
                     <td data-checkbox-enabled="false"></td>
-                    <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
+                    <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image.url}}"></td>
                     <td data-field="ids"><a href="/control/product/edit-product/{{product.id}}"></a></td>
                     <td ><a href="/control/product/edit-product/{{product.id}}" class="title">{{product.title}}</a></td>
                     <td >{{product.category}}</td>
@@ -578,7 +578,7 @@
                         {% for product in products %}
                         <tr>
                           <td data-checkbox-enabled="false"></td>
-                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
+                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image.url}}"></td>
                           <td >{{product.id}}</td>
                           <td >{{product.title}}</td>
                           <td >{{product.category}}</td>
@@ -1252,7 +1252,7 @@
                         <img
                           class="thumbnail"
                           id="edit-thumbnail"
-                          src="{{product_details.image}}"
+                          src="{{product_details.image.url}}"
                         />
                       </label>
                       <input
@@ -1280,7 +1280,7 @@
                       {% for img in product_details.images.all %}
                       <div class="additional-image-thumbnail">
                         <i class="fas fa-trash" id="trash" img-id="{{img.id}}"></i>
-                        <img class="thumbnail no-border" src="{{img.image}}">
+                        <img class="thumbnail no-border" src="{{img.image.url}}">
                       </div>
                       {% endfor %}
                     </div>
@@ -1412,7 +1412,7 @@
                         {% for product in products %}
                         <tr>
                           <td data-checkbox-enabled="true">{% if product in product_details.related_pro %}true{% endif %}</td>
-                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image}}"></td>
+                          <td class="d-flex flex-fill justify-content-start product-column"><img class="product-img" src="{{product.image.url}}"></td>
                           <td >{{product.id}}</td>
                           <td >{{product.title}}</td>
                           <td >{{product.category}}</td>

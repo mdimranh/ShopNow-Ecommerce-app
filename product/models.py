@@ -107,7 +107,7 @@ class Product(models.Model):
 	group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_groups')
 	subcategory = models.ForeignKey(Subcategory, on_delete=models.DO_NOTHING, blank=True, null=True, related_name = 'product_subcategorys')
 	title = models.CharField(max_length=200)
-	image = models.CharField(max_length=500, blank = True, null=True)
+	image = models.ImageField(upload_to = 'product/thumbnail/')
 	main_price = models.DecimalField(decimal_places=2, max_digits=15)
 	discount = models.DecimalField(decimal_places=0, max_digits=3, blank=True, null=True)
 	discount_type = models.CharField(max_length=10, choices=dis_type, default="Percentage")
@@ -189,13 +189,15 @@ class Product(models.Model):
 		else: return False
 
 	def hd_end(self):
-		return self.hot_deal_end+timedelta(1)
+		return self.hot_deal_end and self.hot_deal_end+timedelta(1)
 
 	def hd_disc(self):
-		if self.hot_deal_discount_type == 'percentage':
-			return f'hot deal | {self.hot_deal_discount}% '+' off'
-		else: return f'hot deal | {self.hot_deal_discount} off'
-    		 
+		if self.hot_deal_end:
+			if self.hot_deal_discount_type == 'percentage':
+				return f'hot deal | {self.hot_deal_discount}% '+' off'
+			else: return f'hot deal | {self.hot_deal_discount} off'
+		else: return ''
+			 
 
 	def total_review(self):
 		return Review.objects.filter(product=self).count()
@@ -216,7 +218,7 @@ class Product(models.Model):
 class Images(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name="images", null=True, blank=True)
 	title = models.CharField(max_length=200, blank=True)
-	image = models.TextField(blank=True)
+	image = models.ImageField(upload_to="product/additional/")
 	unique = models.TextField(blank=True, null=True)
 
 	def __str__(self):

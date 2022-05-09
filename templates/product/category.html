@@ -42,7 +42,7 @@
 											<div class="product-countdown" data-until="+{{product.hd_end|timeuntil}}" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
 										{% endif %}
                                         <a href="/products/{{product.id}}">
-                                            <img src="{{product.image}}" alt="Product image" class="product-image">
+                                            <img src="{{product.image.url}}" alt="Product image" class="product-image">
                                         </a>
                                         <div class="product-action-vertical">
                                             <div id="btn-wishlist{{product.id}}" class="btn-product-icon btn-wishlist {% if product in wishlist.1 %}select{% endif %}" title="Add to wishlist" onclick="AddWishlist({{product.id}})"><span>add to wishlist</span></div>
