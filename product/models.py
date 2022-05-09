@@ -142,7 +142,7 @@ class Product(models.Model):
 	def price(self):
 		main_price = float(self.main_price)
 		main_price -=  (( main_price * float(self.discount)) / 100)
-		if self.hot_deal_end >= date.today():
+		if self.hot_deal_end and self.hot_deal_end >= date.today():
 			if self.hot_deal_discount_type == 'percentage':
 				main_price -= ((main_price * self.hot_deal_discount) / 100)
 			else:
@@ -184,7 +184,7 @@ class Product(models.Model):
 		return rating if type(rating) == float else 0
 
 	def hot_deal_active(self):
-		if self.hot_deal_end > date.today():
+		if self.hot_deal_end and self.hot_deal_end > date.today():
 			return True
 		else: return False
 

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'api',
     'newsletter',
@@ -63,6 +64,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'fontawesome_5',
+
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +121,14 @@ DATABASES = {
     }
 }
 
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'shopnowbd-herokuapp-com',
+    'API_KEY': '625542925886395',
+    'API_SECRET': 'dCdVw2Fupe6yWUPxHtg8x3ZFwrI',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
