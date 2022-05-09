@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from product.models import Product, Category, Group, Subcategory
-from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from product.models import Images, Options, Option, Brands
@@ -29,9 +28,6 @@ def Products(request):
 			discount = 0
 		discount_type = request.POST.get("discount-type", None)
 		image = request.FILES['thumbnail']
-		fs = FileSystemStorage("media/product/")
-		filename = fs.save(image.name, image)
-		image_url = settings.MEDIA_URL+"product/"+filename
 		meta_title = request.POST["meta-title"]
 		meta_keywords = request.POST["meta-keywords"]
 		meta_descriptions = request.POST["meta-descriptions"]
@@ -66,7 +62,7 @@ def Products(request):
 				main_price = main_price,
 				discount = discount,
 				discount_type = discount_type,
-				image = image_url,
+				image = image,
 				meta_title = meta_title,
 				meta_keywords = meta_keywords,
 				meta_descriptions = meta_descriptions,
@@ -131,11 +127,8 @@ def ImagesSave(request):
 		idlist = []
 		urllist = []
 		for img in imgs:
-			fs = FileSystemStorage("media/product/additional/")
-			filename = fs.save(img.name, img)
-			image_url = settings.MEDIA_URL+"product/additional/"+filename
 			new_image = Images(
-				image = image_url,
+				image = img,
 				unique = request.POST["unique"]
 			)
 			new_image.save()
@@ -246,10 +239,7 @@ class EditProduct(View):
 
 		try:
 			image = request.FILES['thumbnail']
-			fs = FileSystemStorage("media/product/")
-			filename = fs.save(image.name, image)
-			image_url = settings.MEDIA_URL+"product/"+filename
-			pro.image = image_url
+			pro.image = image
 			pro.save()
 		except:
 			pass
