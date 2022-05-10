@@ -133,7 +133,7 @@ def ImagesSave(request):
 			)
 			new_image.save()
 			idlist.append(new_image.id)
-			urllist.append(new_image.image)
+			urllist.append(new_image.image.url)
 		context = {
 			'ids' : idlist,
 			'urls': urllist
