@@ -127,7 +127,6 @@ class AddToCart(View):
 						'cost': mycart.subtotal - mycart.coupon_discount,
 						'subtotal': mycart.subtotal,
 						'msg': msg,
-						'product': pro,
 						'cart': cart_serialize
 					}
 					return JsonResponse(context)

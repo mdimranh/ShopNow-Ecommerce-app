@@ -227,6 +227,7 @@ function CartDelete(id) {
       'id': id
     },
     success: function (resp) {
+      document.getElementById("overlay").style.display = "block";
       window.location.reload()
     },
     headers: {
