@@ -77,7 +77,7 @@ class AddToCart(View):
 				if pro_id in pro_list:
 					return JsonResponse({'msg_type':'fail', 'msg': "Product already exist to your cart."})
 				pro = Product.objects.get(id = pro_id)
-				if pro.amount < 0:
+				if pro.amount <= 0:
 					return JsonResponse({'msg_type':'fail', 'msg': "Out of stock"})
 				else:
 					try:
@@ -89,7 +89,7 @@ class AddToCart(View):
 					except:
 						size = None
 					cart = Cart(
-						product= pro,
+						product = pro,
 						quantity = request.POST['quantity'],
 						color=color,
 						size=size
@@ -99,7 +99,6 @@ class AddToCart(View):
 						option = Option.objects.get(id = opt_id)
 						cart.options.add(option)
 					scart.carts.add(cart)
-					scart.save()
 					try:
 						Wishlist.objects.filter(product = pro, user = request.user).first().delete()
 					except:
