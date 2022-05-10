@@ -105,6 +105,13 @@ class AddToCart(View):
 						pass
 					item = scart.carts.all().count()
 					msg = "Product successfully added to cart!"
+					main_price = float(pro.main_price)
+					main_price -=  (( main_price * float(pro.discount)) / 100)
+					if pro.hot_deal_end >= date.today():
+						if pro.hot_deal_discount_type == 'percentage':
+							main_price -= ((main_price * pro.hot_deal_discount) / 100)
+						else:
+							main_price -= pro.hot_deal_discount
 					mycart = cartDetails(scart)
 					context = {
 						'msg_type':'success',
@@ -113,12 +120,12 @@ class AddToCart(View):
 						'subtotal': mycart.subtotal,
 						'msg': msg,
 						'title': pro.title,
-						'id': pro.id,
-						'image': pro.image.url,
-						'price': pro.price,
-						'main_price': pro.main_price,
-						'discount': pro.discount,
 						'amount': cart.quantity,
+						'price': main_price,
+						'main_price': pro.main_price,
+						'id': pro.id,
+						'image': pro.image,
+						'cart': cart_serialize
 					}
 					return JsonResponse(context)
 			else:
