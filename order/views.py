@@ -23,6 +23,8 @@ from order.models import ShippingMethod, PaymentMethod, Order, Cart
 from accounts.models import AddressBook
 from .cartdetails import cartDetails
 
+from datetime import date
+
 import json
 
 class AddToCart(View):
@@ -117,6 +119,13 @@ class AddToCart(View):
 						cart_serialize.append(cs)
 					item = scart.carts.all().count()
 					msg = "Product successfully added to cart!"
+					main_price = float(pro.main_price)
+					main_price -=  (( main_price * float(pro.discount)) / 100)
+					if pro.hot_deal_end >= date.today():
+						if pro.hot_deal_discount_type == 'percentage':
+							main_price -= ((main_price * pro.hot_deal_discount) / 100)
+						else:
+							main_price -= pro.hot_deal_discount
 					mycart = cartDetails(scart)
 					context = {
 						'msg_type':'success',
@@ -124,7 +133,13 @@ class AddToCart(View):
 						'cost': mycart.subtotal - mycart.coupon_discount,
 						'subtotal': mycart.subtotal,
 						'msg': msg,
-						'product': pro,
+						# 'product': pro,
+						'title': pro.title,
+						'amount': cart.quantity,
+						'price': main_price,
+						'main_price': pro.main_price,
+						'id': pro.id,
+						'image': pro.image,
 						'cart': cart_serialize
 					}
 					return JsonResponse(context)
@@ -148,8 +163,6 @@ def CartView(request):
 
 def CartDelete(request):
 	getcart = Cart.objects.get(id = request.POST['id'])
-	scart = getcart.shopcart_set.all().first()
-	cart = cartDetails(scart)
 	getcart.delete()
 	msg = "Product successfully deleted"
 	context = {
