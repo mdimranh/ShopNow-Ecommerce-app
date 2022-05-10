@@ -19,7 +19,7 @@ class cartDetails:
 				opt_cost += opt.price
 			main_price = float(item.product.main_price) + float(opt_cost)
 			main_price -= (( main_price * float(item.product.discount)) / 100)
-			if item.product.hot_deal_end >= datetime.date.today():
+			if item.product.hot_deal_end and item.product.hot_deal_end >= datetime.date.today():
 				if item.product.hot_deal_discount_type == 'percentage':
 					main_price -= ((main_price * item.product.hot_deal_discount) / 100)
 				else:
