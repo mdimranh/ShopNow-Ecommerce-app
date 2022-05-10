@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from django.db.models import Q
+from datetime import date
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
