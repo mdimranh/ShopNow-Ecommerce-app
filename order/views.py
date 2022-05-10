@@ -120,14 +120,6 @@ class AddToCart(View):
 						cart_serialize.append(cs)
 					item = scart.carts.all().count()
 					msg = "Product successfully added to cart!"
-					product_serialize = {
-							'title': pro.title,
-							'id': pro.id,
-							'image': pro.image.url,
-							'price': pro.price,
-							'main_price': pro.main_price,
-							'discount': pro.discount
-						}
 					mycart = cartDetails(scart)
 					context = {
 						'msg_type':'success',
@@ -135,7 +127,12 @@ class AddToCart(View):
 						'cost': mycart.subtotal - mycart.coupon_discount,
 						'subtotal': mycart.subtotal,
 						'msg': msg,
-						'product': [product_serialize],
+						'title': pro.title,
+						'id': pro.id,
+						'image': pro.image.url,
+						'price': pro.price,
+						'main_price': pro.main_price,
+						'discount': pro.discount,
 						'cart': cart_serialize
 					}
 					return JsonResponse(context)

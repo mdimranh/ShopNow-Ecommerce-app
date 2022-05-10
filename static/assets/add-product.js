@@ -85,24 +85,23 @@ function AddProduct(id, quantity) {
           document.getElementById("wishitem" + id).remove();
         }
         $(".cart-count").text(resp.item);
-        pro = JSON.parse(JSON.stringify(resp.product));
         var div = `<tr>
               <td class="product-col">
                   <div class="product">
                       <figure class="product-media">
-                          <a href="/products/${pro[0].id}">
-                              <img src="${pro[0].image}" alt="Product image">
+                          <a href="/products/${resp.id}">
+                              <img src="${resp.image}" alt="Product image">
                           </a>
                       </figure>
                       <h3 class="product-title">
-                          <a href="/products/${pro[0].id}">${pro[0].title}</a>
+                          <a href="/products/${resp.id}">${resp.title}</a>
                       </h3><!-- End .product-title -->
                   </div><!-- End .product -->
               </td>
               <td class="product-price">
                 <div class="d-flex flex-column">
-                  <span class="new-price">${pro[0].price}</span><clear>
-                  <span class="old-price"><span>${pro[0].main_price}</span> (${pro[0].discount}%)</span>
+                  <span class="new-price">${resp.price}</span><clear>
+                  <span class="old-price"><span>${resp.main_price}</span> (${resp.discount}%)</span>
                 </div>
               </td>
               <td class="quantity-col">
