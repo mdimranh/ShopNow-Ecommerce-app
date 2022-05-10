@@ -85,32 +85,32 @@ function AddProduct(id, quantity) {
           document.getElementById("wishitem" + id).remove();
         }
         $(".cart-count").text(resp.item);
-        var product = JSON.parse(resp.product);
+        pro = JSON.parse(JSON.stringify(resp.product));
         var div = `<tr>
-                    <td class="product-col">
-                        <div class="product">
-                            <figure class="product-media">
-                                <a href="/products/${product.id}">
-                                    <img src="${product.image}" alt="Product image">
-                                </a>
-                            </figure>
-                            <h3 class="product-title">
-                                <a href="/products/${product.id}">${product.title}</a>
-                            </h3><!-- End .product-title -->
-                        </div><!-- End .product -->
-                    </td>
-                    <td class="product-price">
-                      <div class="d-flex flex-column">
-                        <span class="new-price">${product.price}</span><clear>
-                        <span class="old-price"><span>${product.main_price}</span> (${product.discount}%)</span>
-                      </div>
-                    </td>
-                    <td class="quantity-col">
-                        <div class="cart-product-quantity">
-                            <span>${quantity}</span>
-                        </div><!-- End .cart-product-quantity -->
-                    </td>
-                </tr>`;
+              <td class="product-col">
+                  <div class="product">
+                      <figure class="product-media">
+                          <a href="/products/${pro[0].id}">
+                              <img src="${pro[0].image}" alt="Product image">
+                          </a>
+                      </figure>
+                      <h3 class="product-title">
+                          <a href="/products/${pro[0].id}">${pro[0].title}</a>
+                      </h3><!-- End .product-title -->
+                  </div><!-- End .product -->
+              </td>
+              <td class="product-price">
+                <div class="d-flex flex-column">
+                  <span class="new-price">${pro[0].price}</span><clear>
+                  <span class="old-price"><span>${pro[0].main_price}</span> (${pro[0].discount}%)</span>
+                </div>
+              </td>
+              <td class="quantity-col">
+                  <div class="cart-product-quantity">
+                      <span>${quantity}</span>
+                  </div><!-- End .cart-product-quantity -->
+              </td>
+          </tr>`;
         document.getElementById("overlay").style.display = "none";
         $('#modal-table-body').empty();
         $('#modal-table-body').append(div);
