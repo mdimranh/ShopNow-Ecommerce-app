@@ -59,28 +59,24 @@ function AddProduct(id, quantity) {
       else {
         document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
         $("#cart-total-price").parent().removeClass("d-none")
-        $("#dropdown-cart-products").empty();
-        varjson = JSON.parse(JSON.stringify(resp.cart));
-        varjson.forEach(function (data) {
-          var div = `<div class="product">
+        var div = `<div class="product">
                       <div class="product-cart-details">
                           <h4 class="product-title">
-                              <a href="product.html">${data.title}</a>
+                              <a href="product.html">${resp.title}</a>
                           </h4>
                           <span class="cart-product-info">
-                              <span class="cart-product-qty">${data.amount}</span>
-                              X${data.price}
+                              <span class="cart-product-qty">${resp.amount}</span>
+                              X${resp.price}
                           </span>
                       </div><!-- End .product-cart-details -->
                       <figure class="product-image-container">
                           <a href="product.html" class="product-image">
-                              <img src="${data.image}" alt="product">
+                              <img src="${resp.image}" alt="product">
                           </a>
                       </figure>
                       <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
-          $('#dropdown-cart-products').append(div);
-        });
+        $('#dropdown-cart-products').append(div);
         if ($("#wishitem" + id).length > 0) {
           document.getElementById("wishitem" + id).remove();
         }

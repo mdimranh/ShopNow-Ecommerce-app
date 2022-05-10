@@ -104,20 +104,6 @@ class AddToCart(View):
 						Wishlist.objects.filter(product = pro, user = request.user).first().delete()
 					except:
 						pass
-					cart_serialize = []
-					cs={}
-					for cart in scart.carts.all():
-						cs = {
-							"id": cart.id,
-							"category": cart.product.category.name,
-							"title": cart.product.title,
-							"image": cart.product.image.url,
-							"main_price": str(cart.product.main_price),
-							"price": str(cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)),
-							"discount": str(cart.product.discount),
-							"amount": cart.quantity
-						}
-						cart_serialize.append(cs)
 					item = scart.carts.all().count()
 					msg = "Product successfully added to cart!"
 					mycart = cartDetails(scart)
@@ -133,7 +119,7 @@ class AddToCart(View):
 						'price': pro.price,
 						'main_price': pro.main_price,
 						'discount': pro.discount,
-						'cart': cart_serialize
+						'amount': cart.quantity,
 					}
 					return JsonResponse(context)
 			else:
