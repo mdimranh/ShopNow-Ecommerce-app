@@ -23,47 +23,46 @@ function quantity(type, amount) {
 
 function AddProduct(id, quantity) {
   document.getElementById("overlay").style.display = "block";
-  if (document.getElementById('user').innerText === 'yes') {
-    if (quantity === 'no') {
-      quantity = 1;
-    }
-    else {
-      quantity = document.getElementById('pro-quantity').value;
-    }
-    let options = new Array()
-    document.querySelectorAll("#option").forEach((element) => {
-      options.push($(element)[0].options[$(element)[0].options.selectedIndex].attributes.opid.value)
-    })
-    console.log(options)
-    $.ajax({
-      type: 'POST',
-      url: '/ajax/addtocart',
-      data: {
-        'id': id,
-        'quantity': quantity,
-        'color': $(".color-select:checked").val(),
-        'size': $("#size").val(),
-        'options': options
-      },
-      success: function (resp) {
-        if (resp.msg_type == 'fail') {
-          document.getElementById("overlay").style.display = "none";
-          new PNotify({
-            title: 'Fail to add',
-            type: 'fail',
-            text: resp.msg,
-            addclass: 'stack-bottom-right',
-            icon: true,
-            delay: 2500
-          });
-        }
-        else {
-          document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
-          $("#cart-total-price").parent().removeClass("d-none")
-          $("#dropdown-cart-products").empty();
-          varjson = JSON.parse(JSON.stringify(resp.cart));
-          varjson.forEach(function (data) {
-            var div = `<div class="product">
+  if (quantity === 'no') {
+    quantity = 1;
+  }
+  else {
+    quantity = document.getElementById('pro-quantity').value;
+  }
+  let options = new Array()
+  document.querySelectorAll("#option").forEach((element) => {
+    options.push($(element)[0].options[$(element)[0].options.selectedIndex].attributes.opid.value)
+  })
+  console.log(options)
+  $.ajax({
+    type: 'POST',
+    url: '/ajax/addtocart',
+    data: {
+      'id': id,
+      'quantity': quantity,
+      'color': $(".color-select:checked").val(),
+      'size': $("#size").val(),
+      'options': options
+    },
+    success: function (resp) {
+      if (resp.msg_type == 'fail') {
+        document.getElementById("overlay").style.display = "none";
+        new PNotify({
+          title: 'Fail to add',
+          type: 'fail',
+          text: resp.msg,
+          addclass: 'stack-bottom-right',
+          icon: true,
+          delay: 2500
+        });
+      }
+      else {
+        document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
+        $("#cart-total-price").parent().removeClass("d-none")
+        $("#dropdown-cart-products").empty();
+        varjson = JSON.parse(JSON.stringify(resp.cart));
+        varjson.forEach(function (data) {
+          var div = `<div class="product">
                       <div class="product-cart-details">
                           <h4 class="product-title">
                               <a href="product.html">${data.title}</a>
@@ -80,14 +79,14 @@ function AddProduct(id, quantity) {
                       </figure>
                       <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
-            $('#dropdown-cart-products').append(div);
-          });
-          if ($("#wishitem" + id).length > 0) {
-            document.getElementById("wishitem" + id).remove();
-          }
-          $(".cart-count").text(resp.item);
-          var product = JSON.parse(resp.product);
-          var div = `<tr>
+          $('#dropdown-cart-products').append(div);
+        });
+        if ($("#wishitem" + id).length > 0) {
+          document.getElementById("wishitem" + id).remove();
+        }
+        $(".cart-count").text(resp.item);
+        var product = JSON.parse(resp.product);
+        var div = `<tr>
                     <td class="product-col">
                         <div class="product">
                             <figure class="product-media">
@@ -112,21 +111,16 @@ function AddProduct(id, quantity) {
                         </div><!-- End .cart-product-quantity -->
                     </td>
                 </tr>`;
-          document.getElementById("overlay").style.display = "none";
-          $('#modal-table-body').empty();
-          $('#modal-table-body').append(div);
-          $('#add-product-modal').iziModal('open');
-        }
-      },
-      headers: {
-        "X-CSRFToken": getCookie("csrftoken")
-      },
-    });
-  }
-  else {
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById('login-modal-btn').click();
-  }
+        document.getElementById("overlay").style.display = "none";
+        $('#modal-table-body').empty();
+        $('#modal-table-body').append(div);
+        $('#add-product-modal').iziModal('open');
+      }
+    },
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+  });
 }
 
 // function Update(id, quantity) {
