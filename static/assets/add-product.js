@@ -59,53 +59,58 @@ function AddProduct(id, quantity) {
       else {
         document.getElementById("cart-total-price").innerHTML = "&#2547;" + resp.subtotal;
         $("#cart-total-price").parent().removeClass("d-none")
-        var div = `<div class="product">
+        $("#dropdown-cart-products").empty();
+        varjson = JSON.parse(JSON.stringify(resp.cart));
+        varjson.forEach(function (data) {
+          var div = `<div class="product">
                       <div class="product-cart-details">
                           <h4 class="product-title">
-                              <a href="product.html">${resp.title}</a>
+                              <a href="product.html">${data.title}</a>
                           </h4>
                           <span class="cart-product-info">
-                              <span class="cart-product-qty">${resp.amount}</span>
-                              X${resp.price}
+                              <span class="cart-product-qty">${data.amount}</span>
+                              X${data.price}
                           </span>
                       </div><!-- End .product-cart-details -->
                       <figure class="product-image-container">
                           <a href="product.html" class="product-image">
-                              <img src="${resp.image}" alt="product">
+                              <img src="${data.image}" alt="product">
                           </a>
                       </figure>
                       <a href="#" class="btn-remove" title="Remove Product" id="cart-remove" cart-id="${resp.id}"><i class="icon-close"></i></a>
                   </div>`
-        $('#dropdown-cart-products').append(div);
+          $('#dropdown-cart-products').append(div);
+        });
         if ($("#wishitem" + id).length > 0) {
           document.getElementById("wishitem" + id).remove();
         }
         $(".cart-count").text(resp.item);
+        // var product = JSON.parse(resp.product);
         var div = `<tr>
-              <td class="product-col">
-                  <div class="product">
-                      <figure class="product-media">
-                          <a href="/products/${resp.id}">
-                              <img src="${resp.image}" alt="Product image">
-                          </a>
-                      </figure>
-                      <h3 class="product-title">
-                          <a href="/products/${resp.id}">${resp.title}</a>
-                      </h3><!-- End .product-title -->
-                  </div><!-- End .product -->
-              </td>
-              <td class="product-price">
-                <div class="d-flex flex-column">
-                  <span class="new-price">${resp.price}</span><clear>
-                  <span class="old-price"><span>${resp.main_price}</span> (${resp.discount}%)</span>
-                </div>
-              </td>
-              <td class="quantity-col">
-                  <div class="cart-product-quantity">
-                      <span>${quantity}</span>
-                  </div><!-- End .cart-product-quantity -->
-              </td>
-          </tr>`;
+                    <td class="product-col">
+                        <div class="product">
+                            <figure class="product-media">
+                                <a href="/products/${resp.id}">
+                                    <img src="${resp.image}" alt="Product image">
+                                </a>
+                            </figure>
+                            <h3 class="product-title">
+                                <a href="/products/${resp.id}">${resp.title}</a>
+                            </h3><!-- End .product-title -->
+                        </div><!-- End .product -->
+                    </td>
+                    <td class="product-price">
+                      <div class="d-flex">
+                        <span class="new-price">${resp.price}</span><clear>
+                        <span class="old-price"><span>${resp.main_price}</span>
+                      </div>
+                    </td>
+                    <td class="quantity-col">
+                        <div class="cart-product-quantity">
+                            <span>${quantity}</span>
+                        </div><!-- End .cart-product-quantity -->
+                    </td>
+                </tr>`;
         document.getElementById("overlay").style.display = "none";
         $('#modal-table-body').empty();
         $('#modal-table-body').append(div);
