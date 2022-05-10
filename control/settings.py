@@ -126,38 +126,38 @@ def SettingView(request):
 							name_plural = data1[cur]['name_plural']
 						)
 						crncy.save()
-			# setting = Settings.objects.get()
-			# setting.default_currency = Currency.objects.get(code = request.POST['default-currency'])
-			# setting.save()
+			setting = Settings.objects.get()
+			setting.default_currency = Currency.objects.get(code = request.POST['default-currency'])
+			setting.save()
 			return redirect(request.path_info)
 
-		# elif 'mail-host' in request.POST:
-		# 	email_config = EmailConfig.objects.get()
-		# 	email_config.email_host = request.POST['mail-host']
-		# 	email_config.email_port = request.POST['mail-port']
-		# 	email_config.email_host_user = request.POST['mail-username']
-		# 	email_config.email_host_password = request.POST['mail-password']
-		# 	email_config.email_host_use = request.POST['encrypt']
-		# 	email_config.save()
-		# 	return redirect(request.path_info)
+		elif 'mail-host' in request.POST:
+			email_config = EmailConfig.objects.get()
+			email_config.email_host = request.POST['mail-host']
+			email_config.email_port = request.POST['mail-port']
+			email_config.email_host_user = request.POST['mail-username']
+			email_config.email_host_password = request.POST['mail-password']
+			email_config.email_host_use = request.POST['encrypt']
+			email_config.save()
+			return redirect(request.path_info)
 
-		# elif 'store-phone' in request.POST:
-		# 	sinfo = StoreInfo.objects.get()
-		# 	sinfo.phone = request.POST['store-phone']
-		# 	sinfo.email = request.POST['store-email']
-		# 	sinfo.address1 = request.POST['store-address1']
-		# 	sinfo.tagline = request.POST['store-tagline']
-		# 	sinfo.city = request.POST['store-city']
-		# 	sinfo.country = request.POST['store-country']
-		# 	sinfo.state = request.POST['store-state']
-		# 	sinfo.zip = request.POST['store-zip']
-		# 	try:
-		# 		sinfo.address2 = request.POST['store-address2']
-		# 	except:
-		# 		pass
+		elif 'store-phone' in request.POST:
+			sinfo = StoreInfo.objects.get()
+			sinfo.phone = request.POST['store-phone']
+			sinfo.email = request.POST['store-email']
+			sinfo.address1 = request.POST['store-address1']
+			sinfo.tagline = request.POST['store-tagline']
+			sinfo.city = request.POST['store-city']
+			sinfo.country = request.POST['store-country']
+			sinfo.state = request.POST['store-state']
+			sinfo.zip = request.POST['store-zip']
+			try:
+				sinfo.address2 = request.POST['store-address2']
+			except:
+				pass
 
-		# 	sinfo.save()
-		# 	return redirect(request.path_info)
+			sinfo.save()
+			return redirect(request.path_info)
 
 	facebook_login = SocialApp.objects.filter(name = 'facebook').first()
 	google_login = SocialApp.objects.filter(name = 'google').first()
@@ -228,7 +228,7 @@ def Sliders(request):
 	slider = Slider.objects.all()
 	context = {
 		"slider": slider,
-		# 'onaction': SiteConfiguration.objects.get(),
+		'onaction': SiteConfiguration.objects.get(),
 		'appearance_sec': True,
 		'slider_list_sec': True
 	}
@@ -375,163 +375,163 @@ class DeletePage(View):
 
 
 def SiteFrontView(request):
-	# if request.method == 'POST':
-	# 	site_config = SiteConfiguration.objects.get()
-	# 	if 'name' in request.POST:
-	# 		site_config.name = request.POST['name']
-	# 		site_config.address = request.POST['address']
-	# 		site_config.slider = Slider.objects.get(id = request.POST['slider'])
-	# 		site_config.save()
-	# 		return redirect(request.path_info)
-	# 	elif 'logo' in request.FILES:
-	# 		site_config.logo = request.FILES.get('logo')
-	# 		site_config.favicon = request.FILES.get('favicon')
-	# 		site_config.save()
-	# 		return redirect(request.path_info)
-	# 	# lst = [request.POST.get('banner[%d]' % i) for i in range(0, len(request.POST))]
-	# 	elif 'banner1' in request.POST:
-	# 		if len(request.POST['banner1']) > 0:
-	# 			site_config.banner1 = Banner.objects.filter(id = request.POST['banner1']).first()
-	# 		if len(request.POST['banner2']) > 0:
-	# 			site_config.banner2 = Banner.objects.filter(id = request.POST['banner2']).first()
-	# 		if len(request.POST['banner3']) > 0:
-	# 			site_config.banner3 = Banner.objects.filter(id = request.POST['banner3']).first()
-	# 		if len(request.POST['banner4']) > 0:
-	# 			site_config.banner4 = Banner.objects.filter(id = request.POST['banner4']).first()
-	# 		if len(request.POST['banner5']) > 0:
-	# 			site_config.banner5 = Banner.objects.filter(id = request.POST['banner5']).first()
-	# 		if len(request.POST['banner6']) > 0:
-	# 			site_config.banner6 = Banner.objects.filter(id = request.POST['banner6']).first()
-	# 		if len(request.POST['banner7']) > 0:
-	# 			site_config.banner7 = Banner.objects.filter(id = request.POST['banner7']).first()
-	# 		if len(request.POST['banner8']) > 0:
-	# 			site_config.banner8 = Banner.objects.filter(id = request.POST['banner8']).first()
-	# 		site_config.save()
-	# 		return redirect(request.path_info)
+	if request.method == 'POST':
+		site_config = SiteConfiguration.objects.get()
+		if 'name' in request.POST:
+			site_config.name = request.POST['name']
+			site_config.address = request.POST['address']
+			site_config.slider = Slider.objects.get(id = request.POST['slider'])
+			site_config.save()
+			return redirect(request.path_info)
+		elif 'logo' in request.FILES:
+			site_config.logo = request.FILES.get('logo')
+			site_config.favicon = request.FILES.get('favicon')
+			site_config.save()
+			return redirect(request.path_info)
+		# lst = [request.POST.get('banner[%d]' % i) for i in range(0, len(request.POST))]
+		elif 'banner1' in request.POST:
+			if len(request.POST['banner1']) > 0:
+				site_config.banner1 = Banner.objects.filter(id = request.POST['banner1']).first()
+			if len(request.POST['banner2']) > 0:
+				site_config.banner2 = Banner.objects.filter(id = request.POST['banner2']).first()
+			if len(request.POST['banner3']) > 0:
+				site_config.banner3 = Banner.objects.filter(id = request.POST['banner3']).first()
+			if len(request.POST['banner4']) > 0:
+				site_config.banner4 = Banner.objects.filter(id = request.POST['banner4']).first()
+			if len(request.POST['banner5']) > 0:
+				site_config.banner5 = Banner.objects.filter(id = request.POST['banner5']).first()
+			if len(request.POST['banner6']) > 0:
+				site_config.banner6 = Banner.objects.filter(id = request.POST['banner6']).first()
+			if len(request.POST['banner7']) > 0:
+				site_config.banner7 = Banner.objects.filter(id = request.POST['banner7']).first()
+			if len(request.POST['banner8']) > 0:
+				site_config.banner8 = Banner.objects.filter(id = request.POST['banner8']).first()
+			site_config.save()
+			return redirect(request.path_info)
 
-	# 	elif 'title1' in request.POST:
-	# 		ftr = Feature.objects.get()
-	# 		ftr.title1 = request.POST['title1']
-	# 		ftr.title2 = request.POST['title2']
-	# 		ftr.title3 = request.POST['title3']
-	# 		ftr.title4 = request.POST['title4']
-	# 		ftr.subtitle1 = request.POST['subtitle1']
-	# 		ftr.subtitle2 = request.POST['subtitle2']
-	# 		ftr.subtitle3 = request.POST['subtitle3']
-	# 		ftr.subtitle4 = request.POST['subtitle4']
-	# 		ftr.icon1 = request.POST['icon1']
-	# 		ftr.icon2 = request.POST['icon2']
-	# 		ftr.icon3 = request.POST['icon3']
-	# 		ftr.icon4 = request.POST['icon4']
-	# 		ftr.save()
-	# 		return redirect(request.path_info)
+		elif 'title1' in request.POST:
+			ftr = Feature.objects.get()
+			ftr.title1 = request.POST['title1']
+			ftr.title2 = request.POST['title2']
+			ftr.title3 = request.POST['title3']
+			ftr.title4 = request.POST['title4']
+			ftr.subtitle1 = request.POST['subtitle1']
+			ftr.subtitle2 = request.POST['subtitle2']
+			ftr.subtitle3 = request.POST['subtitle3']
+			ftr.subtitle4 = request.POST['subtitle4']
+			ftr.icon1 = request.POST['icon1']
+			ftr.icon2 = request.POST['icon2']
+			ftr.icon3 = request.POST['icon3']
+			ftr.icon4 = request.POST['icon4']
+			ftr.save()
+			return redirect(request.path_info)
 
-	# 	elif 'facebook-link' in request.POST:
-	# 		site_config.facebook = request.POST['facebook-link']
-	# 		site_config.twitter = request.POST['twitter']
-	# 		site_config.youtube = request.POST['youtube']
-	# 		site_config.instagram = request.POST['instagram']
-	# 		site_config.save()
-	# 		return redirect(request.path_info)
+		elif 'facebook-link' in request.POST:
+			site_config.facebook = request.POST['facebook-link']
+			site_config.twitter = request.POST['twitter']
+			site_config.youtube = request.POST['youtube']
+			site_config.instagram = request.POST['instagram']
+			site_config.save()
+			return redirect(request.path_info)
 
-	# 	elif 'link' and 'title' in request.POST:
-	# 		titles = request.POST.getlist('title')
-	# 		lnks = request.POST.getlist('link')
-	# 		if 'useful-link' in request.POST:
-	# 			flinks, create = FooterLinks.objects.get_or_create(section_name = 'useful')
-	# 			flinks.links.all().delete()
-	# 			c = 0
-	# 			for title in titles:
-	# 				create_link = Links(
-	# 					name=title,
-	# 					link=lnks[0]
-	# 				)
-	# 				create_link.save()
-	# 				flinks.links.add(create_link)
-	# 				c += 1
-	# 		else:
-	# 			flinks, create = FooterLinks.objects.get_or_create(section_name = 'service')
-	# 			flinks.links.all().delete()
-	# 			c = 0
-	# 			for title in titles:
-	# 				create_link = Links(
-	# 					name=title,
-	# 					link=lnks[c]
-	# 				)
-	# 				create_link.save()
-	# 				flinks.links.add(create_link)
-	# 				c += 1
+		elif 'link' and 'title' in request.POST:
+			titles = request.POST.getlist('title')
+			lnks = request.POST.getlist('link')
+			if 'useful-link' in request.POST:
+				flinks, create = FooterLinks.objects.get_or_create(section_name = 'useful')
+				flinks.links.all().delete()
+				c = 0
+				for title in titles:
+					create_link = Links(
+						name=title,
+						link=lnks[0]
+					)
+					create_link.save()
+					flinks.links.add(create_link)
+					c += 1
+			else:
+				flinks, create = FooterLinks.objects.get_or_create(section_name = 'service')
+				flinks.links.all().delete()
+				c = 0
+				for title in titles:
+					create_link = Links(
+						name=title,
+						link=lnks[c]
+					)
+					create_link.save()
+					flinks.links.add(create_link)
+					c += 1
 
-	# 		return redirect(request.path_info)
+			return redirect(request.path_info)
 
-	# 	elif 'caro-name' in request.POST:
-	# 		if len(request.POST['id']) == 0:
-	# 			enable = True if request.POST.get("caro-enable", False) == 'on' else False
-	# 			carousel = ProductCarousel(
-	# 				name = request.POST['caro-name'],
-	# 				enable = enable
-	# 			)
-	# 			if ProductCarousel.objects.all().count() > 0:
-	# 				position = ProductCarousel.objects.all().count() + 1
-	# 			else:
-	# 				position = 1
-	# 			carousel.position = position
-	# 			carousel.save()
-	# 			if request.POST.getlist('caro-category')[0].split(',')[0] != '':
-	# 				for i in request.POST.getlist('caro-category')[0].split(','):
-	# 					carousel.categories.add(Category.objects.get(id = i))
-	# 			if request.POST.getlist('caro-group')[0].split(',')[0] != '':
-	# 				for i in request.POST.getlist('caro-group')[0].split(','):
-	# 					carousel.groups.add(Group.objects.get(id = i))
-	# 			if request.POST.getlist('caro-subcategory')[0].split(',')[0] != '':
-	# 				for i in request.POST.getlist('caro-subcategory')[0].split(','):
-	# 					carousel.subcategorys.add(Subcategory.objects.get(id = i))
-	# 			carousel.save()
+		elif 'caro-name' in request.POST:
+			if len(request.POST['id']) == 0:
+				enable = True if request.POST.get("caro-enable", False) == 'on' else False
+				carousel = ProductCarousel(
+					name = request.POST['caro-name'],
+					enable = enable
+				)
+				if ProductCarousel.objects.all().count() > 0:
+					position = ProductCarousel.objects.all().count() + 1
+				else:
+					position = 1
+				carousel.position = position
+				carousel.save()
+				if request.POST.getlist('caro-category')[0].split(',')[0] != '':
+					for i in request.POST.getlist('caro-category')[0].split(','):
+						carousel.categories.add(Category.objects.get(id = i))
+				if request.POST.getlist('caro-group')[0].split(',')[0] != '':
+					for i in request.POST.getlist('caro-group')[0].split(','):
+						carousel.groups.add(Group.objects.get(id = i))
+				if request.POST.getlist('caro-subcategory')[0].split(',')[0] != '':
+					for i in request.POST.getlist('caro-subcategory')[0].split(','):
+						carousel.subcategorys.add(Subcategory.objects.get(id = i))
+				carousel.save()
 				
-	# 		else:
-	# 			get_carousel = ProductCarousel.objects.get(id = request.POST['id'])
-	# 			get_carousel.enable = True if request.POST.get("caro-enable") == 'on' else False
-	# 			get_carousel.name = request.POST['caro-name']
-	# 			get_carousel.save()
-	# 			get_carousel.categories.clear()
-	# 			get_carousel.groups.clear()
-	# 			get_carousel.subcategorys.clear()
-	# 			for i in request.POST.getlist('caro-category')[0].split(','):
-	# 				get_carousel.categories.add(Category.objects.get(id = i))
-	# 			if request.POST.getlist('caro-group')[0].split(',')[0] != '':
-	# 				for i in request.POST.getlist('caro-group')[0].split(','):
-	# 					get_carousel.groups.add(Group.objects.get(id = i))
-	# 			if request.POST.getlist('caro-subcategory')[0].split(',')[0] != '':
-	# 				for i in request.POST.getlist('caro-subcategory')[0].split(','):
-	# 					get_carousel.subcategorys.add(Subcategory.objects.get(id = i))
-	# 			get_carousel.save()
-	# 		return redirect(request.path_info)
+			else:
+				get_carousel = ProductCarousel.objects.get(id = request.POST['id'])
+				get_carousel.enable = True if request.POST.get("caro-enable") == 'on' else False
+				get_carousel.name = request.POST['caro-name']
+				get_carousel.save()
+				get_carousel.categories.clear()
+				get_carousel.groups.clear()
+				get_carousel.subcategorys.clear()
+				for i in request.POST.getlist('caro-category')[0].split(','):
+					get_carousel.categories.add(Category.objects.get(id = i))
+				if request.POST.getlist('caro-group')[0].split(',')[0] != '':
+					for i in request.POST.getlist('caro-group')[0].split(','):
+						get_carousel.groups.add(Group.objects.get(id = i))
+				if request.POST.getlist('caro-subcategory')[0].split(',')[0] != '':
+					for i in request.POST.getlist('caro-subcategory')[0].split(','):
+						get_carousel.subcategorys.add(Subcategory.objects.get(id = i))
+				get_carousel.save()
+			return redirect(request.path_info)
 
-	# siteinfo = SiteConfiguration.objects.get()
-	# useful_links, create = FooterLinks.objects.get_or_create(section_name = 'useful')
-	# service_links, create = FooterLinks.objects.get_or_create(section_name = 'service')
-	# sliders = Slider.objects.all()
-	# all_page = Pages.objects.all().exclude(active = False)
-	# banners = Banner.objects.all().exclude(active = False)
-	# pro_caro = ProductCarousel.objects.all()
-	# categorys = Category.objects.all()
-	# groups = Group.objects.all()
-	# subcategories = Subcategory.objects.all()
-	# context = {
-	# 	"siteinfo": siteinfo,
-	# 	'sliders': sliders,
-	# 	'pages': all_page,
-	# 	'banners': banners,
-	# 	'pro_caro': pro_caro,
-	# 	'categorys': categorys,
-	# 	'groups': groups,
-	# 	'subcategories': subcategories,
-	# 	'useful_links': useful_links,
-	# 	'service_links': service_links,
-	# 	'appearance_sec': True,
-	# 	'sitefront_sec': True
-	# }
-	return render(request, "control/sitefront.html")
+	siteinfo = SiteConfiguration.objects.get()
+	useful_links, create = FooterLinks.objects.get_or_create(section_name = 'useful')
+	service_links, create = FooterLinks.objects.get_or_create(section_name = 'service')
+	sliders = Slider.objects.all()
+	all_page = Pages.objects.all().exclude(active = False)
+	banners = Banner.objects.all().exclude(active = False)
+	pro_caro = ProductCarousel.objects.all()
+	categorys = Category.objects.all()
+	groups = Group.objects.all()
+	subcategories = Subcategory.objects.all()
+	context = {
+		"siteinfo": siteinfo,
+		'sliders': sliders,
+		'pages': all_page,
+		'banners': banners,
+		'pro_caro': pro_caro,
+		'categorys': categorys,
+		'groups': groups,
+		'subcategories': subcategories,
+		'useful_links': useful_links,
+		'service_links': service_links,
+		'appearance_sec': True,
+		'sitefront_sec': True
+	}
+	return render(request, "control/sitefront.html", context)
 
 class CarouselUpdate(View):
 	def post(self, request):

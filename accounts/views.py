@@ -10,17 +10,17 @@ from django.contrib.auth.models import User, Group, auth
 from django.contrib import messages
 
 from .models import AddressBook, EmailConfirmed
-from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage
+from setting.models import Slider, Banner, TeamInfo, Aboutus, ContactMessage, EmailConfig, SiteConfiguration
 from product.models import Category, Product
 from order.models import ShopCart, Order
 from region.models import Country, Region, City, Area
-# from control.emailconfig import backend
+from control.emailconfig import backend
 
 from datetime import datetime
 
 from django.core.mail import EmailMultiAlternatives
 
-# siteinfo = SiteConfiguration.objects.get()
+siteinfo = SiteConfiguration.objects.get()
 
 def Account(request):
 	if request.method == "POST":
@@ -40,14 +40,14 @@ def Account(request):
 				user.save()
 				euser = EmailConfirmed.objects.get(user = user)
 				site = get_current_site(request)
-				# email_config = EmailConfig.objects.get()
+				email_config = EmailConfig.objects.get()
 				email = user.email
 				subject, from_email, to = 'Email Verification', email_config.email_host_user, email
 				text_content = 'Email Verification'
 				html_content = render_to_string('verify.html', context={
 					'user': user.first_name+' '+user.last_name,
 					'domain': get_current_site(request).domain,
-					# 'siteinfo': siteinfo,
+					'siteinfo': siteinfo,
 					'activation_key': euser.activation_key,
 				})
 				msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
@@ -70,7 +70,7 @@ def Account(request):
 				usr.save()
 				euser = EmailConfirmed.objects.get(user = usr)
 				site = get_current_site(request)
-				# email_config = EmailConfig.objects.get()
+				email_config = EmailConfig.objects.get()
 				subject, from_email, to = 'Password Recover', email_config.email_host_user, usr.email
 				text_content = 'Password Recover'
 				html_content = render_to_string('recover.html', context={
