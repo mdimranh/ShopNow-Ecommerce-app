@@ -100,9 +100,9 @@ function AddProduct(id, quantity) {
                         </div><!-- End .product -->
                     </td>
                     <td class="product-price">
-                      <div class="d-flex">
-                        <span class="new-price">${resp.price}</span><clear>
-                        <span class="old-price ml-1"><span>(${resp.main_price})</span>
+                      <div class="d-flex flex-column">
+                        <span class="new-price mr-1">${resp.price}</span><clear>
+                        (<span class="old-price"><span>${resp.main_price}</span>)
                       </div>
                     </td>
                     <td class="quantity-col">

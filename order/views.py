@@ -104,6 +104,7 @@ class AddToCart(View):
 						Wishlist.objects.filter(product = pro, user = request.user).first().delete()
 					except:
 						pass
+					currency = Currency.objects.get(code = request.COOKIES['mycurrency'])
 					cart_serialize = []
 					cs={}
 					for cart in scart.carts.all():
@@ -112,8 +113,8 @@ class AddToCart(View):
 							"category": cart.product.category.name,
 							"title": cart.product.title,
 							"image": cart.product.image.url,
-							"main_price": str(cart.product.main_price),
-							"price": str(cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)),
+							"main_price": currency.symbol_native+str(cart.product.main_price * currency.rate),
+							"price": currency.symbol_native+str((cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)) * currency.rate),
 							"discount": str(cart.product.discount),
 							"amount": cart.quantity
 						}
@@ -136,8 +137,8 @@ class AddToCart(View):
 						'msg': msg,
 						'title': pro.title,
 						'amount': cart.quantity,
-						'price': main_price,
-						'main_price': pro.main_price,
+						'price': currency.symbol_native+str(main_price * currency.rate),
+						'main_price': currency.symbol_native+str(pro.main_price * currency.rate),
 						'id': pro.id,
 						'image': pro.image.url,
 						'cart': cart_serialize
