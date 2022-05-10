@@ -13,7 +13,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 
-from setting.models import EmailConfig
+# from setting.models import EmailConfig
 from control.emailconfig import backend
 
 from setting.models import Currency
@@ -284,17 +284,18 @@ def Checkout(request):
 			try:
 				return redirect('/')
 			finally:
-				mail_config = EmailConfig.objects.get()
-				subject, from_email, to = 'Confirm order', mail_config.email_host_user, email
-				text_content = 'Confirm order'
-				html_content = render_to_string('order-confirm.html', context={
-					'order': ordr,
-					'currency': Currency.objects.get(code = request.COOKIES['mycurrency']),
-					'domain': get_current_site(request).domain
-				})
-				msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
-				msg.attach_alternative(html_content, "text/html")
-				msg.send()
+				# mail_config = EmailConfig.objects.get()
+				# subject, from_email, to = 'Confirm order', mail_config.email_host_user, email
+				# text_content = 'Confirm order'
+				# html_content = render_to_string('order-confirm.html', context={
+				# 	'order': ordr,
+				# 	'currency': Currency.objects.get(code = request.COOKIES['mycurrency']),
+				# 	'domain': get_current_site(request).domain
+				# })
+				# msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=backend)
+				# msg.attach_alternative(html_content, "text/html")
+				# msg.send()
+				pass
 	else:
 		# import requests
 		# urls = "https://fcsapi.com/api-v2/forex/converter?symbol=BDT/USD&amount=1&access_key=ohHkx8n2tCX9BBoaGvFUwY"

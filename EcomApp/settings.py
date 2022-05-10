@@ -25,7 +25,7 @@ mimetypes.add_type("text/css", ".css", True)
 # Application definition
 
 INSTALLED_APPS = [
-    # 'control',
+    'control',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
-    # 'api',
-    # 'newsletter',
+    'api',
+    'newsletter',
 
     'django_countries',
 
@@ -54,12 +54,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
 
-    # 'home',
-    # 'product',
-    # 'accounts',
-    # 'order',
+    'home',
+    'product',
+    'accounts',
+    'order',
     'setting',
-    # 'region',
+    'region',
 
     'ckeditor',
     'ckeditor_uploader',

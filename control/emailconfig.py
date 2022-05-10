@@ -6,10 +6,18 @@ from setting.models import EmailConfig
 config = EmailConfig.objects.get()
 
 backend = EmailBackend(
-        host=config.email_host,
-        port=config.email_port,
-        username=config.email_host_user,
-        password=config.email_host_password,
+        host='config.email_host',
+        port='config.email_port',
+        username='config.email_host_user',
+        password='config.email_host_password',
         use_tls=True,
         fail_silently=True
     )
+# backend = EmailBackend(
+#         host=config.email_host,
+#         port=config.email_port,
+#         username=config.email_host_user,
+#         password=config.email_host_password,
+#         use_tls=True,
+#         fail_silently=True
+#     )
