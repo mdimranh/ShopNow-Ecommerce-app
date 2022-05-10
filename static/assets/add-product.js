@@ -102,7 +102,7 @@ function AddProduct(id, quantity) {
                     <td class="product-price">
                       <div class="d-flex">
                         <span class="new-price">${resp.price}</span><clear>
-                        <span class="old-price"><span>${resp.main_price}</span>
+                        <span class="old-price ml-1"><span>(${resp.main_price})</span>
                       </div>
                     </td>
                     <td class="quantity-col">
