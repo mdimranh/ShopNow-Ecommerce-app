@@ -1,9 +1,9 @@
 from django.core.mail import EmailMessage
 from django.core.mail.backends.smtp import EmailBackend
 
-from setting.models import EmailConfig
+# from setting.models import EmailConfig
 
-config = EmailConfig.objects.get()
+# config = EmailConfig.objects.get()
 
 backend = EmailBackend(
         host='config.email_host',
