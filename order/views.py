@@ -151,8 +151,6 @@ def CartView(request):
 
 def CartDelete(request):
 	getcart = Cart.objects.get(id = request.POST['id'])
-	scart = getcart.shopcart_set.get()
-	cart = cartDetails(scart)
 	getcart.delete()
 	msg = "Product successfully deleted"
 	context = {
