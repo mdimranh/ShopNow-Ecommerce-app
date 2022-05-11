@@ -154,9 +154,9 @@ class CategoryProduct(View):
         context = {
             'product': page_obj,
             'id': id,
-            'slug': slug, 
             'categories': categories,
-            'sortby': request.POST['sortby']
+            'sortby': request.POST['sortby'],
+            'query': query
         }
         return render(request, 'product/category.html', context)
 
