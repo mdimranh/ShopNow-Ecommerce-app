@@ -86,7 +86,10 @@ function AddProduct(id, quantity) {
             document.getElementById("wishitem" + id).remove();
           }
           $(".cart-count").text(resp.item);
-          // var product = JSON.parse(resp.product);
+          var cart_action = `<a href="/cart" class="btn btn-primary">View Cart</a>
+          <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>`
+          $("#cart_action").empty()
+          $("#cart_action").append(cart_action)
           var div = `<tr>
                     <td class="product-col">
                         <div class="product">

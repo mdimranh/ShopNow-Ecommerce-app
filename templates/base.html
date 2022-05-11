@@ -280,7 +280,7 @@
                                                 <div class="dropdown-cart-total">
                                                     <span class="{% if not mycart.subtotal > 0 %}d-none{% endif %}"><span class="h6">Total: </span><span class="cart-total-price" id="cart-total-price">{{mycurrency.1}}{{mycart.subtotal|mul:mycurrency.0|floatformat:2|intcomma}}</span></span>    
                                                 </div><!-- End .dropdown-cart-total -->
-                                                <div class="dropdown-cart-action">
+                                                <div class="dropdown-cart-action" id="cart_action">
                                                     {% if mycart.cart.carts.all|length > 0 %}
                                                         <a href="/cart" class="btn btn-primary">View Cart</a>
                                                         <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
