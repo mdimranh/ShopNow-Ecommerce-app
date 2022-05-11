@@ -112,7 +112,7 @@ class AddToCart(View):
 							"id": cart.id,
 							"category": cart.product.category.name,
 							"title": cart.product.title,
-							"image": cart.product.image,
+							"image": cart.product.image.url,
 							"main_price": currency.symbol_native+str(float(cart.product.main_price) * currency.rate),
 							"price": currency.symbol_native+str(float((cart.product.main_price) - ((cart.product.main_price) * cart.product.discount / 100)) * currency.rate),
 							"discount": str(cart.product.discount),
@@ -141,7 +141,7 @@ class AddToCart(View):
 						'price': currency.symbol_native+str(float(main_price) * currency.rate),
 						'main_price': currency.symbol_native+str(float(pro.main_price) * currency.rate),
 						'id': pro.id,
-						'image': pro.image,
+						'image': pro.image.url,
 						'cart': cart_serialize
 					}
 					return JsonResponse(context)
