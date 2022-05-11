@@ -123,7 +123,7 @@ class AddToCart(View):
 					msg = "Product successfully added to cart!"
 					main_price = float(pro.main_price)
 					main_price -=  (( main_price * float(pro.discount)) / 100)
-					if pro.hot_deal_end >= date.today():
+					if pro.hot_deal_end and pro.hot_deal_end >= date.today():
 						if pro.hot_deal_discount_type == 'percentage':
 							main_price -= ((main_price * pro.hot_deal_discount) / 100)
 						else:
