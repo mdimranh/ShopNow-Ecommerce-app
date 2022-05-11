@@ -115,28 +115,37 @@ class CategoryProduct(View):
         }
         return render(request, 'product/category.html', context)
 
-    def post(self, request, id):
+    def post(self, request, id, type):
         if request.POST['sortby'] == 'new_old':
-            if Category.objects.filter(id = id).exists():
+            if type == 'category' and Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('-created_at')
-            elif Group.objects.filter(id = id).exists():
+                query = Category.objects.get(id = id).name
+            elif type == 'group' and Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('-created_at')
-            elif Subcategory.objects.filter(id = id).exists():
+                query = Group.objects.get(id = id).name
+            elif type == 'subcategory' and Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('-created_at')
+                query = Subcategory.objects.get(id = id).name
         elif request.POST['sortby'] == 'old_new':
-            if Category.objects.filter(id = id).exists():
+            if type == 'category' and Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('created_at')
-            elif Group.objects.filter(id = id).exists():
+                query = Category.objects.get(id = id).name
+            elif type == 'group' and Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('created_at')
-            elif Subcategory.objects.filter(id = id).exists():
+                query = Group.objects.get(id = id).name
+            elif type == 'subcategory' and Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('created_at')
+                query = Subcategory.objects.get(id = id).name
         elif request.POST['sortby'] == 'rate':
-            if Category.objects.filter(id = id).exists():
+            if type == 'category' and Category.objects.filter(id = id).exists():
                 product = Product.objects.filter(category__id = id).order_by('-rate')
-            elif Group.objects.filter(id = id).exists():
+                query = Category.objects.get(id = id).name
+            elif type == 'group' and Group.objects.filter(id = id).exists():
                 product = Product.objects.filter(group__id = id).order_by('-rate')
-            elif Subcategory.objects.filter(id = id).exists():
+                query = Group.objects.get(id = id).name
+            elif type == 'subcategory' and Subcategory.objects.filter(id = id).exists():
                 product = Product.objects.filter(subcategory__id = id).order_by('-rate')
+                query = Subcategory.objects.get(id = id).name
 
         paginator = Paginator(product, 12) # Show 12 contacts per page.
         page_number = request.GET.get('page')
