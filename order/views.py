@@ -462,22 +462,22 @@ class GeneratePdf(View):
 	def get(self, request, *args, **kwargs):
 		crncy = Currency.objects.get(code = request.COOKIES['mycurrency'])
 		ordr = Order.objects.get(id = kwargs['id'])
-		try:
-			context = {
-				'order': Order.objects.get(id = kwargs['id']),
-				'rate': crncy.rate,
-				'symbol': crncy.symbol_native,
-				'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
-			}
-			pdf = render_to_pdf('account/invoice_pdf.html', context)
-		except:
-			context = {
-				'order': Order.objects.get(id = kwargs['id']),
-				'rate': crncy.rate,
-				'symbol': f'{crncy.code} ',
-				'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
-			}
-			pdf = render_to_pdf('account/invoice_pdf.html', context)
+		# try:
+		# 	context = {
+		# 		'order': Order.objects.get(id = kwargs['id']),
+		# 		'rate': crncy.rate,
+		# 		'symbol': crncy.symbol_native,
+		# 		'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
+		# 	}
+		# 	pdf = render_to_pdf('account/invoice_pdf.html', context)
+		# except:
+		context = {
+			'order': Order.objects.get(id = kwargs['id']),
+			'rate': crncy.rate,
+			'symbol': f'{crncy.code} ',
+			'due': ordr.total if ordr.payment_mode == 'cash' and ordr.status != 'completed' else 0
+		}
+		pdf = render_to_pdf('account/invoice_pdf.html', context)
 
 		if pdf:
 			response = HttpResponse(pdf, content_type='application/pdf')
