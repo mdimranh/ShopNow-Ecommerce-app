@@ -112,9 +112,9 @@ class AddToCart(View):
 							"id": cart.id,
 							"category": cart.product.category.name,
 							"title": cart.product.title,
-							"image": cart.product.image.url,
-							"main_price": currency.symbol_native+str(cart.product.main_price * currency.rate),
-							"price": currency.symbol_native+str((cart.product.main_price - (cart.product.main_price * cart.product.discount / 100)) * currency.rate),
+							"image": cart.product.image,
+							"main_price": currency.symbol_native+str(float(cart.product.main_price) * currency.rate),
+							"price": currency.symbol_native+str(float((cart.product.main_price) - ((cart.product.main_price) * cart.product.discount / 100)) * currency.rate),
 							"discount": str(cart.product.discount),
 							"amount": cart.quantity
 						}
@@ -123,7 +123,7 @@ class AddToCart(View):
 					msg = "Product successfully added to cart!"
 					main_price = float(pro.main_price)
 					main_price -=  (( main_price * float(pro.discount)) / 100)
-					if pro.hot_deal_end and pro.hot_deal_end >= date.today():
+					if pro.hot_deal_end >= date.today():
 						if pro.hot_deal_discount_type == 'percentage':
 							main_price -= ((main_price * pro.hot_deal_discount) / 100)
 						else:
@@ -132,15 +132,16 @@ class AddToCart(View):
 					context = {
 						'msg_type':'success',
 						'item':item,
-						'cost': mycart.subtotal - mycart.coupon_discount,
-						'subtotal': mycart.subtotal,
+						'cost': currency.symbol_native+str(float(mycart.subtotal - mycart.coupon_discount) * currency.rate),
+						'subtotal': currency.symbol_native+str(float(mycart.subtotal) * currency.rate),
 						'msg': msg,
+						# 'product': pro,
 						'title': pro.title,
 						'amount': cart.quantity,
-						'price': currency.symbol_native+str(main_price * currency.rate),
-						'main_price': currency.symbol_native+str(pro.main_price * currency.rate),
+						'price': currency.symbol_native+str(float(main_price) * currency.rate),
+						'main_price': currency.symbol_native+str(float(pro.main_price) * currency.rate),
 						'id': pro.id,
-						'image': pro.image.url,
+						'image': pro.image,
 						'cart': cart_serialize
 					}
 					return JsonResponse(context)
