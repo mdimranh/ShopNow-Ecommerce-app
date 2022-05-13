@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from datetime import datetime
@@ -21,6 +21,10 @@ class EmailConfirmed(models.Model):
 
     class Meta:
         verbose_name_plural = 'User email confirmed'
+
+@receiver(pre_save, sender=User)
+def email_as_username(sender, instance, *args, **kwargs):
+    instance.username = instance.email
 
 @receiver(post_save, sender=User)
 def create_user_email_confirmation(sender, instance, created, **kwargs):

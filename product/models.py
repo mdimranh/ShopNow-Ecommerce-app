@@ -239,7 +239,7 @@ class RecentlyView(models.Model):
 class Review(models.Model):
 	product = models.ForeignKey(Product, on_delete = models.CASCADE, related_name="reviews")
 	user = models.ForeignKey(User, on_delete = models.CASCADE, blank=True, null=True, related_name="user_review")
-	user_name = models.CharField(max_length=200)
+	user_name = models.CharField(max_length=200, blank=True, null=True)
 	rating = models.IntegerField()
 	comment = models.TextField()
 	add_on = models.DateTimeField(auto_now_add=True)

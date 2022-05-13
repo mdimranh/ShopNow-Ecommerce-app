@@ -1,7 +1,8 @@
 {% extends 'control/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
-{% block title %}{{site_config.name}} | Users{% endblock title %}
+{% block title %}{{site_config.name}} | {% if role_details %}{{role_details.name}}{% else %}Roles{% endif %}{% endblock title %}
 
     {% block style %}
     <link
@@ -167,8 +168,7 @@
                               {% comment %} <span class="permission-btn" ids="inherit">Inherit All</span> {% endcomment %}
                             </span>
                           </div>
-                          <p>Contents -------- {{p}}</p>
-                          {% for all in p.contents.all %}
+                          {% for all in p|getperms %}
                             <li class="ps-4 ms-2 my-3">
                               <div class="d-flex flex-fill justify-content-between">
                                 <span>{{all.name}}</span>
@@ -289,7 +289,7 @@
                             {% comment %} <span class="permission-btn" ids="inherit">Inherit All</span> {% endcomment %}
                           </span>
                         </div>
-                        {% for all in p.contents.all %}
+                        {% for all in p|getperms %}
                           <li class="ps-4 ms-2 my-3">
                             <div class="d-flex flex-fill justify-content-between">
                               <span>{{all.name}}</span>
