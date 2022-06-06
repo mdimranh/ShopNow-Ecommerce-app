@@ -36,7 +36,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 	category = CategoryDetailsSerializer()
 	class Meta:
 		model = Product
-		fields = ['id', 'title', 'image', 'main_price', 'price', 'discount', 'discount_type', 'category', 'rating', 'total_review', 'hot_deal_discount', 'hot_deal_discount_type', 'hot_deal_end']
+		fields = ['id', 'title', 'image', 'main_price', 'price', 'discount', 'discount_type', 'category', 'rating', 'total_review', 'hot_deal_discount', 'hot_deal_discount_type', 'hot_deal_end', 'price']
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
 	category = CategoryDetailsSerializer()
@@ -44,6 +44,7 @@ class ProductDetailsSerializer(serializers.ModelSerializer):
 	subcategory = SubcategoryDetailsSerializer()
 	review = serializers.SerializerMethodField()
 	rating = serializers.SerializerMethodField()
+	price = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Product
@@ -57,6 +58,16 @@ class ProductDetailsSerializer(serializers.ModelSerializer):
 	def get_rating(self, obj):
 		rating = Review.objects.filter(product__id = obj.id).aggregate(Avg('rating'))['rating__avg']
 		return rating
+
+	def get_price(self, obj):
+		main_price = float(obj.main_price)
+		main_price -=  (( main_price * float(obj.discount)) / 100)
+		if obj.hot_deal_end >= date.today():
+			if obj.hot_deal_discount_type == 'percentage':
+				main_price -= ((main_price * obj.hot_deal_discount) / 100)
+			else:
+				main_price -= obj.hot_deal_discount
+		return main_price
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -91,29 +102,46 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 		return data
 
 class ShopcartSerializer(serializers.ModelSerializer):
+	carts = serializers.SerializerMethodField()
 	class Meta:
 		model = ShopCart
-		exclude = ['device', 'created_at']
+		exclude = ['device', 'created_at', 'order_id', 'on_order', 'user']
 
 	def get_carts(self, obj):
-		carts = obj.carts.all()
-		serializer = CartSerializer(carts, many=True)
+		cart_list = obj.carts.all()
+		serializer = CartSerializer(cart_list, many=True)
 		return serializer.data
 
 class CartSerializer(serializers.ModelSerializer):
+	product = serializers.SerializerMethodField()
 	class Meta:
 		model = Cart
 		fields = '__all__'
+
+	def get_product(self, obj):
+		pro = ProductDetailsSerializer(obj.product, many=False)
+		data = {
+			'title': pro.data['title'],
+			'img': pro.data['image'],
+			'category':{
+				'id': pro.data['category']['id'],
+				'name': pro.data['category']['name']
+			},
+			'main_price': float(pro.data['main_price']),
+			'price': pro.data['price'],
+			'rating': pro.data['rating']
+		}
+		return data
 
 class WishlistSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Wishlist
 		fields = '__all__'
 
-class UserSrializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = '__all__'
+		exclude = ['password']
 
 class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:

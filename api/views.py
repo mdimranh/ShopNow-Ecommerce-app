@@ -106,7 +106,7 @@ class tokenApi(TokenObtainPairView):
 @permission_classes([IsAuthenticated,])
 class UserDetails(RetrieveUpdateAPIView):
 	queryset = User.objects.all()
-	serializer_class = UserSrializer
+	serializer_class = UserSerializer
 	lookup_field = 'id'
 
 
@@ -136,99 +136,53 @@ def DeleteWishlist(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,])
 def AddddToCart(request):
-	# scart, create = Cart.objects.get_or_create(user = request.user)
-	# pro_id = int(request.POST['id'])
-	# if Product.objects.filter(id = pro_id).exists():
-	# 	pro_list = list(scart.carts.values_list('product__id', flat=True))
-	# 	if pro_id in pro_list:
-	# 		return JsonResponse({'message': "Product already exist to your cart."})
-	# 	pro = Product.objects.get(id = pro_id)
-	# 	if pro.amount < 0:
-	# 		return JsonResponse({'message': "Out of stock"})
-	# 	else:
-	# 		try:
-	# 			color = request.data['color']
-	# 		except:
-	# 			color = None
-	# 		try:
-	# 			size = request.data['size']
-	# 		except:
-	# 			size = None
-	# 		cart = Cart(
-	# 			product= pro,
-	# 			quantity = request.data['quantity'],
-	# 			color=color,
-	# 			size=size
-	# 		)
-	# 		cart.save()
-	# 		for opt_id in request.POST.getlist('options[]'):
-	# 			option = Option.objects.get(id = opt_id)
-	# 			cart.options.add(option)
-	# 		scart.carts.add(cart)
-	# 		scart.save()
-	# 		try:
-	# 			Wishlist.objects.filter(product = pro, user = request.user).first().delete()
-	# 		except:
-	# 			pass
-	# 		currency = Currency.objects.get(code = request.COOKIES['mycurrency'])
-	# 		cart_serialize = []
-	# 		cs={}
-	# 		for cart in scart.carts.all():
-	# 			cs = {
-	# 				"id": cart.id,
-	# 				"category": cart.product.category.name,
-	# 				"title": cart.product.title,
-	# 				"image": cart.product.image,
-	# 				"main_price": currency.symbol_native+str(float(cart.product.main_price) * currency.rate),
-	# 				"price": currency.symbol_native+str(float((cart.product.main_price) - ((cart.product.main_price) * cart.product.discount / 100)) * currency.rate),
-	# 				"discount": str(cart.product.discount),
-	# 				"amount": cart.quantity
-	# 			}
-	# 			cart_serialize.append(cs)
-	# 		item = scart.carts.all().count()
-	# 		msg = "Product successfully added to cart!"
-	# 		main_price = float(pro.main_price)
-	# 		main_price -=  (( main_price * float(pro.discount)) / 100)
-	# 		if pro.hot_deal_end >= date.today():
-	# 			if pro.hot_deal_discount_type == 'percentage':
-	# 				main_price -= ((main_price * pro.hot_deal_discount) / 100)
-	# 			else:
-	# 				main_price -= pro.hot_deal_discount
-	# 		mycart = cartDetails(scart)
-	# 		context = {
-	# 			'msg_type':'success',
-	# 			'item':item,
-	# 			'cost': currency.symbol_native+str(float(mycart.subtotal - mycart.coupon_discount) * currency.rate),
-	# 			'subtotal': currency.symbol_native+str(float(mycart.subtotal) * currency.rate),
-	# 			'msg': msg,
-	# 			# 'product': pro,
-	# 			'title': pro.title,
-	# 			'amount': cart.quantity,
-	# 			'price': currency.symbol_native+str(float(main_price) * currency.rate),
-	# 			'main_price': currency.symbol_native+str(float(pro.main_price) * currency.rate),
-	# 			'id': pro.id,
-	# 			'image': pro.image,
-	# 			'cart': cart_serialize
-	# 		}
-	# 		return JsonResponse(context)
-	# else:
-	# 	return JsonResponse({'msg': "Product is not exist."})
-	# pro = Product.objects.get(id = request.data['id'])
-	# cart = Cart(
-	# 	product = Product.objects.get(id = request.data['product_id']),
-	# 	user = request.user,
-	# 	quantity = request.data['product_quantity'],
-	# 	color = request.data['color'],
-	# 	size = request.data['size'],
-	# 	options = request.data['options']
-	# )
-	# cart.save()
-	# scart, create = ShopCart.objects.get_or_create(user = request.user)
-	# scart.carts.add(cart)
-	# serializers = ShopcartSerializer(scart, many=False)
-	# return Response(serializers.data)
-	print(request.data['options'])
-	return Response({'Options': request.data['options']})
+	errors = {}
+	for var in ['product_id', 'quantity']:
+		if var not in request.POST:
+			errors[f'{var}'] = 'This field is required'
+	if len(errors) > 0:
+		return Response(errors)
+	else:
+		scart, create = ShopCart.objects.get_or_create(user = request.user)
+		pro_id = int(request.POST['product_id'])
+		if Product.objects.filter(id = pro_id).exists():
+			pro_list = list(scart.carts.values_list('product__id', flat=True))
+			if pro_id in pro_list:
+				return JsonResponse({'message': "Product already exist to your cart."})
+			pro = Product.objects.get(id = pro_id)
+			if pro.amount < 0:
+				return JsonResponse({'message': "Out of stock"})
+			else:
+				try:
+					color = request.data['color']
+				except:
+					color = None
+				try:
+					size = request.data['size']
+				except:
+					size = None
+				cart = Cart(
+					product= pro,
+					quantity = request.data['quantity'],
+					color=color,
+					size=size
+				)
+				cart.save()
+				scart.carts.add(cart)
+				try:
+					for opt_id in request.data['options'][1:-1].replace(' ', '').split(','):
+						option = Option.objects.get(id = opt_id)
+						cart.options.add(option)
+				except:
+					pass
+				try:
+					Wishlist.objects.filter(product = pro, user = request.user).first().delete()
+				except:
+					pass
+				serializers = ShopcartSerializer(scart, many=False)
+				return Response(serializers.data)
+		else:
+			return Response({'message': "Product is not exist."})
 	
 
 @permission_classes([IsAuthenticated,])
