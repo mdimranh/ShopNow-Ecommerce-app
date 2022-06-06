@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from datetime import datetime
@@ -22,6 +22,10 @@ class EmailConfirmed(models.Model):
     class Meta:
         verbose_name_plural = 'User email confirmed'
 
+@receiver(pre_save, sender=User)
+def email_as_username(sender, instance, *args, **kwargs):
+    instance.username = instance.email
+
 @receiver(post_save, sender=User)
 def create_user_email_confirmation(sender, instance, created, **kwargs):
     if created:
@@ -31,6 +35,28 @@ def create_user_email_confirmation(sender, instance, created, **kwargs):
         activation_key = hashlib.sha224(user_encoded).hexdigest()
         email_confirmed_instance.activation_key = activation_key
         email_confirmed_instance.save()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete = models.CASCADE, related_name="profile_info")
+    phone = models.CharField(max_length=20)
+    birthday = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    image = models.ImageField(upload_to = 'user/', blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def name(self):
+        return self.user.first_name+" "+self.user.last_name
+
+    def image_tag(self):
+        if self.image:
+            return mark_safe('<img src="{}" height="50" weight="50" />'.format(self.image.url))
+    image_tag.short_description = 'Image'
+
+    class Meta:
+        verbose_name_plural = 'Profiles'
+        app_label = 'auth'
 
 
 class AddressBook(models.Model):
@@ -47,18 +73,4 @@ class AddressBook(models.Model):
 
     def __str__(self):
         return self.name+" ("+self.user.first_name+" "+self.user.last_name+")"
-
-class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name="profile_info")
-    phone = models.CharField(max_length=20)
-    birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10, blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username
-
-    def name(self):
-        return self.user.first_name+" "+self.user.last_name
-    
-
     
