@@ -80,6 +80,28 @@ http://localhost:8000
 | :-------- | :------- | :------------------------- |
 | `token` | `string` | **Required** |
 
+### User
+
+```http
+  GET /api/user/<int:id> [user id]
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `int` | **Required** |
+| `Authorization` [Header] | "Bearer 'access key, get from /api/token'" | **Required** |
+
+```http
+  POST /api/user/<int:id> [user id]
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | **Required** |
+| `last_name` | `string` | **Required** |
+| `email` | `email` | **Required** |
+| `password` | `string` | **Required** |
+
 ### ShopCart
 
 ```http
@@ -88,6 +110,19 @@ http://localhost:8000
 
 | Parameter | Type/Value     | Description                |
 | :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, get from /api/token'" | **Required** |
+
+```http
+  POST /api/cart/add
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `product_id` | `int` | **Required** |
+| `quantity` | `int` | **Required** |
+| `color` | `str` | **Optional** |
+| `size` | `str` | **Optional** |
+| `options` | `list` | **Optional** |
 | `Authorization` [Header] | "Bearer 'access key, get from /api/token'" | **Required** |
 
 ### Wishlist
