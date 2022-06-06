@@ -143,6 +143,17 @@ http://localhost:8000
 | :-------- | :------- | :------------------------- |
 | `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
 
+### AddressBook
+
+```http
+  GET /api/addressbook/<int:id> [book id, from /api/user/<int:id>]
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+
 ### Product
 
 ```http
@@ -229,4 +240,17 @@ http://localhost:8000
 
 | Parameter | Type/Value     | Description                |
 | :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+### Add Review
+
+```http
+  POST /api/review
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `product_id` | `int` | **Required** |
+| `comment` | `str` | **Required** |
+| `rating` | `int` [0-5] | **Required** |
 | `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
