@@ -44,3 +44,20 @@ Start the server
 ```
 Now click here
 http://localhost:8000
+
+
+## API Reference
+
+#### Registration
+
+```http
+  POST /api/registration
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | **Required** |
+| `last_name` | `string` | **Required** |
+| `email` | `email` | **Required** |
+| `password` | `string` | **Required** |
+
