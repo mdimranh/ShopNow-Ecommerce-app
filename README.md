@@ -61,3 +61,23 @@ http://localhost:8000
 | `email` | `email` | **Required** |
 | `password` | `string` | **Required** |
 
+#### Login
+
+```http
+  POST /api/token
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `username` | `email` | **Required** |
+| `password` | `string` | **Required** |
+
+#### ShopCart
+
+```http
+  POST /api/myshopcart
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` | `Header` | `Bearer access` |
