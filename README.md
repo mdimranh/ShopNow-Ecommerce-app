@@ -48,7 +48,7 @@ http://localhost:8000
 
 ## API Reference
 
-#### Registration
+### Registration
 
 ```http
   POST /api/registration
@@ -61,7 +61,7 @@ http://localhost:8000
 | `email` | `email` | **Required** |
 | `password` | `string` | **Required** |
 
-#### Login
+### Login
 
 ```http
   POST /api/token
@@ -72,12 +72,126 @@ http://localhost:8000
 | `username` | `email` | **Required** |
 | `password` | `string` | **Required** |
 
-#### ShopCart
-
 ```http
-  POST /api/myshopcart
+  POST /api/resfresh
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `Authorization` | `Header` | `Bearer access` |
+| `token` | `string` | **Required** |
+
+### ShopCart
+
+```http
+  GET /api/myshopcart
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, get from /api/token'" | **Required** |
+
+### Wishlist
+
+```http
+  GET /api/wishlist
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/wishlist/delete/<int:id>[product id]
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+### Product
+
+```http
+  GET /api/products
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/product/<int:id>
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/new-product
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `date_range` | `int`[no of days] | **Required** |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/hot-product
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/recently-view
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `no_of_product` | `int` | **Required** |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/best-sold
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `date_range` | `int`[no of days] | **Required** |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/latest-sold
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `no_of_product` | `int` | **Required** |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/products/product-carousel
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+### Category
+
+```http
+  GET /api/categories
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
+
+```http
+  GET /api/category/<int:id> [category id]
+```
+
+| Parameter | Type/Value     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Authorization` [Header] | "Bearer 'access key, from /api/token'" | **Required** |
