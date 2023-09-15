@@ -1,8 +1,8 @@
 import os
-
 from pathlib import Path
-import django_heroku
+
 import dj_database_url
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +20,7 @@ ALLOWED_HOSTS = ['shopnowbd.herokuapp.com', '127.0.0.1']
 APPEND_SLASH=False
 
 import mimetypes
+
 mimetypes.add_type("text/css", ".css", True)
 
 # Application definition
@@ -113,22 +114,22 @@ WSGI_APPLICATION = 'EcomApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dcfp4gm47aprpm',
-        'USER' : 'dmjwoaizpqhxjp',
-        'PASSWORD' : '44ecda8af2656d70be46c4e3182a6a63d5152ee34d6bc8ce1cb4cb90d719d849',
+        'NAME': 'ecomapp',
+        'USER' : 'postgres',
+        'PASSWORD' : 'postgres',
         'PORT': 5432,
-        'HOST' : 'ec2-52-5-110-35.compute-1.amazonaws.com',
+        'HOST' : 'localhost',
     }
 }
 
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'shopnowbd-herokuapp-com',
-    'API_KEY': '625542925886395',
-    'API_SECRET': 'dCdVw2Fupe6yWUPxHtg8x3ZFwrI',
-}
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'shopnowbd-herokuapp-com',
+#     'API_KEY': '625542925886395',
+#     'API_SECRET': 'dCdVw2Fupe6yWUPxHtg8x3ZFwrI',
+# }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -230,7 +231,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -311,4 +312,4 @@ JAZZMIN_UI_TWEAKS = {
 # EMAIL_HOST_USER = 'mdimranh.cse@gmail.com'
 # EMAIL_HOST_PASSWORD = 'yycpjtrriwopnysc'
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
